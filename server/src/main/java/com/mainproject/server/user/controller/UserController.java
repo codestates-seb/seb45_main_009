@@ -1,6 +1,8 @@
 package com.mainproject.server.user.controller;
 
 
+import com.mainproject.server.exception.BusinessLogicException;
+import com.mainproject.server.exception.ExceptionCode;
 import com.mainproject.server.user.dto.UserDto;
 import com.mainproject.server.user.entity.User;
 import com.mainproject.server.user.mapper.UserMapper;
@@ -53,17 +55,22 @@ public class UserController {
         return ResponseEntity.ok(responseDto);
     }
 
+    @PatchMapping("mypage/{user_id}/update")
+    public ResponseEntity<?> patchUser(@PathVariable("user_id") long userId,
+                                       @Valid @RequestBody UserDto.PatchDto patchDto) {
 
 
+            User updatedUser = userService.updateUser(userId, patchDto);
+            UserDto.ResponseDto responseDto = mapper.userToResponse(updatedUser);
+            return ResponseEntity.ok(responseDto);
+    }
 
 
-
-
-
-
-
-
-
+    @DeleteMapping("mypage/{user_id}/delete")
+    public ResponseEntity<?> deleteUser(@PathVariable("user_id") long userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.noContent().build();
+    }
 
 
 

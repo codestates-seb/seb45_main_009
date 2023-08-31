@@ -40,7 +40,6 @@ public class User {
     private LocalDateTime modifiedAt = LocalDateTime.now();
 
 
-
     @Column(nullable = false)
     private boolean usertype;
 

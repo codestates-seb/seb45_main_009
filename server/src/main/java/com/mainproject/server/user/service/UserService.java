@@ -41,12 +41,16 @@ public class UserService {
     public User updateUser(Long userId, UserDto.PatchDto patchDto) {
         User existingUser = findVerifiedUser(userId);
 
-        // 업데이트하려는 정보가 있다면 해당 정보로 엔티티를 업데이트
         if (patchDto.getNickname() != null) {
             existingUser.setNickname(patchDto.getNickname());
         }
+
         if (patchDto.getProfileimg() != null) {
             existingUser.setProfileimg(patchDto.getProfileimg());
+        }
+
+        if (patchDto.getSport() != null) {
+            existingUser.setSport(patchDto.getSport());
         }
 
         if (patchDto.getBio() != null) {
@@ -65,10 +69,8 @@ public class UserService {
             existingUser.setLocation(patchDto.getLocation());
         }
 
-
         return userRepository.save(existingUser);
     }
-
 
 
 

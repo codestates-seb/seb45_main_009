@@ -69,6 +69,8 @@ public class UserDto {
 
         private String password;
 
+        private ArrayList<String> sport;
+
 
     }
 
@@ -91,6 +93,7 @@ public class UserDto {
         private int height;
         private int weight;
         private String location;
+        private ArrayList<String> sport;
 
     }
 
