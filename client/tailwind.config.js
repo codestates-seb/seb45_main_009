@@ -3,7 +3,28 @@ module.exports = {
   content: [],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "btn-color": "#7FBCD9",
+        "feedbtn-color": "#FFF99A",
+        "feedbtnhover-color": "#FFF000",
+      },
+      animation: {
+        "slide-down": "slide-down 0.5s",
+      },
+      keyframes: {
+        "slide-down": {
+          "0%": {
+            opacity: 0,
+            transform: "translateY(-40%)",
+          },
+          "100%": {
+            opacity: 1,
+            transform: "translateY(0)",
+          },
+        },
+      },
+    },
   },
   variants: {
     extend: {},

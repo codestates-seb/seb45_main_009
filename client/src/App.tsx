@@ -12,6 +12,7 @@ import FeedDetailPageCor from "./pages/FeedDetailPageCor";
 import FeedDetailPageInd from "./pages/FeedDetailPageInd";
 import FeedFormPageCor from "./pages/FeedFormPageCor";
 import FeedFormPageInd from "./pages/FeedFormPageInd";
+import Not404 from "./pages/Not404";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/feeddetailind" element={<FeedDetailPageInd />}></Route>
           <Route path="/feedformcor" element={<FeedFormPageCor />}></Route>
           <Route path="/feedformind" element={<FeedFormPageInd />}></Route>
+          <Route path="*" element={<Not404 />} />
         </Routes>
         <Footer />
       </div>
