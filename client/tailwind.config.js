@@ -3,7 +3,13 @@ module.exports = {
   content: [],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        bts: "#7FBCD9",
+        bdc: "#D9D9D9",
+        btc: "#676767",
+      },
+    },
   },
   variants: {
     extend: {},
