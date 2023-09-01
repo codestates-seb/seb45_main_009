@@ -8,6 +8,13 @@ module.exports = {
         "btn-color": "#7FBCD9",
         "feedbtn-color": "#FFF99A",
         "feedbtnhover-color": "#FFF000",
+        bts: "#7FBCD9",
+        bdc: "#D9D9D9",
+        btc: "#676767",
+      },
+      screens: {
+        "max-tablet": { max: "1024px" },
+        "max-mobile": { max: "425px" },
       },
       animation: {
         "slide-down": "slide-down 0.5s",
