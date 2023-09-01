@@ -8,7 +8,9 @@ function FeedFormPageInd() {
   //본문
   const [bodyValue, setBodyValue] = useState<string>("");
 
-  const handleBodyChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
+  const handleBodyChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ): void => {
     setBodyValue(e.target.value);
   };
 
@@ -32,12 +34,19 @@ function FeedFormPageInd() {
     setAddedTags(addedTags.filter((_, index) => index !== indexToRemove));
   };
 
-  const inputTagHandler = (event: React.ChangeEvent<HTMLInputElement>): void => {
+  const inputTagHandler = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
     setInputTag(event.target.value);
   };
 
   const addTags = (e: React.KeyboardEvent<HTMLInputElement>): void => {
-    if (inputTag !== "" && inputTag.length <= 18 && !addedTags.includes(inputTag) && addedTags.length < 5) {
+    if (
+      inputTag !== "" &&
+      inputTag.length <= 18 &&
+      !addedTags.includes(inputTag) &&
+      addedTags.length < 5
+    ) {
       setAddedTags([...addedTags, `#${inputTag}`]);
       setInputTag("");
     }
@@ -74,12 +83,16 @@ function FeedFormPageInd() {
             onChange={handleBodyChange}
           ></textarea>
           <div className="w-[360px] mb-5">
-            <div className="text-btc py-2 rounded mb-2"># 연관 태그 필수 선택</div>
+            <div className="text-btc py-2 rounded mb-2">
+              # 연관 태그 필수 선택
+            </div>
             {healthCategory.map((category, index) => (
               <div
                 key={index}
                 className={`text-btc inline-block px-2 py-1 border border-bdc rounded mr-2.5 mb-2.5 ${
-                  selectedTags.includes(category) ? "bg-bts text-white" : "text-btc"
+                  selectedTags.includes(category)
+                    ? "bg-bts text-white"
+                    : "text-btc"
                 }`}
                 onClick={() => handleTagSelect(category)}
               >
@@ -95,7 +108,10 @@ function FeedFormPageInd() {
                   className="text-btc inline-block px-2 py-1 border border-bdc rounded mr-2.5 mb-2.5 bg-bts text-white "
                 >
                   <span className="mr-2 inline-block">{tag}</span>
-                  <TiDelete className="inline-block" onClick={() => removeTags(index)} />
+                  <TiDelete
+                    className="inline-block"
+                    onClick={() => removeTags(index)}
+                  />
                 </li>
               ))}
               {addedTags.length === 5 ? null : (
@@ -114,7 +130,9 @@ function FeedFormPageInd() {
               )}
             </ul>
           </div>
-          <button className="text-btc px-6 py-2 border border-bdc rounded">등록하기</button>
+          <button className="text-btc px-6 py-2 border border-bdc rounded">
+            등록하기
+          </button>
         </div>
       </div>
     </>

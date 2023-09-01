@@ -1,7 +1,6 @@
 // 컴포넌트 가져오기
-import BackButton from '../components/atoms/BackButton';
-import ProfileCor from '../components/atoms/ProfileCor';
-
+import BackButton from "../components/atoms/BackButton";
+import ProfileCor from "../components/atoms/ProfileCor";
 
 function FeedDetailPageCor() {
   return (
