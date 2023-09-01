@@ -8,41 +8,27 @@ import {
     faThumbsUp
   } from '@fortawesome/free-solid-svg-icons';
 
-function DetailFeed() {
+function DetailFeedCor() {
     // 피드 데이터
-    // 피드 고유 아이디
-    // get 요청 했을때
-    // 댓글이랑 좋아요 추가적인 데이터를 한번에 오도록
-
-    // 로그인 시큐얼티..? 승범 동훈,
-    // 피드쪽 소연 은영,
-
   let feedData : {
-    feedid : number,
     photo : string[],
     date :string, 
     content :string ,
-    tag :string[]
+    price : string[],
+    tag :string[],
+    addresstag : string[]
   } = {
-    feedid : 1,
     photo : ['/asset/gym1.jpeg','/asset/gym2.jpeg','/asset/gym3.jpeg'],
     date : '2023.08.11',
-    content : '오늘도 오운완 성공!',
-    tag : ['크로스핏', '헬스']
+    content : '여름이벤트!',
+    price : ['1회 체험 세션 - 40,000원', 
+            '10회(PT+이용권+락카) - 600,000원', 
+            '20회(PT+이용권+락카) - 1,150,000원', 
+            '30회(PT+이용권+락카) - 1,650,000원', 
+            '40회(PT+이용권+락카) - 2,100,000원'],
+    tag : ['크로스핏', '헬스'],
+    addresstag : ['서울','인천']
   }
-
-  let feedproductData : {
-    product : string[], 
-    price : number[],
-    size : string[]
-    } = {
-    product : ['adidas','나이키'],
-    price : [99000, 13000],
-    size : ['XL사이즈', '260mm']
-  }
-
-  const taglength = feedproductData.product.length;
-  console.log(taglength)
 
   // 좋아요
   const [isLiked, setIsLiked] = useState(false);
@@ -79,6 +65,17 @@ function DetailFeed() {
         </div>
 
         <div className=" mt-[40px]">
+            <div className="font-bold text-gray-400 text-sm mb-[10px]">가격</div>
+            <div>
+                {
+                    feedData.price.map((index,item) => (
+                            <div>{index}</div> 
+                    ))
+                }
+            </div>
+        </div>
+
+        <div className=" mt-[40px]">
             <div className="font-bold text-gray-400 text-sm mb-[10px]">연관태그</div>
             <div>
                 {
@@ -90,36 +87,17 @@ function DetailFeed() {
         </div>
 
         <div className=" mt-[40px]">
-            <div className="font-bold text-gray-400 text-sm mb-[10px]">착용 제품</div>
-            <div className='flex'>
-
-            <div className="border rounded p-4 flex float-left  w-auto mr-[20px]">
-                <div className="float-left mr-[14px]">
-                    <div>제품</div>
-                    <div>가격</div>
-                    <div>사이즈</div>
-                </div>
-                <div>
-                    <div className="font-bold">{feedproductData.product[0]}</div>
-                    <div>₩ {feedproductData.price[0]}</div>
-                    <div className="text-blue-300">{feedproductData.size[0]}</div>
-                </div>
-            </div>
-
-            <div className="border rounded p-4 flex float-left  w-auto">
-                <div className="float-left mr-[14px]">
-                    <div>제품</div>
-                    <div>가격</div>
-                    <div>사이즈</div>
-                </div>
-                <div>
-                    <div className="font-bold">{feedproductData.product[1]}</div>
-                    <div>₩ {feedproductData.price[1]}</div>
-                    <div className="text-blue-300">{feedproductData.size[1]}</div>
-                </div>
-            </div>
+            <div className="font-bold text-gray-400 text-sm mb-[10px]">지역 태그</div>
+            <div>
+                {
+                    feedData.addresstag.map((item,index)=>(
+                        <span  className=" p-1 bg-blue-100 w-auto rounded  mr-2" key={index}>{item}</span>
+                    ))
+                }
             </div>
         </div>
+
+        
         <div className="float-right mt-[10px]" onClick={inappropriateviewBtn}>🚨</div>
 
     </div>
@@ -127,4 +105,4 @@ function DetailFeed() {
   ) 
 }
 
-export default DetailFeed;
+export default DetailFeedCor;
