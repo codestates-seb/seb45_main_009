@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import { TiDelete } from "react-icons/ti";
+
 type Category = string;
 
 function FeedFormPageInd() {
@@ -22,24 +24,24 @@ function FeedFormPageInd() {
   };
 
   //입력 태그
-  const initialTag = ["오운완"];
+  const initialTag = ["#오운완"];
   const [addedTags, setAddedTags] = useState<string[]>(initialTag);
   const [inputTag, setInputTag] = useState<string>("");
 
-  // const removeTags = (indexToRemove) => {
-  //   setTags(tags.filter((el, index) => index !== indexToRemove));
-  // };
+  const removeTags = (indexToRemove: number): void => {
+    setAddedTags(addedTags.filter((_, index) => index !== indexToRemove));
+  };
 
-  // const inputTagHandler = (event) => {
-  //   setInputTag(event.target.value);
-  // };
+  const inputTagHandler = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setInputTag(event.target.value);
+  };
 
-  // const addTags = (event) => {
-  //   if (inputTag !== "" && !tags.includes(inputTag)) {
-  //     setTags([...tags, inputTag]);
-  //     setInputTag("");
-  //   }
-  // };
+  const addTags = (e: React.KeyboardEvent<HTMLInputElement>): void => {
+    if (inputTag !== "" && inputTag.length <= 18 && !addedTags.includes(inputTag) && addedTags.length < 5) {
+      setAddedTags([...addedTags, `#${inputTag}`]);
+      setInputTag("");
+    }
+  };
 
   useEffect(() => console.log("bodyValue:", bodyValue), [bodyValue]);
   useEffect(() => console.log("selectedTags:", selectedTags), [selectedTags]);
@@ -67,12 +69,12 @@ function FeedFormPageInd() {
         </div>
         <div className="flex flex-col h-[600px]">
           <textarea
-            className="w-[360px] h-[200px] border border-bdc rounded-md mb-5 p-2.5 resize-none  focus:outline-[#bdc]"
+            className="w-[360px] h-[200px] border border-bdc rounded-md mb-5 p-2.5 resize-none  focus:outline-[#abb4af]"
             placeholder="글을 입력해 주세요"
             onChange={handleBodyChange}
           ></textarea>
           <div className="w-[360px] mb-5">
-            <div className="text-btc py-2 rounded mb-4"># 연관 태그 필수 선택</div>
+            <div className="text-btc py-2 rounded mb-2"># 연관 태그 필수 선택</div>
             {healthCategory.map((category, index) => (
               <div
                 key={index}
@@ -85,7 +87,33 @@ function FeedFormPageInd() {
               </div>
             ))}
           </div>
-          <div className="border border-bdc rounded px-8 py-2 w-[360px] mb-5 text-btc"># 연관 태그 추가</div>
+          <div className="border border-bdc rounded px-3 pt-2 w-[360px] mh-[50px] mb-5 text-btc ">
+            <ul>
+              {addedTags.map((tag, index) => (
+                <li
+                  key={index}
+                  className="text-btc inline-block px-2 py-1 border border-bdc rounded mr-2.5 mb-2.5 bg-bts text-white "
+                >
+                  <span className="mr-2 inline-block">{tag}</span>
+                  <TiDelete className="inline-block" onClick={() => removeTags(index)} />
+                </li>
+              ))}
+              {addedTags.length === 5 ? null : (
+                <input
+                  className="outline-none mb-2.5 "
+                  type="text"
+                  onKeyUp={(event) => {
+                    if (event.key === "Enter") {
+                      addTags(event);
+                    }
+                  }}
+                  value={inputTag}
+                  placeholder="연관 태그 추가"
+                  onChange={inputTagHandler}
+                />
+              )}
+            </ul>
+          </div>
           <button className="text-btc px-6 py-2 border border-bdc rounded">등록하기</button>
         </div>
       </div>
