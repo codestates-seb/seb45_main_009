@@ -9,6 +9,7 @@ import com.mainproject.server.user.mapper.UserMapper;
 import com.mainproject.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,8 @@ public class UserController {
 
         User createdUser = userService.createUser(user);
 
-        return ResponseEntity.created(URI.create("/user/" + createdUser.getUserId())).body(createdUser);
+        return ResponseEntity.created(URI.create("/user/" +
+                "" + createdUser.getUserId())).body(createdUser);
     }
 
     @PostMapping("join/store")
@@ -55,6 +57,19 @@ public class UserController {
         return ResponseEntity.ok(responseDto);
     }
 
+
+    //유저 전체 조회
+    @GetMapping("users")
+    public ResponseEntity<Page<UserDto.ResponseDto>> getUsers(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size) {
+
+        Page<User> userPage = userService.findUsers(page, size);
+        Page<UserDto.ResponseDto> responsePage = userPage.map(mapper::userToResponse);
+
+        return ResponseEntity.ok(responsePage);
+    }
+
     @PatchMapping("mypage/{user_id}/update")
     public ResponseEntity<?> patchUser(@PathVariable("user_id") long userId,
                                        @Valid @RequestBody UserDto.PatchDto patchDto) {
@@ -71,6 +86,8 @@ public class UserController {
         userService.deleteUser(userId);
         return ResponseEntity.noContent().build();
     }
+
+
 
 
 

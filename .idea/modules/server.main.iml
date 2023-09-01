@@ -5,4 +5,7 @@
       <sourceFolder url="file://$MODULE_DIR$/../../server/build/generated/sources/annotationProcessor/java/main" isTestSource="false" generated="true" />
     </content>
   </component>
+  <component name="SonarLintModuleSettings">
+    <option name="uniqueId" value="38e406dc-2037-4dbc-b347-94fc0a1fbb25" />
+  </component>
 </module>

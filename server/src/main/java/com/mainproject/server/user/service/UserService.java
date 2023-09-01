@@ -31,10 +31,16 @@ public class UserService {
         verifyExistEmail(user.getEmail());
         verifyExistNickname(user.getNickname());
 
+        // 비밀번호 유효성 검사 추가
+        if (!isValidPassword(user.getPassword())) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_PASSWORD);
+        }
+
         user.setCreatedAt(LocalDateTime.now());
 
         return userRepository.save(user);
     }
+
 
 
     //유저 정보 변경
@@ -73,7 +79,6 @@ public class UserService {
     }
 
 
-
     //유저 조회
     public User findUser(long userId) {
         return findVerifiedUser(userId);
@@ -91,7 +96,6 @@ public class UserService {
         User existingUser = findVerifiedUser(userId);
         userRepository.delete(existingUser);
     }
-
 
 
     public User findVerifiedUser(long userId) {
@@ -112,8 +116,6 @@ public class UserService {
 
 
 
-
-
     private void verifyExistEmail(String email) {
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isPresent())
@@ -124,6 +126,16 @@ public class UserService {
         Optional<User> user = userRepository.findByNickname(nickname);
         if (user.isPresent())
             throw new BusinessLogicException(ExceptionCode.NICKNAME_EXISTS);
+    }
+
+
+
+
+    private boolean isValidPassword(String password) {
+        // 비밀번호는 최소 6자 이상, 영문 대소문자 및 숫자를 포함해야 유효하다고 가정하는 로직
+        return password != null && password.length() >= 6 &&
+                password.matches(".*[a-zA-Z].*") &&
+                password.matches(".*\\d.*");
     }
 
 
