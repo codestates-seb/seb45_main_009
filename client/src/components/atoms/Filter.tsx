@@ -15,16 +15,29 @@ const filters = [
   "농구",
   "기타",
 ];
+interface FilterProps {
+  setSelectedFilter: (filter: string) => void;
+}
 
-const Filter = () => {
+const Filter = ({ setSelectedFilter }: FilterProps) => {
   const [showFilters, setShowFilters] = useState(false);
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 
   const filterClickHandler = () => {
     setShowFilters(!showFilters);
   };
 
+  const handleFilterButtonClick = (filter: string) => {
+    if (selectedFilters.includes(filter)) {
+      setSelectedFilters(selectedFilters.filter((f) => f !== filter));
+    } else {
+      setSelectedFilters([...selectedFilters, filter]);
+    }
+    setSelectedFilter(filter);
+  };
+
   return (
-    <div className="max-w-5xl my-7 w-full">
+    <div className="max-w-7xl my-7 w-full">
       <img
         src="/asset/filter.png"
         alt="filter"
@@ -34,7 +47,12 @@ const Filter = () => {
       {showFilters && (
         <div className="m-2 animate-slide-down">
           {filters.map((filter, index) => (
-            <Filterbtn key={index} name={filter} />
+            <Filterbtn
+              key={index}
+              name={filter}
+              isSelected={selectedFilters.includes(filter)}
+              onClick={() => handleFilterButtonClick(filter)}
+            />
           ))}
         </div>
       )}

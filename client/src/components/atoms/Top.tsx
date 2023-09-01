@@ -8,7 +8,7 @@ const Top = () => {
     <div className="flex justify-center text-2xl p-3 border-t-2 border-b-2 w-full">
       <Link
         to={"/"}
-        className={`mr-10 ${
+        className={`mr-16 ${
           location.pathname === "/" ? "text-btn-color" : "hover:text-btn-color"
         }`}
       >
@@ -16,7 +16,7 @@ const Top = () => {
       </Link>
       <Link
         to={"/store"}
-        className={`mr-10 ${
+        className={`mr-16 ${
           location.pathname === "/store"
             ? "text-btn-color"
             : "hover:text-btn-color"
@@ -26,7 +26,7 @@ const Top = () => {
       </Link>
       <Link
         to={"/community"}
-        className={`mr-10 ${
+        className={`mr-16 ${
           location.pathname === "/community"
             ? "text-btn-color"
             : "hover:text-btn-color"

@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import styled from "styled-components";
 
 const members = [
   { name: "손승범", github: "깃허브링크1", mail: "이메일주소1" },
@@ -14,7 +13,7 @@ const members = [
 
 function Footer() {
   return (
-    <div className="flex justify-center items-center  m-2">
+    <div className="flex justify-center items-center  bg-slate-200">
       <Link to={"/"}>
         <div className=" mr-44 hover:cursor-pointer">
           <img src="/asset/fitfolio.png" alt="logo" />

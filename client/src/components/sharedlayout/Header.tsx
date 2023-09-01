@@ -1,19 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import styled from "styled-components";
 
 function Header() {
   return (
     <div className="flex justify-center items-center m-2">
       <Link to={"/"}>
         <div className=" ml-4 hover:cursor-pointer">
-          <img src="/asset/fitfolio.png" alt="logo" />
+          <img src="/asset/fitfolio.png" alt="logo" className="w-[250]" />
         </div>
       </Link>
-      <div className="flex h-8 w-6/12 border rounded-2xl p-1 mr-4">
+      <div className="flex h-8 w-4/12 border rounded-2xl p-1 mr-4">
         <img src="/asset/search.png" alt="search" className="mr-2 w-6" />
         <input
-          className="w-full outline-none"
+          className="w-4/12 outline-none"
           placeholder="검색하실 ID 또는 #태그를 입력하세요."
         ></input>
       </div>

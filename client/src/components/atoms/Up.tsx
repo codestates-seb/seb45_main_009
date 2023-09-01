@@ -6,8 +6,8 @@ const Up = () => {
   };
 
   return (
-    <div className="flex justify-end mr-10 hover:cursor-pointer w-full">
-      <img src="/asset/up.png" alt="pageup" onClick={scrollUp}></img>
+    <div className="fixed bottom-0 right-0 mb-10 mr-10 hover:cursor-pointer">
+      <img src="/asset/up.png" alt="pageup" onClick={scrollUp} />
     </div>
   );
 };
