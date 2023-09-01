@@ -9,21 +9,15 @@ function FeedDetailPageInd() {
   return(
     <div className="w-full p-10">
       <BackButton />
-
       <div className="w-full pl-10  flex-left">    
         <ProfileInd />
-
         <div className=" mt-[60px] flex justify-center">
-
         <div>
           <DetailFeed />
           <Comment />
         </div>
-
         </div>
-        
       </div>
-
     </div>
 
   ) 
