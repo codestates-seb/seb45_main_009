@@ -4,7 +4,15 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
-      'custom-color': '#97EAF0',
+      colors: {
+        bts: "#7FBCD9",
+        bdc: "#D9D9D9",
+        btc: "#676767",
+      },
+      screens: {
+        "max-tablet": { max: "1024px" },
+        "max-mobile": { max: "425px" },
+      },
     },
   },
   variants: {
