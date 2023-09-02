@@ -3,6 +3,7 @@ package com.mainproject.server.user.service;
 
 import com.mainproject.server.exception.BusinessLogicException;
 import com.mainproject.server.exception.ExceptionCode;
+//import com.mainproject.server.user.config.PasswordEncoder;
 import com.mainproject.server.user.dto.UserDto;
 import com.mainproject.server.user.entity.User;
 import com.mainproject.server.user.repository.UserRepository;
@@ -21,15 +22,20 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository){
-        this.userRepository = userRepository;
-    }
+
+    public UserService(UserRepository userRepository) {this.userRepository = userRepository;}
 
 
-    //유저 생성
+
+    // 유저 생성
     public User createUser(User user) {
         verifyExistEmail(user.getEmail());
         verifyExistNickname(user.getNickname());
+
+
+        // 비밀번호 암호화
+//        String encryptedPassword = passwordEncoder.encode(user.getPassword());
+//        user.setPassword(encryptedPassword);
 
         // 비밀번호 유효성 검사 추가
         if (!isValidPassword(user.getPassword())) {
@@ -43,7 +49,7 @@ public class UserService {
 
 
 
-    //유저 정보 변경
+    // 유저 정보 변경
     public User updateUser(Long userId, UserDto.PatchDto patchDto) {
         User existingUser = findVerifiedUser(userId);
 
@@ -79,25 +85,27 @@ public class UserService {
     }
 
 
-    //유저 조회
+    // 유저 조회
     public User findUser(long userId) {
         return findVerifiedUser(userId);
     }
 
-    //유저 전체 조회
+
+    // 유저 전체 조회
     public Page<User> findUsers(int page, int size) {
         return userRepository.findAll(PageRequest.of(page, size,
                 Sort.by("userId").descending()));
     }
 
 
-    //유저 삭제
+    // 유저 삭제
     public void deleteUser(Long userId) {
         User existingUser = findVerifiedUser(userId);
         userRepository.delete(existingUser);
     }
 
 
+    // userId를 사용하여 유저를 조회
     public User findVerifiedUser(long userId) {
         Optional<User> optionalUser =  userRepository.findById(userId);
         User findUser = optionalUser.orElseThrow(() ->
@@ -106,6 +114,8 @@ public class UserService {
         return findUser;
     }
 
+
+     // 이메일 사용하여 유저를 조회
     public User findVerifiedUser(String email) {
         Optional<User> optionalUser =  userRepository.findByEmail(email);
         User findUser = optionalUser.orElseThrow(() ->
@@ -115,13 +125,15 @@ public class UserService {
     }
 
 
-
+    // 이메일 중복이 있는지 조회
     private void verifyExistEmail(String email) {
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isPresent())
             throw new BusinessLogicException(ExceptionCode.USER_EXISTS);
     }
 
+
+    // 닉네임 중복이 있는지 조회
     private void verifyExistNickname(String nickname) {
         Optional<User> user = userRepository.findByNickname(nickname);
         if (user.isPresent())
@@ -129,8 +141,7 @@ public class UserService {
     }
 
 
-
-
+    // 비밀번호 유효성 검증
     private boolean isValidPassword(String password) {
         // 비밀번호는 최소 6자 이상, 영문 대소문자 및 숫자를 포함해야 유효하다고 가정하는 로직
         return password != null && password.length() >= 6 &&
