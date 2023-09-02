@@ -5,6 +5,12 @@ spring:
     username: ${LOCAL_DB_USERNAME}
     password: ${LOCAL_DB_PASSWORD}
 
+    servlet:
+      multipart:
+        enabled: true
+        max-file-size: 10MB  # 파일 크기 제한 설정
+        max-request-size: 10MB  # 요청 크기 제한 설정
+
   jpa:
     hibernate:
       dialect: org.hibernate.dialect.MySQL8Dialect
@@ -34,7 +40,6 @@ spring:
               - email
               - profile
 
-
 logging:
   level:
     p6spy: info
@@ -43,3 +48,15 @@ jwt:
   key: ${JWT_SECRET_KEY}
   access-token-expiration-minutes: 30
   refresh-token-expiration-minutes: 420
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_S3_ACCESS_KEY}
+      secret-key: ${AWS_S3_SECRET_KEY}
+    s3:
+      bucket: ${AWS_S3_BUCKET}
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
