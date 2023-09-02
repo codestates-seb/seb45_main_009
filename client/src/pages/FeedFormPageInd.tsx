@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import { TiDelete } from "react-icons/ti";
+import ImageForm from "../components/features/ImageForm";
 
 type Category = string;
 
@@ -61,11 +62,12 @@ function FeedFormPageInd() {
   return (
     <div className="flex items-center flex-col my-20 ">
       <div className="flex flex-row">
-        <div className="flex flex-col w-[420px] mr-10 h-[580px]">
-          <div className="bg-[#D9D9D9] min-w-[320px] h-[400px]"></div>
+        <div className="flex flex-col w-[420px] mr-10 ">
+          <ImageForm></ImageForm>
+          {/* <div className="bg-[#D9D9D9] min-w-[320px] h-[400px]"></div>
           <div className="flex mt-5">
             <div className="bg-[#D9D9D9] min-w-[100px] h-[120px] mr-5"></div>
-          </div>
+          </div> */}
         </div>
         <div className="flex flex-col w-[420px] h-[580px]">
           <textarea
