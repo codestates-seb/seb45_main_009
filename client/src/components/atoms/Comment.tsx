@@ -1,17 +1,28 @@
+// import React, { InputHTMLAttributes } from 'react';
+
+// interface CommentProps extends InputHTMLAttributes<HTMLInputElement> {
+
+// }
+
+
+// const Comment :React.FC<CommentProps> = () => {
+
+//     return (
+//       <div className='mt-[60px]'>
+//         <div>댓글 </div>
+//       </div>
+//     );
+//   };
+  
+
+// export default Comment;
+
 import { useState } from "react";
 
 
+
 function Comment() {
-    let userData = [
-    {
-        username: 'Lee seeun',
-        useremail: 'lse@gmail.com',
-        pw: '1234',
-        userheight : 170,
-        userweight : 60,
-        userphoto : 'img.png'
-    }
-    ];
+
 
     // 댓글생성
   const [inputValue, setInputValue]  = useState<string>('');
@@ -61,13 +72,13 @@ function Comment() {
 
   return(
     <div>
-        <div className=" mt-[40px]">
+        <div className=" mt-[40px] w-full">
                   <div className="flex items-center">
-                  <img src={userData[0].userphoto}  className='w-[30px] h-[30px] rounded-full float-left mr-4' />
+                  <img src='/asset/img.png'  className='w-[30px] h-[30px] rounded-full float-left mr-4' />
                   <div className="border rounded p-1 w-full">
 
                   <input 
-                      className=" rounded w-[300px]" 
+                      className=" rounded w-[500px]" 
                       type='text' 
                       placeholder="댓글을 남겨보세요."
                       onChange={handleInputChange}
@@ -88,8 +99,8 @@ function Comment() {
 
           <div className=" mt-[40px] flex items-center mb-[10px]  justify-between">
             <div className="flex">
-              <img src={userData[0].userphoto}  className='w-[30px] h-[30px] rounded-full float-left mr-4' />
-              <div className="font-bold">{userData[0].username}</div>
+              <img src='/asset/img.png'  className='w-[30px] h-[30px] rounded-full float-left mr-4' />
+              <div className="font-bold">Lee seeun</div>
             </div>
           <div className="flex">
             <button className=" text-gray-400 text-sm " onClick={handleEditComment} >수정</button>
