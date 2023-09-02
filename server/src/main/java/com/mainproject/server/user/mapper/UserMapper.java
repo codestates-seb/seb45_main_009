@@ -2,9 +2,11 @@ package com.mainproject.server.user.mapper;
 
 
 
+import com.mainproject.server.user.dto.AuthLoginDto;
 import com.mainproject.server.user.dto.UserDto;
 import com.mainproject.server.user.entity.User;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
@@ -21,6 +23,7 @@ public interface UserMapper {
 
      List<UserDto.ResponseDto> UsersToResponses(List<User> users);
 
-
+     @Mapping(source = "profileimg", target = "image")
+     User AuthLoginDtoUser(AuthLoginDto authLoginDto);
 
 }

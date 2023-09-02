@@ -2,6 +2,7 @@ package com.mainproject.server.user.controller;
 
 
 
+import com.mainproject.server.user.dto.AuthLoginDto;
 import com.mainproject.server.user.dto.UserDto;
 import com.mainproject.server.user.entity.User;
 import com.mainproject.server.user.mapper.UserMapper;
@@ -55,6 +56,27 @@ public class UserController {
 
         // 생성된 기업 정보를 반환하고 HTTP 상태 코드 201(CREATED)를 반환
         return ResponseEntity.created(URI.create("/user/" + createdUser.getUserId())).body(createdUser);
+    }
+
+    @PostMapping("/oauth/signup/kakao")
+    public ResponseEntity oAuth2LoginKakao(@RequestBody @Valid AuthLoginDto requesBody) {
+        log.info("### oauth2 login start! ###");
+        String accessToken = "";
+        String refreshToken = "";
+        String userId = "";
+        User user = mapper.AuthLoginDtoUser(requesBody);
+        user.setEmail(user.getEmail() + "3");
+        if (!userService.existsByEmail(user.getEmail())) {
+            user = userService.createUserOAuth2(user);
+        } else {
+            user = userService.findVerifiedUser(user.getEmail());
+        }
+        accessToken = userService.delegateAccessToken(user);
+        refreshToken = userService.delegateRefreshToken(user);
+        userId = String.valueOf(user.getUserId());
+        return ResponseEntity.ok().header("Authorization", "Bearer " + accessToken)
+                .header("Refresh", refreshToken)
+                .header("UserId", userId).build();
     }
 
     // 유저 정보 조회

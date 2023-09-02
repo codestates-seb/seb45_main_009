@@ -1,6 +1,8 @@
 package com.mainproject.server.user.service;
 
 
+import com.mainproject.server.auth.jwt.JwtTokenizer;
+import com.mainproject.server.auth.utils.CustomAuthorityUtils;
 import com.mainproject.server.exception.BusinessLogicException;
 import com.mainproject.server.exception.ExceptionCode;
 //import com.mainproject.server.user.config.PasswordEncoder;
@@ -24,9 +26,16 @@ public class UserService {
 
 
     private final UserRepository userRepository;
+    private final CustomAuthorityUtils authorityUtils;
+    private final JwtTokenizer jwtTokenizer;
 
 
-    public UserService(UserRepository userRepository) {this.userRepository = userRepository;}
+    public UserService(UserRepository userRepository,
+                       CustomAuthorityUtils authorityUtils, JwtTokenizer jwtTokenizer) {
+        this.userRepository = userRepository;
+        this.authorityUtils = authorityUtils;
+        this.jwtTokenizer = jwtTokenizer;
+    }
 
 
 
@@ -50,6 +59,15 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User createUserOAuth2(User user) {
+
+        List<String> role = authorityUtils.createRoles(user.getEmail());
+        user.setRoles(role);
+        String newName = verifyExistName(user.getNickname());
+        user.setNickname(newName);
+
+        return userRepository.save(user);
+    }
 
 
     // 유저 정보 변경
@@ -152,10 +170,48 @@ public class UserService {
                 password.matches(".*\\d.*");
     }
 
+    private String verifyExistName(String name){     // oauth2로 로그인 했을 때 같은 이름이 있을 때 1~1000까지의 랜덤숫자를 붙임
+        String newName = name;
+        Optional<User> optionalUser = userRepository.findByNickname(name);
+        if(optionalUser.isPresent()){
+            Random random = new Random();
+            int randomNumber = random.nextInt(10000) + 1;
+            newName = name + randomNumber;
+        }
+        return newName;
+    }
+
+    public Boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    public String delegateAccessToken(User user) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", user.getUserId());
+        claims.put("roles", user.getRoles());
+
+        String subject = user.getEmail();
+        Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
+
+        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
+
+        String accessToken = jwtTokenizer.generateAccessToken(claims, subject, expiration, base64EncodedSecretKey);
+
+        return accessToken;
+    }
 
 
+    public String delegateRefreshToken(User user) {
 
 
+        String subject = user.getEmail();
+        Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
+        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
+
+        String refreshToken = jwtTokenizer.generateRefreshToken(subject, expiration, base64EncodedSecretKey);
+
+        return refreshToken;
+    }
 
 }
 
