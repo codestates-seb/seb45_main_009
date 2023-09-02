@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -80,6 +81,7 @@ public class UserController {
     }
 
     // 유저 정보 조회
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("mypage/{user_id}")
     public ResponseEntity<UserDto.ResponseDto> getUser(@PathVariable("user_id") long userId) {
         // UserService를 사용하여 userId에 해당하는 유저 정보 조회
@@ -104,6 +106,7 @@ public class UserController {
     }
 
     // 유저 정보 업데이트
+    @PreAuthorize("isAuthenticated()")
     @PatchMapping("mypage/{user_id}/update")
     public ResponseEntity<?> patchUser(@PathVariable("user_id") long userId,
                                        @Valid @RequestBody UserDto.PatchDto patchDto) {
@@ -119,6 +122,7 @@ public class UserController {
 
 
     // 유저 삭제
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("mypage/{user_id}/delete")
     public ResponseEntity<?> deleteUser(@PathVariable("user_id") long userId) {
         // UserService를 사용하여 userId에 해당하는 유저 삭제

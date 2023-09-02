@@ -59,13 +59,16 @@ public class UserService {
 
         user.setCreatedAt(LocalDateTime.now());
 
+        List<String> roles = authorityUtils.createRoles(user.getEmail());
+        user.setRoles(roles);
+
         return userRepository.save(user);
     }
 
     public User createUserOAuth2(User user) {
 
-        List<String> role = authorityUtils.createRoles(user.getEmail());
-        user.setRoles(role);
+        List<String> roles = authorityUtils.createRoles(user.getEmail());
+        user.setRoles(roles);
         String newName = verifyExistName(user.getNickname());
         user.setNickname(newName);
 

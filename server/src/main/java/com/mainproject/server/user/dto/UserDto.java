@@ -62,6 +62,7 @@ public class UserDto {
         private Integer weight;
 
         private LocalDate birth;
+
     }
 
 
