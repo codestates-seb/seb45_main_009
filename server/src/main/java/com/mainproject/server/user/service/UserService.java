@@ -5,13 +5,14 @@ import com.mainproject.server.auth.jwt.JwtTokenizer;
 import com.mainproject.server.auth.utils.CustomAuthorityUtils;
 import com.mainproject.server.exception.BusinessLogicException;
 import com.mainproject.server.exception.ExceptionCode;
-//import com.mainproject.server.user.config.PasswordEncoder;
+import com.mainproject.server.auth.config.PasswordEncoderConfig;
 import com.mainproject.server.user.dto.UserDto;
 import com.mainproject.server.user.entity.User;
 import com.mainproject.server.user.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,13 +29,15 @@ public class UserService {
     private final UserRepository userRepository;
     private final CustomAuthorityUtils authorityUtils;
     private final JwtTokenizer jwtTokenizer;
+    private final PasswordEncoder passwordEncoder;
 
 
     public UserService(UserRepository userRepository,
-                       CustomAuthorityUtils authorityUtils, JwtTokenizer jwtTokenizer) {
+                       CustomAuthorityUtils authorityUtils, JwtTokenizer jwtTokenizer, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.authorityUtils = authorityUtils;
         this.jwtTokenizer = jwtTokenizer;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -46,8 +49,8 @@ public class UserService {
 
 
         // 비밀번호 암호화
-//        String encryptedPassword = passwordEncoder.encode(user.getPassword());
-//        user.setPassword(encryptedPassword);
+        String encryptedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encryptedPassword);
 
         // 비밀번호 유효성 검사 추가
         if (!isValidPassword(user.getPassword())) {

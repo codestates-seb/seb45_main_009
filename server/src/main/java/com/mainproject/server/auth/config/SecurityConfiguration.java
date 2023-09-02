@@ -55,12 +55,13 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                         .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                         // # user 관련
+                        // role값 인식 못함
                         .antMatchers(HttpMethod.POST, "/join/**").permitAll()
                         .antMatchers(HttpMethod.POST, "/login").permitAll()
-                        .antMatchers(HttpMethod.POST, "/logout").hasRole("USER")
-                        .antMatchers(HttpMethod.GET, "/mypage/**").hasAnyRole("USER", "ADMIN")
-                        .antMatchers(HttpMethod.PATCH, "/mypage/**").hasAnyRole("USER", "ADMIN")
-                        .antMatchers(HttpMethod.DELETE, "/mypage/**").hasAnyRole("USER", "ADMIN")
+                        .antMatchers(HttpMethod.POST, "/logout").permitAll()
+                        .antMatchers(HttpMethod.GET, "/mypage/**").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH, "/mypage/**").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/mypage/**").hasRole("USER")
 
                         // # feed 관련
                         .antMatchers(HttpMethod.GET, "/").permitAll()

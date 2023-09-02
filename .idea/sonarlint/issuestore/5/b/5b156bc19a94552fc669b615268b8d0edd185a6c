@@ -1,9 +1,11 @@
 
 L
-java:S3740 "/Provide the parametrized type for this generic.(ÂÑ™µ8Ùï§ã¤1
+java:S3740$"/Provide the parametrized type for this generic.(ÂÑ™µ8ÎÑ¨­¥1
 L
-java:S3740*"/Provide the parametrized type for this generic.(äÜÿö8Ùï§ã¤1
-q
-java:S1128"TRemove this unused import 'com.mainproject.server.exception.BusinessLogicException'.(¦ß–Ð8†Ã¿ã¤1
-h
-java:S1128"KRemove this unused import 'com.mainproject.server.exception.ExceptionCode'.(“â¾¶8†Ã¿ã¤1
+java:S37402"/Provide the parametrized type for this generic.(äÜÿö8ÎÑ¨­¥1
+L
+java:S3740>"/Provide the parametrized type for this generic.(ÞÓá—8ÎÑ¨­¥1
+B
+java:S1452l"&Remove usage of generic wildcard type.(îó¤78ÜÑ¨­¥1
+H
+java:S1452{"&Remove usage of generic wildcard type.(Øº©Žúÿÿÿÿ8ÝÑ¨­¥1

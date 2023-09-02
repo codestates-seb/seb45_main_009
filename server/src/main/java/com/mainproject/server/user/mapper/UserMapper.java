@@ -23,7 +23,7 @@ public interface UserMapper {
 
      List<UserDto.ResponseDto> UsersToResponses(List<User> users);
 
-     @Mapping(source = "profileimg", target = "image")
+     @Mapping(source = "profileimg", target = "profileimg")
      User AuthLoginDtoUser(AuthLoginDto authLoginDto);
 
 }

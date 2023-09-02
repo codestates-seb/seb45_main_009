@@ -38,7 +38,9 @@ spring:
 logging:
   level:
     p6spy: info
-
+mail:
+  address:
+    admin: admin@gmail.com
 jwt:
   key: ${JWT_SECRET_KEY}
   access-token-expiration-minutes: 120

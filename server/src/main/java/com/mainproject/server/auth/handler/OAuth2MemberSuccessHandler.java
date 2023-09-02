@@ -45,11 +45,12 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         List<String> authorities = authorityUtils.createRoles(email);
         User user = buildOAuth2User(name, email, profileimg);
 
-        if(!userService.existsByEmail(user.getEmail())) {
+        if (!userService.existsByEmail(user.getEmail())) {
             User savedUser = saveUser(user);
-            redirect(request, response, savedUser, authorities); // 리다이렉트를 하기위한 정보들을 보내줌
+            redirect(request, response, savedUser, authorities);
         } else {
-            User findUser = UserService.findVerifiedUser(user.getEmail());
+            // 이미 userService 인스턴스가 주입되었으므로 주입된 인스턴스를 사용합니다.
+            User findUser = userService.findVerifiedUser(user.getEmail());
             redirect(request, response, findUser, authorities);
         }
     }
