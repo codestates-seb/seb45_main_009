@@ -9,6 +9,7 @@ import com.mainproject.server.user.repository.UserRepository;
 import com.mainproject.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -16,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/")
@@ -25,6 +24,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class UserController {
+
 
     private final UserService userService;
     private final UserMapper mapper;
@@ -94,22 +94,7 @@ public class UserController {
     }
 
 
-    // 일단 유저 닉네임만 검색되게 구성
-    @GetMapping("feed/search")
-    public ResponseEntity<List<UserDto.ResponseDto>> searchUsersByNickname(
-            @RequestParam(name = "query") String query) {
 
-        // userRepository에서 사용자를 검색하고 Levenshtein 거리로 정렬하여 가져옵니다.
-        List<User> users = userRepository.searchUsersByNickname(query);
-
-        // 검색된 사용자 목록을 UserDto.ResponseDto로 변환합니다.
-        List<UserDto.ResponseDto> responseDtos = users.stream()
-                .map(mapper::userToResponse)
-                .collect(Collectors.toList());
-
-        // ResponseEntity를 사용하여 검색 결과를 클라이언트에 반환합니다.
-        return ResponseEntity.ok(responseDtos);
-    }
 
     // 유저 삭제
     @DeleteMapping("mypage/{user_id}/delete")
