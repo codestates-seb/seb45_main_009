@@ -1,7 +1,9 @@
 
 ~
-java:S1488_"cImmediately return this expression instead of assigning it to the temporary variable "accessToken".(Œö¿úÿÿÿÿ
+java:S1488`"cImmediately return this expression instead of assigning it to the temporary variable "accessToken".(Œö¿úÿÿÿÿ
 
-java:S1488i"dImmediately return this expression instead of assigning it to the temporary variable "refreshToken".(´®«£ùÿÿÿÿ
+java:S1488j"dImmediately return this expression instead of assigning it to the temporary variable "refreshToken".(´®«£ùÿÿÿÿ
+J
+java:S54110"(Use a primitive boolean expression here.(ÏîŠ«üÿÿÿÿ8ÚÄé®¥1
 P
-java:S1172n".Remove this unused method parameter "request".(¯’Ã¬ùÿÿÿÿ8ôæÿ¬¥1
+java:S1172o".Remove this unused method parameter "request".(¯’Ã¬ùÿÿÿÿ8ôæÿ¬¥1

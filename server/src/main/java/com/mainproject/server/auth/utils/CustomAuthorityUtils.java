@@ -21,10 +21,10 @@ public class CustomAuthorityUtils {
     private final List<String> ADMIN_ROLES_STRING = List.of("ADMIN", "USER");
     private final List<String> USER_ROLES_STRING = List.of("USER");
 
-    public List<GrantedAuthority> createAuthorities(List<String> role) {
+    public List<GrantedAuthority> createAuthorities(List<String> roles) {
         List<GrantedAuthority> authorities =
-                role.stream()
-                        .map(roles -> new SimpleGrantedAuthority("ROLE_" + role))
+                roles.stream()
+                        .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                         .collect(Collectors.toList());
 
         return authorities;
