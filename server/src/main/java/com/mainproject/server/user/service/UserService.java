@@ -80,6 +80,7 @@ public class UserService {
     public User updateUser(Long userId, UserDto.PatchDto patchDto) {
         User existingUser = findVerifiedUser(userId);
 
+
         if (patchDto.getNickname() != null) {
             existingUser.setNickname(patchDto.getNickname());
         }
@@ -107,6 +108,9 @@ public class UserService {
         if (patchDto.getLocation() != null) {
             existingUser.setLocation(patchDto.getLocation());
         }
+
+        // 업데이트 시간
+        existingUser.setModifiedAt(LocalDateTime.now());
 
         return userRepository.save(existingUser);
     }

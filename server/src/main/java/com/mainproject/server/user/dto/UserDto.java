@@ -102,6 +102,7 @@ public class UserDto {
         private boolean usertype;
         private boolean gender;
         private LocalDateTime createdAt;
+        private LocalDateTime modifiedAt;
         private String bio;
         private String profileimg;
         private String price;
