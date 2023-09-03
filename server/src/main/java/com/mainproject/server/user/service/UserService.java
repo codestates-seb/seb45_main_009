@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
@@ -57,7 +58,12 @@ public class UserService {
             throw new BusinessLogicException(ExceptionCode.INVALID_PASSWORD);
         }
 
-        user.setCreatedAt(LocalDateTime.now());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = LocalDateTime.now().format(formatter);
+
+        LocalDateTime createdAt = LocalDateTime.parse(formattedDateTime, formatter);
+
+        user.setCreatedAt(createdAt);
 
         List<String> roles = authorityUtils.createRoles(user.getEmail());
         user.setRoles(roles);
@@ -109,8 +115,15 @@ public class UserService {
             existingUser.setLocation(patchDto.getLocation());
         }
 
-        // 업데이트 시간
-        existingUser.setModifiedAt(LocalDateTime.now());
+        // 업데이트 시간 포맷팅
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = LocalDateTime.now().format(formatter);
+
+         // String을 LocalDateTime으로 변환
+        LocalDateTime modifiedAt = LocalDateTime.parse(formattedDateTime, formatter);
+
+        existingUser.setModifiedAt(modifiedAt);
+
 
         return userRepository.save(existingUser);
     }
