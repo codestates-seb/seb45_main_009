@@ -17,8 +17,6 @@ interface TagData {
 
 interface ImageData {
   src: string;
-  width: number;
-  height: number;
   tags: TagData[];
 }
 
@@ -38,8 +36,6 @@ function ImageForm({ previewImg, setPreviewImg }: ImageFormProps) {
       if (typeof previewImgUrl === "string") {
         const newImgData: ImageData = {
           src: previewImgUrl,
-          width: 0,
-          height: 0,
           tags: [],
         };
         setPreviewImg([...previewImg, newImgData]);

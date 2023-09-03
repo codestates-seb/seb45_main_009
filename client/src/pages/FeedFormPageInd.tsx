@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { TiDelete } from "react-icons/ti";
 import ImageForm from "../components/features/ImageForm";
 
 interface ImageData {
   src: string;
-  width: number;
-  height: number;
   tags: TagData[];
 }
 
@@ -66,6 +64,11 @@ function FeedFormPageInd() {
 
   //imageform props
   const [previewImg, setPreviewImg] = useState<ImageData[]>([]);
+
+  useEffect(() => console.log("본문:", bodyValue), [bodyValue]);
+  useEffect(() => console.log("필선태그:", selectedTags), [selectedTags]);
+  useEffect(() => console.log("입력태그:", addedTags), [addedTags]);
+  useEffect(() => console.log("이미지정보:", previewImg), [previewImg]);
 
   return (
     <div className="flex items-center flex-col my-20 h-screen">
