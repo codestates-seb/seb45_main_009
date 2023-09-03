@@ -1,22 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { TiDelete } from "react-icons/ti";
 import ImageForm from "../components/features/ImageForm";
 
-type Category = string;
+interface ImageData {
+  src: string;
+  width: number;
+  height: number;
+  tags: TagData[];
+}
+
+interface TagData {
+  x: number;
+  y: number;
+  data?: { name: string; price: string; info: string };
+}
 
 function FeedFormPageInd() {
-  //본문
   const [bodyValue, setBodyValue] = useState<string>("");
 
   const handleBodyChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
     setBodyValue(e.target.value);
   };
 
-  //필수 선택 태그
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-  const handleTagSelect = (category: Category): void => {
+  const handleTagSelect = (category: string): void => {
     if (selectedTags.includes(category)) {
       setSelectedTags(selectedTags.filter((tag) => tag !== category));
     } else {
@@ -24,7 +33,6 @@ function FeedFormPageInd() {
     }
   };
 
-  //입력 태그
   const initialTag = ["#오운완"];
   const [addedTags, setAddedTags] = useState<string[]>(initialTag);
   const [inputTag, setInputTag] = useState<string>("");
@@ -43,10 +51,7 @@ function FeedFormPageInd() {
       setInputTag("");
     }
   };
-
-  useEffect(() => console.log("bodyValue:", bodyValue), [bodyValue]);
-  useEffect(() => console.log("selectedTags:", selectedTags), [selectedTags]);
-  const healthCategory: Category[] = [
+  const healthCategory: string[] = [
     "헬스",
     "필라테스",
     "크로스핏",
@@ -59,17 +64,16 @@ function FeedFormPageInd() {
     "기타",
   ];
 
+  //imageform props
+  const [previewImg, setPreviewImg] = useState<ImageData[]>([]);
+
   return (
-    <div className="flex items-center flex-col my-20 ">
+    <div className="flex items-center flex-col my-20 h-screen">
       <div className="flex flex-row">
         <div className="flex flex-col w-[420px] mr-10 ">
-          <ImageForm></ImageForm>
-          {/* <div className="bg-[#D9D9D9] min-w-[320px] h-[400px]"></div>
-          <div className="flex mt-5">
-            <div className="bg-[#D9D9D9] min-w-[100px] h-[120px] mr-5"></div>
-          </div> */}
+          <ImageForm previewImg={previewImg} setPreviewImg={setPreviewImg}></ImageForm>
         </div>
-        <div className="flex flex-col w-[420px] h-[580px]">
+        <div className="flex flex-col w-[420px]">
           <textarea
             className="h-[200px] border border-bdc rounded-md mb-5 p-2.5 resize-none  focus:outline-[#abb4af]"
             placeholder="글을 입력해 주세요"
