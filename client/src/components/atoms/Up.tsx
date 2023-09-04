@@ -6,7 +6,7 @@ const Up = () => {
   };
 
   return (
-    <div className="fixed bottom-0 right-0 mb-10 mr-10 hover:cursor-pointer">
+    <div className="fixed bottom-10 right-0 mb-10 mr-10 hover:cursor-pointer z-50">
       <img src="/asset/up.png" alt="pageup" onClick={scrollUp} />
     </div>
   );
