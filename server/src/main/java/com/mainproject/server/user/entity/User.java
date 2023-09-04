@@ -76,7 +76,9 @@ public class User {
     @Column(nullable = false)
     private boolean gender;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(targetClass = UserRole.class)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING) // 열거형 값을 문자열로 저장
     private List<UserRole> roles = new ArrayList<>();
 
 

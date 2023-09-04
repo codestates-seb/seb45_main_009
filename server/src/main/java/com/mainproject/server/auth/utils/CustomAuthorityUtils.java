@@ -20,8 +20,8 @@ public class CustomAuthorityUtils {
     private final List<GrantedAuthority> ADMIN_ROLES = AuthorityUtils.createAuthorityList("ROLE_ADMIN", "ROLE_USER");
     private final List<GrantedAuthority> USER_ROLES = AuthorityUtils.createAuthorityList("ROLE_USER");
 
-    private final List<UserRole> ADMIN_USER_ROLES = List.of(UserRole.ADMIN, UserRole.USER);
-    private final List<UserRole> USER_USER_ROLES = List.of(UserRole.USER);
+    private final List<UserRole> ADMIN_USER_ROLES = List.of(UserRole.ADMIN, UserRole.USER, UserRole.STORE);
+    private final List<UserRole> USER_USER_ROLES = List.of(UserRole.USER, UserRole.STORE);
 
     public List<GrantedAuthority> createAuthorities(List<UserRole> roles) {
         List<GrantedAuthority> authorities =

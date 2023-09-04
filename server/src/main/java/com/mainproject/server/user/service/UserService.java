@@ -10,6 +10,9 @@ import com.mainproject.server.user.dto.UserDto;
 import com.mainproject.server.user.entity.User;
 import com.mainproject.server.user.repository.UserRepository;
 import com.mainproject.server.user.role.UserRole;
+import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -24,23 +27,20 @@ import java.util.*;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserService {
 
 
 
     private final UserRepository userRepository;
     private final CustomAuthorityUtils authorityUtils;
+
+    @Autowired
     private final JwtTokenizer jwtTokenizer;
     private final PasswordEncoder passwordEncoder;
 
 
-    public UserService(UserRepository userRepository,
-                       CustomAuthorityUtils authorityUtils, JwtTokenizer jwtTokenizer, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.authorityUtils = authorityUtils;
-        this.jwtTokenizer = jwtTokenizer;
-        this.passwordEncoder = passwordEncoder;
-    }
+
 
 
 
@@ -76,7 +76,7 @@ public class UserService {
 
         List<UserRole> roles = authorityUtils.createRoles(user.getEmail());
         user.setRoles(roles);
-        String newName = verifyExistName(user.getNickname());
+        String newName = verifyExistNickName(user.getNickname());
         user.setNickname(newName);
 
         return userRepository.save(user);
@@ -84,58 +84,60 @@ public class UserService {
 
 
     // 유저 정보 변경
-    public User updateUser(Long userId, UserDto.PatchDto patchDto) {
-        User existingUser = findVerifiedUser(userId);
+    public User updateUser(Long loginId, User user) {
+
+        verifyPermission(loginId, user.getUserId());
+        User findUser = findVerifiedUser(user.getUserId());
 
 
-        if (patchDto.getNickname() != null) {
-            existingUser.setNickname(patchDto.getNickname());
-        }
-
-        if (patchDto.getProfileimg() != null) {
-            existingUser.setProfileimg(patchDto.getProfileimg());
-        }
-
-        if (patchDto.getSport() != null) {
-            existingUser.setSport(new ArrayList<>(patchDto.getSport()));
+        if(user.getNickname()!=findUser.getNickname()){
+            findUser.setNickname(verifyExistNickName(user.getNickname()));
         }
 
 
-        if (patchDto.getBio() != null) {
-            existingUser.setBio(patchDto.getBio());
+        if (user.getProfileimg() != null) {
+            findUser.setProfileimg(user.getProfileimg());
         }
 
-        if (patchDto.getPrice() != null) {
-            existingUser.setPrice(patchDto.getPrice());
+        if (user.getSport() != null) {
+            findUser.setSport(new ArrayList<>(user.getSport()));
         }
 
-        if (patchDto.getPassword() != null) {
-            existingUser.setPassword(patchDto.getPassword());
+        if (user.getBio() != null) {
+            findUser.setBio(user.getBio());
         }
 
-        if (patchDto.getLocation() != null) {
-            existingUser.setLocation(patchDto.getLocation());
+        if (user.getPrice() != null) {
+            findUser.setPrice(user.getPrice());
+        }
+
+        if (user.getPassword() != null) {
+            findUser.setPassword(user.getPassword());
+        }
+
+        if (user.getLocation() != null) {
+            findUser.setLocation(user.getLocation());
         }
 
         // 업데이트 시간 포맷팅
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDateTime = LocalDateTime.now().format(formatter);
 
-         // String을 LocalDateTime으로 변환
+        // String을 LocalDateTime으로 변환
         LocalDateTime modifiedAt = LocalDateTime.parse(formattedDateTime, formatter);
 
-        existingUser.setModifiedAt(modifiedAt);
+        findUser.setModifiedAt(modifiedAt);
 
-
-        return userRepository.save(existingUser);
+        return userRepository.save(findUser);
     }
-
 
 
 
     // 유저 조회
     public User findUser(long userId) {
-        return findVerifiedUser(userId);
+        User user =  findVerifiedUser(userId);
+        Hibernate.initialize(user.getRoles());
+        return user;
     }
 
 
@@ -183,6 +185,19 @@ public class UserService {
         return findUser;
     }
 
+    // oauth2로 로그인 했을 때 같은 이름이 있을 때 1~1000까지의 랜덤숫자를 생성
+    private String verifyExistNickName(String nickname){
+        String newNickName = nickname;
+        Optional<User> optionalUser = userRepository.findByNickname(nickname);
+        if(optionalUser.isPresent()){
+            Random random = new Random();
+            int randomNumber = random.nextInt(10000) + 1;
+            newNickName = nickname + randomNumber;
+        }
+
+        return newNickName;
+    }
+
 
     // 이메일 중복이 있는지 조회
     private void verifyExistEmail(String email) {
@@ -208,16 +223,7 @@ public class UserService {
                 password.matches(".*\\d.*");
     }
 
-    private String verifyExistName(String name){     // oauth2로 로그인 했을 때 같은 이름이 있을 때 1~1000까지의 랜덤숫자를 붙임
-        String newName = name;
-        Optional<User> optionalUser = userRepository.findByNickname(name);
-        if(optionalUser.isPresent()){
-            Random random = new Random();
-            int randomNumber = random.nextInt(10000) + 1;
-            newName = name + randomNumber;
-        }
-        return newName;
-    }
+
 
     public Boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
