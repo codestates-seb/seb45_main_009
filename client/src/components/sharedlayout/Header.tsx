@@ -12,7 +12,7 @@ function Header() {
       <div className="flex h-8 w-4/12 border rounded-2xl p-1 mr-4">
         <img src="/asset/search.png" alt="search" className="mr-2 w-6" />
         <input
-          className="w-4/12 outline-none"
+          className="w-full outline-none"
           placeholder="검색하실 ID 또는 #태그를 입력하세요."
         ></input>
       </div>
@@ -20,8 +20,12 @@ function Header() {
         <img src="/asset/notify.png" alt="notify"></img>
       </div>
       <div className="flex">
-        <button className="mr-4 hover:text-btn-color">로그인</button>
-        <button className="mr-8 hover:text-btn-color">회원가입</button>
+        <Link to={"/login"}>
+          <button className="mr-4 hover:text-btn-color">로그인</button>
+        </Link>
+        <Link to={"signup"}>
+          <button className="mr-8 hover:text-btn-color">회원가입</button>
+        </Link>
       </div>
     </div>
   );
