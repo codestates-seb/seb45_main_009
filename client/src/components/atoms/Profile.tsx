@@ -12,7 +12,7 @@ interface ProfileProps extends InputHTMLAttributes<HTMLInputElement> {
 const Profile :React.FC<ProfileProps> = ({photourl, userid,userheight,userweight,usercontent}) => {
     return (
         <div>
-            <img src={photourl} className='w-20 h-20 rounded-full float-left mr-4' />
+            <img src={photourl} className='w-[20px] h-[20px] rounded-full float-left mr-4 ' />
             <div className='font-bold text-2xl'>{userid}</div>
             <div className='flex  space-x-4'>
                 <div className='text-gray-400 text-sm'>{userheight}</div>

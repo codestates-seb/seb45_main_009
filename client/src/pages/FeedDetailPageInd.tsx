@@ -1,16 +1,13 @@
 // 컴포넌트 가져오기
 import BackButton from "../components/atoms/BackButton";
-import Comment from "../components/atoms/Comment";
-
 import FollowMobal from "../components/atoms/FollowMobal";
 import Profile from '../components/atoms/Profile'
 import DetailFeed from "../components/atoms/DetailFeed";
-import CommonInput from '../components/atoms/CommonInput'
-import BlueButton from "../components/atoms/BlueButton";
+import Comment from "../components/atoms/Comment";
 
+// 아이콘 가져오기
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from "react";
-// 아이콘 가져오기
 import {
     faHeart,
     faThumbsUp
@@ -18,6 +15,7 @@ import {
 
 
 function FeedDetailPageInd() {
+  // 유저 데이터
   let userData : {
     username : string,
     userphoto : string,
@@ -59,7 +57,7 @@ function FeedDetailPageInd() {
 
   return (
   <div>
-    <div className="ml-[100px]"> <BackButton /> </div>
+    <div className="sm:ml-[30px] md:ml-[60px] lg:ml-[100px]"> <BackButton /> </div>
     <div className="w-full pr-[150px] pl-[150px]">
       <div className="flex justify-center">
         <div className="w-[90%]">
