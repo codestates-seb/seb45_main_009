@@ -8,7 +8,6 @@ import Footer from "./components/sharedlayout/Footer";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 
-
 import MainPageInd from "./pages/MainPageInd";
 // import MainPageCor from "./pages/MainPageCor";
 import FeedDetailPageCor from "./pages/FeedDetailPageCor";

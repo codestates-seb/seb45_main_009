@@ -27,6 +27,7 @@ function ImageForm({ previewImg, setPreviewImg }: ImageFormProps) {
   const [selectedTagIndex, setSelectedTagIndex] = useState<number | null>(null);
 
   const insertImg = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsTaggingMode(false);
     if (e.target.files) {
       // 선택된 파일들을 배열로 가져옴
       const files = Array.from(e.target.files);
