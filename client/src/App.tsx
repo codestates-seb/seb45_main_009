@@ -12,21 +12,24 @@ import FeedDetailPageInd from "./pages/FeedDetailPageInd";
 import FeedFormPageCor from "./pages/FeedFormPageCor";
 import FeedFormPageInd from "./pages/FeedFormPageInd";
 import Not404 from "./pages/Not404";
+import MainPageCor from "./pages/MainPageCor";
 
 function App() {
   return (
     <BrowserRouter>
       <div className="App">
         <Header />
+
         <Routes>
-          <Route path="/" element={<MainPageInd />}></Route>
-          {/* <Route path="/store" element={<MainPageCor />}></Route> */}
-          <Route path="/feeddetailcor" element={<FeedDetailPageCor />}></Route>
-          <Route path="/feeddetailind" element={<FeedDetailPageInd />}></Route>
-          <Route path="/feedformcor" element={<FeedFormPageCor />}></Route>
-          <Route path="/feedformind" element={<FeedFormPageInd />}></Route>
+          <Route path="/" element={<MainPageInd />} />
+          <Route path="/store" element={<MainPageCor />} />
+          <Route path="/feeddetailcor" element={<FeedDetailPageCor />} />
+          <Route path="/feeddetailind" element={<FeedDetailPageInd />} />
+          <Route path="/feedformcor" element={<FeedFormPageCor />} />
+          <Route path="/feedformind" element={<FeedFormPageInd />} />
           <Route path="*" element={<Not404 />} />
         </Routes>
+
         <Footer />
       </div>
     </BrowserRouter>
