@@ -16,6 +16,7 @@ interface TagData {
 }
 
 interface ImageData {
+  file: File | null;
   src: string;
   tags: TagData[];
 }
@@ -35,6 +36,7 @@ function ImageForm({ previewImg, setPreviewImg }: ImageFormProps) {
       const previewImgUrl = reader.result;
       if (typeof previewImgUrl === "string") {
         const newImgData: ImageData = {
+          file: e.target.files && e.target.files[0],
           src: previewImgUrl,
           tags: [],
         };

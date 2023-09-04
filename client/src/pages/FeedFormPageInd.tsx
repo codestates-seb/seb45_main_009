@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 import { TiDelete } from "react-icons/ti";
 import ImageForm from "../components/features/ImageForm";
 
 interface ImageData {
+  file: File | null;
   src: string;
   tags: TagData[];
 }
@@ -132,7 +134,10 @@ function FeedFormPageInd() {
       </div>
 
       <div className="flex w-[880px] justify-end mb-2">
-        <button className="text-btc px-6 py-2 border border-bdc rounded text-white transition bg-[#7DD9C4] hover:bg-[#4dab95]">
+        <button
+          onClick={submitForm}
+          className="text-btc px-6 py-2 border border-bdc rounded text-white transition bg-[#7DD9C4] hover:bg-[#4dab95]"
+        >
           등록하기
         </button>
       </div>
