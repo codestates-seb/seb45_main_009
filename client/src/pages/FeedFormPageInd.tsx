@@ -73,7 +73,7 @@ function FeedFormPageInd() {
   useEffect(() => console.log("이미지정보:", previewImg), [previewImg]);
 
   return (
-    <div className="flex items-center flex-col my-20 h-screen">
+    <div className="flex items-center flex-col my-20 ">
       <div className="flex flex-row">
         <div className="flex flex-col w-[420px] mr-10 ">
           <ImageForm previewImg={previewImg} setPreviewImg={setPreviewImg}></ImageForm>
@@ -134,10 +134,7 @@ function FeedFormPageInd() {
       </div>
 
       <div className="flex w-[880px] justify-end mb-2">
-        <button
-          onClick={submitForm}
-          className="text-btc px-6 py-2 border border-bdc rounded text-white transition bg-[#7DD9C4] hover:bg-[#4dab95]"
-        >
+        <button className="text-btc px-6 py-2 border border-bdc rounded text-white transition bg-[#7DD9C4] hover:bg-[#4dab95]">
           등록하기
         </button>
       </div>
