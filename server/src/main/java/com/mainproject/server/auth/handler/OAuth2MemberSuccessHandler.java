@@ -3,9 +3,11 @@ package com.mainproject.server.auth.handler;
 import com.mainproject.server.auth.jwt.JwtTokenizer;
 import com.mainproject.server.auth.utils.CustomAuthorityUtils;
 import com.mainproject.server.user.entity.User;
+import com.mainproject.server.user.role.UserRole;
 import com.mainproject.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -30,6 +32,14 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     private final CustomAuthorityUtils authorityUtils;
     private final UserService userService;
 
+
+    @Autowired
+    public OAuth2MemberSuccessHandler(UserService userService,JwtTokenizer jwtTokenizer,CustomAuthorityUtils authorityUtils) {
+        this.userService = userService;
+        this.jwtTokenizer = jwtTokenizer;
+        this.authorityUtils = authorityUtils;
+    }
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         var oAuth2User = (OAuth2User)authentication.getPrincipal();
@@ -42,7 +52,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         }
 
 
-        List<String> authorities = authorityUtils.createRoles(email);
+        List<UserRole> authorities = authorityUtils.createRoles(email);
         User user = buildOAuth2User(name, email, profileimg);
 
         if (!userService.existsByEmail(user.getEmail())) {
@@ -70,7 +80,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return userService.createUserOAuth2(user);
     }
 
-    private void redirect(HttpServletRequest request, HttpServletResponse response, User user, List<String> authorities) throws IOException {
+    private void redirect(HttpServletRequest request, HttpServletResponse response, User user, List<UserRole> authorities) throws IOException {
         String accessToken = delegateAccessToken(user, authorities);
         String refreshToken = delegateRefreshToken(user);
 
@@ -83,7 +93,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         getRedirectStrategy().sendRedirect(request, response, uri);
     }
 
-    private String delegateAccessToken(User user, List<String> authorities) {
+    private String delegateAccessToken(User user, List<UserRole> authorities) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", user.getUserId());
         claims.put("roles", authorities);

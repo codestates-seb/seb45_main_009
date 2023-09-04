@@ -1,6 +1,7 @@
 package com.mainproject.server.user.entity;
 
 
+import com.mainproject.server.user.role.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -76,7 +77,7 @@ public class User {
     private boolean gender;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> roles = new ArrayList<>();
+    private List<UserRole> roles = new ArrayList<>();
 
 
 

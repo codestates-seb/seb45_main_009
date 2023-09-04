@@ -9,6 +9,7 @@ import com.mainproject.server.auth.config.PasswordEncoderConfig;
 import com.mainproject.server.user.dto.UserDto;
 import com.mainproject.server.user.entity.User;
 import com.mainproject.server.user.repository.UserRepository;
+import com.mainproject.server.user.role.UserRole;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -65,7 +66,7 @@ public class UserService {
 
         user.setCreatedAt(createdAt);
 
-        List<String> roles = authorityUtils.createRoles(user.getEmail());
+        List<UserRole> roles = authorityUtils.createRoles(user.getEmail());
         user.setRoles(roles);
 
         return userRepository.save(user);
@@ -73,7 +74,7 @@ public class UserService {
 
     public User createUserOAuth2(User user) {
 
-        List<String> roles = authorityUtils.createRoles(user.getEmail());
+        List<UserRole> roles = authorityUtils.createRoles(user.getEmail());
         user.setRoles(roles);
         String newName = verifyExistName(user.getNickname());
         user.setNickname(newName);
@@ -96,8 +97,9 @@ public class UserService {
         }
 
         if (patchDto.getSport() != null) {
-            existingUser.setSport(patchDto.getSport());
+            existingUser.setSport(new ArrayList<>(patchDto.getSport()));
         }
+
 
         if (patchDto.getBio() != null) {
             existingUser.setBio(patchDto.getBio());
@@ -129,6 +131,8 @@ public class UserService {
     }
 
 
+
+
     // 유저 조회
     public User findUser(long userId) {
         return findVerifiedUser(userId);
@@ -146,6 +150,17 @@ public class UserService {
     public void deleteUser(Long userId) {
         User existingUser = findVerifiedUser(userId);
         userRepository.delete(existingUser);
+    }
+
+
+
+    public void verifyPermission(Long loginId, long userId) {
+        User findUser = findVerifiedUser(loginId);
+        if (!findUser.getRoles().contains("ADMIN")) {
+            if (loginId != userId) {
+                throw new BusinessLogicException(ExceptionCode.NO_PERMISSION_EDITING_POST);
+            }
+        }
     }
 
 

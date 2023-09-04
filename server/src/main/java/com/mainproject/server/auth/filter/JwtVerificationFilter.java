@@ -3,6 +3,7 @@ package com.mainproject.server.auth.filter;
 import com.mainproject.server.auth.dto.TokenPrincipalDto;
 import com.mainproject.server.auth.jwt.JwtTokenizer;
 import com.mainproject.server.auth.utils.CustomAuthorityUtils;
+import com.mainproject.server.user.role.UserRole;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
@@ -62,7 +63,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     private void setAuthenticationToContext(Map<String, Object> claims) {
         String email = (String) claims.get("sub");
         Long id = Long.valueOf((Integer) claims.get("userId"));
-        List<GrantedAuthority> authorities = authorityUtils.createAuthorities((List<String>)claims.get("roles"));
+        List<GrantedAuthority> authorities = authorityUtils.createAuthorities((List<UserRole>)claims.get("roles"));
         Authentication authentication = new UsernamePasswordAuthenticationToken(new TokenPrincipalDto(id, email), null, authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }

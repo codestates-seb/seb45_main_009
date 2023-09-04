@@ -8,6 +8,7 @@ import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class UserDto {
@@ -73,6 +74,7 @@ public class UserDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class PatchDto{
+        private Long userId;
 
         private String nickname;
 
@@ -86,7 +88,7 @@ public class UserDto {
 
         private String password;
 
-        private ArrayList<String> sport;
+        private List<String> sport;
     }
 
 
@@ -109,7 +111,7 @@ public class UserDto {
         private int height;
         private int weight;
         private String location;
-        private ArrayList<String> sport;
+        private List<String> sport;
 
 
     }
