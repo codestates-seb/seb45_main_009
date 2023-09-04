@@ -1,4 +1,4 @@
-package com.mainproject.server.user.role;
+package com.mainproject.server.user.entity;
 
 public enum UserRole {
     ADMIN,

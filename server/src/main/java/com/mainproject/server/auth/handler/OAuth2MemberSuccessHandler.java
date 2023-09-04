@@ -3,7 +3,6 @@ package com.mainproject.server.auth.handler;
 import com.mainproject.server.auth.jwt.JwtTokenizer;
 import com.mainproject.server.auth.utils.CustomAuthorityUtils;
 import com.mainproject.server.user.entity.User;
-import com.mainproject.server.user.role.UserRole;
 import com.mainproject.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -52,7 +51,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         }
 
 
-        List<UserRole> authorities = authorityUtils.createRoles(email);
+        List<User.UserRole> authorities = authorityUtils.createRoles(email);
         User user = buildOAuth2User(name, email, profileimg);
 
         if (!userService.existsByEmail(user.getEmail())) {
@@ -80,7 +79,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return userService.createUserOAuth2(user);
     }
 
-    private void redirect(HttpServletRequest request, HttpServletResponse response, User user, List<UserRole> authorities) throws IOException {
+    private void redirect(HttpServletRequest request, HttpServletResponse response, User user, List<User.UserRole> authorities) throws IOException {
         String accessToken = delegateAccessToken(user, authorities);
         String refreshToken = delegateRefreshToken(user);
 
@@ -93,7 +92,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         getRedirectStrategy().sendRedirect(request, response, uri);
     }
 
-    private String delegateAccessToken(User user, List<UserRole> authorities) {
+    private String delegateAccessToken(User user, List<User.UserRole> authorities) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", user.getUserId());
         claims.put("roles", authorities);

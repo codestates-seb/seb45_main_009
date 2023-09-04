@@ -1,8 +1,11 @@
 package com.mainproject.server.user.dto;
 
+import com.mainproject.server.user.entity.User;
 import lombok.*;
 
 
+import javax.persistence.ElementCollection;
+import javax.persistence.FetchType;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
@@ -76,6 +79,7 @@ public class UserDto {
     public static class PatchDto{
         private Long userId;
 
+
         private String nickname;
 
         private String profileimg;
@@ -89,6 +93,8 @@ public class UserDto {
         private String password;
 
         private List<String> sport;
+
+
     }
 
 
@@ -112,6 +118,8 @@ public class UserDto {
         private int weight;
         private String location;
         private List<String> sport;
+
+
 
 
     }

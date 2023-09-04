@@ -9,7 +9,6 @@ import com.mainproject.server.auth.config.PasswordEncoderConfig;
 import com.mainproject.server.user.dto.UserDto;
 import com.mainproject.server.user.entity.User;
 import com.mainproject.server.user.repository.UserRepository;
-import com.mainproject.server.user.role.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,16 +65,13 @@ public class UserService {
 
         user.setCreatedAt(createdAt);
 
-        List<UserRole> roles = authorityUtils.createRoles(user.getEmail());
-        user.setRoles(roles);
-
         return userRepository.save(user);
     }
 
     public User createUserOAuth2(User user) {
 
-        List<UserRole> roles = authorityUtils.createRoles(user.getEmail());
-        user.setRoles(roles);
+//        List<User.UserRole> roles = authorityUtils.createRoles(user.getEmail());
+//        user.setRoles(roles);
         String newName = verifyExistNickName(user.getNickname());
         user.setNickname(newName);
 

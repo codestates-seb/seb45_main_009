@@ -3,14 +3,12 @@ package com.mainproject.server.user.controller;
 
 
 import com.mainproject.server.auth.loginResolver.LoginUserId;
-import com.mainproject.server.auth.utils.CustomAuthorityUtils;
+import com.mainproject.server.response.DataResponseDto;
 import com.mainproject.server.response.SingleResponseDto;
 import com.mainproject.server.user.dto.AuthLoginDto;
 import com.mainproject.server.user.dto.UserDto;
 import com.mainproject.server.user.entity.User;
 import com.mainproject.server.user.mapper.UserMapper;
-import com.mainproject.server.user.repository.UserRepository;
-import com.mainproject.server.user.role.UserRole;
 import com.mainproject.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,8 +23,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
-import java.util.Collections;
-import java.util.List;
 
 @RestController
 @RequestMapping("/")
@@ -38,8 +34,7 @@ public class UserController {
 
     private final UserService userService;
     private final UserMapper mapper;
-    private final UserRepository userRepository;
-    private final CustomAuthorityUtils customAuthorityUtils;
+
 
     // 유저 등록
     @PostMapping("join/user")
@@ -48,7 +43,8 @@ public class UserController {
         user.setUsertype(0); // USER 역할
 
         // "ROLE_USER" 역할을 설정
-        user.setRoles(Collections.singletonList(UserRole.USER));
+        user.getRoles().add(User.UserRole.USER);
+
 
         // UserService를 사용하여 유저 생성
         User createdUser = userService.createUser(user);
@@ -61,10 +57,11 @@ public class UserController {
     @PostMapping("join/store")
     public ResponseEntity postStore(@Valid @RequestBody UserDto.PostDto requestBody) {
         User user = mapper.postToUser(requestBody);
-        user.setUsertype(1); // 기업은 false로 생성
+        user.setUsertype(1); // 기업은 1로 생성
+
 
         // "ROLE_STORE" 역할을 설정
-        user.setRoles(Collections.singletonList(UserRole.STORE));
+        user.getRoles().add(User.UserRole.STORE);
 
         // UserService를 사용하여 유저 생성
         User createdUser = userService.createUser(user);
@@ -98,22 +95,12 @@ public class UserController {
     // 유저 정보 조회
     @PreAuthorize("isAuthenticated()")
     @GetMapping("mypage")
-    public ResponseEntity<UserDto.ResponseDto> getUser(@LoginUserId Long loggedInUserId) {
-        // 로그인한 사용자의 ID를 사용하여 해당 사용자 정보 조회
-        if (loggedInUserId == null) {
-            // 로그인한 사용자의 ID가 null인 경우에 대한 처리
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // 또는 다른 적절한 처리
-        }
+    public ResponseEntity getUserInfo(@LoginUserId Long userId) {
+        User findUser = userService.findUser(userId);
+        UserDto.ResponseDto response = mapper.userToResponse(findUser);
 
-        User findUser = userService.findUser(loggedInUserId);
-        if (findUser == null) {
-            // 사용자 정보를 찾을 수 없는 경우에 대한 처리
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // 또는 다른 적절한 처리
-        }
-
-        // 조회한 정보를 UserDto.ResponseDto로 매핑하여 반환
-        UserDto.ResponseDto responseDto = mapper.userToResponse(findUser);
-        return ResponseEntity.ok(responseDto);
+        return new ResponseEntity<>(
+                new DataResponseDto<>(response), HttpStatus.OK);
     }
 
     // 유저 전체 조회
@@ -146,12 +133,11 @@ public class UserController {
         return new ResponseEntity<>(
                 new SingleResponseDto<>(response), HttpStatus.OK);
 
-
     }
 
 
     // 유저 삭제
-    @PreAuthorize("isAuthenticated()")
+     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("mypage/delete")
     public ResponseEntity<?> deleteUser(@LoginUserId Long loggedInUserId) {
         // 로그인한 사용자의 ID를 사용하여 해당 사용자 삭제

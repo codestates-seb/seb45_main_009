@@ -14,7 +14,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -47,7 +49,17 @@ public class MemberDetailsService implements UserDetailsService {
 
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
-            return authorityUtils.createAuthorities(this.getRoles());
+            List<String> roleStrings = getRolesAsStrings(); // 역할 정보를 문자열 리스트로 얻음
+            List<UserRole> userRoles = roleStrings.stream()
+                    .map(UserRole::valueOf) // 문자열을 UserRole Enum 값으로 변환
+                    .collect(Collectors.toList());
+            return authorityUtils.createAuthorities(userRoles);
+        }
+
+        private List<String> getRolesAsStrings() {
+            return getRoles().stream()
+                    .map(UserRole::name) // UserRole Enum 값을 문자열로 변환
+                    .collect(Collectors.toList());
         }
 
         @Override

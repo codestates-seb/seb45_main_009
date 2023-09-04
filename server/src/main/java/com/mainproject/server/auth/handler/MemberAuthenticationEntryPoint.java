@@ -19,9 +19,12 @@ public class MemberAuthenticationEntryPoint implements AuthenticationEntryPoint 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws ServletException, IOException {
         Exception exception = (Exception) request.getAttribute("exception");
-        ErrorResponder.sendErrorResponse(response, HttpStatus.UNAUTHORIZED);
 
+        // 예외 메시지와 함께 더 많은 정보를 반환하거나 로그에 기록합니다.
         logExceptionMessage(authException, exception);
+
+        // 예외 메시지를 클라이언트에게 반환합니다.
+        ErrorResponder.sendErrorResponse(response, HttpStatus.UNAUTHORIZED, "Unauthorized: " + authException.getMessage());
     }
 
     private void logExceptionMessage(AuthenticationException authException, Exception exception) {

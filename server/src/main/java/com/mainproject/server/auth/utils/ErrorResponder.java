@@ -7,13 +7,25 @@ import org.springframework.http.MediaType;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class ErrorResponder {
     public static void sendErrorResponse(HttpServletResponse response, HttpStatus status) throws IOException {
-        Gson gson = new Gson();
-        ErrorResponse errorResponse = ErrorResponse.of(status);
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        sendErrorResponse(response, status, null);
+    }
+
+    public static void sendErrorResponse(HttpServletResponse response, HttpStatus status, String message) throws IOException {
         response.setStatus(status.value());
-        response.getWriter().write(gson.toJson(errorResponse, ErrorResponse.class));
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        PrintWriter writer = response.getWriter();
+        if (message != null) {
+            writer.write("{\"error\": \"" + message + "\"}");
+        } else {
+            writer.write("{\"error\": \"" + status.getReasonPhrase() + "\"}");
+        }
+        writer.flush();
+        writer.close();
     }
 }
