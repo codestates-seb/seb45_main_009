@@ -1,4 +1,4 @@
-//package com.mainproject.server.auth.utils;//package com.preproject.stackOverflow.auth.utils;
+//package com.mainproject.server.auth.utils;
 //
 //import com.mainproject.server.auth.jwt.JwtTokenizer;
 //import lombok.RequiredArgsConstructor;

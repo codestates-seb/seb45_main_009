@@ -35,8 +35,8 @@ public class UserDto {
         @Size(min = 6, message = "비밀번호는 최소 6자 이상이어야 합니다.")
         private String password;
 
-        @NotNull(message = "usertype을 선택하세요.") // boolean 타입에서는 @NotBlank 대신 @NotNull 사용
-        private Boolean usertype;
+        @NotBlank(message = "usertype을 선택하세요.") // boolean 타입에서는 @NotBlank 대신 @NotNull 사용
+        private int usertype;
 
         @NotNull(message = "성별을 선택하세요")
         private Boolean gender;
@@ -99,7 +99,7 @@ public class UserDto {
         private Long userId;
         private String nickname;
         private String email;
-        private boolean usertype;
+        private int usertype;
         private boolean gender;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;

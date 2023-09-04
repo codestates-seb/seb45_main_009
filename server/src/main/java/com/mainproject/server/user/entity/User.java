@@ -42,7 +42,7 @@ public class User {
 
 
     @Column(nullable = false)
-    private boolean usertype;
+    private int usertype;
 
     @Column(nullable = false)
     private LocalDate birth;

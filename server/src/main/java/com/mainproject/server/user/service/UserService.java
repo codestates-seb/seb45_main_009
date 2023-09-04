@@ -213,6 +213,7 @@ public class UserService {
         claims.put("userId", user.getUserId());
         claims.put("roles", user.getRoles());
 
+
         String subject = user.getEmail();
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
 

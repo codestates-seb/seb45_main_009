@@ -36,7 +36,7 @@ public class UserController {
     @PostMapping("join/user")
     public ResponseEntity postUser(@Valid @RequestBody UserDto.PostDto requestBody) {
         User user = mapper.postToUser(requestBody);
-        user.setUsertype(true);  // 유저는 true로 생성
+        user.setUsertype(0);  // 유저는 true로 생성
 
         // UserService를 사용하여 유저 생성
         User createdUser = userService.createUser(user);
@@ -50,7 +50,7 @@ public class UserController {
     @PostMapping("join/store")
     public ResponseEntity postStore(@Valid @RequestBody UserDto.PostDto requestBody) {
         User user = mapper.postToUser(requestBody);
-        user.setUsertype(false);  // 기업은 false로 생성
+        user.setUsertype(1);  // 기업은 false로 생성
 
         // UserService를 사용하여 유저 생성
         User createdUser = userService.createUser(user);

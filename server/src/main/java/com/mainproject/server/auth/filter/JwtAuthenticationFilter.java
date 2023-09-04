@@ -3,8 +3,10 @@ package com.mainproject.server.auth.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mainproject.server.auth.dto.loginDto;
 import com.mainproject.server.auth.jwt.JwtTokenizer;
+import com.mainproject.server.user.dto.UserDto;
 import com.mainproject.server.user.entity.User;
 import com.mainproject.server.user.repository.UserRepository;
+import com.mainproject.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -60,10 +62,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String accessToken = delegateAccessToken(user);
         String refreshToken = delegateRefreshToken(user);
         String userId = String.valueOf(user.getUserId());
+        String usertype = String.valueOf(user.getUsertype());
 
         response.setHeader("Authorization", "Bearer " + accessToken);
         response.setHeader("Refresh", refreshToken);
         response.setHeader("UserId", userId);
+        response.setHeader("Usertype", usertype);
 
         this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
     }
@@ -73,6 +77,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         claims.put("email", user.getEmail());
         claims.put("userId", user.getUserId());
         claims.put("roles", user.getRoles());
+        claims.put("usertype", user.getUsertype());
 
         String subject = user.getEmail();
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
