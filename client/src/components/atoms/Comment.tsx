@@ -60,8 +60,8 @@ function Comment() {
       }
 
   return(
-    <div>
-        <div className=" mt-[40px]">
+    <div className=" mb-[60px]">
+        <div className=" mt-[80px]">
                   <div className="flex items-center">
                   <img src={userData[0].userphoto}  className='w-[30px] h-[30px] rounded-full float-left mr-4' />
                   <div className="border rounded p-1 w-full">
@@ -73,13 +73,13 @@ function Comment() {
                       onChange={handleInputChange}
                       />
                   <button 
-                      className=" rounded "
+                      className=" rounded float-right mr-[10px]"
                       onClick={handleSaveClick}
                       >입력</button>
                   
                   </div>
                   </div> 
-            </div>
+        </div>
             <div className=" mt-[40px]">
         {
           arr.map((item,index) =>(

@@ -1,6 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
 
 // 아이콘 가져오기
 import {
@@ -10,11 +9,12 @@ import {
 let userData = [
   {
     username: 'Lee seeun',
-    useremail: 'lse@gmail.com',
+    useremail: 'lse0522@gmail.com',
     pw: '1234',
     userheight : 170,
     userweight : 60,
-    userphoto : 'img.png'
+    userphoto : 'img.png',
+    userintroduction : '헬스를 좋아합니다~'
   }
 ];
 
@@ -27,7 +27,6 @@ const Modal = ({ onClose } :any) => (
 
 
 function ProfileInd() {
-  const navigate = useNavigate();
 
   // 모달창 열기 닫기
   const [isModalOpen, setModalOpen] = useState(false);
@@ -47,22 +46,22 @@ function ProfileInd() {
   }
 
   return(
-    <div>
-        <div className=" absolute top-[80px] left-[1000px]">
+    <div className='ml-[60px]'>
+        <div className="float-right ">
           <button className="pr-4" onClick={followClick} >팔로우</button>
-          <button className="float-none" onClick={handleOpenModal}><FontAwesomeIcon icon={faEllipsis} /></button>
+          <button className="mr-[60px]" onClick={handleOpenModal}><FontAwesomeIcon icon={faEllipsis} /></button>
           {isModalOpen && <Modal onClose={handleCloseModal} />}
-      </div>
+        </div>
       
-      <img src={userData[0].userphoto}  className='w-20 h-20 rounded-full float-left mr-4' />
+        <img src={userData[0].userphoto}  className='w-[80px] h-[80px] rounded-full float-left mr-4' />
       
-      <div>
-        <div className="font-bold text-2xl">{userData[0].username}</div>
-        <div className="flex space-x-4 font-bold text-gray-400 text-sm ">
+        <div className="font-bold text-xl mt-[4px]">{userData[0].username}</div>
+        <div className="flex space-x-2 font-bold text-gray-400 text-sm ">
           <div>{userData[0].userheight}cm</div>
           <div>{userData[0].userweight}kg</div>
         </div>
-      </div>
+        <div className='text-sm font-bold text-gray-400'>{userData[0].userintroduction}</div>
+
     </div>
 
   ) 
