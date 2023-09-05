@@ -1,12 +1,13 @@
 
 R
-java:S1066"/Merge this if statement with the enclosing one.(çéËüÿÿÿÿ8§½·¦1
+java:S1066 "/Merge this if statement with the enclosing one.(çéËüÿÿÿÿ8§½·¦1
 ^
-java:S4973Y"<Strings and Boxed types should be compared using "equals()".(ÖÂØ½şÿÿÿÿ8òšÅ†¦1
+java:S4973W"<Strings and Boxed types should be compared using "equals()".(ÖÂØ½şÿÿÿÿ8òšÅ†¦1
 Š
-java:S1845Ï"lRename method "verifyExistNickname" to prevent any misunderstanding/clash with method "verifyExistNickName".(Ò«Œà8×½·¦1
-]	java:S125I"<This block of commented-out lines of code should be removed.(²¿’åşÿÿÿÿ8 –Ù¦1
-K
-java:S2175"-A "List<UserRole>" cannot contain a "String".(âšø‹8…›Å†¦1
+java:S1845Ñ"lRename method "verifyExistNickname" to prevent any misunderstanding/clash with method "verifyExistNickName".(Ò«Œà8×½·¦1
 ;
-java:S2119½"Save and re-use this "Random".(¼İÅf8à½·¦1
+java:S2119¿"Save and re-use this "Random".(¼İÅf8à½·¦1
+w
+java:S1128"URemove this unused import 'com.mainproject.server.auth.config.PasswordEncoderConfig'.(¯Î¸®ûÿÿÿÿ8è¢‹¡¦1
+f
+java:S1128	"DRemove this unused import 'com.mainproject.server.user.dto.UserDto'.(­øÙÄüÿÿÿÿ8è¢‹¡¦1

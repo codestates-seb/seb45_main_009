@@ -48,15 +48,15 @@ public class UserService {
         verifyExistEmail(user.getEmail());
         verifyExistNickname(user.getNickname());
 
+        // 비밀번호 유효성 검사 추가
+        if (!isValidPassword(user.getPassword())) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_PASSWORD);
+        }
 
         // 비밀번호 암호화
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encryptedPassword);
 
-        // 비밀번호 유효성 검사 추가
-        if (!isValidPassword(user.getPassword())) {
-            throw new BusinessLogicException(ExceptionCode.INVALID_PASSWORD);
-        }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDateTime = LocalDateTime.now().format(formatter);
@@ -68,10 +68,9 @@ public class UserService {
         return userRepository.save(user);
     }
 
+
     public User createUserOAuth2(User user) {
 
-//        List<User.UserRole> roles = authorityUtils.createRoles(user.getEmail());
-//        user.setRoles(roles);
         String newName = verifyExistNickName(user.getNickname());
         user.setNickname(newName);
 
@@ -82,9 +81,11 @@ public class UserService {
     // 유저 정보 변경
     public User updateUser(Long loginId, User user) {
 
+        // 여기에서 loginId와 user를 사용한 검증 로직을 수행합니다.
         verifyPermission(loginId, user.getUserId());
-        User findUser = findVerifiedUser(user.getUserId());
 
+        // 검증이 완료되면 업데이트를 처리합니다.
+        User findUser = findVerifiedUser(user.getUserId());
 
         if(user.getNickname()!=findUser.getNickname()){
             findUser.setNickname(verifyExistNickName(user.getNickname()));
@@ -108,6 +109,10 @@ public class UserService {
         }
 
         if (user.getPassword() != null) {
+            // 비밀번호 유효성 검사를 추가
+            if (!isValidPassword(user.getPassword())) {
+                throw new BusinessLogicException(ExceptionCode.INVALID_PASSWORD);
+            }
             findUser.setPassword(user.getPassword());
         }
 
@@ -214,7 +219,7 @@ public class UserService {
     // 비밀번호 유효성 검증
     private boolean isValidPassword(String password) {
         // 비밀번호는 최소 6자 이상, 영문 대소문자 및 숫자를 포함해야 유효하다고 가정하는 로직
-        return password != null && password.length() >= 6 &&
+        return password != null && password.length() >= 8 &&
                 password.matches(".*[a-zA-Z].*") &&
                 password.matches(".*\\d.*");
     }

@@ -59,7 +59,6 @@ public class UserController {
     public ResponseEntity postStore(@Valid @RequestBody UserDto.PostDto requestBody) {
         User user = mapper.postToUser(requestBody);
 
-
         // "ROLE_STORE" 역할을 설정
         user.getRoles().add("STORE");
 
@@ -78,6 +77,11 @@ public class UserController {
         String refreshToken = "";
         String userId = "";
         User user = mapper.AuthLoginDtoUser(requesBody);
+
+
+        // "ROLE_USER" 역할을 설정
+        user.getRoles().add("USER");
+
         user.setEmail(user.getEmail() + "3");
         if (!userService.existsByEmail(user.getEmail())) {
             user = userService.createUserOAuth2(user);
@@ -119,25 +123,20 @@ public class UserController {
 
     // 유저 정보 업데이트
     @PreAuthorize("isAuthenticated()")
-    @PatchMapping("mypage/{user-id}/update")
-    public ResponseEntity<?> patchUser(@PathVariable("user-id") @Positive long userId,
-                                       @LoginUserId Long loginId,
+    @PatchMapping("mypage/update")
+    public ResponseEntity<?> patchUser(@LoginUserId Long loginId,
                                        @Valid @RequestBody UserDto.PatchDto requestBody) {
-
         User user = mapper.patchToUser(requestBody);
-        user.setUserId(userId);
+        user.setUserId(loginId); // loginId를 사용자 ID로 설정
         User updatedUser = userService.updateUser(loginId, user);
         UserDto.ResponseDto response = mapper.userToResponse(updatedUser);
 
-
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(response), HttpStatus.OK);
-
+        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
     }
 
 
     // 유저 삭제
-     @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("mypage/delete")
     public ResponseEntity<?> deleteUser(@LoginUserId Long loggedInUserId) {
         // 로그인한 사용자의 ID를 사용하여 해당 사용자 삭제
