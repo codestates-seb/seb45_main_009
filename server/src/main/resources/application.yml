@@ -27,12 +27,21 @@ spring:
     oauth2:
       client:
         registration:
-          google:
-            clientId: ${G_CLIENT_ID}
-            clientSecret: ${G_CLIENT_SECRET}
-            scope:
-              - email
-              - profile
+          kakao:
+            client-id: ${K_CLIENT_ID}
+            client-secret: ${K_CLIENT_SECRET}
+            client-name: Kakao
+            client-authentication-method: POST
+            authorization-grant-type: authorization_code
+            scope: profile_image, account_email, birthday
+            redirect-uri: http://localhost:8080/oauthloading
+
+        provider:
+          kakao:
+            authorizationUri: https://kauth.kakao.com/oauth/authorize
+            tokenUri: https://kauth.kakao.com/oauth/token
+            userInfoUri: https://kapi.kakao.com/v2/user/me
+            userNameAttribute: id
 
 
 logging:

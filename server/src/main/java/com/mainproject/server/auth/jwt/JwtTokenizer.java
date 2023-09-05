@@ -1,7 +1,10 @@
 package com.mainproject.server.auth.jwt;
 
 
+import com.mainproject.server.exception.BusinessLogicException;
+import com.mainproject.server.exception.ExceptionCode;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -87,13 +90,15 @@ public class JwtTokenizer {
     }
 
     // 단순히 검증만 하는 용도로 쓰일 경우
-    public void verifySignature(String jws, String base64EncodedSecretKey) {
-        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
-
-        Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(jws);
+    public Jws<Claims> verifySignature(String jws) {
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(getKey())
+                    .build()
+                    .parseClaimsJws(jws);
+        } catch (ExpiredJwtException exception) {
+            throw new BusinessLogicException(ExceptionCode.JWT_TOKEN_EXPIRED);
+        }
     }
 
     private Key getKey() {

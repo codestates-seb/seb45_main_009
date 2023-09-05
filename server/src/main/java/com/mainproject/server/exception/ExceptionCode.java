@@ -12,7 +12,8 @@ public enum ExceptionCode {
     INVALID_INPUT(400, "잘못된 입력입니다."),
     INVALID_PASSWORD(400, "비밀번호가 유효하지 않습니다"), // 비밀번호 유효성 검사 실패 예외 코드 추가
     FEED_NOT_FOUND(404, "피드를 찾을 수 없습니다."),
-    ACCESS_DENIED(401, "권한이 없습니다.");
+    ACCESS_DENIED(401, "권한이 없습니다."),
+    JWT_TOKEN_EXPIRED(404, "토큰이 만료되었습니다");
 
     @Getter
     private int status;
