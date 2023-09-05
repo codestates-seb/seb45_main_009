@@ -1,0 +1,10 @@
+
+w	java:S116"VRename this field "ADMIN_ROLES" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…­´úÿÿÿÿ8éŞş™¦1
+v	java:S116"URename this field "USER_ROLES" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ù†Òÿÿÿÿÿ8éŞş™¦1
+y	java:S116"]Rename this field "ADMIN_ROLES_STRING" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ä£Î³8éŞş™¦1
+x	java:S116"\Rename this field "USER_ROLES_STRING" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ış´ÿ8éŞş™¦1
+f
+java:S1128"DRemove this unused import 'com.mainproject.server.user.entity.User'.(†œ§‘şÿÿÿÿ8ìŞş™¦1
+T
+java:S1128
+"2Remove this unused import 'java.util.Collections'.(¢³ïÓşÿÿÿÿ8ìŞş™¦1
