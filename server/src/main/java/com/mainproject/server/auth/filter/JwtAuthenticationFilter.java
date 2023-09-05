@@ -60,7 +60,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String accessToken = delegateAccessToken(user);
         String refreshToken = delegateRefreshToken(user);
         String userId = String.valueOf(user.getUserId());
-        String usertype = String.valueOf(user.getUsertype());
 
         response.setHeader("Authorization", "Bearer " + accessToken);
         response.setHeader("Refresh", refreshToken);
@@ -76,7 +75,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         claims.put("email", user.getEmail());
         claims.put("userId", user.getUserId());
         claims.put("roles", user.getRoles());
-        claims.put("usertype", user.getUsertype());
 
         String subject = user.getEmail();
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());

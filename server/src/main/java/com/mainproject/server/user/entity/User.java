@@ -44,8 +44,7 @@ public class User {
     private LocalDateTime modifiedAt = LocalDateTime.now();
 
 
-    @Column(nullable = false)
-    private int usertype;
+
 
     @Column(nullable = false)
     private LocalDate birth;
