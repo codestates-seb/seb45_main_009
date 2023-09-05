@@ -3,10 +3,8 @@ package com.mainproject.server.auth.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mainproject.server.auth.dto.loginDto;
 import com.mainproject.server.auth.jwt.JwtTokenizer;
-import com.mainproject.server.user.dto.UserDto;
 import com.mainproject.server.user.entity.User;
-import com.mainproject.server.user.repository.UserRepository;
-import com.mainproject.server.user.service.UserService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -67,7 +65,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setHeader("Authorization", "Bearer " + accessToken);
         response.setHeader("Refresh", refreshToken);
         response.setHeader("UserId", userId);
-        response.setHeader("Usertype", usertype);
+        response.setHeader("Nickname", user.getNickname());
+        response.setHeader("roles", user.getRoles().toString());
 
         this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
     }

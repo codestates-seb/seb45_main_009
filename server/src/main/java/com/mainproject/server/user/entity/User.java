@@ -80,7 +80,7 @@ public class User {
 
 
 
-    @Column
+    @Column(nullable = false)
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
