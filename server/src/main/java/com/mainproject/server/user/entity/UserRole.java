@@ -1,7 +1,7 @@
-package com.mainproject.server.user.entity;
-
-public enum UserRole {
-    ADMIN,
-    USER,
-    STORE
-}
+//package com.mainproject.server.user.entity;
+//
+//public enum UserRole {
+//    ADMIN,
+//    USER,
+//    STORE
+//}

@@ -6,15 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Getter
 @Setter
@@ -83,15 +82,10 @@ public class User {
 
     @Column
     @ElementCollection(fetch = FetchType.EAGER)
-    private List<UserRole> roles = new ArrayList<>();
+    private List<String> roles = new ArrayList<>();
 
 
 
-    public enum UserRole {
-        ADMIN,
-        USER,
-        STORE
-    }
 
 
 }

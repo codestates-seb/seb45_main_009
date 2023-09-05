@@ -17,26 +17,30 @@ public class CustomAuthorityUtils {
     @Value("${mail.address.admin}")
     private String adminMailAddress;
 
-    private final List<GrantedAuthority> ADMIN_ROLES = AuthorityUtils.createAuthorityList("ROLE_ADMIN", "ROLE_USER");
-    private final List<GrantedAuthority> USER_ROLES = AuthorityUtils.createAuthorityList("ROLE_USER");
+    private final List<GrantedAuthority> ADMIN_ROLES = AuthorityUtils.createAuthorityList("ROLE_ADMIN", "ROLE_USER","ROLE_STORE");
+    private final List<GrantedAuthority> USER_ROLES = AuthorityUtils.createAuthorityList("ROLE_USER", "ROLE_STORE");
 
-    private final List<User.UserRole> ADMIN_USER_ROLES = List.of(User.UserRole.ADMIN, User.UserRole.USER, User.UserRole.STORE);
-    private final List<User.UserRole> USER_USER_ROLES = List.of(User.UserRole.USER, User.UserRole.STORE);
+    private final List<String> ADMIN_ROLES_STRING = List.of("ADMIN", "USER", "STORE");
+    private final List<String> USER_ROLES_STRING = List.of("USER", "STORE");
 
-    public List<GrantedAuthority> createAuthorities(List<User.UserRole> roles) {
+
+
+    // DB에 저장된 Role을 기반으로 권한 정보 생성
+    public List<GrantedAuthority> createAuthorities(List<String> roles) {
         List<GrantedAuthority> authorities =
                 roles.stream()
-                        .map(role -> new SimpleGrantedAuthority(role.toString())) // "ROLE_" 접두사를 제거
+                        .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                         .collect(Collectors.toList());
 
         return authorities;
     }
 
-    public List<User.UserRole> createRoles(String email) {
-        // 이메일을 기반으로 사용자의 기본 역할을 설정
+    // DB 저장 용
+    public List<String> createRoles(String email) {
         if (email.equals(adminMailAddress)) {
-            return ADMIN_USER_ROLES;
+            return ADMIN_ROLES_STRING;
         }
-        return USER_USER_ROLES; // 기본 역할을 USER로 설정
+        return USER_ROLES_STRING;
     }
 }
+

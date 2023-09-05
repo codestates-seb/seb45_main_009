@@ -43,7 +43,7 @@ public class UserController {
         user.setUsertype(0); // USER 역할
 
         // "ROLE_USER" 역할을 설정
-        user.getRoles().add(User.UserRole.USER);
+        user.getRoles().add("USER");
 
 
         // UserService를 사용하여 유저 생성
@@ -61,7 +61,7 @@ public class UserController {
 
 
         // "ROLE_STORE" 역할을 설정
-        user.getRoles().add(User.UserRole.STORE);
+        user.getRoles().add("STORE");
 
         // UserService를 사용하여 유저 생성
         User createdUser = userService.createUser(user);
@@ -95,7 +95,7 @@ public class UserController {
     // 유저 정보 조회
     @PreAuthorize("isAuthenticated()")
     @GetMapping("mypage")
-    public ResponseEntity getUserInfo(@LoginUserId Long userId) {
+    public ResponseEntity getUserMypage(@LoginUserId Long userId) {
         User findUser = userService.findUser(userId);
         UserDto.ResponseDto response = mapper.userToResponse(findUser);
 

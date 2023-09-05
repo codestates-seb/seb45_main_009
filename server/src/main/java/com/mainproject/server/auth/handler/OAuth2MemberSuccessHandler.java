@@ -51,7 +51,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         }
 
 
-        List<User.UserRole> authorities = authorityUtils.createRoles(email);
+        List<String> authorities = authorityUtils.createRoles(email);
         User user = buildOAuth2User(name, email, profileimg);
 
         if (!userService.existsByEmail(user.getEmail())) {
@@ -79,7 +79,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return userService.createUserOAuth2(user);
     }
 
-    private void redirect(HttpServletRequest request, HttpServletResponse response, User user, List<User.UserRole> authorities) throws IOException {
+    private void redirect(HttpServletRequest request, HttpServletResponse response, User user, List<String> authorities) throws IOException {
         String accessToken = delegateAccessToken(user, authorities);
         String refreshToken = delegateRefreshToken(user);
 
@@ -92,7 +92,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         getRedirectStrategy().sendRedirect(request, response, uri);
     }
 
-    private String delegateAccessToken(User user, List<User.UserRole> authorities) {
+    private String delegateAccessToken(User user, List<String> authorities) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", user.getUserId());
         claims.put("roles", authorities);

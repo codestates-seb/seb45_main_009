@@ -118,6 +118,7 @@ public class UserDto {
         private int weight;
         private String location;
         private List<String> sport;
+        private List<String> roles = new ArrayList<>();
 
 
 

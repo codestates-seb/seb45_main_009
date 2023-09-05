@@ -1,13 +1,12 @@
 
-~
-java:S1488›"`Immediately return this expression instead of assigning it to the temporary variable "findUser".(Ó¦Û¿8˜Êº­¥1
-~
-java:S1488¥"`Immediately return this expression instead of assigning it to the temporary variable "findUser".(Ó¦Û¿8˜Êº­¥1
-†
-java:S1488Ş"cImmediately return this expression instead of assigning it to the temporary variable "accessToken".(Œö¿úÿÿÿÿ8˜Êº­¥1
-‡
-java:S1488ë"dImmediately return this expression instead of assigning it to the temporary variable "refreshToken".(´®«£ùÿÿÿÿ8˜Êº­¥1
+R
+java:S1066"/Merge this if statement with the enclosing one.(çéËüÿÿÿÿ8§½·¦1
+^
+java:S4973Y"<Strings and Boxed types should be compared using "equals()".(ÖÂØ½şÿÿÿÿ8òšÅ†¦1
+Š
+java:S1845Ï"lRename method "verifyExistNickname" to prevent any misunderstanding/clash with method "verifyExistNickName".(Ò«Œà8×½·¦1
+]	java:S125I"<This block of commented-out lines of code should be removed.(²¿’åşÿÿÿÿ8 –Ù¦1
+K
+java:S2175"-A "List<UserRole>" cannot contain a "String".(âšø‹8…›Å†¦1
 ;
-java:S2119È"Save and re-use this "Random".(¼İÅf8§Êº­¥1
-w
-java:S1128"URemove this unused import 'com.mainproject.server.auth.config.PasswordEncoderConfig'.(¯Î¸®ûÿÿÿÿ8°‘¥¯¥1
+java:S2119½"Save and re-use this "Random".(¼İÅf8à½·¦1
