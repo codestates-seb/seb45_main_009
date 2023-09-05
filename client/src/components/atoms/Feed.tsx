@@ -8,10 +8,11 @@ interface UserData {
   feedImg: string;
   userInfo: string;
   tags: string;
+  location: string;
 }
 
 interface FeedProps {
-  selectedFilter: string;
+  selectedFilter: string[];
 }
 
 const tempData: UserData[] = [
@@ -21,6 +22,7 @@ const tempData: UserData[] = [
     feedImg: "/asset/feedpicture.png",
     userInfo: "오늘은 날씨가 좋네요",
     tags: "헬스",
+    location: "서울",
   },
   {
     proFileImg: "/asset/profile.png",
@@ -28,6 +30,7 @@ const tempData: UserData[] = [
     feedImg: "/asset/feedpicture.png",
     userInfo: "서울은 비가 올거 같아요",
     tags: "헬스",
+    location: "서울",
   },
   {
     proFileImg: "/asset/profile.png",
@@ -35,6 +38,7 @@ const tempData: UserData[] = [
     feedImg: "/asset/feedpicture.png",
     userInfo: "오운완!",
     tags: "헬스",
+    location: "경기",
   },
   {
     proFileImg: "/asset/profile.png",
@@ -42,6 +46,7 @@ const tempData: UserData[] = [
     feedImg: "/asset/feedpicture.png",
     userInfo: "뛰나요?",
     tags: "크로스핏",
+    location: "경기",
   },
   {
     proFileImg: "/asset/profile.png",
@@ -49,6 +54,7 @@ const tempData: UserData[] = [
     feedImg: "/asset/feedpicture.png",
     userInfo: "오늘은 날씨가 좋네요",
     tags: "크로스핏",
+    location: "서울",
   },
   {
     proFileImg: "/asset/profile.png",
@@ -56,13 +62,15 @@ const tempData: UserData[] = [
     feedImg: "/asset/feedpicture.png",
     userInfo: "오늘은 날씨가 좋네요",
     tags: "크로스핏",
-  },
+    location: "인천",
+    },
   {
     proFileImg: "/asset/profile.png",
     userId: "ID123ABC",
     feedImg: "/asset/feedpicture.png",
     userInfo: "오늘은 날씨가 좋네요",
     tags: "수영",
+    location: "강원",
   },
   {
     proFileImg: "/asset/profile.png",
@@ -70,6 +78,7 @@ const tempData: UserData[] = [
     feedImg: "/asset/feedpicture.png",
     userInfo: "오늘은 날씨가 좋네요",
     tags: "수영",
+    location: "서울",
   },
   {
     proFileImg: "/asset/profile.png",
@@ -77,6 +86,7 @@ const tempData: UserData[] = [
     feedImg: "/asset/feedpicture.png",
     userInfo: "오늘은 날씨가 좋네요",
     tags: "수영",
+    location: "서울",
   },
   {
     proFileImg: "/asset/profile.png",
@@ -84,6 +94,7 @@ const tempData: UserData[] = [
     feedImg: "/asset/feedpicture.png",
     userInfo: "오늘은 날씨가 좋네요",
     tags: "홈트",
+    location: "서울",
   },
   {
     proFileImg: "/asset/profile.png",
@@ -91,6 +102,7 @@ const tempData: UserData[] = [
     feedImg: "/asset/test.png",
     userInfo: "팬티 단돈 99000원",
     tags: "홈트",
+    location: "인천",
   },
   {
     proFileImg: "/asset/profile.png",
@@ -98,6 +110,7 @@ const tempData: UserData[] = [
     feedImg: "/asset/feedpicture.png",
     userInfo: "오늘은 날씨가 좋네요",
     tags: "농구",
+    location: "서울",
   },
   {
     proFileImg: "/asset/profile.png",
@@ -105,6 +118,7 @@ const tempData: UserData[] = [
     feedImg: "/asset/feedpicture.png",
     userInfo: "오늘은 날씨가 좋네요",
     tags: "축구",
+    location: "서울",
   },
   {
     proFileImg: "/asset/profile.png",
@@ -112,6 +126,7 @@ const tempData: UserData[] = [
     feedImg: "/asset/test.png",
     userInfo: "팬티 단돈 99000원",
     tags: "축구",
+    location: "부산",
   },
   {
     proFileImg: "/asset/profile.png",
@@ -119,6 +134,7 @@ const tempData: UserData[] = [
     feedImg: "/asset/feedpicture.png",
     userInfo: "오늘은 날씨가 좋네요",
     tags: "축구",
+    location: "부산",
   },
   {
     proFileImg: "/asset/profile.png",
@@ -126,6 +142,7 @@ const tempData: UserData[] = [
     feedImg: "/asset/feedpicture.png",
     userInfo: "오늘은 날씨가 좋네요",
     tags: "농구",
+    location: "서울",
   },
   {
     proFileImg: "/asset/profile.png",
@@ -133,6 +150,7 @@ const tempData: UserData[] = [
     feedImg: "/asset/test.png",
     userInfo: "팬티 단돈 99000원",
     tags: "농구",
+    location: "서울",
   },
   {
     proFileImg: "/asset/profile.png",
@@ -140,8 +158,11 @@ const tempData: UserData[] = [
     feedImg: "/asset/feedpicture.png",
     userInfo: "오늘은 날씨가 좋네요",
     tags: "농구",
+    location: "서울",
   },
 ];
+
+localStorage.setItem("tempData", JSON.stringify(tempData));
 
 const PAGE_SIZE = 4;
 
@@ -154,18 +175,21 @@ const Feed = ({ selectedFilter }: FeedProps) => {
   useEffect(() => {
     if (inView) {
       setPage((prevPage) => prevPage + 1);
-      console.log(inView);
     }
   }, [inView]);
 
   const startIndex = (page - 1) * PAGE_SIZE;
   const chunkData = allData.slice(0, startIndex + PAGE_SIZE);
 
-  const filteredData =
-    selectedFilter === "전체"
-      ? chunkData
-      : chunkData.filter((user) => user.tags === selectedFilter);
+  const filteredData = selectedFilter.includes("전체")
+    ? chunkData
+    : chunkData.filter(
+        (user) =>
+          selectedFilter.includes(user.tags) ||
+          selectedFilter.includes(user.location)
+      );
 
+  console.log(selectedFilter, chunkData);
   return (
     <div className="flex justify-center flex-col items-center">
       <div>
@@ -177,7 +201,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-4 gap-4 ">
+        <div className="grid grid-cols-4 gap-4 h-full mb-24">
           {filteredData.map((user, idx) => (
             <div key={idx} className=" mx-4 mb-4">
               <div className="flex mb-4">
@@ -195,7 +219,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
                 <img
                   src={user.feedImg}
                   alt={`FeedImg of ${user.userId}`}
-                  className="w-[300px] h-[350px] object-cover"
+                  className="w-[250px] h-[300px] object-cover"
                 />
               </div>
             </div>
