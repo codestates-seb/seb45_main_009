@@ -1,6 +1,7 @@
 import BackButton from "../components/atoms/BackButton";
 import Feed from "../components/atoms/Feed";
 import React, { useState } from "react";
+import BlueButton from "../components/atoms/BlueButton";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -24,6 +25,153 @@ function Profile() {
         }
       ];
 
+      const tempData = [
+        {
+          proFileImg: "/asset/profile.png",
+          userId: "ImHello",
+          feedImg: "/asset/feedpicture.png",
+          userInfo: "오늘은 날씨가 좋네요",
+          tags: "헬스",
+          location: "서울",
+        },
+        {
+          proFileImg: "/asset/profile.png",
+          userId: "ImTaeyoung",
+          feedImg: "/asset/feedpicture.png",
+          userInfo: "서울은 비가 올거 같아요",
+          tags: "헬스",
+          location: "서울",
+        },
+        {
+          proFileImg: "/asset/profile.png",
+          userId: "ImAGoodBoy",
+          feedImg: "/asset/feedpicture.png",
+          userInfo: "오운완!",
+          tags: "헬스",
+          location: "경기",
+        },
+        {
+          proFileImg: "/asset/profile.png",
+          userId: "ID123",
+          feedImg: "/asset/feedpicture.png",
+          userInfo: "뛰나요?",
+          tags: "크로스핏",
+          location: "경기",
+        },
+        {
+          proFileImg: "/asset/profile.png",
+          userId: "ID777",
+          feedImg: "/asset/feedpicture.png",
+          userInfo: "오늘은 날씨가 좋네요",
+          tags: "크로스핏",
+          location: "서울",
+        },
+        {
+          proFileImg: "/asset/profile.png",
+          userId: "IDABC",
+          feedImg: "/asset/feedpicture.png",
+          userInfo: "오늘은 날씨가 좋네요",
+          tags: "크로스핏",
+          location: "인천",
+        },
+        {
+          proFileImg: "/asset/profile.png",
+          userId: "ID123ABC",
+          feedImg: "/asset/feedpicture.png",
+          userInfo: "오늘은 날씨가 좋네요",
+          tags: "수영",
+          location: "강원",
+        },
+        {
+          proFileImg: "/asset/profile.png",
+          userId: "ID888888",
+          feedImg: "/asset/feedpicture.png",
+          userInfo: "오늘은 날씨가 좋네요",
+          tags: "수영",
+          location: "강원",
+        },
+        {
+          proFileImg: "/asset/profile.png",
+          userId: "IDABC",
+          feedImg: "/asset/feedpicture.png",
+          userInfo: "오늘은 날씨가 좋네요",
+          tags: "수영",
+          location: "서울",
+        },
+        {
+          proFileImg: "/asset/profile.png",
+          userId: "ID123ABC",
+          feedImg: "/asset/feedpicture.png",
+          userInfo: "오늘은 날씨가 좋네요",
+          tags: "홈트",
+          location: "서울",
+        },
+        {
+          proFileImg: "/asset/profile.png",
+          userId: "ID888888",
+          feedImg: "/asset/test.png",
+          userInfo: "팬티 단돈 99000원",
+          tags: "홈트",
+          location: "인천",
+        },
+        {
+          proFileImg: "/asset/profile.png",
+          userId: "IDABC",
+          feedImg: "/asset/feedpicture.png",
+          userInfo: "오늘은 날씨가 좋네요",
+          tags: "농구",
+          location: "서울",
+        },
+        {
+          proFileImg: "/asset/profile.png",
+          userId: "ID123ABC",
+          feedImg: "/asset/feedpicture.png",
+          userInfo: "오늘은 날씨가 좋네요",
+          tags: "축구",
+          location: "서울",
+        },
+        {
+          proFileImg: "/asset/profile.png",
+          userId: "ID888888",
+          feedImg: "/asset/test.png",
+          userInfo: "팬티 단돈 99000원",
+          tags: "축구",
+          location: "부산",
+        },
+        {
+          proFileImg: "/asset/profile.png",
+          userId: "IDABC",
+          feedImg: "/asset/feedpicture.png",
+          userInfo: "오늘은 날씨가 좋네요",
+          tags: "축구",
+          location: "부산",
+        },
+        {
+          proFileImg: "/asset/profile.png",
+          userId: "ID123ABC",
+          feedImg: "/asset/feedpicture.png",
+          userInfo: "오늘은 날씨가 좋네요",
+          tags: "농구",
+          location: "서울",
+        },
+        {
+          proFileImg: "/asset/profile.png",
+          userId: "ID888888",
+          feedImg: "/asset/test.png",
+          userInfo: "팬티 단돈 99000원",
+          tags: "농구",
+          location: "서울",
+        },
+        {
+          proFileImg: "/asset/profile.png",
+          userId: "IDABC",
+          feedImg: "/asset/feedpicture.png",
+          userInfo: "오늘은 날씨가 좋네요",
+          tags: "농구",
+          location: "서울",
+        },
+      ];
+
       // 팔로우
   const followClick =() =>{
     console.log('팔로우하기')
@@ -31,11 +179,11 @@ function Profile() {
 
 
   return (
-    <div className="w-[1000px] ml-[100px] ">
+    <div className="w-[1100px] ml-[100px] ">
         <BackButton />
         <div>
-        <div className="float-right ">
-           <button className="pr-4" onClick={followClick} >팔로우</button>
+        <div className="float-right">
+            <BlueButton label="팔로우"  onClick={followClick} />
         </div>
         <img src={userData[0].userphoto}  className='w-[80px] h-[80px] rounded-full float-left mr-4' />
       
@@ -45,13 +193,22 @@ function Profile() {
           <div>{userData[0].userweight}kg</div>
         </div>
         </div>
-        <div className="border mt-[60px]">
+        <div className=" mt-[60px]">
             {/* 아이콘 넣기 */}
-            <div className='text-sm font-bold text-gray-400 border'><FontAwesomeIcon icon={faHeart} className='mr-[10px]' />{userData[0].userexercise}</div>
-            <div className='text-sm font-bold text-gray-400 border'><FontAwesomeIcon icon={faUser} className='mr-[10px]' />{userData[0].userintroduction}</div>
+            <div className='text-sm font-bold text-gray-400 '><FontAwesomeIcon icon={faHeart} className='mr-[10px]' />{userData[0].userexercise}</div>
+            <div className='text-sm font-bold text-gray-400 '><FontAwesomeIcon icon={faUser} className='mr-[10px]' />{userData[0].userintroduction}</div>
         </div>
-        <div className="border mt-[60px]">
+        <div className=" mt-[60px]">
             {/* 피드 리스트 넣기 */}
+            {
+                tempData
+                .filter(item => item.userId === "ID888888")
+                .map((item, index) => (
+                    <div key={index} className='float-left flex '>
+                        <img className="w-[250px] h-[300px] mr-[24px] mb-[24px]" src={item.feedImg}/>
+                    </div>
+                ))
+            }
         </div>
     </div>
   );
