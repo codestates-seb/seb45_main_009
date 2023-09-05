@@ -7,6 +7,8 @@ import Footer from "./components/sharedlayout/Footer";
 
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Profile from "./pages/Profile";
+
 
 
 import MainPageInd from "./pages/MainPageInd";
@@ -27,6 +29,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
+          <Route path="/profile" element={<Profile />}></Route>
           <Route path="/" element={<MainPageInd />}></Route>
           <Route path="/store" element={<MainPageCor />}></Route>
           <Route path="/feeddetailcor" element={<FeedDetailPageCor />}></Route>
