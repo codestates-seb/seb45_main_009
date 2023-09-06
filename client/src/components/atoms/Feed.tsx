@@ -238,7 +238,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-4 gap-4  mb-24 min-h-screen">
+        <div className="grid grid-cols-4 gap-4  mb-24">
           {filteredData.map((user, idx) => (
             <div key={idx} className=" mx-4 mb-4">
               <div className="flex mb-4">
