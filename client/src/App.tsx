@@ -13,6 +13,7 @@ import Footer from "./components/sharedlayout/Footer";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import Profile from "./pages/Profile";
+import Loginaddition from "./pages/Loginaddition";
 
 import MainPageInd from "./pages/MainPageInd";
 // import MainPageCor from "./pages/MainPageCor";
@@ -62,11 +63,11 @@ function App() {
             <Route path="/mypage/:page" element={<MyPage />} />
             <Route path="/login" element={<LoginPage />}></Route>
             <Route path="/signup" element={<SignupPage />}></Route>
+            <Route path="/loginaddition" element={<Loginaddition />}></Route>
             <Route path="/profile" element={<Profile />}></Route>
             <Route path="*" element={<Not404 />} />
           </Routes>
         </div>
-
         <Footer />
       </div>
     </BrowserRouter>
