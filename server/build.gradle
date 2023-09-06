@@ -37,6 +37,8 @@ dependencies {
 	implementation 'com.google.code.gson:gson:2.9.0'
 	//응답값을 JSON 형식으로 받아 parsing을 위 라이브러리 빌드
 	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+	// aws s3
+	implementation "com.amazonaws:aws-java-sdk-s3:1.12.429"
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'

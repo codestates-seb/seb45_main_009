@@ -43,7 +43,6 @@ spring:
             userInfoUri: https://kapi.kakao.com/v2/user/me
             userNameAttribute: id
 
-
 logging:
   level:
     p6spy: info
@@ -54,3 +53,15 @@ jwt:
   key: ${JWT_SECRET_KEY}
   access-token-expiration-minutes: 120
   refresh-token-expiration-minutes: 420
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_S3_ACCESS_KEY}
+      secret-key: ${AWS_S3_SECRET_KEY}
+    s3:
+      bucket: ${AWS_S3_BUCKET}
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
