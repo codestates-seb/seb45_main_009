@@ -29,7 +29,8 @@ const MyPageTop = () => {
       <Link
         to={"/mypage/edit"}
         className={`mr-16 ${
-          location.pathname === "/mypage/edit"
+          location.pathname === "/mypage/edit" ||
+          location.pathname === "/mypage/changepassword"
             ? "text-btn-color"
             : "hover:text-btn-color"
         }`}

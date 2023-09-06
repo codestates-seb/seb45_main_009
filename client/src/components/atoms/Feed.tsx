@@ -195,9 +195,11 @@ const tempData: UserData[] = [
 ];
 
 localStorage.setItem("tempData", JSON.stringify(tempData));
+const tempDataString = localStorage.getItem("tempData");
+const tempDatas = tempDataString ? JSON.parse(tempDataString) : [];
 
 const Feed = ({ selectedFilter }: FeedProps) => {
-  const [allData, setAllData] = useState<UserData[]>(tempData);
+  const [allData, setAllData] = useState<UserData[]>(tempDatas);
   const [page, setPage] = useState(2);
 
   const [ref, inView] = useInView();
@@ -226,8 +228,8 @@ const Feed = ({ selectedFilter }: FeedProps) => {
     location.pathname === "/" ? "/feeddetailind" : "/feeddetailcor";
 
   return (
-    <div className="flex justify-center flex-col items-center">
-      <div>
+    <div className="flex justify-center flex-col items-center ">
+      <div className="">
         <div className="flex justify-end mr-4">
           <Link to={currentFeed}>
             <button className="px-8 py-2 rounded-xl mb-5 bg-feedbtn-color hover:bg-feedbtnhover-color">
@@ -236,7 +238,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-4 gap-4 h-full mb-24">
+        <div className="grid grid-cols-4 gap-4  mb-24 min-h-screen">
           {filteredData.map((user, idx) => (
             <div key={idx} className=" mx-4 mb-4">
               <div className="flex mb-4">
@@ -264,7 +266,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
         </div>
       </div>
 
-      <div ref={ref}></div>
+      <div ref={ref}>xxxxxxxxxxxxxxxxxxx</div>
     </div>
   );
 };

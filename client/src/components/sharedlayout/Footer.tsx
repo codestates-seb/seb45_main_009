@@ -13,7 +13,7 @@ const members = [
 
 function Footer() {
   return (
-    <div className="flex justify-center items-center  bg-slate-200 absolute bottom-[-40] w-full  min-h-[80px] ">
+    <div className="flex justify-center items-center  bg-slate-200  min-h-[80px] ">
       <Link to={"/"}>
         <div className=" mr-44 hover:cursor-pointer">
           <img src="/asset/fitfolio.png" alt="logo" />
