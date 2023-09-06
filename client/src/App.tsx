@@ -55,14 +55,8 @@ function App() {
             <Route path="/profile" element={<Profile />}></Route>
             <Route path="/" element={<MainPageInd />}></Route>
             <Route path="/store" element={<MainPageCor />}></Route>
-            <Route
-              path="/feeddetailcor"
-              element={<FeedDetailPageCor />}
-            ></Route>
-            <Route
-              path="/feeddetailind"
-              element={<FeedDetailPageInd />}
-            ></Route>
+            <Route path="/feeddetailcor" element={<FeedDetailPageCor />}></Route>
+            <Route path="/feeddetailind" element={<FeedDetailPageInd />}></Route>
             <Route path="/feedformcor" element={<FeedFormPageCor />}></Route>
             <Route path="/feedformind" element={<FeedFormPageInd />}></Route>
             <Route path="/mypage/:page" element={<MyPage />} />

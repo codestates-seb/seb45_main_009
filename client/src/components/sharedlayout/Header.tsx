@@ -37,10 +37,7 @@ function Header() {
       </Link>
       <div className="flex h-8 w-4/12 border rounded-2xl p-1 mr-4">
         <img src="/asset/search.png" alt="search" className="mr-2 w-6" />
-        <input
-          className="w-full outline-none"
-          placeholder="검색하실 ID 또는 #태그를 입력하세요."
-        ></input>
+        <input className="w-full outline-none" placeholder="검색하실 ID 또는 #태그를 입력하세요."></input>
       </div>
       <div className=" w-6 mr-4 hover:cursor-pointer">
         <img src="/asset/notify.png" alt="notify"></img>
@@ -51,7 +48,7 @@ function Header() {
             <button className="mr-4 hover:text-btn-color" onClick={logoutHandler}>
               로그아웃
             </button>
-            <Link to="*">
+            <Link to="/mypage/:page">
               <button className="mr-8 hover:text-btn-color">마이페이지</button>
             </Link>
           </>
