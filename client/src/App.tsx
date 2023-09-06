@@ -12,6 +12,7 @@ import Footer from "./components/sharedlayout/Footer";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
+import Loginaddition from "./pages/Loginaddition";
 
 import MainPageInd from "./pages/MainPageInd";
 // import MainPageCor from "./pages/MainPageCor";
@@ -66,10 +67,19 @@ function App() {
             <Route path="/feedformcor" element={<FeedFormPageCor />}></Route>
             <Route path="/feedformind" element={<FeedFormPageInd />}></Route>
             <Route path="/mypage/:page" element={<MyPage />} />
-
-            <Route path="*" element={<Not404 />} />
-          </Routes>
-        </div>
+            
+        <Routes>
+          <Route path="/login" element={<Login />}></Route>
+          <Route path="/signup" element={<Signup />}></Route>
+          <Route path="/loginaddition" element={<Loginaddition />}></Route>
+          <Route path="/" element={<MainPageInd />}></Route>
+          <Route path="/store" element={<MainPageCor />}></Route>
+          <Route path="/feeddetailcor" element={<FeedDetailPageCor />}></Route>
+          <Route path="/feeddetailind" element={<FeedDetailPageInd />}></Route>
+          <Route path="/feedformcor" element={<FeedFormPageCor />}></Route>
+          <Route path="/feedformind" element={<FeedFormPageInd />}></Route>
+          <Route path="*" element={<Not404 />} />
+        </Routes>
 
         <Footer />
       </div>
