@@ -7,14 +7,12 @@ import Comment from "../components/atoms/Comment";
 function FeedDetailPageCor() {
   return (
     <div>
-      <BackButton />
-      <ProfileCor />
-        <div className=" mt-[60px] flex justify-center">
-        <div>
+        <BackButton />
+        <ProfileCor />
+        <div className=" mt-[60px]">
             <DetailFeedCor />
             <Comment />
           </div>
-        </div>
       </div>
   );
 }

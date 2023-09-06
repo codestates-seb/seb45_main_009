@@ -47,7 +47,7 @@ function DetailFeedCor() {
   }
   return(
     // 화면 최대 넓이를 중간크기로, 수평 중앙 위치, 패딩조절
-    <div className='max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8'>
+    <div className='w-full sm:max-w-screen-sm  mx-auto px-4 sm:px-4 lg:px-8'>
         {
             feedData.photo.map((photo,index) => (
                 <div className='mb-8' key={index}>
