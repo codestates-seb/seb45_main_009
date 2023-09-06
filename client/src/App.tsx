@@ -26,22 +26,13 @@ import { useDispatch } from "react-redux";
 function App() {
   const dispatch = useDispatch();
 
-  function getCookie(name: string) {
-    let value = "; " + document.cookie;
-    let parts = value.split("; " + name + "=");
-    if (parts.length === 2) {
-      return parts.pop()!.split(";").shift();
-    }
-  }
-
   useEffect(() => {
-    const accessToken = getCookie("access_token");
-    const userInfoString = getCookie("user_info");
+    const accessToken = sessionStorage.getItem("access_token");
+    const userInfoString = sessionStorage.getItem("user_info");
 
     if (accessToken && userInfoString) {
       try {
-        const decodedUserInfo = atob(userInfoString);
-        const userInfo: UserInfo = JSON.parse(decodedUserInfo);
+        const userInfo: UserInfo = JSON.parse(userInfoString);
 
         dispatch(login(userInfo));
       } catch (error) {

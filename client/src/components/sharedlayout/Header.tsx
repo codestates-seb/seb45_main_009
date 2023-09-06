@@ -21,11 +21,10 @@ function Header() {
   const dispatch = useDispatch();
 
   const isAuthenticated = useSelector((state: RootState) => state.login.isAuthenticated);
-
   const logoutHandler = () => {
     dispatch(logout());
-    document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    document.cookie = "user_info=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    sessionStorage.removeItem("access_token");
+    sessionStorage.removeItem("user_info");
     navigate("/");
   };
 

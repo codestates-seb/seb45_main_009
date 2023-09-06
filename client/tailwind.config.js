@@ -9,9 +9,12 @@ module.exports = {
         "feedbtn-color": "#FFF99A",
         "feedbtnhover-color": "#FFF000",
         bts: "#7FBCD9",
+        "bts-hover": "#6a9fb8",
         bdc: "#D9D9D9",
         btc: "#676767",
-        "isValid-text-red" : '#EC0000'
+        "isValid-text-red": "#EC0000",
+        sbc: "#7DD9C4",
+        "sbc-hover": "4dab95",
       },
       screens: {
         "max-tablet": { max: "1024px" },
