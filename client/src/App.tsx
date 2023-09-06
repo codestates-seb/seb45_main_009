@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import { login } from "./redux/reducers/loginSlice";
+
+import { UserInfo } from "./types/types";
 
 import Header from "./components/sharedlayout/Header";
 import Footer from "./components/sharedlayout/Footer";
@@ -8,7 +12,6 @@ import Footer from "./components/sharedlayout/Footer";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
-
 
 import MainPageInd from "./pages/MainPageInd";
 // import MainPageCor from "./pages/MainPageCor";
@@ -21,7 +24,26 @@ import MainPageCor from "./pages/MainPageCor";
 import MyPage from "./pages/MyPage";
 import ChangePassword from "./components/atoms/ChangePassword";
 
+import { useDispatch } from "react-redux";
+
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const accessToken = sessionStorage.getItem("access_token");
+    const userInfoString = sessionStorage.getItem("user_info");
+
+    if (accessToken && userInfoString) {
+      try {
+        const userInfo: UserInfo = JSON.parse(userInfoString);
+
+        dispatch(login(userInfo));
+      } catch (error) {
+        console.error("Error decoding user info:", error);
+      }
+    }
+  }, [dispatch]);
+
   return (
     <BrowserRouter>
       <div className="App">
