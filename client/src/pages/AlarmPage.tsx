@@ -46,29 +46,30 @@ function Alarm() {
         }
 
   return (
-    <div className=" ml-[200px] mr-[200px]">
-        <div className="flex justify-between">
+    <div className="flex justify-center min-h-screen px-[10px]  md:px-[60px] lg:px-[200px] mt-[40px]">
+    <div className="w-full">
+        <div className="flex justify-between items-center">
             <div className="text-[20px] font-semibold">내 소식</div>
-            <button className=" text-[14px] font-medium w-[140px] h-[30px] rounded-[4px] bg-red-600 text-white"  onClick={handleDeleteAllComment}>모두 삭제하기</button>
+            <button className="text-[14px] font-medium w-[140px] h-[30px] rounded-[4px] bg-red-600 text-white" onClick={handleDeleteAllComment}>모두 삭제하기</button>
         </div>
 
-        <div>
-
+        <div className="mt-[20px]">
             {
-                data.map((item,index) =>(
-                    <div key={index} className="mt-[30px] mb-[30px] w-full h-[50px] border">
-                        <img className="w-[50px] h-[50px] rounded-full float-left mr-[20px]" src={item.photo} alt={item.name} />
-                            <div onClick={() => handleDeleteComment(index)} className="cursor-pointer float-right w-[20px] h-[50px] flex items-center float-right">❌</div>
-                            <div className="">
-                                <div className="font-bold text-[18px] mr-[10px] float-left mt-[6px] w-[120px]">{item.name}</div>
-                                <div className="clear-none flex items-center">{item.content}</div>
-                                <div className="font-bold text-[12px] text-gray-400 mr-[50px] mt-[4px] clear-none">{item.date}</div>
-                            </div> 
+                data.map((item, index) => (
+                    <div key={index} className="flex items-center border my-[15px] p-[10px]">
+                        <img className="w-[50px] h-[50px] rounded-full mr-[20px]" src={item.photo} alt={item.name} />
+                        <div className="flex-grow">
+                            <div className="font-bold text-[18px] mb-[5px]">{item.name}</div>
+                            <div>{item.content}</div>
+                            <div className="font-bold text-[12px] text-gray-400 mt-[4px]">{item.date}</div>
+                        </div>
+                        <button onClick={() => handleDeleteComment(index)} className="w-[20px] h-[20px] flex items-center justify-center text-red-600 ml-[10px]">❌</button>
                     </div>
                 ))
             }
         </div>
     </div>
+</div>
   );
 }
 

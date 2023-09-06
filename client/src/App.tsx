@@ -7,7 +7,7 @@ import Footer from "./components/sharedlayout/Footer";
 
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import Alarm from './pages/Alarm'
+import Alarm from './pages/AlarmPage'
 
 
 import MainPageInd from "./pages/MainPageInd";
