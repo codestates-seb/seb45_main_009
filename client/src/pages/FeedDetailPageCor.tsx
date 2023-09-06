@@ -12,7 +12,7 @@ function FeedDetailPageCor() {
         <div className=" mt-[60px]">
             <DetailFeedCor />
             <Comment />
-          </div>
+        </div>
       </div>
   );
 }

@@ -1,12 +1,6 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from "react";
-
-
-// 아이콘 가져오기
-import {
-    faHeart,
-    faThumbsUp
-  } from '@fortawesome/free-solid-svg-icons';
+import {AiOutlineHeart , AiFillHeart} from 'react-icons/ai';
+import {RiAlarmWarningFill} from 'react-icons/ri';
 
 function DetailFeedCor() {
     // 피드 데이터
@@ -60,8 +54,8 @@ function DetailFeedCor() {
         <div className=" mt-[20px]">
             {
               isLiked === false ? 
-              <FontAwesomeIcon icon={faHeart}  onClick={ handleLikeClick }/> : 
-              <FontAwesomeIcon icon={faThumbsUp} onClick={ handleLikeCancelClick } />
+              <AiOutlineHeart onClick={ handleLikeClick }/> : 
+              <AiFillHeart onClick={ handleLikeCancelClick } />
             }
         </div>
 
@@ -99,7 +93,7 @@ function DetailFeedCor() {
         </div>
 
         <div className="flex justify-end mt-4">
-            <button onClick={inappropriateviewBtn} className='focus:outline-none'>🚨</button>
+            <button onClick={inappropriateviewBtn} className='focus:outline-none'><RiAlarmWarningFill /></button>
         </div>
         {/* <div className="float-right mt-[10px]" onClick={inappropriateviewBtn}>🚨</div> */}
 

@@ -1,11 +1,7 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState, useRef, useEffect } from "react";
+import { BsFillBookmarkStarFill } from 'react-icons/bs';
+import { FaEllipsisH } from 'react-icons/fa';
 
-// 아이콘 가져오기
-import {
-  faEllipsis,
-  faCircleCheck,
-} from '@fortawesome/free-solid-svg-icons';
 
   const userData = [
     {
@@ -72,15 +68,15 @@ function ProfileCor() {
 
   <div className='max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8'>
     <div className="grid md:grid-cols-2 gap-4 items-center ">
-    <div className="flex items-center border ">
-      <img src={userData[0].userphoto} className="w-[80px] h-[80px] rounded-full border mr-4 " />
+    <div className="flex items-center">
+      <img src={userData[0].userphoto} className="w-[80px] h-[80px] rounded-full mr-4 " />
       <div className="flex flex-col">
-        <div className="font-bold text-xl ">
-          {userData[0].username}
-          <FontAwesomeIcon className='ml-[10px]' icon={faCircleCheck} />
-        </div>
-        <div className="font-bold text-gray-400 text-sm ">
-          <div>{userData[0].useraddress}</div>
+        <div className="grid grid-cols-[3fr,1fr] items-center">
+          <div className="font-bold text-xl truncate mr-[10px]">{userData[0].username}</div>
+          <div><BsFillBookmarkStarFill /></div>
+      </div>
+        <div className="text-gray-400 text-xs ">
+          <div className="mt-[2px]">{userData[0].useraddress}</div>
           <div>{userData[0].userintroduction}</div>
         </div>
       </div>
@@ -88,7 +84,7 @@ function ProfileCor() {
     <div className="flex items-center justify-end md:justify-start">
       <button className="ml-[200px] mr-4 w-[100px] h-[30px] rounded-[4px] text-[14px] font-medium bg-btn-color text-white" onClick={followClick}>팔로우</button>
       <button onClick={handleOpenModal}  className='relative'>
-        <FontAwesomeIcon icon={faEllipsis} />
+      <FaEllipsisH />
       </button>
       {isModalOpen && 
         <Modal onClose={handleCloseModal} /> 
