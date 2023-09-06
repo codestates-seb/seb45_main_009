@@ -6,20 +6,14 @@ import kakao from "../assets/images/kakaotalk.png";
 
 //컴포넌트 불러오기
 import CommonInput from "../components/atoms/CommonInput";
-import MembershipButton from "../components/atoms/MembershipButton";
-import MembershipButtonGroup from "../components/atoms/MembershipButtonGroup";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 
 import { UserInfo } from "../types/types";
 
-function Login() {
+function LoginPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const handleMembershipChange = (type: "개인회원" | "기업회원") => {
-    console.log(`선택된 회원 유형: ${type}`);
-  };
 
   //   이메일 값 저장
   const [email, setEmail] = useState<string>("");
@@ -51,50 +45,31 @@ function Login() {
 
   const onSubmitHandler = async () => {
     if (isValidEmail) {
-      //////////로컬
-      const accessToken = "bearer fasdkfjsdkzdfjl.hkllfgkad.gfkgslgksl";
-      const userType = 0;
-      const userNickname = "TEST_NICKNAME";
-      const userInfo: UserInfo = { userType, userNickname };
+      const url = "http://localhost:8080/login";
+      try {
+        const response = await axios.post(url, { email, password });
 
-      sessionStorage.setItem("access_token", accessToken);
-      const userInfoString = JSON.stringify(userInfo);
-      sessionStorage.setItem("user_info", userInfoString);
+        const accessToken = response.headers["Authorization"];
+        const userType = response.headers["Usertype"];
+        const userNickname = response.headers["Nickname"];
+        const userInfo: UserInfo = { userType, userNickname };
 
-      dispatch(login({ userInfo }));
+        sessionStorage.setItem("access_token", accessToken);
+        const userInfoString = JSON.stringify(userInfo);
+        sessionStorage.setItem("user_info", userInfoString);
 
-      navigate("/");
-      ///////////////////
+        dispatch(login({ userInfo }));
 
-      ////////////api
-      // const url = "URL";
-      // try {
-      //   const response = await axios.post(url, { email, password });
-
-      //   const accessToken = response.headers["Authorization"];
-      //   const userId = response.headers["UserId"];
-      //   const userType = response.headers["Usertype"];
-      //   const userNickname = response.headers["Nickname"];
-      //   const userInfo: UserInfo = { userId, userType, userNickname };
-
-      //   sessionStorage.setItem("access_token", accessToken);
-      //   const userInfoString = JSON.stringify(userInfo);
-      //   sessionStorage.setItem("user_info", userInfoString);
-
-      //   dispatch(login({ userInfo }));
-
-      //   navigate("/");
-      // } catch (error) {
-      //   console.error("Error during login:", error);
-      // }
+        navigate("/");
+      } catch (error) {
+        console.error("Error during login:", error);
+      }
     }
   };
 
   return (
     <div className=" flex justify-center h-3/5 items-center  pt-[20px] mb-[40px] mt-[20px] ">
       <div className="w-[300px] ">
-        <MembershipButtonGroup onChange={handleMembershipChange} />
-
         <CommonInput
           placeholder="이메일을 입력해주세요."
           label="이메일"
@@ -136,4 +111,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginPage;
