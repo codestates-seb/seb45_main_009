@@ -16,6 +16,7 @@ interface TagData {
 }
 
 interface ImageData {
+  file: File | null;
   src: string;
   tags: TagData[];
 }
@@ -26,29 +27,45 @@ function ImageForm({ previewImg, setPreviewImg }: ImageFormProps) {
   const [selectedTagIndex, setSelectedTagIndex] = useState<number | null>(null);
 
   const insertImg = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (previewImg.length >= 5) return;
-    let reader = new FileReader();
-    if (e.target.files && e.target.files[0]) {
-      reader.readAsDataURL(e.target.files[0]);
-    }
-    reader.onloadend = () => {
-      const previewImgUrl = reader.result;
-      if (typeof previewImgUrl === "string") {
-        const newImgData: ImageData = {
-          src: previewImgUrl,
-          tags: [],
-        };
-        setPreviewImg([...previewImg, newImgData]);
-        setSelectedImgIndex(previewImg.length);
+    setIsTaggingMode(false);
+    if (e.target.files) {
+      // 선택된 파일들을 배열로 가져옴
+      const files = Array.from(e.target.files);
+
+      // 이미 추가된 이미지와 새로 선택된 이미지의 합계가 5를 초과하는 경우, 초과분 제거
+      const availableSlots = 5 - previewImg.length;
+      if (files.length > availableSlots) {
+        files.splice(availableSlots, files.length - availableSlots);
       }
-    };
-    reader.onerror = () => {
-      alert("사진 업로드 실패, 잠시 후 다시 시도해 주세요");
-      console.error("An error occurred while reading the file.");
-    };
+
+      files.forEach((file) => {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+
+        reader.onloadend = () => {
+          const previewImgUrl = reader.result;
+          if (typeof previewImgUrl === "string") {
+            const newImgData: ImageData = {
+              file: file,
+              src: previewImgUrl,
+              tags: [],
+            };
+            setPreviewImg((prev) => [...prev, newImgData]);
+            setSelectedImgIndex(previewImg.length);
+          }
+        };
+
+        reader.onerror = () => {
+          alert("사진 업로드 실패, 잠시 후 다시 시도해 주세요");
+          console.error("An error occurred while reading the file.");
+        };
+      });
+    }
   };
 
-  const handleImageClick = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
+  const handleImageClick = (
+    e: React.MouseEvent<HTMLImageElement, MouseEvent>
+  ) => {
     if (!isTaggingMode || selectedImgIndex === null) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -99,7 +116,10 @@ function ImageForm({ previewImg, setPreviewImg }: ImageFormProps) {
     setPreviewImg(updatedPreview);
   };
 
-  const handleTagSave = (index: number, data: { name: string; price: string; info: string }) => {
+  const handleTagSave = (
+    index: number,
+    data: { name: string; price: string; info: string }
+  ) => {
     const updatedImg = { ...previewImg[selectedImgIndex as number] };
     updatedImg.tags[index] = { ...updatedImg.tags[index], data };
     const updatedPreview = [...previewImg];
@@ -121,7 +141,8 @@ function ImageForm({ previewImg, setPreviewImg }: ImageFormProps) {
     setIsTaggingMode(false);
   };
 
-  const selectedImg = selectedImgIndex !== null ? previewImg[selectedImgIndex]?.src : "";
+  const selectedImg =
+    selectedImgIndex !== null ? previewImg[selectedImgIndex]?.src : "";
 
   return (
     <div>
@@ -150,7 +171,13 @@ function ImageForm({ previewImg, setPreviewImg }: ImageFormProps) {
                 onClick={() => handleTagSelect(index)}
               />
               {selectedTagIndex === index && (
-                <div style={{ position: "absolute", top: tag.y + 18, left: tag.x - 62 }}>
+                <div
+                  style={{
+                    position: "absolute",
+                    top: tag.y + 18,
+                    left: tag.x - 62,
+                  }}
+                >
                   <BallonTag
                     data={tag.data}
                     onDelete={() => deleteTag(index)}
@@ -165,7 +192,12 @@ function ImageForm({ previewImg, setPreviewImg }: ImageFormProps) {
       <div className="flex flex-row w-full mb-4">
         {previewImg.length > 0
           ? previewImg.map((imgData, index) => (
-              <div className={`${index === previewImg.length - 1 ? "mr-0" : "mr-2"} relative group`} key={index}>
+              <div
+                className={`${
+                  index === previewImg.length - 1 ? "mr-0" : "mr-2"
+                } relative group`}
+                key={index}
+              >
                 <img
                   src={imgData.src}
                   alt={`uploadedimg-${index}`}
@@ -193,6 +225,7 @@ function ImageForm({ previewImg, setPreviewImg }: ImageFormProps) {
           accept="image/*"
           className="absolute inset-0 overflow-hidden h-0 w-0"
           onChange={insertImg}
+          multiple
         />
       </form>
     </div>
