@@ -53,7 +53,7 @@ const MyPageFeed = () => {
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-4 gap-2 h-full mb-24">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-2 h-full mb-24">
           {chunkData.map((user: UserData, idx: number) => (
             <div key={idx}>
               <img
