@@ -1,6 +1,4 @@
 import BackButton from "../components/atoms/BackButton";
-import Feed from "../components/atoms/Feed";
-import React, { useState } from "react";
 import BlueButton from "../components/atoms/BlueButton";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
