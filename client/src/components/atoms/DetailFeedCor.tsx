@@ -46,11 +46,12 @@ function DetailFeedCor() {
     console.log('게시물 신고')
   }
   return(
-    <div className='w-[600px]'>
+    // 화면 최대 넓이를 중간크기로, 수평 중앙 위치, 패딩조절
+    <div className='max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8'>
         {
-            feedData.photo.map((index,item) => (
-                <div className='mb-[30px]'>
-                    <img src={index} />
+            feedData.photo.map((photo,index) => (
+                <div className='mb-8' key={index}>
+                    <img src={photo} className='w-full h-auto'/>
                 </div>
             ))
         }
@@ -80,7 +81,7 @@ function DetailFeedCor() {
             <div>
                 {
                     feedData.tag.map((item,index)=>(
-                        <span  className=" p-1 bg-blue-100 w-auto rounded  mr-2" key={index}>{item}</span>
+                        <span  className=" p-1 bg-blue-100 rounded  mr-2" key={index}>{item}</span>
                     ))
                 }
             </div>
@@ -91,14 +92,16 @@ function DetailFeedCor() {
             <div>
                 {
                     feedData.addresstag.map((item,index)=>(
-                        <span  className=" p-1 bg-blue-100 w-auto rounded  mr-2" key={index}>{item}</span>
+                        <span  className=" p-1 bg-blue-100 rounded  mr-2" key={index}>{item}</span>
                     ))
                 }
             </div>
         </div>
 
-        
-        <div className="float-right mt-[10px]" onClick={inappropriateviewBtn}>🚨</div>
+        <div className="flex justify-end mt-4">
+            <button onClick={inappropriateviewBtn} className='focus:outline-none'>🚨</button>
+        </div>
+        {/* <div className="float-right mt-[10px]" onClick={inappropriateviewBtn}>🚨</div> */}
 
     </div>
 

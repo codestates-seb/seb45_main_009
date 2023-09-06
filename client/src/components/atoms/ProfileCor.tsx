@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 // 아이콘 가져오기
 import {
@@ -18,13 +18,35 @@ import {
     }
   ];
 
-  const Modal = ({ onClose } :any) => (
-    // absolute top-[200px] mt-2 right-[230px]
-    <div className='flex flex-col border rounded-[4px] w-[100px]'>
-      <button onClick={onClose} className='border-b'>삭제</button>
-      <button onClick={onClose}>수정</button>
-    </div>
-  );
+  const Modal = ({ onClose } :any) => {
+    const modalRef = useRef<HTMLDivElement | null>(null);
+    // const modalRef = useRef(null);
+
+    useEffect(() => {
+      // 클릭 이벤트를 처리하는 함수
+      const handleClickOutside = (event: MouseEvent) => {
+          if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+              onClose();
+          }
+      }
+
+      // 이벤트 리스너를 문서에 추가
+      document.addEventListener("mousedown", handleClickOutside);
+      
+      // 컴포넌트가 언마운트될 때 이벤트 리스너 제거
+      return () => {
+          document.removeEventListener("mousedown", handleClickOutside);
+      };
+  }, [onClose]);
+
+    return(
+      <div ref={modalRef} className='flex flex-col border rounded-[4px] w-[100px] 
+        absolute  md:right-[60px] right-[100px] md:top-[200px] top-[280px] '>
+        <button onClick={onClose} className='border-b'>삭제</button>
+        <button onClick={onClose}>수정</button>
+      </div>
+      )
+  };
 
 function ProfileCor() {
     // 모달창 열기 닫기
@@ -44,13 +66,16 @@ function ProfileCor() {
       console.log('팔로우하기')
     }
 
+    // className='max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8'   flex justify-center 
   return(
-  <div className="flex justify-center">
+    // <div  ref={modalRef}>
+
+  <div className='max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8'>
     <div className="grid md:grid-cols-2 gap-4 items-center ">
     <div className="flex items-center border ">
       <img src={userData[0].userphoto} className="w-[80px] h-[80px] rounded-full border mr-4 " />
       <div className="flex flex-col">
-        <div className="font-bold text-xl mr-[140px]">
+        <div className="font-bold text-xl ">
           {userData[0].username}
           <FontAwesomeIcon className='ml-[10px]' icon={faCircleCheck} />
         </div>
@@ -66,11 +91,12 @@ function ProfileCor() {
         <FontAwesomeIcon icon={faEllipsis} />
       </button>
       {isModalOpen && 
-        <Modal onClose={handleCloseModal} />
+        <Modal onClose={handleCloseModal} /> 
       }
     </div>
     </div>
   </div>
+  // </div>
   ) 
 }
 
