@@ -6,10 +6,9 @@ import Comment from "../components/atoms/Comment";
 
 function FeedDetailPageCor() {
   return (
-    <div className="w-full p-10">
+    <div>
       <BackButton />
       <ProfileCor />
-      <div className="w-full pl-10  flex-left">
         <div className=" mt-[60px] flex justify-center">
         <div>
             <DetailFeedCor />
@@ -17,7 +16,6 @@ function FeedDetailPageCor() {
           </div>
         </div>
       </div>
-    </div>
   );
 }
 

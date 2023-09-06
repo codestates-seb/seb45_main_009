@@ -23,6 +23,7 @@ function App() {
     <BrowserRouter>
       <div className="App">
         <Header />
+        <div className="min-h-screen">
 
         <Routes>
           <Route path="/login" element={<Login />}></Route>
@@ -37,6 +38,7 @@ function App() {
         </Routes>
 
         <Footer />
+        </div>
       </div>
     </BrowserRouter>
   );

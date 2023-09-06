@@ -7,7 +7,7 @@ import {
   faCircleCheck,
 } from '@fortawesome/free-solid-svg-icons';
 
-  let userData = [
+  const userData = [
     {
       username: '버퍼짐 휘트니스',
       useremail: 'gym@gmail.com',
@@ -19,7 +19,8 @@ import {
   ];
 
   const Modal = ({ onClose } :any) => (
-    <div className="flex  flex-col border ml-[55px] w-[60px] h-[50px] rounded">
+    // absolute top-[200px] mt-2 right-[230px]
+    <div className='flex flex-col border rounded-[4px] w-[100px]'>
       <button onClick={onClose} className='border-b'>삭제</button>
       <button onClick={onClose}>수정</button>
     </div>
@@ -37,33 +38,39 @@ function ProfileCor() {
     const handleCloseModal = () => {
       setModalOpen(false);
     };
-  
+
     // 팔로우
     const followClick =() =>{
       console.log('팔로우하기')
     }
 
   return(
-    <div className='ml-[60px]'>
-        <div className="float-right">
-          <button className="pr-4" onClick={followClick} >팔로우</button>
-          <button className="mr-[60px]" onClick={handleOpenModal}><FontAwesomeIcon icon={faEllipsis} /></button>
-          {isModalOpen && <Modal onClose={handleCloseModal} />}
+  <div className="flex justify-center">
+    <div className="grid md:grid-cols-2 gap-4 items-center ">
+    <div className="flex items-center border ">
+      <img src={userData[0].userphoto} className="w-[80px] h-[80px] rounded-full border mr-4 " />
+      <div className="flex flex-col">
+        <div className="font-bold text-xl mr-[140px]">
+          {userData[0].username}
+          <FontAwesomeIcon className='ml-[10px]' icon={faCircleCheck} />
         </div>
-
-
-        <div className=' w-[300px]'>
-
-        <img src={userData[0].userphoto}  className='w-[80px] h-[80px] rounded-full float-left mr-4' />
-        <FontAwesomeIcon icon={faCircleCheck} className="float-right"/>
-        <div className="font-bold text-xl mt-[4px]">{userData[0].username}</div>
-        <div className=" font-bold text-gray-400 text-sm ">
+        <div className="font-bold text-gray-400 text-sm ">
           <div>{userData[0].useraddress}</div>
           <div>{userData[0].userintroduction}</div>
         </div>
-        </div>
+      </div>
     </div>
-
+    <div className="flex items-center justify-end md:justify-start">
+      <button className="ml-[200px] mr-4 w-[100px] h-[30px] rounded-[4px] text-[14px] font-medium bg-btn-color text-white" onClick={followClick}>팔로우</button>
+      <button onClick={handleOpenModal}  className='relative'>
+        <FontAwesomeIcon icon={faEllipsis} />
+      </button>
+      {isModalOpen && 
+        <Modal onClose={handleCloseModal} />
+      }
+    </div>
+    </div>
+  </div>
   ) 
 }
 
