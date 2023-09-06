@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @AllArgsConstructor
@@ -17,36 +16,21 @@ public class FeedDto {
     public static class PostDto {
 
         private boolean usertype;
-
         private String content;
-
-        @NotBlank
-        private String photo_url;
-
-
-        private List<String> tags;
+        private List<String> relatedTags;
 
 //        private List<Phototag> phototags;
 
     }
-
 
     @Getter
     @Setter
     public static class PatchDto {
 
         private long feedId;
-
         private boolean usertype;
-
-        @NotBlank
-        private String photo_url;
-
         private String content;
-
-//        private String tag;
-
-        private List<String> tags;
+        private List<String> relatedTags;
 
 //        private List<PhotoTag> photoTags;
 

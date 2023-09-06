@@ -1,130 +1,132 @@
 package com.mainproject.server.feed.service;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.mainproject.server.exception.BusinessLogicException;
 import com.mainproject.server.exception.ExceptionCode;
 import com.mainproject.server.feed.enitiy.Feed;
 import com.mainproject.server.feed.repository.FeedRepository;
-import com.mainproject.server.photo.S3UploadService;
-import org.springframework.beans.factory.annotation.Value;
+import com.mainproject.server.image.entity.Image;
+import com.mainproject.server.image.service.ImageService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.net.URI;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class FeedService {
 
-    @Value("${cloud.aws.s3.bucket}") // application.yml에 설정된 값을 주입받음
-    private String bucket; // S3 버킷 이름을 저장할 필드
-
     private final FeedRepository feedRepository;
-    private final S3UploadService s3UploadService;
-    private final AmazonS3 amazonS3;
 
-    public FeedService(FeedRepository feedRepository, S3UploadService s3UploadService, AmazonS3 amazonS3) {
+    private final ImageService imageService;
+
+    public FeedService(FeedRepository feedRepository, ImageService imageService) {
         this.feedRepository = feedRepository;
-        this.s3UploadService = s3UploadService;
-        this.amazonS3 = amazonS3;
+        this.imageService = imageService;
     }
 
+    //피드 등록
+    public Feed createFeed(Feed feed, List<MultipartFile> imageFiles) {
 
-    // 피드 등록
-    public Feed createFeed(Feed feed, MultipartFile photoFile) {
+        Feed savedFeed = feedRepository.save(feed);
 
-        // 회원인지 아닌지 검증
+        // 이미지 업로드와 URL 가져오기
+        for (MultipartFile imageFile : imageFiles) {
+            String imageUrl = imageService.createImage(imageFile);
 
-        // 업로드한 이미지url 가져오기
-        String photoUrl = s3UploadService.upload(photoFile);
-        feed.setPhoto_url(photoUrl); // 업로드한 이미지 url로 설정
+            // 이미지와 피드 연결 후 image를 객체 저장
+            Image image = new Image.Builder()
+                    .imageUrl(imageUrl) // 이미지 URL 설정
+                    .feed(savedFeed)    // 이미지와 연결할 피드 설정
+                    .build();
+
+            // 이미지 객체를 피드에 추가
+            savedFeed.getImages().add(image);
+        }
 
         return feedRepository.save(feed);
-
     }
 
-
-    // 피드 수정(이미지 수정을 하면 기존의 이미지는 버킷에서 삭제)
-    public Feed updateFeed(Feed feed, MultipartFile photoFile) {
-
+    // 피드 수정
+    public Feed updateFeed(Feed feed, List<MultipartFile> imageFiles) {
         // 회원인지 아닌지 검증
-
         // 피드 작성자인지 검증, LoginMemberIdResolver
-
         // 피드가 있는지 확인 후 수정
         Feed updatedFeed = findFeedId(feed.getFeedId());
 
         Optional.ofNullable(feed.getContent())
                 .ifPresent(content -> updatedFeed.setContent(content));
 
-        // 기존 이미지를 삭제
-        String oldPhotoUrl = updatedFeed.getPhoto_url();
-        if (oldPhotoUrl != null) {
-            // S3 객체 URL 키(key) 추출
-            URI uri = URI.create(oldPhotoUrl);
-            String key = uri.getPath().substring(1); // 경로에서 첫 번째 슬래시(/) 제거
+        // 이미지를 수정하면서 새 이미지를 등록
+        List<String> updatedImageUrls = new ArrayList<>();
 
-            // 기존 이미지를 S3에서 삭제
-            amazonS3.deleteObject(new DeleteObjectRequest(bucket, key));
+        // 이미지 목록(updatedFeed.getImages())을 순회하면서
+        for (int i = 0; i < updatedFeed.getImages().size(); i++) {
+            if (i >= imageFiles.size()) {
+                // 이미지 파일 목록의 크기가 이미지 목록보다 작을 경우, 이미지를 그대로 둠
+                updatedImageUrls.add(updatedFeed.getImages().get(i).getImageUrl());
+                continue;
+            }
+
+            Long imageId = updatedFeed.getImages().get(i).getImageId();
+            String imageUrl = imageService.updateImage(imageId, imageFiles.get(i));
+            updatedImageUrls.add(imageUrl);
         }
 
-        // 업로드한 이미지url 가져오기
-        String photoUrl = s3UploadService.upload(photoFile);
-        updatedFeed.setPhoto_url(photoUrl); // 수정한 이미지url 설정
 
-        updatedFeed.setTags(feed.getTags());
+        // 수정할 때 새로운 이미지 추가할 경우
+        for (int imageIndex = updatedFeed.getImages().size(); imageIndex < imageFiles.size(); imageIndex++) {
+            String imageUrl = imageService.createImage(imageFiles.get(imageIndex));
 
-        // 수정 시간 변경
-        updatedFeed.setModifiedAt(LocalDateTime.now());
+            // 이미지와 피드 연결 후 image를 객체 저장
+            Image newImage = new Image.Builder()
+                    .imageUrl(imageUrl) // 이미지 URL 설정
+                    .feed(updatedFeed)  // 이미지와 연결할 피드 설정
+                    .build();
+
+            // 이미지 객체를 피드에 추가
+            updatedFeed.getImages().add(newImage);
+            updatedImageUrls.add(newImage.getImageUrl());
+        }
+
+        // 이미지 URL 업데이트
+        for (int imageIndex = 0; imageIndex < updatedFeed.getImages().size(); imageIndex++) {
+            updatedFeed.getImages().get(imageIndex).setImageUrl(updatedImageUrls.get(imageIndex));
+        }
+
+        updatedFeed.setRelatedTags(feed.getRelatedTags());
+        updatedFeed.setModifiedAt(LocalDateTime.now()); // 수정 시간 변경
 
         return feedRepository.save(updatedFeed);
     }
 
     // 피드 상세 조회
     public Feed findFeed(long feedId) {
-       return findFeedId(feedId);
+        return findFeedId(feedId);
     }
 
 
     // 피드 리스트 조회
-    public List<Feed> findFeeds(Feed feed) {
-        if(feed.isUsertype()) {  // 개인
-           List<Feed> findUserFeeds = feedRepository.findByUsertype(true);
-           return findUserFeeds;
-        }
-        else{  // 기업
+    public List<Feed> findFeeds(boolean isUser) {
+        if (isUser) {  // 개인
+            List<Feed> findUserFeeds = feedRepository.findByUsertype(true);
+            return findUserFeeds;
+        } else {  // 기업
             List<Feed> findStoreFeeds = feedRepository.findByUsertype(false);
             return findStoreFeeds;
         }
     }
 
-    // 피드 삭제(피드가 삭제되면 버킷에서도 피드 이미지 함께 삭제)
+    // 피드 삭제
     public void deleteFeed(long feedId) {
-
-        // 회원인지 아닌지 검증
-
-        // 피드 작성자인지 검증, LoginMemberIdResolver
-
-        // 피드가 있는지 확인
         Feed deletedFeed = findFeedId(feedId);
 
-        // 업로드 한 이미지url 가져오기
-        String photoUrl = deletedFeed.getPhoto_url();
+        List<Image> images = new ArrayList<>(deletedFeed.getImages());
+        for (Image image : images) {
+            imageService.deleteImage(image.getImageId());
+        }
 
-        // S3 객체 URL 키(key) 추출
-        URI uri = URI.create(photoUrl);
-        String key = uri.getPath().substring(1); // 경로에서 첫 번째 슬래시(/) 제거
-
-        // s3 버킷 이미지 삭제
-        amazonS3.deleteObject(new DeleteObjectRequest(bucket, key));
-
-        // 피드 삭제
         feedRepository.delete(deletedFeed);
     }
-
 
     // 피드ID 조회
     public Feed findFeedId(Long feedId) {
@@ -133,127 +135,6 @@ public class FeedService {
         return feed;
     }
 
-//    // 이미지 url 받아오기
-//    public String uploadAndReturnImageUrl(MultipartFile photoFile) {
-//        String photoUrl = s3UploadService.upload(photoFile);
-//        return photoUrl;
-//    }
-
-    // 수정 권한 검증(회원을 구분하는걸 email로 할지 Id로 할지)
-//    public void verifyAccess(String questionEmail, String email, Long userId) {
-//        if (!questionEmail.equals(memberEmail)) {
-//            throw new BusinessLogicException(ExceptionCode.ACCESS_DENIED);
-//        }
-
-    }
+}
 
 
-
-
-//// 이미지를 여러장 등록하는 경우
-//@Service
-//public class FeedService {
-//
-//    @Value("${cloud.aws.s3.bucket}")
-//    private String bucket;
-//
-//    private final FeedRepository feedRepository;
-//    private final S3UploadService s3UploadService;
-//    private final AmazonS3 amazonS3;
-//
-//    public FeedService(FeedRepository feedRepository, S3UploadService s3UploadService, AmazonS3 amazonS3) {
-//        this.feedRepository = feedRepository;
-//        this.s3UploadService = s3UploadService;
-//        this.amazonS3 = amazonS3;
-//    }
-//
-//    // 피드 등록 (여러 이미지 처리)
-//    public Feed createFeed(Feed feed, List<MultipartFile> photoFiles) {
-//        List<String> photoUrls = new ArrayList<>();
-//
-//        photoFiles.forEach(photoFile -> {
-//            String photoUrl = s3UploadService.upload(photoFile);
-//            photoUrls.add(photoUrl);
-//        });
-//
-//        feed.setPhoto_urls(photoUrls); // 여러 이미지 URL을 리스트로 저장
-//
-//        return feedRepository.save(feed);
-//    }
-//
-//    // 피드 수정 (여러 이미지 처리)
-//    public Feed updateFeed(Feed feed, List<MultipartFile> photoFiles) {
-//        Feed updatedFeed = findFeedId(feed.getFeedId());
-//
-//        Optional.ofNullable(feed.getContent())
-//                .ifPresent(content -> updatedFeed.setContent(content));
-//
-//        List<String> oldPhotoUrls = updatedFeed.getPhoto_urls();
-//
-//        // 이전 이미지들을 S3에서 삭제
-//        if (oldPhotoUrls != null && !oldPhotoUrls.isEmpty()) {
-//            oldPhotoUrls.forEach(oldPhotoUrl -> {
-//                URI uri = URI.create(oldPhotoUrl);
-//                String key = uri.getPath().substring(1);
-//                amazonS3.deleteObject(new DeleteObjectRequest(bucket, key));
-//            });
-//        }
-//
-//        List<String> newPhotoUrls = new ArrayList<>();
-//        photoFiles.forEach(photoFile -> {
-//            String photoUrl = s3UploadService.upload(photoFile);
-//            newPhotoUrls.add(photoUrl);
-//        });
-//
-//        updatedFeed.setPhoto_urls(newPhotoUrls); // 새로운 이미지 URL로 업데이트
-//        updatedFeed.setTags(feed.getTags());
-//        updatedFeed.setModifiedAt(LocalDateTime.now());
-//
-//        return feedRepository.save(updatedFeed);
-//    }
-//
-//    // 피드 상세 조회
-//    public Feed findFeed(long feedId) {
-//        return findFeedId(feedId);
-//    }
-//
-//
-//    // 피드 리스트 조회
-//    public List<Feed> findFeeds(Feed feed) {
-//        if(feed.isUsertype()) {  // 개인
-//            List<Feed> findUserFeeds = feedRepository.findByUsertype(true);
-//            return findUserFeeds;
-//        }
-//        else{  // 기업
-//            List<Feed> findStoreFeeds = feedRepository.findByUsertype(false);
-//            return findStoreFeeds;
-//        }
-//    }
-//
-//    // 피드 삭제
-//    public void deleteFeed(long feedId) {
-//        Feed deletedFeed = findFeedId(feedId);
-//        List<String> photoUrls = deletedFeed.getPhoto_urls();
-//
-//        // 이미지 URL에 해당하는 S3 객체 삭제
-//        if (photoUrls != null && !photoUrls.isEmpty()) {
-//            photoUrls.forEach(photoUrl -> {
-//                URI uri = URI.create(photoUrl);
-//                String key = uri.getPath().substring(1);
-//                amazonS3.deleteObject(new DeleteObjectRequest(bucket, key));
-//            });
-//        }
-//
-//        feedRepository.delete(deletedFeed);
-//    }
-//
-//    // 피드ID 조회
-//    public Feed findFeedId(Long feedId) {
-//        Optional<Feed> optionalFeed = feedRepository.findById(feedId);
-//        Feed feed = optionalFeed.orElseThrow(() -> new BusinessLogicException(ExceptionCode.FEED_NOT_FOUND));
-//        return feed;
-//    }
-//
-//}
-//
-//
