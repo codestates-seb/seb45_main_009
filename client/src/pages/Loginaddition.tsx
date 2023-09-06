@@ -8,7 +8,7 @@ import UserCorForm from  '../components/atoms/UserCorfrom';
 
 
 function Loginaddition() {
-    const [ind, setind] = useState<boolean>(false);
+    const [ind, setind] = useState<boolean>(true);
 
     // 미리보기 url 저장
     const [previewImage, setPreviewImage] = useState<string | null>(null);
