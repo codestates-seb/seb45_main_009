@@ -58,7 +58,7 @@ function Header() {
             >
               로그아웃
             </button>
-            <Link to="*">
+            <Link to="/mypage/:page">
               <button className="mr-8 hover:text-btn-color">마이페이지</button>
             </Link>
           </>

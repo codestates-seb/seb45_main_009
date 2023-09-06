@@ -3,14 +3,12 @@ import React, { useState } from "react";
 type MembershipType = "개인회원" | "기업회원";
 
 interface MembershipButtonGroupProps {
-  onChange: (type: MembershipType) => void;
+  selectedType: MembershipType;
+  onChange: (type: "개인회원" | "기업회원") => void;
 }
 
-const MembershipButtonGroup: React.FC<MembershipButtonGroupProps> = ({ onChange }) => {
-  const [selectedType, setSelectedType] = useState<MembershipType | null>("개인회원");
-
+const MembershipButtonGroup: React.FC<MembershipButtonGroupProps> = ({ selectedType, onChange }) => {
   const handleButtonClick = (type: MembershipType) => {
-    setSelectedType(type);
     onChange(type);
   };
 
