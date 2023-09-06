@@ -20,6 +20,10 @@ const Modal = ({ onClose } :any) => {
   useEffect(() => {
     // 클릭 이벤트를 처리하는 함수
     const handleClickOutside = (event: MouseEvent) => {
+      // 만약 event.target as Node 가 !modalRef.current의 자손 or 동일한 노드인 경우 true 그렇지 않으면 false 반환한다.
+      // 모달참조의 자신이 아닌 경우 클릭했을때 모달을 닫아야 한다.
+
+      // modalRef.current 타입을 never로 
         if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
             onClose();
         }
