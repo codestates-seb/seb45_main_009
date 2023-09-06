@@ -63,18 +63,18 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                         .antMatchers(HttpMethod.POST, "/join/**").permitAll()
                         .antMatchers(HttpMethod.POST, "/login").permitAll()
                         .antMatchers(HttpMethod.POST, "/logout").permitAll()
-                        .antMatchers(HttpMethod.GET, "/mypage/**").hasRole("USER")
-                        .antMatchers(HttpMethod.PATCH, "/mypage/**").hasRole("USER")
-                        .antMatchers(HttpMethod.DELETE, "/mypage/**").hasRole("USER")
+                        .antMatchers(HttpMethod.GET, "/mypage/**").hasAnyRole("USER", "STORE")
+                        .antMatchers(HttpMethod.PATCH, "/mypage/**").hasAnyRole("USER", "STORE")
+                        .antMatchers(HttpMethod.DELETE, "/mypage/**").hasAnyRole("USER", "STORE")
 
 
                         // # feed 관련
                         .antMatchers(HttpMethod.GET, "/").permitAll()
                         .antMatchers(HttpMethod.GET, "/store").permitAll()
                         .antMatchers(HttpMethod.GET, "/feed/detail/**").permitAll()
-                        .antMatchers(HttpMethod.POST, "/feed/detail/**").hasRole("USER")
-                        .antMatchers(HttpMethod.PATCH, "/feed/detail/**").hasRole("USER")
-                        .antMatchers(HttpMethod.DELETE, "/feed/detail/**").hasRole("USER")
+                        .antMatchers(HttpMethod.POST, "/feed/detail/**").hasAnyRole("USER", "STORE")
+                        .antMatchers(HttpMethod.PATCH, "/feed/detail/**").hasAnyRole("USER", "STORE")
+                        .antMatchers(HttpMethod.DELETE, "/feed/detail/**").hasAnyRole("USER", "STORE")
 
                         // # feed 댓글 관련
                         .antMatchers(HttpMethod.POST, "/feed/detail/*/comment").hasRole("USER")

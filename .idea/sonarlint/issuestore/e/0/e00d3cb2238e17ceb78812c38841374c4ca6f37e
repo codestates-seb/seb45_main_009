@@ -1,13 +1,21 @@
 
 R
-java:S1066 "/Merge this if statement with the enclosing one.(çéËüÿÿÿÿ8§½·¦1
+java:S1066£"/Merge this if statement with the enclosing one.(çéËüÿÿÿÿ8çêï§¦1
+~
+java:S1488­"`Immediately return this expression instead of assigning it to the temporary variable "findUser".(Ó¦Û¿8çêï§¦1
+~
+java:S1488·"`Immediately return this expression instead of assigning it to the temporary variable "findUser".(Ó¦Û¿8çêï§¦1
+†
+java:S1488ô"cImmediately return this expression instead of assigning it to the temporary variable "accessToken".(Œö¿úÿÿÿÿ8ãÑä¤¦1
+‡
+java:S1488"dImmediately return this expression instead of assigning it to the temporary variable "refreshToken".(´®«£ùÿÿÿÿ8ãÑä¤¦1
 ^
-java:S4973W"<Strings and Boxed types should be compared using "equals()".(ÖÂØ½şÿÿÿÿ8òšÅ†¦1
+java:S4973Z"<Strings and Boxed types should be compared using "equals()".(ÖÂØ½şÿÿÿÿ8èêï§¦1
 Š
-java:S1845Ñ"lRename method "verifyExistNickname" to prevent any misunderstanding/clash with method "verifyExistNickName".(Ò«Œà8×½·¦1
+java:S1845Ô"lRename method "verifyExistNickname" to prevent any misunderstanding/clash with method "verifyExistNickName".(Ò«Œà8¯ëï§¦1
 ;
-java:S2119¿"Save and re-use this "Random".(¼İÅf8à½·¦1
+java:S2119Â"Save and re-use this "Random".(¼İÅf8½ëï§¦1
 w
-java:S1128"URemove this unused import 'com.mainproject.server.auth.config.PasswordEncoderConfig'.(¯Î¸®ûÿÿÿÿ8è¢‹¡¦1
+java:S1128"URemove this unused import 'com.mainproject.server.auth.config.PasswordEncoderConfig'.(¯Î¸®ûÿÿÿÿ8ùÒä¤¦1
 f
-java:S1128	"DRemove this unused import 'com.mainproject.server.user.dto.UserDto'.(­øÙÄüÿÿÿÿ8è¢‹¡¦1
+java:S1128	"DRemove this unused import 'com.mainproject.server.user.dto.UserDto'.(­øÙÄüÿÿÿÿ8ùÒä¤¦1

@@ -331,11 +331,7 @@ Q.idea/sonarlint/securityhotspotstore/7/d/7d8f5d653101525f4aa10bcf4d8fad4f573455
 Q.idea/sonarlint/securityhotspotstore/7/f/7f26c52c5adbace77ba81d4beb85ca69013c1cd7,4/d/4d0afddf1bcff9d8a8a57f30401a93cd124c1f28
 v
 Fserver/src/main/java/com/mainproject/server/auth/config/WebConfig.java,9/1/91ea7c759761c64f4a0517c5f47a957e62779e29
-}
-Mserver/src/main/java/com/mainproject/server/follow/dto/FollowResponseDto.java,2/b/2b0ab2f9824ddfea7ccb4084d9b047ad520135b8
-u
-Eserver/src/main/java/com/mainproject/server/follow/entity/Follow.java,2/a/2a0a96a7c2aafd6bec067eebd1634ec4d9bcc719
-ƒ
-Sserver/src/main/java/com/mainproject/server/follow/repository/FollowRepository.java,7/0/70ca1674a708d34cb312f70894965922bf0ce949
-}
-Mserver/src/main/java/com/mainproject/server/follow/service/FollowService.java,b/1/b167a95667a2b6f54cbebf14d4fceac3fee6d417
+€
+Pserver/src/main/java/com/mainproject/server/auth/controller/TokenController.java,7/3/73afa5947e6eeb5f6c0912f6a44f3e907af82885
+z
+Jserver/src/main/java/com/mainproject/server/auth/service/TokenService.java,a/2/a211d8687eaf985bd15e2d6feae1ca6c2f2dbb42

@@ -1,4 +1,6 @@
 
+€
+java:S1488"cImmediately return this expression instead of assigning it to the temporary variable "authorities".(ìı¸ä8¿ãã¡¦1
 w	java:S116"VRename this field "ADMIN_ROLES" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…­´úÿÿÿÿ8éŞş™¦1
 v	java:S116"URename this field "USER_ROLES" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ù†Òÿÿÿÿÿ8éŞş™¦1
 y	java:S116"]Rename this field "ADMIN_ROLES_STRING" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ä£Î³8éŞş™¦1
@@ -8,3 +10,7 @@ java:S1128"DRemove this unused import 'com.mainproject.server.user.entity.User
 T
 java:S1128
 "2Remove this unused import 'java.util.Collections'.(¢³ïÓşÿÿÿÿ8ìŞş™¦1
+Q
+java:S1068"/Remove this unused "ADMIN_ROLES" private field.(…­´úÿÿÿÿ8Çãã¡¦1
+P
+java:S1068".Remove this unused "USER_ROLES" private field.(ù†Òÿÿÿÿÿ8Çãã¡¦1

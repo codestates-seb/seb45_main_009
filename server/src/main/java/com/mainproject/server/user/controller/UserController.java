@@ -41,6 +41,7 @@ public class UserController {
     // 유저 등록
     @PostMapping("join/user")
     public ResponseEntity postUser(@Valid @RequestBody UserDto.PostDto requestBody) {
+        log.info("### user login start! ###");
         User user = mapper.postToUser(requestBody);
 
         // "ROLE_USER" 역할을 설정
@@ -50,6 +51,7 @@ public class UserController {
         // UserService를 사용하여 유저 생성
         User createdUser = userService.createUser(user);
 
+        log.info("### user login end! ###");
         // 생성된 유저 정보를 반환하고 HTTP 상태 코드 201(CREATED)를 반환
         return ResponseEntity.created(URI.create("/user/" + createdUser.getUserId())).body(createdUser);
     }
@@ -57,6 +59,7 @@ public class UserController {
     // 기업 등록
     @PostMapping("join/store")
     public ResponseEntity postStore(@Valid @RequestBody UserDto.PostDto requestBody) {
+        log.info("### store login start! ###");
         User user = mapper.postToUser(requestBody);
 
         // "ROLE_STORE" 역할을 설정
@@ -65,6 +68,7 @@ public class UserController {
         // UserService를 사용하여 유저 생성
         User createdUser = userService.createUser(user);
 
+        log.info("### store login end! ###");
         // 생성된 기업 정보를 반환하고 HTTP 상태 코드 201(CREATED)를 반환
         return ResponseEntity.created(URI.create("/user/" + createdUser.getUserId())).body(createdUser);
     }
@@ -91,6 +95,7 @@ public class UserController {
         accessToken = userService.delegateAccessToken(user);
         refreshToken = userService.delegateRefreshToken(user);
         userId = String.valueOf(user.getUserId());
+        log.info("### oauth2 login end! ###");
         return ResponseEntity.ok().header("Authorization", "Bearer " + accessToken)
                 .header("Refresh", refreshToken)
                 .header("UserId", userId).build();
