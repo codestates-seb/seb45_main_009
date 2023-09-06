@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Filterbtn from "./Filterbtn";
+import { BsFilter } from "react-icons/bs";
 
 const locationFilters = [
   "전체",
@@ -113,17 +114,17 @@ const Filter = ({ setSelectedFilter }: FilterProps) => {
       selectedExerciseFilters.length === 0 ? ["전체"] : selectedExerciseFilters;
     const selectedLocations =
       selectedLocationFilters.length === 0 ? ["전체"] : selectedLocationFilters;
-    setSelectedFilter(selectedLocations, selectedExercises);
+    setSelectedFilter(selectedExercises, selectedLocations);
   }, [selectedExerciseFilters, selectedLocationFilters]);
-  // console.log(selectedLocationFilters, selectedExerciseFilters);
+
   return (
     <div className="max-w-6xl my-7 w-full flex items-center">
-      <img
-        src="/asset/filter.png"
-        alt="filter"
+      <BsFilter
+        size="50"
         onClick={filterClickHandler}
         className="hover:cursor-pointer mr-5"
       />
+
       {showFilters && (
         <div className=" animate-slide-down">
           <div>

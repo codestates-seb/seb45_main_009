@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import axios from "axios";
 
 import { TiDelete } from "react-icons/ti";
 import ImageForm from "../components/features/ImageForm";
 
 interface ImageData {
+  file: File | null;
   src: string;
   tags: TagData[];
 }
@@ -24,10 +26,11 @@ function FeedFormPageInd() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const handleTagSelect = (category: string): void => {
-    if (selectedTags.includes(category)) {
-      setSelectedTags(selectedTags.filter((tag) => tag !== category));
+    const transformedCategory = `#${category}`;
+    if (selectedTags.includes(transformedCategory)) {
+      setSelectedTags(selectedTags.filter((tag) => tag !== transformedCategory));
     } else {
-      setSelectedTags([...selectedTags, category]);
+      setSelectedTags([...selectedTags, transformedCategory]);
     }
   };
 
@@ -65,13 +68,39 @@ function FeedFormPageInd() {
   //imageform props
   const [previewImg, setPreviewImg] = useState<ImageData[]>([]);
 
-  useEffect(() => console.log("본문:", bodyValue), [bodyValue]);
-  useEffect(() => console.log("필선태그:", selectedTags), [selectedTags]);
-  useEffect(() => console.log("입력태그:", addedTags), [addedTags]);
-  useEffect(() => console.log("이미지정보:", previewImg), [previewImg]);
+  const submitForm = async () => {
+    const url = "URL";
+
+    const formData = new FormData();
+    formData.append("body", bodyValue);
+    formData.append("relativeTags", JSON.stringify([...addedTags, ...selectedTags]));
+
+    previewImg.forEach((img, index) => {
+      if (img.file) {
+        formData.append(`images[${index}]`, img.file, `image_${index}.jpg`);
+      }
+
+      const tagsDataArray = img.tags.map((tag) => ({
+        x: tag.x,
+        y: tag.y,
+        name: tag.data?.name,
+        price: tag.data?.price,
+        info: tag.data?.info,
+      }));
+
+      formData.append(`ballonTags[${index}]`, JSON.stringify(tagsDataArray));
+    });
+
+    try {
+      const response = await axios.post(url, formData);
+      console.log("성공:", response.data);
+    } catch (error: any) {
+      console.error("서버 오류:", error.response ? error.response.data : error.message);
+    }
+  };
 
   return (
-    <div className="flex items-center flex-col my-20 h-screen">
+    <div className="flex items-center flex-col my-20 ">
       <div className="flex flex-row">
         <div className="flex flex-col w-[420px] mr-10 ">
           <ImageForm previewImg={previewImg} setPreviewImg={setPreviewImg}></ImageForm>
@@ -89,7 +118,9 @@ function FeedFormPageInd() {
                 <li
                   key={index}
                   className={`text-btc inline-block px-2 py-1 border border-bdc rounded mr-2.5 mb-2.5 transition ${
-                    selectedTags.includes(category) ? "bg-bts text-white" : "text-btc hover:bg-bts hover:text-white"
+                    selectedTags.includes(`#${category}`)
+                      ? "bg-bts text-white"
+                      : "text-btc hover:bg-bts hover:text-white"
                   }`}
                   onClick={() => handleTagSelect(category)}
                 >
@@ -132,7 +163,10 @@ function FeedFormPageInd() {
       </div>
 
       <div className="flex w-[880px] justify-end mb-2">
-        <button className="text-btc px-6 py-2 border border-bdc rounded text-white transition bg-[#7DD9C4] hover:bg-[#4dab95]">
+        <button
+          onClick={submitForm}
+          className="text-btc px-6 py-2 border border-bdc rounded text-white transition bg-[#7DD9C4] hover:bg-[#4dab95]"
+        >
           등록하기
         </button>
       </div>
