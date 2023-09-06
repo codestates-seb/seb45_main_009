@@ -61,18 +61,14 @@ function ProfileCor() {
     const followClick =() =>{
       console.log('팔로우하기')
     }
-
-    // className='max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8'   flex justify-center 
   return(
-    // <div  ref={modalRef}>
-
   <div className='max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8'>
     <div className="grid md:grid-cols-2 gap-4 items-center ">
     <div className="flex items-center">
       <img src={userData[0].userphoto} className="w-[80px] h-[80px] rounded-full mr-4 " />
       <div className="flex flex-col">
         <div className="grid grid-cols-[3fr,1fr] items-center">
-          <div className="font-bold text-xl truncate mr-[10px]">{userData[0].username}</div>
+          <div className="font-bold text-xl truncate ">{userData[0].username}</div>
           <div><BsFillBookmarkStarFill /></div>
       </div>
         <div className="text-gray-400 text-xs ">
@@ -92,7 +88,6 @@ function ProfileCor() {
     </div>
     </div>
   </div>
-  // </div>
   ) 
 }
 
