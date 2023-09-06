@@ -113,9 +113,9 @@ const Filter = ({ setSelectedFilter }: FilterProps) => {
       selectedExerciseFilters.length === 0 ? ["전체"] : selectedExerciseFilters;
     const selectedLocations =
       selectedLocationFilters.length === 0 ? ["전체"] : selectedLocationFilters;
-    setSelectedFilter(selectedLocations, selectedExercises);
+    setSelectedFilter(selectedExercises, selectedLocations);
   }, [selectedExerciseFilters, selectedLocationFilters]);
-  // console.log(selectedLocationFilters, selectedExerciseFilters);
+
   return (
     <div className="max-w-6xl my-7 w-full flex items-center">
       <img

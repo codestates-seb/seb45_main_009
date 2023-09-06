@@ -13,7 +13,7 @@ const members = [
 
 function Footer() {
   return (
-    <div className="flex justify-center items-center  bg-slate-200 absolute bottom-0 w-full mt-5 ">
+    <div className="flex justify-center items-center  bg-slate-200  min-h-[80px] ">
       <Link to={"/"}>
         <div className=" mr-44 hover:cursor-pointer">
           <img src="/asset/fitfolio.png" alt="logo" />
@@ -22,10 +22,10 @@ function Footer() {
       <div className="flex justify-center">
         {members.map((member, index) => (
           <div key={index} className="mx-9">
-            <p>{member.name}</p>
+            <p className="min-w-[50px]">{member.name}</p>
             <div className="flex">
-              <img className="mr-2" src="asset/github.png" alt="githubimg" />
-              <img src="asset/mail.png" alt="mailimg" />
+              <img className="mr-2" src="/asset/github.png" alt="githubimg" />
+              <img src="/asset/mail.png" alt="mailimg" />
             </div>
           </div>
         ))}

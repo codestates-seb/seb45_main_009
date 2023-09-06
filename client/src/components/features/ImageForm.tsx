@@ -63,7 +63,9 @@ function ImageForm({ previewImg, setPreviewImg }: ImageFormProps) {
     }
   };
 
-  const handleImageClick = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
+  const handleImageClick = (
+    e: React.MouseEvent<HTMLImageElement, MouseEvent>
+  ) => {
     if (!isTaggingMode || selectedImgIndex === null) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -114,7 +116,10 @@ function ImageForm({ previewImg, setPreviewImg }: ImageFormProps) {
     setPreviewImg(updatedPreview);
   };
 
-  const handleTagSave = (index: number, data: { name: string; price: string; info: string }) => {
+  const handleTagSave = (
+    index: number,
+    data: { name: string; price: string; info: string }
+  ) => {
     const updatedImg = { ...previewImg[selectedImgIndex as number] };
     updatedImg.tags[index] = { ...updatedImg.tags[index], data };
     const updatedPreview = [...previewImg];
@@ -136,7 +141,8 @@ function ImageForm({ previewImg, setPreviewImg }: ImageFormProps) {
     setIsTaggingMode(false);
   };
 
-  const selectedImg = selectedImgIndex !== null ? previewImg[selectedImgIndex]?.src : "";
+  const selectedImg =
+    selectedImgIndex !== null ? previewImg[selectedImgIndex]?.src : "";
 
   return (
     <div>
@@ -165,7 +171,13 @@ function ImageForm({ previewImg, setPreviewImg }: ImageFormProps) {
                 onClick={() => handleTagSelect(index)}
               />
               {selectedTagIndex === index && (
-                <div style={{ position: "absolute", top: tag.y + 18, left: tag.x - 62 }}>
+                <div
+                  style={{
+                    position: "absolute",
+                    top: tag.y + 18,
+                    left: tag.x - 62,
+                  }}
+                >
                   <BallonTag
                     data={tag.data}
                     onDelete={() => deleteTag(index)}
@@ -180,7 +192,12 @@ function ImageForm({ previewImg, setPreviewImg }: ImageFormProps) {
       <div className="flex flex-row w-full mb-4">
         {previewImg.length > 0
           ? previewImg.map((imgData, index) => (
-              <div className={`${index === previewImg.length - 1 ? "mr-0" : "mr-2"} relative group`} key={index}>
+              <div
+                className={`${
+                  index === previewImg.length - 1 ? "mr-0" : "mr-2"
+                } relative group`}
+                key={index}
+              >
                 <img
                   src={imgData.src}
                   alt={`uploadedimg-${index}`}
