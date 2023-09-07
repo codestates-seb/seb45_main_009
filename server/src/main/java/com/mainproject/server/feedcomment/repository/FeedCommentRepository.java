@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FeedCommentRepository extends JpaRepository<FeedComment, Long> {
+//    FeedComment findByFeedCommentId(Long feedCommentId);
+
+    Page<FeedComment> findByFeed(Feed feed, PageRequest pageRequest);
 }
