@@ -39,13 +39,6 @@ public class UserDto {
         @Size(min = 6, message = "비밀번호는 최소 6자 이상이어야 합니다.")
         private String password;
 
-        @NotNull(message = "성별을 선택하세요")
-        private Boolean gender;
-
-        @NotNull(message = "선호 운동 종목을 선택하세요 (최대 5개)")
-        @Size(max = 5)
-        private ArrayList<String> sport;
-
         private String location;
 
         private String profileimg;
@@ -62,7 +55,7 @@ public class UserDto {
         @Max(value = 300, message = "몸무게는 300보다 작거나 같아야 합니다.")
         private Integer weight;
 
-        private LocalDate birth;
+        private String sport;
 
     }
 
@@ -89,7 +82,7 @@ public class UserDto {
 
         private String password;
 
-        private List<String> sport;
+        private String sport;
 
 
     }
@@ -104,7 +97,6 @@ public class UserDto {
         private Long userId;
         private String nickname;
         private String email;
-        private boolean gender;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
         private String bio;
@@ -113,7 +105,7 @@ public class UserDto {
         private int height;
         private int weight;
         private String location;
-        private List<String> sport;
+        private String sport;
         private List<String> roles = new ArrayList<>();
 
 

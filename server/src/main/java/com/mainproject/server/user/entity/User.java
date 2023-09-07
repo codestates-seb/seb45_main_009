@@ -36,19 +36,11 @@ public class User {
     @Column(nullable = false, name = "CREATED_AT")
     private LocalDateTime createdAt = LocalDateTime.now();
 
-
     @Column(nullable = false, name = "MODIFIED_AT")
     private LocalDateTime modifiedAt = LocalDateTime.now();
 
-
-
-
-    @Column(nullable = false)
-    private LocalDate birth;
-
-    @Column(nullable= false)
-    private ArrayList<String> sport = new ArrayList<>();
-
+    @Column
+    private String sport;
 
     @Column
     private String location;
@@ -67,14 +59,8 @@ public class User {
     @Column
     private String bio;
 
-
     @Column
     private String price;
-
-    @Column(nullable = false)
-    private boolean gender;
-
-
 
     @Column(nullable = false)
     @ElementCollection(fetch = FetchType.EAGER)

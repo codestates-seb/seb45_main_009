@@ -97,7 +97,7 @@ public class UserService {
         }
 
         if (user.getSport() != null) {
-            findUser.setSport(new ArrayList<>(user.getSport()));
+            findUser.setSport(user.getSport());
         }
 
         if (user.getBio() != null) {

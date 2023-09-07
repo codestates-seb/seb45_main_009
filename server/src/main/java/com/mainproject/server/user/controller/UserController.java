@@ -77,28 +77,53 @@ public class UserController {
     @GetMapping("/oauthloading")
     public ResponseEntity oAuth2LoginKakao(@RequestBody @Valid AuthLoginDto requesBody) {
         log.info("### oauth2 login start! ###");
+
+        // 초기화
         String accessToken = "";
         String refreshToken = "";
         String userId = "";
+        String userNickname = "";
+        String userRole = "";
+
+        // AuthLoginDto에서 User 객체로 매핑
         User user = mapper.AuthLoginDtoUser(requesBody);
 
 
         // "ROLE_USER" 역할을 설정
         user.getRoles().add("USER");
-
+        // 닉네임을 kakao로 설정
+        user.setNickname("kakao");
+        // 이메일에 "3"을 추가 (이 부분은 필요에 따라 변경 가능)
         user.setEmail(user.getEmail() + "3");
+
+        // 사용자가 이메일로 이미 가입했는지 확인
         if (!userService.existsByEmail(user.getEmail())) {
+            // 새로운 사용자로 등록
             user = userService.createUserOAuth2(user);
         } else {
+            // 기존 사용자 정보 가져오기
             user = userService.findVerifiedUser(user.getEmail());
         }
+
+        // 엑세스 토큰 및 리프레시 토큰 발급
         accessToken = userService.delegateAccessToken(user);
         refreshToken = userService.delegateRefreshToken(user);
+        // 사용자 ID를 문자열로 변환
         userId = String.valueOf(user.getUserId());
+        // 사용자 닉네임 가져오기
+        userNickname = user.getNickname();
+        // 사용자 역할 가져오기 (예: "USER")
+        userRole = user.getRoles().stream().findFirst().orElse("");
+
         log.info("### oauth2 login end! ###");
+
+        // 응답 헤더에 토큰 및 사용자 ID, nickname, role 값 추가하여 반환
         return ResponseEntity.ok().header("Authorization", "Bearer " + accessToken)
                 .header("Refresh", refreshToken)
-                .header("UserId", userId).build();
+                .header("UserId", userId)
+                .header("UserNickname", userNickname)
+                .header("UserRole", userRole).build();
+
     }
 
     // 유저 정보 조회
