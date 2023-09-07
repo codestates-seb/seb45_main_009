@@ -4,10 +4,13 @@ import {RiAlarmWarningFill} from 'react-icons/ri';
 import {AiFillPlusCircle} from 'react-icons/ai';
 
 
-
-function TagModal({ title, size, price }: { title: string; size: string; price: number }) {
+function TagModal({ title, size, price, top }: { title: string; size: string; price: number; top: string }) {
+  // 우선 위아래만 지정
+  // 좌우 추가 해야함
+  // 이미지 위아래 50% 기준으로 나눔
+  const modalTopPosition = parseInt(top) > 50 ? '-60px' : '25px'; 
   return (
-    <div className="border w-[100px] rounded-[2px] bg-white text-[12px] mt-[2px] pl-[10px]">
+    <div style={{ top: modalTopPosition }} className="absolute border w-[100px] rounded-[2px] bg-white text-[12px] mt-[2px] pl-[10px]">
       <div className="">{title}</div>
       <div className="text-gray-400 text-[8px]">{size}</div>
       <div className="font-bold">₩{price}</div>
@@ -82,13 +85,15 @@ function DetailFeedCor() {
                 onMouseEnter={() => setShowTagModal({ photoIndex, tagIndex })}
                 onMouseLeave={() => setShowTagModal(null)}
               >
-                <AiFillPlusCircle className="w-[20px] h-[20px] text-red-500" />
+                <AiFillPlusCircle className="w-[20px] h-[20px] text-btn-color" />
                 {/* 만약 div위에 마우스 올린게 이미지index와 태그 index가 맞으면 모달창 보여주기 */}
                 {showTagModal?.photoIndex === photoIndex && showTagModal?.tagIndex === tagIndex &&
                   <TagModal
                     title={tagDatas[photoIndex].title[tagIndex]}
                     size={tagDatas[photoIndex].size[tagIndex]}
                     price={tagDatas[photoIndex].price[tagIndex]}
+                    // 위치값 전달
+                    top={top}
                   />
                 }
               </div>
