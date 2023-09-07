@@ -8,6 +8,8 @@ import { useDispatch } from "react-redux";
 import { logout } from "../../redux/reducers/loginSlice";
 
 import { UserInfo } from "../../types/types";
+import { BiSearch } from "react-icons/bi/";
+import { IoNotificationsOutline } from "react-icons/io5/";
 
 interface RootState {
   login: {
@@ -20,7 +22,9 @@ function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const isAuthenticated = useSelector((state: RootState) => state.login.isAuthenticated);
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.login.isAuthenticated
+  );
   const logoutHandler = () => {
     dispatch(logout());
     sessionStorage.removeItem("access_token");
@@ -36,22 +40,25 @@ function Header() {
         </div>
       </Link>
       <div className="flex h-8 w-4/12 border rounded-2xl p-1 mr-4">
-        <img src="/asset/search.png" alt="search" className="mr-2 w-6" />
+        <BiSearch size="24"></BiSearch>
         <input
           className="w-full outline-none"
           placeholder="검색하실 ID 또는 #태그를 입력하세요."
         ></input>
       </div>
       <div className=" w-6 mr-4 hover:cursor-pointer">
-        <img src="/asset/notify.png" alt="notify"></img>
+        <IoNotificationsOutline size="24"></IoNotificationsOutline>
       </div>
       <div className="flex">
         {isAuthenticated ? (
           <>
-            <button className="mr-4 hover:text-btn-color" onClick={logoutHandler}>
+            <button
+              className="mr-4 hover:text-btn-color"
+              onClick={logoutHandler}
+            >
               로그아웃
             </button>
-            <Link to="*">
+            <Link to="/mypage/:page">
               <button className="mr-8 hover:text-btn-color">마이페이지</button>
             </Link>
           </>

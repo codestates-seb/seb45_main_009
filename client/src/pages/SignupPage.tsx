@@ -1,13 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 //컴포넌트 불러오기
 import CommonInput from "../components/atoms/CommonInput";
 import MembershipButtonGroup from "../components/atoms/MembershipButtonGroup";
 
-function Login() {
+function SignupPage() {
+  const [selectedType, setSelectedType] = useState<"개인회원" | "기업회원">("개인회원");
+
   const handleMembershipChange = (type: "개인회원" | "기업회원") => {
-    console.log(`선택된 회원 유형: ${type}`);
+    setSelectedType(type);
+    // 기타 필요한 로직
   };
+  useEffect(() => console.log("selectedType:", selectedType), [selectedType]);
 
   //   이메일 값 저장
   const [email, setEmail] = useState<string>("");
@@ -66,7 +70,7 @@ function Login() {
   return (
     <div className=" flex justify-center pt-[20px] mb-[40px]  h-4/6 items-center ">
       <div className="w-[300px]">
-        <MembershipButtonGroup onChange={handleMembershipChange} />
+        <MembershipButtonGroup selectedType={selectedType} onChange={handleMembershipChange} />
 
         <CommonInput
           placeholder="이메일을 입력해주세요."
@@ -101,16 +105,26 @@ function Login() {
           여자
         </div>
 
-        <button
-          type="submit"
-          onClick={onSubmitHandler}
-          className="w-[300px] py-2 rounded-[4px] text-[14px] mt-[20px] font-medium transition bg-sbc hover:bg-sbc-hover text-white"
-        >
-          회원가입
-        </button>
+        {selectedType === "개인회원" ? (
+          <button
+            type="submit"
+            onClick={onSubmitHandler}
+            className="w-[300px] py-2 rounded-[4px] text-[14px] mt-[20px] font-medium transition bg-sbc hover:bg-sbc-hover text-white"
+          >
+            회원가입
+          </button>
+        ) : (
+          <button
+            type="submit"
+            onClick={onSubmitHandler}
+            className="w-[300px] py-2 rounded-[4px] text-[14px] mt-[20px] font-medium transition bg-sbc hover:bg-sbc-hover text-white"
+          >
+            다음
+          </button>
+        )}
       </div>
     </div>
   );
 }
 
-export default Login;
+export default SignupPage;
