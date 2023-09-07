@@ -19,8 +19,7 @@ public class FeedDto {
         private String content;
         private List<String> relatedTags;
 
-//        private List<Phototag> phototags;
-
+//        private List<ImageTag> imageTags;
     }
 
     @Getter
@@ -28,12 +27,11 @@ public class FeedDto {
     public static class PatchDto {
 
         private long feedId;
+        private long imageId;
         private boolean usertype;
         private String content;
         private List<String> relatedTags;
 
-//        private List<PhotoTag> photoTags;
-
+//        private List<ImageTag> imageTags;
     }
-
 }

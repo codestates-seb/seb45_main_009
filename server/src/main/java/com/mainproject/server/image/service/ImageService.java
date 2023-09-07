@@ -2,7 +2,6 @@ package com.mainproject.server.image.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.mainproject.server.feed.enitiy.Feed;
 import com.mainproject.server.image.entity.Image;
 import com.mainproject.server.image.repository.ImageRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -84,12 +83,6 @@ public class ImageService {
             amazonS3.deleteObject(new DeleteObjectRequest(bucket, key));
         }
 
-        // 이미지를 피드에서 제거
-        Feed connectedFeed = deletedImage.getFeed();
-        if (connectedFeed != null) {
-            connectedFeed.getImages().remove(deletedImage);
-        }
-
         imageRepository.delete(deletedImage);
     }
 }
@@ -150,3 +143,9 @@ public class ImageService {
 //
 //        return imageUrls;
 //    }
+
+//        // 이미지를 피드에서 제거
+//        Feed connectedFeed = deletedImage.getFeed();
+//        if (connectedFeed != null) {
+//            connectedFeed.getImages().remove(deletedImage);
+//        }

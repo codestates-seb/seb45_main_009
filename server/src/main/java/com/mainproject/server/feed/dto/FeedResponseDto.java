@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +23,6 @@ public class FeedResponseDto {
         private String imageUrl;
         private List<ImageTagDto> imageTags; // 이미지 태그 정보가 여러 개일 수 있으므로 리스트
 
-
         @Getter
         @Setter
         public static class ImageTagDto {
@@ -34,5 +32,3 @@ public class FeedResponseDto {
         }
     }
 }
-
-
