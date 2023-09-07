@@ -13,7 +13,7 @@ import Footer from "./components/sharedlayout/Footer";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import Profile from "./pages/Profile";
-import Loginaddition from "./pages/Loginaddition";
+import OauthLoadingPage from "./pages/OauthLoadingPage";
 
 import MainPageInd from "./pages/MainPageInd";
 // import MainPageCor from "./pages/MainPageCor";
@@ -30,7 +30,6 @@ import { useDispatch } from "react-redux";
 
 function App() {
   const dispatch = useDispatch();
-
   useEffect(() => {
     const accessToken = sessionStorage.getItem("access_token");
     const userInfoString = sessionStorage.getItem("user_info");
@@ -63,8 +62,8 @@ function App() {
             <Route path="/mypage/:page" element={<MyPage />} />
             <Route path="/login" element={<LoginPage />}></Route>
             <Route path="/signup" element={<SignupPage />}></Route>
-            <Route path="/loginaddition" element={<Loginaddition />}></Route>
             <Route path="/profile" element={<Profile />}></Route>
+            <Route path="/oauthloading" element={<OauthLoadingPage />}></Route>
             <Route path="*" element={<Not404 />} />
           </Routes>
         </div>
