@@ -27,19 +27,41 @@ spring:
     oauth2:
       client:
         registration:
-          google:
-            clientId: ${G_CLIENT_ID}
-            clientSecret: ${G_CLIENT_SECRET}
-            scope:
-              - email
-              - profile
+          kakao:
+            client-id: ${K_CLIENT_ID}
+            client-secret: ${K_CLIENT_SECRET}
+            client-name: Kakao
+            client-authentication-method: POST
+            authorization-grant-type: authorization_code
+            scope: profile_image, account_email, birthday
+            redirect-uri: http://localhost:8080/oauthloading
 
+        provider:
+          kakao:
+            authorizationUri: https://kauth.kakao.com/oauth/authorize
+            tokenUri: https://kauth.kakao.com/oauth/token
+            userInfoUri: https://kapi.kakao.com/v2/user/me
+            userNameAttribute: id
 
 logging:
   level:
     p6spy: info
-
+mail:
+  address:
+    admin: admin@gmail.com
 jwt:
   key: ${JWT_SECRET_KEY}
-  access-token-expiration-minutes: 30
+  access-token-expiration-minutes: 120
   refresh-token-expiration-minutes: 420
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_S3_ACCESS_KEY}
+      secret-key: ${AWS_S3_SECRET_KEY}
+    s3:
+      bucket: ${AWS_S3_BUCKET}
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false

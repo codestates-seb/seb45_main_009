@@ -1,0 +1,9 @@
+
+m
+java:S1192B"KDefine a constant instead of duplicating this literal "/mypage/**" 3 times.(¯àò·þÿÿÿÿ8 ”±£¦1
+r
+java:S1192J"PDefine a constant instead of duplicating this literal "/feed/detail/**" 4 times.(ÎƒÔ¹ûÿÿÿÿ8¡”±£¦1
+u
+java:S1128"YRemove this unused import 'com.mainproject.server.auth.userdetails.MemberDetailsService'.(‰ø¤u8å–à†¦1
+n
+java:S1128	"RRemove this unused import 'com.mainproject.server.user.repository.UserRepository'.(Ì¡Û:8é–à†¦1
