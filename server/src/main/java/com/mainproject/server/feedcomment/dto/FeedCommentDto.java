@@ -16,6 +16,8 @@ public class FeedCommentDto {
     @Setter
     public static class PostDto {
 
+        @NotBlank
+        @Size(min = 2, message = " 답변 내용은 2글자 이상 입력하세요.")
         private String content;
 
     }
