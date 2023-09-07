@@ -34,7 +34,8 @@ function DetailFeedCor() {
 
   // 정보 태그 데이터
   let tagDatas = [{
-    taglocation: ["50px 50px", "400px 100px", "200px 400px"],
+    // taglocation: ["50px 50px", "400px 100px", "200px 400px"],
+    taglocation: ["15% 5%", "50% 10%", "30% 40%"], // 백분율로 위치값 수정
     title: ['adidas', 'Nike', 'adidas'],
     size: ['XL', '280', "s"],
     price: [33000, 99000, 20000]
