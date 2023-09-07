@@ -9,7 +9,6 @@ function MainPageCor() {
 
   return (
     <div className="flex flex-col justify-center items-center">
-      <Top />
       <Filter setSelectedFilter={setSelectedFilter} />
       <Feed selectedFilter={selectedFilter} />
       <Up />

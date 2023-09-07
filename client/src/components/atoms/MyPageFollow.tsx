@@ -40,16 +40,16 @@ const MyPageFollow = () => {
 
   return (
     <div className="flex justify-center flex-col items-center mt-5">
-      <div className="grid grid-cols-4 gap-12 mb-24">
+      <section className="grid  grid-cols-1 gap-8 h-full mb-24 mx-3 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 lg:grid-cols-4 ">
         <div className="flex items-center">
           <AiFillStar size="40" color="#FFEA00" />
           <p className="text-2xl font-bold ml-4">팔로우 목록</p>
         </div>
-        <div className="col-span-3"></div>
+        <span className="col-span-1 md:col-span-2 lg:col-span-3"></span>
         {chunkData.map((user: UserData, idx: number) => (
-          <div key={idx} className="flex items-center">
+          <article key={idx} className="flex items-center">
             <img src={user.proFileImg} alt="profile" className="w-14 h-14" />
-            <div className="mx-5">
+            <div className="mx-3">
               <div className="flex items-center">
                 <div className="font-bold mr-2">{user.userId}</div>
                 <div>
@@ -63,16 +63,15 @@ const MyPageFollow = () => {
                 <p>50kg</p>
               </div>
             </div>
-
             <button
               onClick={() => deleteUserHandler(user.userId)}
-              className="ml-3 text-red-500 w-full"
+              className="flex justify-end text-red-500 w-full"
             >
               삭제
             </button>
-          </div>
+          </article>
         ))}
-      </div>
+      </section>
       <div ref={ref}></div>
     </div>
   );

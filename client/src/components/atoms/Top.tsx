@@ -5,10 +5,10 @@ const Top = () => {
   const location = useLocation();
 
   return (
-    <div className="flex justify-center text-2xl p-3 border-t-2 border-b-2 w-full">
+    <nav className="flex justify-center text-xl p-2 sm:text-2xl sm:p-3 border-t-2 border-b-2 w-full">
       <Link
         to={"/"}
-        className={`mr-16 ${
+        className={`mr-6 sm:mr-8 md:mr-16 ${
           location.pathname === "/" ? "text-btn-color" : "hover:text-btn-color"
         }`}
       >
@@ -16,7 +16,7 @@ const Top = () => {
       </Link>
       <Link
         to={"/store"}
-        className={`mr-16 ${
+        className={`mr-6 sm:mr-8 md:mr-16 ${
           location.pathname === "/store"
             ? "text-btn-color"
             : "hover:text-btn-color"
@@ -26,7 +26,7 @@ const Top = () => {
       </Link>
       <Link
         to={"/community"}
-        className={`mr-16 ${
+        className={` ${
           location.pathname === "/community"
             ? "text-btn-color"
             : "hover:text-btn-color"
@@ -34,7 +34,7 @@ const Top = () => {
       >
         커뮤니티
       </Link>
-    </div>
+    </nav>
   );
 };
 

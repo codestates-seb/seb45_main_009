@@ -33,21 +33,21 @@ function Header() {
   };
 
   return (
-    <div className="flex justify-center items-center m-2">
+    <header className="flex justify-center items-center m-2">
       <Link to="/">
-        <div className=" ml-4 hover:cursor-pointer">
-          <img src="/asset/fitfolio.png" alt="logo" className="w-[250]" />
+        <div className="flex justify-center hover:cursor-pointer w-[20vw] sm:ml-4">
+          <img src="/asset/fitfolio.svg" alt="logo" />
         </div>
       </Link>
-      <div className="flex h-8 w-4/12 border rounded-2xl p-1 mr-4">
+      <div className="flex items-center h-[3vh] w-4/12 border rounded-3xl p-1 sm:mr-2 sm:h-[4vh]">
         <BiSearch size="24"></BiSearch>
         <input
-          className="w-full outline-none"
+          className="w-full outline-none text-[8px] sm:text-sm"
           placeholder="검색하실 ID 또는 #태그를 입력하세요."
         ></input>
       </div>
-      <div className=" w-6 mr-4 hover:cursor-pointer">
-        <IoNotificationsOutline size="24"></IoNotificationsOutline>
+      <div className=" items-center mx-2 sm:mr-4  hover:cursor-pointer">
+        <IoNotificationsOutline size="22"></IoNotificationsOutline>
       </div>
       <div className="flex">
         {isAuthenticated ? (
@@ -65,15 +65,19 @@ function Header() {
         ) : (
           <>
             <Link to="/login">
-              <button className="mr-4 hover:text-btn-color">로그인</button>
+              <button className="text-xs mr-2 sm:mr-4 sm:text-base hover:text-btn-color">
+                로그인
+              </button>
             </Link>
             <Link to="/signup">
-              <button className="mr-8 hover:text-btn-color">회원가입</button>
+              <button className="text-xs sm:mr-8 sm:text-base hover:text-btn-color">
+                회원가입
+              </button>
             </Link>
           </>
         )}
       </div>
-    </div>
+    </header>
   );
 }
 

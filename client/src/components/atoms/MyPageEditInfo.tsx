@@ -69,13 +69,13 @@ const MyPageEditInfo = () => {
 
   return (
     <div className="flex justify-center flex-col items-center my-12">
-      <div className="w-[200px] h-[200px] rounded-full bg-gray-400 mb-10">
-        <div className="w-[200px] h-[200px] rounded-full bg-gray-400 mb-10 flex justify-center items-center text-xl">
+      <div className="w-[15vw] h-[15vw] min-w-[8rem] min-h-[8rem] rounded-full bg-gray-400 mb-10">
+        <div className="w-[15vw] h-[15vw] min-w-[8rem] min-h-[8rem] rounded-full bg-gray-400 mb-10 flex justify-center items-center text-xl">
           +
         </div>
       </div>
 
-      <div className="flex flex-col w-1/4">
+      <div className="flex flex-col w-[70vw] max-w-xl">
         <label htmlFor="introduction">자기소개 수정</label>
         <TextareaAutosize
           id="introduction"
@@ -171,13 +171,13 @@ const MyPageEditInfo = () => {
         </div>
         <div className="flex justify-center my-3">
           <button
-            className="px-6 py-2 rounded-xl mb-5 bg-modify-btn-color hover:text-white mr-5"
+            className="px-4 py-2 w-full  sm:px-6 sm:py-2 rounded-xl mb-5 bg-modify-btn-color hover:text-white mr-5"
             onClick={handleSaveChanges}
           >
             수정하기
           </button>
           <button
-            className="px-6 py-2 rounded-xl mb-5 bg-modify-btn-color hover:text-white"
+            className="px-4 py-2 w-full  sm:px-6 sm:py-2 rounded-xl mb-5 bg-modify-btn-color hover:text-white"
             onClick={handleUndo}
           >
             되돌리기
