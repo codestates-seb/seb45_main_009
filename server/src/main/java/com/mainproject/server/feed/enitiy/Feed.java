@@ -29,15 +29,6 @@ public class Feed {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-//    @Column
-//    @NotBlank
-//    private String photo_url;
-
-//    // 이미지 여러 장
-//    @JoinColumn
-//    @ElementCollection
-//    private List<String> imageUrls = new ArrayList<>();
-
     // 중복 태그
     @Column
     @ElementCollection
@@ -57,14 +48,13 @@ public class Feed {
     @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL)
     private List<Image> images = new ArrayList<>();
 
-
 //    //user와 매핑(다대일)
 //    @ManyToOne
 //    private User user;
 
 //    // 말풍선 태그와 매핑(일대다)
 //    @OneToMany(mappedby = "feed", cascade = CascadeType.ALL)
-//    private List<Phototag> phototag;
+//    private List<ImageTag> imageTag;
 
 
 }

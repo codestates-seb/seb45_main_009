@@ -24,7 +24,7 @@ public class FeedController {
     }
 
     // 피드 등록
-    @PostMapping(value = "/feed/add/{user-id}")
+    @PostMapping("/feed/add/{user-id}")
     public ResponseEntity<FeedResponseDto> postFeed(@PathVariable("user-id") long userId,
                                                     @RequestPart("imageUrl") List<MultipartFile> imageFiles,
                                                     @RequestPart FeedDto.PostDto feedPostDto) {
