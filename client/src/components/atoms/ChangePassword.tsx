@@ -6,6 +6,12 @@ interface ChangePasswordProps {
   confirmPassword: string;
 }
 
+// 비밀번호 검사 함수
+const isPasswordValid = (password: string) => {
+  const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+  return regex.test(password);
+};
+
 const ChangePassword = () => {
   const [formData, setFormData] = useState<ChangePasswordProps>({
     password: "",
@@ -17,9 +23,9 @@ const ChangePassword = () => {
     const newPassword = e.target.value;
     setFormData({ ...formData, password: newPassword });
 
-    if (newPassword.length < 8 || !/[a-zA-Z]/.test(newPassword)) {
+    if (!isPasswordValid(newPassword)) {
       setErrorMessage(
-        "비밀번호는 8자 이상이며, 영문자를 반드시 1자 이상 포함해야 합니다."
+        "비밀번호는 8자 이상이며, 영문, 숫자를 반드시 1자 이상 포함해야 합니다."
       );
     } else {
       setErrorMessage("");
@@ -40,9 +46,9 @@ const ChangePassword = () => {
   };
 
   const handlePasswordSubmit = () => {
-    if (formData.password.length < 8 || !/[a-zA-Z]/.test(formData.password)) {
+    if (!isPasswordValid(formData.password)) {
       setErrorMessage(
-        "비밀번호는 8자 이상이며, 영문자를 반드시 1자 이상 포함해야 합니다."
+        "비밀번호는 8자 이상이며, 영문, 숫자를 반드시 1자 이상 포함해야 합니다."
       );
       return;
     }
@@ -67,7 +73,7 @@ const ChangePassword = () => {
         <p className="text-xl font-bold mb-5">새 비밀번호</p>
         <input
           type="password"
-          className="border rounded-lg p-3 mb-4 min-w-[460]"
+          className="border rounded-lg p-3 mb-4 text-xs min-w-[320] sm:text-base"
           placeholder="영문, 숫자를 포함한 8자 이상의 비밀번호를 입력해주세요."
           value={formData.password}
           onChange={handlePasswordChange}
@@ -75,14 +81,14 @@ const ChangePassword = () => {
         <p className="text-xl font-bold mb-5">비밀번호 확인</p>
         <input
           type="password"
-          className="border rounded-lg p-3 mb-4 min-w-[460]"
+          className="border rounded-lg p-3 mb-4 text-xs sm:text-base"
           value={formData.confirmPassword}
           onChange={handleConfirmPasswordChange}
         />
         {errorMessage && <p className="text-red-500">{errorMessage}</p>}
 
         <button
-          className="border rounded-lg p-3 my-5 bg-modify-btn-color hover:text-white  min-w-[460]"
+          className="border rounded-lg p-3 my-5 bg-modify-btn-color hover:text-white  text-xs sm:text-base"
           onClick={handlePasswordSubmit}
           disabled={!!errorMessage}
         >
