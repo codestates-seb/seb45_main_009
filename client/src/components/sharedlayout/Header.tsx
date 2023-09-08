@@ -21,7 +21,6 @@ function Header() {
   const isAuthenticated = useSelector((state: RootState) => state.login.isAuthenticated);
   const userInfo = useSelector((state: RootState) => state.login.userInfo);
 
-  useEffect(() => console.log(userInfo), [userInfo]);
   const logoutHandler = () => {
     dispatch(logout());
     sessionStorage.removeItem("access_token");

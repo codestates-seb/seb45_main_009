@@ -45,11 +45,15 @@ function LoginPage() {
   const onSubmitHandler = async () => {
     if (isValidEmail) {
       try {
-        const accessToken = "bearer fasdkfjsdkzdfjl.hkllfgkad.gfkgslgksl";
-        const userType = "USER";
-        const userNickname = "TEST_NICKNAME";
-        const userInfo: UserInfo = { userType, userNickname };
+        const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/login`, { email, password });
+        console.log(response.headers);
 
+        const accessToken = response.headers["authorization"];
+        const rolesString = response.headers["roles"];
+        const userType = rolesString.slice(1, -1);
+        const userNickname = response.headers["nickname"];
+        const userInfo: UserInfo = { userType, userNickname };
+        console.log(accessToken);
         sessionStorage.setItem("access_token", accessToken);
         const userInfoString = JSON.stringify(userInfo);
         sessionStorage.setItem("user_info", userInfoString);
@@ -57,21 +61,6 @@ function LoginPage() {
         dispatch(login({ userInfo }));
 
         navigate("/");
-
-        // const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/login`, { email, password });
-
-        // const accessToken = response.headers["Authorization"];
-        // const userType = response.headers["Roles"][0];
-        // const userNickname = response.headers["Nickname"];
-        // const userInfo: UserInfo = { userType, userNickname };
-
-        // sessionStorage.setItem("access_token", accessToken);
-        // const userInfoString = JSON.stringify(userInfo);
-        // sessionStorage.setItem("user_info", userInfoString);
-
-        // dispatch(login({ userInfo }));
-
-        // navigate("/");
       } catch (error) {
         console.error("Error during login:", error);
       }

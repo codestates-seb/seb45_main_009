@@ -3,6 +3,7 @@ import axios from "axios";
 
 import { TiDelete } from "react-icons/ti";
 import ImageForm from "../components/features/ImageForm";
+import { useNavigate } from "react-router";
 
 interface ImageData {
   file: File | null;
@@ -17,6 +18,7 @@ interface TagData {
 }
 
 function FeedFormPageInd() {
+  const navigate = useNavigate();
   const [bodyValue, setBodyValue] = useState<string>("");
 
   const handleBodyChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
@@ -67,38 +69,44 @@ function FeedFormPageInd() {
 
   //imageform props
   const [previewImg, setPreviewImg] = useState<ImageData[]>([]);
-
   const submitForm = async () => {
-    const url = "URL";
-
     const formData = new FormData();
-    formData.append("body", bodyValue);
-    formData.append("relativeTags", JSON.stringify([...addedTags, ...selectedTags]));
 
-    previewImg.forEach((img, index) => {
-      if (img.file) {
-        formData.append(`images[${index}]`, img.file, `image_${index}.jpg`);
-      }
+    // feedPostDto 부분 추가
+    const feedPostDto = {
+      usertype: false,
+      content: bodyValue,
+      relatedTags: [...addedTags, ...selectedTags],
+    };
 
-      const tagsDataArray = img.tags.map((tag) => ({
-        x: tag.x,
-        y: tag.y,
-        name: tag.data?.name,
-        price: tag.data?.price,
-        info: tag.data?.info,
-      }));
-
-      formData.append(`ballonTags[${index}]`, JSON.stringify(tagsDataArray));
+    const blob = new Blob([JSON.stringify(feedPostDto)], {
+      type: "application/json",
     });
 
+    formData.append("feedPostDto", blob);
+
+    // imageUrl 부분 추가
+    previewImg.forEach((img, index) => {
+      if (img.file) {
+        formData.append("imageUrl", img.file, `image_${index}.jpg`);
+      }
+    });
+
+    const accessToken = sessionStorage.getItem("access_token");
     try {
-      const response = await axios.post(url, formData);
-      console.log("성공:", response.data);
+      console.log(accessToken);
+      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/feed/add`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `${accessToken}`,
+        },
+      });
+      alert("포스팅 성공");
+      navigate("/");
     } catch (error: any) {
       console.error("서버 오류:", error.response ? error.response.data : error.message);
     }
   };
-
   return (
     <div className="flex items-center flex-col my-20 ">
       <div className="flex flex-row">
