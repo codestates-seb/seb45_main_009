@@ -1,5 +1,5 @@
-import React, { PropsWithChildren, useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import React, { useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import axios from "axios";
 import { login } from "./redux/reducers/loginSlice";
 import { UserInfo } from "./types/types";
