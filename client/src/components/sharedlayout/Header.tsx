@@ -7,6 +7,8 @@ import { BiSearch } from "react-icons/bi/";
 import { IoNotificationsOutline } from "react-icons/io5/";
 import { RiMenuUnfoldFill, RiMenuFoldFill } from "react-icons/ri";
 
+import { useLocation } from "react-router-dom";
+
 interface RootState {
   login: {
     isAuthenticated: boolean;
@@ -27,7 +29,6 @@ function Header() {
     sessionStorage.removeItem("user_info");
     navigate("/");
   };
-
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const isMobile = windowWidth < 768;
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -57,6 +58,11 @@ function Header() {
       closeModal();
     }
   };
+  //oauthloading에서 제외
+  const location = useLocation();
+  if (location.pathname === "/oauthloading") {
+    return null;
+  }
 
   return (
     <header className="flex justify-center items-center m-2">
