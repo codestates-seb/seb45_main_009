@@ -15,7 +15,6 @@ import java.util.List;
 @Builder
 public class FeedResponseDto {
     private Long feedId;
-    private Long userId;
     private String content;
     private List<String> relatedTags;
     private List<FeedImageDto> images;  // 이미지 정보가 여러 개일 수 있으므로 리스트
