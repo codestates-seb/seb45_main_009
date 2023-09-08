@@ -1,5 +1,6 @@
 package com.mainproject.server.feed.dto;
 
+import com.mainproject.server.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +16,6 @@ public class FeedDto {
     @Setter
     public static class PostDto {
 
-        private boolean usertype;
         private String content;
         private List<String> relatedTags;
 
@@ -28,7 +28,6 @@ public class FeedDto {
 
         private long feedId;
         private long imageId;
-        private boolean usertype;
         private String content;
         private List<String> relatedTags;
 
