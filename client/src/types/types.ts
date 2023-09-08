@@ -1,4 +1,4 @@
 export interface UserInfo {
-  userType: number;
+  userType: "USER" | "STORE";
   userNickname: string;
 }

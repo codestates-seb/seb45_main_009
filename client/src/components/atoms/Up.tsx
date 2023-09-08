@@ -1,10 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { FiArrowUpCircle } from "react-icons/fi";
-
+import { useLocation } from "react-router";
 const Up = () => {
   const scrollUp = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+  //oauthloading에서 제외
+  const location = useLocation();
+  if (
+    location.pathname === "/oauthloading" ||
+    location.pathname === "/login" ||
+    location.pathname === "/signup" ||
+    location.pathname === "/feedformind"
+  ) {
+    return null;
+  }
 
   const [showUpButton, setShowUpButton] = useState(false);
 

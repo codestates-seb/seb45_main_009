@@ -46,12 +46,14 @@ function LoginPage() {
     if (isValidEmail) {
       try {
         const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/login`, { email, password });
+        console.log(response.headers);
 
-        const accessToken = response.headers["Authorization"];
-        const userType = response.headers["Roles"][0];
-        const userNickname = response.headers["Nickname"];
+        const accessToken = response.headers["authorization"];
+        const rolesString = response.headers["roles"];
+        const userType = rolesString.slice(1, -1);
+        const userNickname = response.headers["nickname"];
         const userInfo: UserInfo = { userType, userNickname };
-
+        console.log(accessToken);
         sessionStorage.setItem("access_token", accessToken);
         const userInfoString = JSON.stringify(userInfo);
         sessionStorage.setItem("user_info", userInfoString);
