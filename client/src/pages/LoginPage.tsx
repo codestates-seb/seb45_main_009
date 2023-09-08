@@ -3,7 +3,6 @@ import axios from "axios";
 import { login } from "../redux/reducers/loginSlice";
 import { Link } from "react-router-dom";
 import kakao from "../assets/images/kakaotalk.png";
-
 //컴포넌트 불러오기
 import CommonInput from "../components/atoms/CommonInput";
 import { useNavigate } from "react-router";
@@ -45,12 +44,11 @@ function LoginPage() {
 
   const onSubmitHandler = async () => {
     if (isValidEmail) {
-      const url = "http://localhost:8080/login";
       try {
-        const response = await axios.post(url, { email, password });
+        const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/login`, { email, password });
 
         const accessToken = response.headers["Authorization"];
-        const userType = response.headers["Usertype"];
+        const userType = response.headers["Roles"][0];
         const userNickname = response.headers["Nickname"];
         const userInfo: UserInfo = { userType, userNickname };
 
@@ -67,8 +65,14 @@ function LoginPage() {
     }
   };
 
+  //카카오톡 로그인
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_REST_API_KEY}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code`;
+  const kakaoLoginHandler = () => {
+    window.location.href = KAKAO_AUTH_URL;
+  };
+
   return (
-    <div className=" flex justify-center h-3/5 items-center  pt-[20px] mb-[40px] mt-[20px] ">
+    <div className=" flex flex-col justify-center h-3/5 items-center  pt-[20px] mb-[40px] mt-[20px] ">
       <div className="w-[300px] ">
         <CommonInput
           placeholder="이메일을 입력해주세요."
@@ -103,7 +107,10 @@ function LoginPage() {
           </Link>
         </div>
 
-        <button className="flex flex-row justify-center w-[300px] py-2 rounded-[4px] text-[14px] mt-[20px] font-medium bg-[#f9e000] text-black transition hover:opacity-75">
+        <button
+          onClick={kakaoLoginHandler}
+          className="flex flex-row justify-center w-[300px] py-2 rounded-[4px] text-[14px] mt-[20px] font-medium bg-[#f9e000] text-black transition hover:opacity-75"
+        >
           <img src={kakao} alt="kakaotalk" className="w-6 h-6" /> KaKao 로그인/회원가입
         </button>
       </div>

@@ -11,6 +11,8 @@ import { UserInfo } from "../../types/types";
 import { BiSearch } from "react-icons/bi/";
 import { IoNotificationsOutline } from "react-icons/io5/";
 
+import { useLocation } from "react-router-dom";
+
 interface RootState {
   login: {
     isAuthenticated: boolean;
@@ -31,6 +33,12 @@ function Header() {
     sessionStorage.removeItem("user_info");
     navigate("/");
   };
+
+  //oauthloading에서 제외
+  const location = useLocation();
+  if (location.pathname === "/oauthloading") {
+    return null;
+  }
 
   return (
     <div className="flex justify-center items-center m-2">
