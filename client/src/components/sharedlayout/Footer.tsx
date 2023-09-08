@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { AiFillGithub } from "react-icons/ai";
 import { LuMail } from "react-icons/lu";
+import { useLocation } from "react-router-dom";
 
 const members = [
   { name: "손승범", github: "깃허브링크1", mail: "이메일주소1" },
@@ -14,6 +15,12 @@ const members = [
 ];
 
 function Footer() {
+  //oauthloading에서 제외
+  const location = useLocation();
+  if (location.pathname === "/oauthloading") {
+    return null;
+  }
+
   return (
     <footer className="flex justify-center items-center  bg-slate-200  min-h-[80px] ">
       <Link to={"/"}>

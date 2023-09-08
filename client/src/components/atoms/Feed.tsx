@@ -63,7 +63,7 @@ const tempData: UserData[] = [
     userInfo: "오늘은 날씨가 좋네요",
     tags: "크로스핏",
     location: "인천",
-  },
+    },
   {
     proFileImg: "/asset/gym1.png",
     userId: "ID123ABC",
@@ -78,7 +78,7 @@ const tempData: UserData[] = [
     feedImg: "/asset/feedpicture.png",
     userInfo: "오늘은 날씨가 좋네요",
     tags: "수영",
-    location: "강원",
+    location: "서울",
   },
   {
     proFileImg: "/asset/cat.png",
