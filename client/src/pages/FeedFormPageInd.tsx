@@ -100,14 +100,15 @@ function FeedFormPageInd() {
   };
 
   return (
-    <div className="flex items-center flex-col my-20 ">
-      <div className="flex flex-row">
-        <div className="flex flex-col w-[420px] mr-10 ">
+    <div className="flex justify-center items-center flex-col my-20 ">
+      <div className="flex flex-row relative max-mobile:flex-col max-mobile:mx-1 max-tablet:flex-col">
+        <div className="flex flex-col  min-w-[300px] max-w-[420px] mr-10 max-mobile:mr-1 max-tablet:mr-1">
           <ImageForm previewImg={previewImg} setPreviewImg={setPreviewImg}></ImageForm>
         </div>
-        <div className="flex flex-col w-[420px]">
+        <div className="flex flex-col min-w-[300px] max-w-[420px]  max-mobile:mt-4 max-tablet:mt-4">
           <textarea
-            className="h-[200px] border border-bdc rounded-md mb-5 p-2.5 resize-none  focus:outline-[#abb4af]"
+            className="h-[200px] border border-bdc rounded-md mb-5 p-2.5 resize-none  focus:outline-[#abb4af]
+            "
             placeholder="글을 입력해 주세요"
             onChange={handleBodyChange}
           ></textarea>
@@ -129,7 +130,7 @@ function FeedFormPageInd() {
               ))}
             </ul>
           </div>
-          <div className="border border-bdc rounded px-3 pt-2 mh-[50px] mb-8 text-btc ">
+          <div className="border border-bdc rounded px-3 pt-2 mh-[50px] mb-8 text-btc mb-20">
             <ul>
               {addedTags.map((tag, index) => (
                 <li
@@ -160,12 +161,10 @@ function FeedFormPageInd() {
             </ul>
           </div>
         </div>
-      </div>
-
-      <div className="flex w-[880px] justify-end mb-2">
         <button
           onClick={submitForm}
-          className="text-btc px-6 py-2 border border-bdc rounded text-white transition bg-[#7DD9C4] hover:bg-[#4dab95]"
+          className="absolute bottom-[-30px] right-0 text-btc px-6 py-2 border border-bdc rounded text-white transition bg-[#7DD9C4] hover:bg-[#4dab95] max-mobile:mx-1
+          "
         >
           등록하기
         </button>
