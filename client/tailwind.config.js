@@ -23,6 +23,7 @@ module.exports = {
       },
       animation: {
         "slide-down": "slide-down 0.5s",
+        "slide-right": "slide-right 0.5s",
       },
       keyframes: {
         "slide-down": {
@@ -33,6 +34,14 @@ module.exports = {
           "100%": {
             opacity: 1,
             transform: "translateY(0)",
+          },
+        },
+        "slide-right": {
+          "0%": {
+            transform: "translateX(100%)",
+          },
+          "100%": {
+            transform: "translateX(0)",
           },
         },
       },

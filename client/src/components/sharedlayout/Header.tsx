@@ -1,15 +1,11 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-
-import { useNavigate } from "react-router";
-import { useDispatch } from "react-redux";
-
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/reducers/loginSlice";
-
 import { UserInfo } from "../../types/types";
 import { BiSearch } from "react-icons/bi/";
 import { IoNotificationsOutline } from "react-icons/io5/";
+import { RiMenuUnfoldFill, RiMenuFoldFill } from "react-icons/ri";
 
 interface RootState {
   login: {
@@ -21,10 +17,10 @@ interface RootState {
 function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const isAuthenticated = useSelector(
     (state: RootState) => state.login.isAuthenticated
   );
+
   const logoutHandler = () => {
     dispatch(logout());
     sessionStorage.removeItem("access_token");
@@ -32,51 +28,148 @@ function Header() {
     navigate("/");
   };
 
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const isMobile = windowWidth < 768;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const toggleModal = () => {
+    setIsModalOpen((prevIsModalOpen) => !prevIsModalOpen);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleMenuClick = () => {
+    if (isMobile && isModalOpen) {
+      closeModal();
+    }
+  };
+
   return (
     <header className="flex justify-center items-center m-2">
       <Link to="/">
-        <div className="flex justify-center hover:cursor-pointer w-[20vw] sm:ml-4">
+        <div className="flex justify-center hover:cursor-pointer">
           <img src="/asset/fitfolio.svg" alt="logo" />
         </div>
       </Link>
-      <div className="flex items-center h-[3vh] w-4/12 border rounded-3xl p-1 sm:mr-2 sm:h-[4vh]">
-        <BiSearch size="24"></BiSearch>
+      <div className="flex items-center h-[3vh] w-[50vw] max-w-[500px] border rounded-3xl p-1 sm:mr-2 sm:h-[4vh]">
+        <BiSearch size="24" />
         <input
           className="w-full outline-none text-[8px] sm:text-sm"
           placeholder="검색하실 ID 또는 #태그를 입력하세요."
-        ></input>
+        />
       </div>
-      <div className=" items-center mx-2 sm:mr-4  hover:cursor-pointer">
-        <IoNotificationsOutline size="22"></IoNotificationsOutline>
-      </div>
-      <div className="flex">
-        {isAuthenticated ? (
-          <>
-            <button
-              className="mr-4 hover:text-btn-color"
-              onClick={logoutHandler}
-            >
-              로그아웃
-            </button>
-            <Link to="/mypage/:page">
-              <button className="mr-8 hover:text-btn-color">마이페이지</button>
-            </Link>
-          </>
-        ) : (
-          <>
+      {isMobile ? (
+        <>
+          <div className="ml-3" onClick={toggleModal}>
+            {isModalOpen ? (
+              <RiMenuFoldFill size="24" />
+            ) : (
+              <RiMenuUnfoldFill size="24" />
+            )}
+          </div>
+          {isModalOpen && (
+            <div className="fixed top-0 right-0 bottom-0 left-0 bg-white z-50 flex flex-col items-center animate-slide-right">
+              {isAuthenticated ? (
+                <>
+                  <button
+                    className="my-4 hover:text-btn-color"
+                    onClick={() => {
+                      logoutHandler();
+                      handleMenuClick();
+                    }}
+                  >
+                    로그아웃
+                  </button>
+                  <Link to="/mypage/:page">
+                    <button
+                      className="mb-4 hover:text-btn-color"
+                      onClick={handleMenuClick}
+                    >
+                      마이페이지
+                    </button>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link to="/login">
+                    <button
+                      className="my-4 hover:text-btn-color"
+                      onClick={handleMenuClick}
+                    >
+                      로그인
+                    </button>
+                  </Link>
+                  <Link to="/signup">
+                    <button
+                      className="mb-4 hover:text-btn-color"
+                      onClick={handleMenuClick}
+                    >
+                      회원가입
+                    </button>
+                  </Link>
+                </>
+              )}
+              <div className="my-4">
+                <IoNotificationsOutline size="22" />
+              </div>
+              <button onClick={closeModal}>닫기</button>
+            </div>
+          )}
+        </>
+      ) : (
+        <>
+          {isAuthenticated && (
+            <div className="items-center mx-2 sm:mr-4 hover:cursor-pointer">
+              <IoNotificationsOutline size="22" />
+            </div>
+          )}
+        </>
+      )}
+      {!isMobile && isAuthenticated ? (
+        <div className="flex">
+          <button className="mr-4 hover:text-btn-color" onClick={logoutHandler}>
+            로그아웃
+          </button>
+          <Link to="/mypage/:page">
+            <button className="hover:text-btn-color">마이페이지</button>
+          </Link>
+        </div>
+      ) : (
+        !isMobile && (
+          <div className="flex">
             <Link to="/login">
-              <button className="text-xs mr-2 sm:mr-4 sm:text-base hover:text-btn-color">
+              <button
+                className="text-xs mr-2 sm:mr-4 sm:text-base hover:text-btn-color"
+                onClick={handleMenuClick}
+              >
                 로그인
               </button>
             </Link>
             <Link to="/signup">
-              <button className="text-xs sm:mr-8 sm:text-base hover:text-btn-color">
+              <button
+                className="text-xs sm:text-base hover:text-btn-color"
+                onClick={handleMenuClick}
+              >
                 회원가입
               </button>
             </Link>
-          </>
-        )}
-      </div>
+          </div>
+        )
+      )}
     </header>
   );
 }

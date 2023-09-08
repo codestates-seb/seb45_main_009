@@ -17,7 +17,7 @@ const Withdraw = () => {
           먼저 해당 게시물을 삭제 하신 후, 탈퇴를 신청하시기 바랍니다.
         </p>
 
-        <button className="border rounded-lg p-3 my-5 bg-modify-btn-color hover:text-white  min-w-[300px]">
+        <button className="border rounded-lg p-3 my-5 bg-modify-btn-color hover:text-white">
           탈퇴하기
         </button>
         <div

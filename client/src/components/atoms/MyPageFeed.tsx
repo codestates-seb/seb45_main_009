@@ -34,10 +34,11 @@ const MyPageFeed = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
-    // 윈도우 크기가 변경될 때 실행
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
+
+    console.log(windowWidth);
 
     // 이벤트 리스너 등록
     window.addEventListener("resize", handleResize);
@@ -46,7 +47,7 @@ const MyPageFeed = () => {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때 한 번만 실행
+  }, [windowWidth]);
 
   return (
     <section>
