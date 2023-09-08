@@ -45,11 +45,9 @@ function LoginPage() {
   const onSubmitHandler = async () => {
     if (isValidEmail) {
       try {
-        const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/login`, { email, password });
-
-        const accessToken = response.headers["Authorization"];
-        const userType = response.headers["Roles"][0];
-        const userNickname = response.headers["Nickname"];
+        const accessToken = "bearer fasdkfjsdkzdfjl.hkllfgkad.gfkgslgksl";
+        const userType = "USER";
+        const userNickname = "TEST_NICKNAME";
         const userInfo: UserInfo = { userType, userNickname };
 
         sessionStorage.setItem("access_token", accessToken);
@@ -59,6 +57,21 @@ function LoginPage() {
         dispatch(login({ userInfo }));
 
         navigate("/");
+
+        // const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/login`, { email, password });
+
+        // const accessToken = response.headers["Authorization"];
+        // const userType = response.headers["Roles"][0];
+        // const userNickname = response.headers["Nickname"];
+        // const userInfo: UserInfo = { userType, userNickname };
+
+        // sessionStorage.setItem("access_token", accessToken);
+        // const userInfoString = JSON.stringify(userInfo);
+        // sessionStorage.setItem("user_info", userInfoString);
+
+        // dispatch(login({ userInfo }));
+
+        // navigate("/");
       } catch (error) {
         console.error("Error during login:", error);
       }
