@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import {AiOutlineHeart , AiFillHeart} from 'react-icons/ai';
 import {RiAlarmWarningFill} from 'react-icons/ri';
 import {AiFillPlusCircle} from 'react-icons/ai';
+import React from "react";
 
 
 function TagModal({ title, size, price, top }: { title: string; size: string; price: number; top: string }) {
@@ -11,7 +12,7 @@ function TagModal({ title, size, price, top }: { title: string; size: string; pr
   const modalTopPosition = parseInt(top) > 50 ? '-60px' : '25px'; 
   return (
     <div style={{ top: modalTopPosition }} className="absolute border w-[100px] rounded-[2px] bg-white text-[12px] mt-[2px] pl-[10px]">
-      <div className="">{title}</div>
+      <div >{title}</div>
       <div className="text-gray-400 text-[8px]">{size}</div>
       <div className="font-bold">₩{price}</div>
     </div>
@@ -74,7 +75,7 @@ function DetailFeedInd() {
     <div className='w-full sm:max-w-screen-sm  mx-auto px-4 sm:px-4 lg:px-8'>
       {feedData.photo.map((photo, photoIndex) => (
         <div key={photoIndex} className="mb-8 relative">
-          <img src={photo} className="w-full h-auto" />
+          <img src={photo} alt=" " className="w-full h-auto" />
           {tagDatas[photoIndex].taglocation.map((location, tagIndex) => {
             // 띄어쓰기로 top,left 나누기
             const [top, left] = location.split(' ');
