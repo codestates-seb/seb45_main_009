@@ -18,7 +18,7 @@ function TagModal({ title, size, price, top }: { title: string; size: string; pr
   );
 }
 
-function DetailFeedCor() {
+function DetailFeedInd() {
     // 피드 데이터
   let feedData : {
     photo : string[],
@@ -129,4 +129,4 @@ function DetailFeedCor() {
   ) 
 }
 
-export default DetailFeedCor;
+export default DetailFeedInd;
