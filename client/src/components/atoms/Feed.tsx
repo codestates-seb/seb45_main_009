@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
+import globalAxios from "../../data/data";
 
 interface UserData {
   proFileImg: string;
@@ -204,6 +205,8 @@ const Feed = ({ selectedFilter }: FeedProps) => {
 
   const [ref, inView] = useInView();
 
+  const [abc, setABC] = useState();
+
   useEffect(() => {
     if (inView) {
       setPage((prevPage) => prevPage + 1);
@@ -227,6 +230,22 @@ const Feed = ({ selectedFilter }: FeedProps) => {
   const currentDetail =
     location.pathname === "/" ? "/feeddetailind" : "/feeddetailcor";
 
+  const getMainListData = async () => {
+    try {
+      const response = await globalAxios.get("/feed/detail/1");
+      const getData = response.data;
+      //setAllData(getData.data);
+      setABC(getData.data);
+      console.log("response >>", getData);
+    } catch (err) {
+      console.log("Error >>", err);
+    }
+  };
+
+  useEffect(() => {
+    getMainListData();
+  }, []);
+
   return (
     <section className="flex justify-center flex-col items-center ">
       <div>
@@ -239,8 +258,8 @@ const Feed = ({ selectedFilter }: FeedProps) => {
         </div>
 
         <section className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4  mb-24">
-          {filteredData.map((user, idx) => (
-            <article key={idx} className="  mb-4 min-w-[250px]">
+          {filteredData.map((user) => (
+            <article key={user.userId} className="  mb-4 min-w-[250px]">
               <div className="flex mb-4">
                 <img
                   src={user.proFileImg}
