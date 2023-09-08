@@ -19,11 +19,13 @@ public interface UserMapper {
 
      User patchToUser(UserDto.PatchDto patchDto);
 
+     @Mapping(source = "profileimg.imageUrl", target = "profileimg")
      UserDto.ResponseDto userToResponse(User user);
 
      List<UserDto.ResponseDto> UsersToResponses(List<User> users);
 
      @Mapping(source = "profileimg", target = "profileimg")
      User AuthLoginDtoUser(AuthLoginDto authLoginDto);
+
 
 }

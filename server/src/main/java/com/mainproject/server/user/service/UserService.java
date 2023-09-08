@@ -5,8 +5,10 @@ import com.mainproject.server.auth.jwt.JwtTokenizer;
 import com.mainproject.server.auth.utils.CustomAuthorityUtils;
 import com.mainproject.server.exception.BusinessLogicException;
 import com.mainproject.server.exception.ExceptionCode;
-import com.mainproject.server.auth.config.PasswordEncoderConfig;
-import com.mainproject.server.user.dto.UserDto;
+
+import com.mainproject.server.image.entity.Image;
+import com.mainproject.server.image.service.ImageService;
+
 import com.mainproject.server.user.entity.User;
 import com.mainproject.server.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -33,6 +36,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final CustomAuthorityUtils authorityUtils;
+    private final ImageService imageService;
 
     @Autowired
     private final JwtTokenizer jwtTokenizer;
@@ -41,12 +45,11 @@ public class UserService {
 
 
 
-
-
     // 유저 생성
-    public User createUser(User user) {
+    public User createUser(User user, MultipartFile profileimg) {
         verifyExistEmail(user.getEmail());
         verifyExistNickname(user.getNickname());
+
 
         // 비밀번호 유효성 검사 추가
         if (!isValidPassword(user.getPassword())) {
@@ -65,6 +68,17 @@ public class UserService {
 
         user.setCreatedAt(createdAt);
 
+
+        // 프로필 사진 업로드 및 이미지 엔티티와 관계 설정
+        if (profileimg != null && !profileimg.isEmpty()) {
+            Image profileImage = new Image();
+            String imageUrl = imageService.createImage(profileimg);
+            profileImage.setImageUrl(imageUrl);
+            profileImage.setUser(user);
+            user.setProfileimg(profileImage);
+        }
+
+
         return userRepository.save(user);
     }
 
@@ -79,7 +93,7 @@ public class UserService {
 
 
     // 유저 정보 변경
-    public User updateUser(Long loginId, User user) {
+    public User updateUser(Long loginId, User user, MultipartFile profileimg) {
 
         // 여기에서 loginId와 user를 사용한 검증 로직을 수행합니다.
         verifyPermission(loginId, user.getUserId());
@@ -92,12 +106,15 @@ public class UserService {
         }
 
 
-        if (user.getProfileimg() != null) {
-            findUser.setProfileimg(user.getProfileimg());
+        // 이미지 업데이트
+        String newImageUrl = updateProfileImage(findUser, profileimg);
+        if (newImageUrl != null) {
+            findUser.getProfileimg().setImageUrl(newImageUrl);
         }
 
+
         if (user.getSport() != null) {
-            findUser.setSport(new ArrayList<>(user.getSport()));
+            findUser.setSport(user.getSport());
         }
 
         if (user.getBio() != null) {
@@ -132,6 +149,19 @@ public class UserService {
         return userRepository.save(findUser);
     }
 
+    private String updateProfileImage(User user, MultipartFile profileimg) {
+        Image profileImage = user.getProfileimg();
+        if (profileImage != null) {
+            Long imageId = profileImage.getImageId();
+            // 새로운 이미지 업로드 및 URL 저장
+            if (profileimg != null && !profileimg.isEmpty()) {
+                String newImageUrl = imageService.updateImage(imageId, profileimg);
+                return newImageUrl;
+            }
+        }
+        return null; // 프로필 이미지가 업데이트되지 않은 경우
+    }
+
 
 
     // 유저 조회
@@ -152,9 +182,24 @@ public class UserService {
     // 유저 삭제
     public void deleteUser(Long userId) {
         User existingUser = findVerifiedUser(userId);
+
+        // 프로필 이미지 삭제
+        Image profileImage = existingUser.getProfileimg();
+        if (profileImage != null) {
+            String profileImageUrl = profileImage.getImageUrl();
+            if (profileImageUrl != null) {
+                // 이미지 서비스를 호출하여 해당 URL에 해당하는 이미지 정보를 조회
+                Image image = imageService.findImageByImageUrl(profileImageUrl);
+                if (image != null) {
+                    imageService.deleteImage(image.getImageId());
+                }
+            }
+        }
+
+        userRepository.delete(existingUser);
+
         userRepository.delete(existingUser);
     }
-
 
 
     public void verifyPermission(Long loginId, long userId) {
@@ -258,6 +303,27 @@ public class UserService {
 
         return refreshToken;
     }
+
+    // 이미지 ID를 가져오는 메서드
+    private Long getImageIdFromUser(User user) {
+        if (user != null && user.getProfileimg() != null) {
+            // user.getProfileimg()는 이미지 URL이라고 가정
+            String imageUrl = user.getProfileimg().getImageUrl();
+
+            // 이미지 서비스를 호출하여 해당 URL에 해당하는 이미지 정보를 조회
+            Image image = imageService.findImageByImageUrl(imageUrl);
+
+            // 조회한 이미지에서 이미지 ID를 반환
+            if (image != null) {
+                return image.getImageId();
+            }
+        }
+        return null;
+    }
+
+
+
+
 
 }
 
