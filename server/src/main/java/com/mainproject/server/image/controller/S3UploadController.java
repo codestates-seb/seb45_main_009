@@ -1,4 +1,4 @@
-//package com.mainproject.server.image.controller;
+package com.mainproject.server.image.controller;//package com.mainproject.server.image.controller;
 //
 //
 //import com.mainproject.server.image.service.S3UploadService;

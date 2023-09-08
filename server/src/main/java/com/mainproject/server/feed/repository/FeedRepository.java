@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface FeedRepository extends JpaRepository<Feed, Long> {
-    List<Feed> findByUsertype(boolean userType);
+//    List<Feed> findByUsertype(boolean userType);
     Feed findByFeedId(Long feedId);
 }
