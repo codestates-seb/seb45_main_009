@@ -40,7 +40,7 @@ const MyPageFollow = () => {
 
   return (
     <div className="flex justify-center flex-col items-center mt-5">
-      <section className="grid  grid-cols-1 gap-8 h-full mb-24 mx-3 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 lg:grid-cols-4 ">
+      <section className="grid  grid-cols-1 gap-8 h-full mb-24 mx-3 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 md:gap-8 lg:grid-cols-4 ">
         <div className="flex items-center">
           <AiFillStar size="40" color="#FFEA00" />
           <p className="text-2xl font-bold ml-4">팔로우 목록</p>

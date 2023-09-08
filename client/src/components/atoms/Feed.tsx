@@ -63,7 +63,7 @@ const tempData: UserData[] = [
     userInfo: "오늘은 날씨가 좋네요",
     tags: "크로스핏",
     location: "인천",
-    },
+  },
   {
     proFileImg: "/asset/gym1.png",
     userId: "ID123ABC",
@@ -266,7 +266,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
         </section>
       </div>
 
-      <div ref={ref}>xxxxxxxxxxxxxxxxxxx</div>
+      <div ref={ref}></div>
     </section>
   );
 };
