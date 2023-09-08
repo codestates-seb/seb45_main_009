@@ -14,6 +14,7 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import Profile from "./pages/Profile";
 import OauthLoadingPage from "./pages/OauthLoadingPage";
+import Alarm from "./pages/alarmpage";
 
 import MainPageInd from "./pages/MainPageInd";
 // import MainPageCor from "./pages/MainPageCor";
@@ -64,6 +65,7 @@ function App() {
             <Route path="/signup" element={<SignupPage />}></Route>
             <Route path="/profile" element={<Profile />}></Route>
             <Route path="/oauthloading" element={<OauthLoadingPage />}></Route>
+            <Route path="/alarmpage" element={<Alarm />}></Route>
             <Route path="*" element={<Not404 />} />
           </Routes>
         </div>
