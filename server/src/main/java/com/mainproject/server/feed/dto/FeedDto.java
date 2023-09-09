@@ -15,7 +15,6 @@ public class FeedDto {
     @Setter
     public static class PostDto {
 
-        private boolean usertype;
         private String content;
         private List<String> relatedTags;
 
@@ -28,7 +27,6 @@ public class FeedDto {
 
         private long feedId;
         private long imageId;
-        private boolean usertype;
         private String content;
         private List<String> relatedTags;
 

@@ -1,6 +1,7 @@
 package com.mainproject.server.feedcomment.entity;
 
 import com.mainproject.server.feed.enitiy.Feed;
+import com.mainproject.server.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,8 +32,9 @@ public class FeedComment {
     @ManyToOne
     private Feed feed;
 
-//    //user와 매핑(다대일)
-//    @ManyToOne
-//    private User user;
+    //user와 매핑(다대일)
+    @ManyToOne
+    @JoinColumn
+    private User user;
 
 }
