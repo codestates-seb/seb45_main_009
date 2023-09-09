@@ -3,6 +3,7 @@ package com.mainproject.server.user.entity;
 
 
 import com.mainproject.server.feed.enitiy.Feed;
+import com.mainproject.server.feedcomment.entity.FeedComment;
 import lombok.*;
 
 
@@ -69,6 +70,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Feed> feeds = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<FeedComment> feedComments = new ArrayList<>();
 
     public void addFeed(Feed feed) {
         feeds.add(feed);

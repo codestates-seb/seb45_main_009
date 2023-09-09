@@ -66,10 +66,9 @@ public class FeedController {
 
     // 유저 페이지 피드 조회(리스트) - 메인페이지
     @GetMapping("/")
-    public ResponseEntity findUserFeed() {
+    public ResponseEntity fineUserFeeds() {
 
-//        List<Feed> userFeeds = feedRepository.findByUsertype(true);
-        List<Feed> userFeeds = feedService.findFeeds(true);
+        List<Feed> userFeeds = feedService.findUserFeeds();
         List<FeedResponseDto> userFeedResponse = feedMapper.feedToFeedResponseDtos(userFeeds);
         return new ResponseEntity<>(userFeedResponse, HttpStatus.OK);
     }
@@ -78,8 +77,7 @@ public class FeedController {
     @GetMapping("/store")
     public ResponseEntity findStoreFeed() {
 
-//        List<Feed> storeFeeds = feedRepository.findByUsertype(false);
-        List<Feed> storeFeeds = feedService.findFeeds(false);
+        List<Feed> storeFeeds = feedService.findStoreFeeds();
         List<FeedResponseDto> storeFeedResponse = feedMapper.feedToFeedResponseDtos(storeFeeds);
         return new ResponseEntity<>(storeFeedResponse, HttpStatus.OK);
     }

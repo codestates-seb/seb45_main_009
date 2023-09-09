@@ -5,6 +5,12 @@ spring:
     username: ${LOCAL_DB_USERNAME}
     password: ${LOCAL_DB_PASSWORD}
 
+    servlet:
+      multipart:
+        enabled: true
+        max-file-size: 10MB  # 파일 크기 제한 설정
+        max-request-size: 10MB  # 요청 크기 제한 설정
+
   jpa:
     hibernate:
       dialect: org.hibernate.dialect.MySQL8Dialect
