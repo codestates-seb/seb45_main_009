@@ -2,11 +2,14 @@ package com.mainproject.server.user.entity;
 
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.mainproject.server.follow.entity.Follow;
+import com.mainproject.server.image.entity.Image;
+import com.mainproject.server.userprofile.entity.UserProfile;
 import lombok.*;
 
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,14 +44,8 @@ public class User {
     private LocalDateTime modifiedAt = LocalDateTime.now();
 
 
-
-
-    @Column(nullable = false)
-    private LocalDate birth;
-
-    @Column(nullable= false)
-    private ArrayList<String> sport = new ArrayList<>();
-
+    @Column
+    private String sport;
 
     @Column
     private String location;
@@ -60,9 +57,10 @@ public class User {
     @Column
     private int weight;
 
-    @Column
-    private String profileimg;
-    //profile_photo  =>  profileimg 변경
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JoinColumn(name = "imageId")
+    @JsonManagedReference// 이미지와의 관계를 설정
+    private Image profileimg;
 
     @Column
     private String bio;
@@ -71,17 +69,37 @@ public class User {
     @Column
     private String price;
 
-    @Column(nullable = false)
-    private boolean gender;
-
-
 
     @Column(nullable = false)
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
 
+    @OneToMany(mappedBy = "follow",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private final List<Follow> followerList = new ArrayList<>(); // 나를 팔로우를 하는 유저들의 리스트
 
+    @OneToMany(mappedBy = "follower",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private final List<Follow> followList = new ArrayList<>(); // 내가 팔로우 하는 유저들의 리스트
+
+
+    public void hasFollowed(){
+        this.userProfile.followerCountPlus();
+    }
+    public void hasUnFollowed(){
+        this.userProfile.followerCountMinus();
+    }
+
+    public void hasFollowing(){
+        this.userProfile.followCountPlus();
+    }
+    public void hasUnFollowing(){
+        this.userProfile.followCountMinus();
+    }
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = true)
+    private UserProfile userProfile;
+    // 마이 페이지
 
 
 }

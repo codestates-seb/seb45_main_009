@@ -13,6 +13,7 @@ import com.mainproject.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,10 +22,13 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.annotation.MultipartConfig;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/")
@@ -40,25 +44,29 @@ public class UserController {
 
     // 유저 등록
     @PostMapping("join/user")
-    public ResponseEntity postUser(@Valid @RequestBody UserDto.PostDto requestBody) {
+    public ResponseEntity postUser(@Valid @RequestPart UserDto.PostDto requestBody,
+                                   @RequestPart("imageUrl") MultipartFile imageFiles) {
+
         log.info("### user login start! ###");
         User user = mapper.postToUser(requestBody);
 
         // "ROLE_USER" 역할을 설정
         user.getRoles().add("USER");
 
-
         // UserService를 사용하여 유저 생성
-        User createdUser = userService.createUser(user);
+        User createdUser = userService.createUser(user, imageFiles);
 
         log.info("### user login end! ###");
         // 생성된 유저 정보를 반환하고 HTTP 상태 코드 201(CREATED)를 반환
+
+
         return ResponseEntity.created(URI.create("/user/" + createdUser.getUserId())).body(createdUser);
     }
 
     // 기업 등록
     @PostMapping("join/store")
-    public ResponseEntity postStore(@Valid @RequestBody UserDto.PostDto requestBody) {
+    public ResponseEntity postStore(@Valid @RequestPart UserDto.PostDto requestBody,
+                                    @RequestPart("imageUrl") MultipartFile imageFiles) {
         log.info("### store login start! ###");
         User user = mapper.postToUser(requestBody);
 
@@ -66,7 +74,7 @@ public class UserController {
         user.getRoles().add("STORE");
 
         // UserService를 사용하여 유저 생성
-        User createdUser = userService.createUser(user);
+        User createdUser = userService.createUser(user, imageFiles);
 
         log.info("### store login end! ###");
         // 생성된 기업 정보를 반환하고 HTTP 상태 코드 201(CREATED)를 반환
@@ -77,28 +85,53 @@ public class UserController {
     @GetMapping("/oauthloading")
     public ResponseEntity oAuth2LoginKakao(@RequestBody @Valid AuthLoginDto requesBody) {
         log.info("### oauth2 login start! ###");
+
+        // 초기화
         String accessToken = "";
         String refreshToken = "";
         String userId = "";
+        String userNickname = "";
+        String userRole = "";
+
+        // AuthLoginDto에서 User 객체로 매핑
         User user = mapper.AuthLoginDtoUser(requesBody);
 
 
         // "ROLE_USER" 역할을 설정
         user.getRoles().add("USER");
-
+        // 닉네임을 kakao로 설정
+        user.setNickname("kakao");
+        // 이메일에 "3"을 추가 (이 부분은 필요에 따라 변경 가능)
         user.setEmail(user.getEmail() + "3");
+
+        // 사용자가 이메일로 이미 가입했는지 확인
         if (!userService.existsByEmail(user.getEmail())) {
+            // 새로운 사용자로 등록
             user = userService.createUserOAuth2(user);
         } else {
+            // 기존 사용자 정보 가져오기
             user = userService.findVerifiedUser(user.getEmail());
         }
+
+        // 엑세스 토큰 및 리프레시 토큰 발급
         accessToken = userService.delegateAccessToken(user);
         refreshToken = userService.delegateRefreshToken(user);
+        // 사용자 ID를 문자열로 변환
         userId = String.valueOf(user.getUserId());
+        // 사용자 닉네임 가져오기
+        userNickname = user.getNickname();
+        // 사용자 역할 가져오기 (예: "USER")
+        userRole = user.getRoles().stream().findFirst().orElse("");
+
         log.info("### oauth2 login end! ###");
+
+        // 응답 헤더에 토큰 및 사용자 ID, nickname, role 값 추가하여 반환
         return ResponseEntity.ok().header("Authorization", "Bearer " + accessToken)
                 .header("Refresh", refreshToken)
-                .header("UserId", userId).build();
+                .header("UserId", userId)
+                .header("UserNickname", userNickname)
+                .header("UserRole", userRole).build();
+
     }
 
     // 유저 정보 조회
@@ -130,10 +163,12 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     @PatchMapping("mypage/update")
     public ResponseEntity<?> patchUser(@LoginUserId Long loginId,
-                                       @Valid @RequestBody UserDto.PatchDto requestBody) {
+                                       @RequestPart @Valid UserDto.PatchDto requestBody,
+                                       @RequestPart(value = "imageUrl", required = false) MultipartFile profileimg) {
+
         User user = mapper.patchToUser(requestBody);
         user.setUserId(loginId); // loginId를 사용자 ID로 설정
-        User updatedUser = userService.updateUser(loginId, user);
+        User updatedUser = userService.updateUser(loginId, user, profileimg);
         UserDto.ResponseDto response = mapper.userToResponse(updatedUser);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
@@ -149,6 +184,8 @@ public class UserController {
         // HTTP 상태 코드 204(NO CONTENT)를 반환
         return ResponseEntity.noContent().build();
     }
+
+
 
 //    @GetMapping("oauth/kakao/callback")
 //    public @ResponseBody String kakaocallback(String code) {

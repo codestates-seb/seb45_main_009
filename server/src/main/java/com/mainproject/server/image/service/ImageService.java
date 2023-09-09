@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.mainproject.server.image.entity.Image;
 import com.mainproject.server.image.repository.ImageRepository;
+import com.mainproject.server.user.entity.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,6 +40,10 @@ public class ImageService {
 
     public String updateImage(Long imageId, MultipartFile imageFile) {
         Image updateImage = findImage(imageId);
+
+        if (updateImage == null) {
+            throw new EntityNotFoundException("ID " + imageId + "에 해당하는 이미지를 찾을 수 없습니다.");
+        }
 
         String oldImageUrl = updateImage.getImageUrl();
 
@@ -85,6 +90,29 @@ public class ImageService {
 
         imageRepository.delete(deletedImage);
     }
+
+    // 이미지 URL로 이미지 조회
+    public Image findImageByImageUrl(String imageUrl) {
+        // 이미지 URL을 사용하여 이미지를 데이터베이스에서 조회
+        Image image = imageRepository.findByImageUrl(imageUrl);
+        if (image == null) {
+            // 이미지가 존재하지 않을 경우 예외
+            throw new EntityNotFoundException("Image not found with URL: " + imageUrl);
+        }
+        return image;
+    }
+
+    // 프로필 이미지 URL 가져오기
+    public String getProfileImageUrl(User user) {
+        if (user.getProfileimg() != null) {
+            return user.getProfileimg().getImageUrl();
+        }
+        return null; // 프로필 이미지가 없는 경우 null 반환
+    }
+
+
+
+
 }
 
 

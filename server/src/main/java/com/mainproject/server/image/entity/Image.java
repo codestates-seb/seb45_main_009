@@ -1,6 +1,8 @@
 package com.mainproject.server.image.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.mainproject.server.feed.enitiy.Feed;
+import com.mainproject.server.user.entity.User;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,9 +25,15 @@ public class Image {
     @JoinColumn(name = "feedId")
     private Feed feed;
 
+    @OneToOne
+    @JoinColumn(name = "userId") // User와의 관계를 설정
+    @JsonBackReference // // User와의 관계를 설정
+    private User user;
+
     public static class Builder {
         private String imageUrl;
         private Feed feed;
+        private User user;
 
         public Builder imageUrl(String imageUrl) {
             this.imageUrl = imageUrl;
@@ -37,10 +45,16 @@ public class Image {
             return this;
         }
 
+        public Builder user(User user){
+            this.user = user;
+            return this;
+        }
+
         public Image build() {
             Image image = new Image();
             image.setImageUrl(this.imageUrl);
             image.setFeed(this.feed);
+            image.setUser(this.user);
             return image;
         }
     }
