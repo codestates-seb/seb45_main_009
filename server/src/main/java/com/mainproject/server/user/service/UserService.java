@@ -137,7 +137,7 @@ public class UserService {
     // 유저 조회
     public User findUser(long userId) {
         User user =  findVerifiedUser(userId);
-//        Hibernate.initialize(user.getRoles());
+        Hibernate.initialize(user.getRoles());
         return user;
     }
 
@@ -260,4 +260,3 @@ public class UserService {
     }
 
 }
-
