@@ -5,12 +5,10 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class CustomersDetailsService    {
+public class CustomersDetailsService {
     public static Long getAccountId() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         MemberDetailsService.MemberDetails customUserDetails = (MemberDetailsService.MemberDetails) principal;
         return customUserDetails.getUserId();
     }
-
 }
-
