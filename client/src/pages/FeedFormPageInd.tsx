@@ -171,11 +171,12 @@ function FeedFormPageInd() {
         </div>
         <button
           onClick={submitForm}
-          className="absolute bottom-[-30px] right-0 text-btc px-6 py-2 border border-bdc rounded text-white transition bg-[#7DD9C4] hover:bg-[#4dab95] max-mobile:mx-1
+          className="absolute bottom-[-30px] max-tablet:bottom-[-10px] max-mobile:bottom-[0px]  right-0 text-btc px-6 py-2 border border-bdc rounded text-white transition bg-[#7DD9C4] hover:bg-[#4dab95] max-mobile:mx-1
           "
         >
           등록하기
         </button>
+        <div className="max-tablet:h-[60px] max-mobile:h-[80px]"></div>
       </div>
     </div>
   );

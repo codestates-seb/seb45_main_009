@@ -7,13 +7,13 @@ import Comment from "../components/atoms/Comment";
 function FeedDetailPageInd() {
   return (
     <div>
-        <BackButton />
-        <ProfileInd />
-        <div className=" mt-[60px]">
-            <DetailFeed />
-            <Comment />
-        </div>
+      <BackButton />
+      <ProfileInd />
+      <div className=" mt-[60px]">
+        <DetailFeed />
+        <Comment />
       </div>
+    </div>
   );
 }
 
