@@ -7,6 +7,7 @@ import com.mainproject.server.feed.repository.FeedRepository;
 import com.mainproject.server.image.entity.Image;
 import com.mainproject.server.image.service.ImageService;
 import com.mainproject.server.user.entity.User;
+import com.mainproject.server.user.repository.UserRepository;
 import com.mainproject.server.user.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
