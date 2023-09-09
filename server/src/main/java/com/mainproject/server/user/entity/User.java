@@ -1,16 +1,14 @@
 package com.mainproject.server.user.entity;
 
-
-
+import com.mainproject.server.feed.enitiy.Feed;
+import com.mainproject.server.feedcomment.entity.FeedComment;
 import lombok.*;
-
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 
 @Getter
 @Setter
@@ -66,8 +64,14 @@ public class User {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Feed> feeds = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<FeedComment> feedComments = new ArrayList<>();
 
-
-
+    public void addFeed(Feed feed) {
+        feeds.add(feed);
+        feed.setUser(this); // 피드와 멤버 간의 양방향 연관 관계 설정
+    }
 }
