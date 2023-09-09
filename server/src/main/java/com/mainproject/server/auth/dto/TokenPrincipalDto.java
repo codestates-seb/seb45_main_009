@@ -11,4 +11,3 @@ public class TokenPrincipalDto {
     private long id;
     private String email;
 }
-
