@@ -1,18 +1,14 @@
 package com.mainproject.server.user.entity;
 
-
-
 import com.mainproject.server.feed.enitiy.Feed;
 import com.mainproject.server.feedcomment.entity.FeedComment;
 import lombok.*;
-
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 
 @Getter
 @Setter
