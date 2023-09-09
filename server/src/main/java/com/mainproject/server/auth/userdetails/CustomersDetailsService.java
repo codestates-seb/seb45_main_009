@@ -1,6 +1,3 @@
-//package com.mainproject.server.auth.userdetails;
-//
-////import com.mainproject.server.auth.dto.TokenPrincipalDto;
 package com.mainproject.server.auth.userdetails;
 
 import org.springframework.security.core.context.SecurityContextHolder;
