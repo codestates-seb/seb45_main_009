@@ -1,6 +1,5 @@
 package com.mainproject.server.feed.service;
 
-import com.mainproject.server.auth.dto.TokenPrincipalDto;
 import com.mainproject.server.exception.BusinessLogicException;
 import com.mainproject.server.exception.ExceptionCode;
 import com.mainproject.server.feed.enitiy.Feed;
@@ -149,16 +148,14 @@ public class FeedService {
 //                findFeedId(feedId);
     }
 
-    // 피드 리스트 조회
-    public List<Feed> findFeeds(boolean isUser) {
-//        if (isUser) {  // 개인
-//            List<Feed> findUserFeeds = feedRepository.findByUsertype(true);
-//            return findUserFeeds;
-//        } else {  // 기업
-//            List<Feed> findStoreFeeds = feedRepository.findByUsertype(false);
-//            return findStoreFeeds;
-//        }
-        return null;
+    // 유저 페이지 피드 조회
+    public List<Feed> findUserFeeds() {
+        return feedRepository.findUserFeeds();
+    }
+
+    // 기업 페이지 피드 조회
+    public List<Feed> findStoreFeeds() {
+        return feedRepository.findStoreFeeds();
     }
 
     // 피드 삭제
@@ -210,7 +207,6 @@ public class FeedService {
     // 현재 접속한 유저가 해당 feed를 작성한 유저인지, 혹은 admin인지 분류하여 예외 발생
     private void verifyAccess(Feed feed, long userId) {
         User findUser = userService.findUser(userId);
-
         if (!findUser.getUserId().equals(feed.getUser().getUserId()) && !findUser.getRoles().contains("ADMIN")) {
             throw new BusinessLogicException(ExceptionCode.NO_PERMISSION_EDITING_POST);
         }

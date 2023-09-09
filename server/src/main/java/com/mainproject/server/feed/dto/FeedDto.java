@@ -1,6 +1,5 @@
 package com.mainproject.server.feed.dto;
 
-import com.mainproject.server.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

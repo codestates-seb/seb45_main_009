@@ -13,10 +13,7 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface FeedMapper {
     Feed feedPostDtoToFeed(FeedDto.PostDto feedPostDto);
-
     Feed feedPatchDtoToFeed(FeedDto.PatchDto feedPatchdto);
-
-    //    @Mapping(source = "User.userId", target = "userId")
     FeedResponseDto feedToFeedResponseDto(Feed feed);
     List<FeedResponseDto> feedToFeedResponseDtos(List<Feed> feeds);
 

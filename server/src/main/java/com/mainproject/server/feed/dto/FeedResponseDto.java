@@ -1,12 +1,10 @@
 package com.mainproject.server.feed.dto;
 
-import com.mainproject.server.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor

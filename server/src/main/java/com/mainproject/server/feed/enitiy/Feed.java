@@ -49,16 +49,10 @@ public class Feed {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-//    public void setUser(User user) {
-//        this.user = user;
-//
-//        if (!user.getFeeds().contains(this)) {
-//            user.addFeed(this);
-//        }
 
 //    // 말풍선 태그와 매핑(일대다)
 //    @OneToMany(mappedby = "feed", cascade = CascadeType.ALL)
-//    private List<Phototag> phototag;
+//    private List<Imagetag> imageTags;
 
 
     }
