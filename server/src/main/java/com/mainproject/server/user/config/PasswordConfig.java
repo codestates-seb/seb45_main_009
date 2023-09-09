@@ -1,4 +1,4 @@
-package com.mainproject.server.user.config;//package com.mainproject.server.user.config;
+//package com.mainproject.server.user.config;
 //
 //
 //import org.springframework.context.annotation.Bean;
