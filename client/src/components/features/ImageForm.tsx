@@ -74,10 +74,12 @@ function ImageForm({ previewImg, setPreviewImg }: ImageFormProps) {
 
   const handleImageClick = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
     if (!isTaggingMode || selectedImgIndex === null) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
 
+    const rect = e.currentTarget.getBoundingClientRect();
+    const xRatio = (e.clientX - rect.left) / rect.width;
+    const yRatio = (e.clientY - rect.top) / rect.height;
+    const x = parseFloat((xRatio * 100).toFixed(2));
+    const y = parseFloat((yRatio * 100).toFixed(2));
     const updatedImg = { ...previewImg[selectedImgIndex] };
     updatedImg.tags.push({ x, y });
     const updatedPreview = [...previewImg];
@@ -153,7 +155,7 @@ function ImageForm({ previewImg, setPreviewImg }: ImageFormProps) {
         <img
           src={previewImg.length > 0 ? selectedImg : upload}
           alt="selectedImg"
-          className="w-full h-auto object-contain"
+          className="w-[420px] h-auto object-contain "
           onClick={handleImageClick}
         />
         {previewImg.length !== 0 ? (
@@ -170,15 +172,19 @@ function ImageForm({ previewImg, setPreviewImg }: ImageFormProps) {
             <React.Fragment key={index}>
               <AiFillPlusCircle
                 className="text-[#5ea1db] hover:text-[#3688cf] cursor-pointer w-5 h-5"
-                style={{ position: "absolute", top: tag.y, left: tag.x }}
+                style={{
+                  position: "absolute",
+                  top: `calc(${tag.y * 100}% - 12px)`,
+                  left: `calc(${tag.x * 100}% - 12px)`,
+                }}
                 onClick={() => handleTagSelect(index)}
               />
               {selectedTagIndex === index && (
                 <div
                   style={{
                     position: "absolute",
-                    top: tag.y + 18,
-                    left: tag.x - 62,
+                    top: `calc(${tag.y * 100}% + 18px)`,
+                    left: `calc(${tag.x * 100}% - 62px)`,
                   }}
                 >
                   <BallonTag

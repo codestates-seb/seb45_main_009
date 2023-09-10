@@ -28,15 +28,14 @@ function FeedFormPageInd() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const handleTagSelect = (category: string): void => {
-    const transformedCategory = `#${category}`;
-    if (selectedTags.includes(transformedCategory)) {
-      setSelectedTags(selectedTags.filter((tag) => tag !== transformedCategory));
+    if (selectedTags.includes(category)) {
+      setSelectedTags(selectedTags.filter((tag) => tag !== category));
     } else {
-      setSelectedTags([...selectedTags, transformedCategory]);
+      setSelectedTags([...selectedTags, category]);
     }
   };
 
-  const initialTag = ["#오운완"];
+  const initialTag = ["오운완"];
   const [addedTags, setAddedTags] = useState<string[]>(initialTag);
   const [inputTag, setInputTag] = useState<string>("");
 
@@ -50,7 +49,7 @@ function FeedFormPageInd() {
 
   const addTags = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (inputTag !== "" && inputTag.length <= 18 && !addedTags.includes(inputTag) && addedTags.length < 5) {
-      setAddedTags([...addedTags, `#${inputTag}`]);
+      setAddedTags([...addedTags, inputTag]);
       setInputTag("");
     }
   };
@@ -70,6 +69,19 @@ function FeedFormPageInd() {
   //imageform props
   const [previewImg, setPreviewImg] = useState<ImageData[]>([]);
   const submitForm = async () => {
+    if (bodyValue.trim().length === 0) {
+      alert("내용을 입력해주세요.");
+      return;
+    }
+    if (selectedTags.length === 0) {
+      alert("연관 태그를 하나 이상 선택해주세요.");
+      return;
+    }
+    if (previewImg.length === 0) {
+      alert("사진을 하나 이상 등록해주세요.");
+      return;
+    }
+
     const formData = new FormData();
 
     // feedPostDto 부분 추가
@@ -82,7 +94,6 @@ function FeedFormPageInd() {
     const blob = new Blob([JSON.stringify(feedPostDto)], {
       type: "application/json",
     });
-
     formData.append("feedPostDto", blob);
 
     // imageUrl 부분 추가
@@ -94,7 +105,6 @@ function FeedFormPageInd() {
 
     const accessToken = sessionStorage.getItem("access_token");
     try {
-      console.log(accessToken);
       const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/feed/add`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -127,9 +137,7 @@ function FeedFormPageInd() {
                 <li
                   key={index}
                   className={`text-btc inline-block px-2 py-1 border border-bdc rounded mr-2.5 mb-2.5 transition ${
-                    selectedTags.includes(`#${category}`)
-                      ? "bg-bts text-white"
-                      : "text-btc hover:bg-bts hover:text-white"
+                    selectedTags.includes(category) ? "bg-bts text-white" : "text-btc hover:bg-bts hover:text-white"
                   }`}
                   onClick={() => handleTagSelect(category)}
                 >
@@ -145,7 +153,7 @@ function FeedFormPageInd() {
                   key={index}
                   className="relative text-btc inline-block pl-2 pr-4 py-1 border border-bdc rounded mr-2.5 mb-2.5 bg-bts text-white group"
                 >
-                  <span className=" mr-2 inline-block">{tag}</span>
+                  <span className=" mr-2 inline-block">{`#${tag}`}</span>
                   <TiDelete
                     className="opacity-0 group-hover:opacity-100 transition absolute right-1 top-1/2 transform -translate-y-1/2"
                     onClick={() => removeTags(index)}
