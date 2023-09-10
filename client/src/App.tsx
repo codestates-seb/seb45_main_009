@@ -1,9 +1,5 @@
-import React, { useEffect } from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
-import { login } from "./redux/reducers/loginSlice";
-import { UserInfo } from "./types/types";
 import Header from "./components/sharedlayout/Header";
 import Footer from "./components/sharedlayout/Footer";
 import LoginPage from "./pages/LoginPage";
@@ -20,29 +16,12 @@ import FeedFormPageInd from "./pages/FeedFormPageInd";
 import Not404 from "./pages/Not404";
 import MainPageCor from "./pages/MainPageCor";
 import MyPage from "./pages/MyPage";
-import { useDispatch } from "react-redux";
 import ScrollToTop from "./components/features/ScrollToTop";
 import Layout from "./components/atoms/Layout";
+import { useUserSession } from "./hooks/useUserSession";
 
 function App() {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const accessToken = sessionStorage.getItem("access_token");
-    const userInfoString = sessionStorage.getItem("user_info");
-
-    if (accessToken && userInfoString) {
-      axios.defaults.headers.common["Authorization"] = `${accessToken}`;
-
-      try {
-        const userInfo: UserInfo = JSON.parse(userInfoString);
-
-        dispatch(login(userInfo));
-      } catch (error) {
-        console.error("Error decoding user info:", error);
-      }
-    }
-  }, [dispatch]);
+  useUserSession();
 
   return (
     <BrowserRouter>
@@ -63,10 +42,7 @@ function App() {
               <Route path="/signup" element={<SignupPage />}></Route>
 
               <Route path="/profile" element={<Profile />}></Route>
-              <Route
-                path="/oauthloading"
-                element={<OauthLoadingPage />}
-              ></Route>
+              <Route path="/oauthloading" element={<OauthLoadingPage />}></Route>
               <Route path="/alarmpage" element={<Alarm />}></Route>
               <Route path="*" element={<Not404 />} />
             </Routes>

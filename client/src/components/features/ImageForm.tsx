@@ -78,10 +78,8 @@ function ImageForm({ previewImg, setPreviewImg }: ImageFormProps) {
     const rect = e.currentTarget.getBoundingClientRect();
     const xRatio = (e.clientX - rect.left) / rect.width;
     const yRatio = (e.clientY - rect.top) / rect.height;
-    const x = parseFloat((xRatio * 100).toFixed(2));
-    const y = parseFloat((yRatio * 100).toFixed(2));
     const updatedImg = { ...previewImg[selectedImgIndex] };
-    updatedImg.tags.push({ x, y });
+    updatedImg.tags.push({ x: xRatio, y: yRatio });
     const updatedPreview = [...previewImg];
     updatedPreview[selectedImgIndex] = updatedImg;
 
@@ -183,8 +181,8 @@ function ImageForm({ previewImg, setPreviewImg }: ImageFormProps) {
                 <div
                   style={{
                     position: "absolute",
-                    top: `calc(${tag.y * 100}% + 18px)`,
-                    left: `calc(${tag.x * 100}% - 62px)`,
+                    top: `calc(${tag.y * 100}% + 6px)`,
+                    left: `calc(${tag.x * 100}% - 74px)`,
                   }}
                 >
                   <BallonTag
