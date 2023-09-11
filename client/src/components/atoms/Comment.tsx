@@ -31,12 +31,12 @@ function Comment() {
   };
 
   const handleSaveClick = () => {
-    setComment((prevArr) => [commentInputValue, ...prevArr]);
+    setComment((prevArr) => [ ...prevArr,commentInputValue]);
     const now = new Date();
     const dateString = now.toLocaleDateString();
     const timeString = now.toLocaleTimeString();
-    setCommentDate((dateArr) => [dateString, ...dateArr]);
-    setCurrentTime((timeArr) => [timeString, ...timeArr]);
+    setCommentDate((dateArr) => [ ...dateArr, dateString]);
+    setCurrentTime((timeArr) => [...timeArr, timeString]);
   };
 
   const handleDeleteComment = (index: number) => {

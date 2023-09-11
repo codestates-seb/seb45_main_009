@@ -9,19 +9,23 @@ function TagModal({
   size,
   price,
   top,
+  left
 }: {
   title: string;
   size: string;
   price: number;
   top: string;
+  left: string;
 }) {
-  // 우선 위아래만 지정
-  // 좌우 추가 해야함
-  // 이미지 위아래 50% 기준으로 나눔
+  
+  // 위아래
   const modalTopPosition = parseInt(top) > 50 ? "-60px" : "25px";
+  // 좌우
+  const modalLeftPosition = parseInt(left) > 50 ? "-105px" : "25px";
+
   return (
     <div
-      style={{ top: modalTopPosition }}
+      style={{ top: modalTopPosition, left: modalLeftPosition }}
       className="absolute border w-[100px] rounded-[2px] bg-white text-[12px] mt-[2px] pl-[10px]"
     >
       <div>{title}</div>
@@ -48,14 +52,13 @@ function DetailFeedInd() {
   // 정보 태그 데이터
   let tagDatas = [
     {
-      // taglocation: ["50px 50px", "400px 100px", "200px 400px"],
-      taglocation: ["15% 5%", "50% 10%", "30% 40%"], // 백분율로 위치값 수정
+      taglocation: ["15% 5%", "90% 10%", "30% 90%"],
       title: ["adidas", "Nike", "adidas"],
       size: ["XL", "280", "s"],
       price: [33000, 99000, 20000],
     },
     {
-      taglocation: ["100px 50px", "200px 200px", "100px 400px"],
+      taglocation: ["50% 50%", "10% 30%", "90% 90%"],
       title: ["2adidas", "2Nike", "2adidas"],
       size: ["XL", "280", "s"],
       price: [233000, 299000, 220000],
@@ -79,14 +82,12 @@ function DetailFeedInd() {
   };
 
   // 정보 태그 모달창
-  // 모달창이 photoindex와 tagindex 일치 불일치
   const [showTagModal, setShowTagModal] = useState<{
     photoIndex: number;
     tagIndex: number;
   } | null>(null);
 
   return (
-    // 화면 최대 넓이를 중간크기로, 수평 중앙 위치, 패딩조절
     <div className="w-full sm:max-w-screen-sm  mx-auto px-4 sm:px-4 lg:px-8">
       {feedData.photo.map((photo, photoIndex) => (
         <div key={photoIndex} className="mb-8 relative">
@@ -102,7 +103,7 @@ function DetailFeedInd() {
                 onMouseEnter={() => setShowTagModal({ photoIndex, tagIndex })}
                 onMouseLeave={() => setShowTagModal(null)}
               >
-                <AiFillPlusCircle className="w-[20px] h-[20px] text-btn-color" />
+                <AiFillPlusCircle className="w-[20px] h-[20px] text-tag-btn-color" />
                 {/* 만약 div위에 마우스 올린게 이미지index와 태그 index가 맞으면 모달창 보여주기 */}
                 {showTagModal?.photoIndex === photoIndex &&
                   showTagModal?.tagIndex === tagIndex && (
@@ -112,6 +113,7 @@ function DetailFeedInd() {
                       price={tagDatas[photoIndex].price[tagIndex]}
                       // 위치값 전달
                       top={top}
+                      left={left}
                     />
                   )}
               </div>
@@ -141,7 +143,30 @@ function DetailFeedInd() {
             </span>
           ))}
         </div>
+        <div className="mt-[40px] flex flex-wrap">
+        {
+          tagDatas.map((tagData, dataIndex) => (
+            tagData.title.map((_, itemIndex) => (
+              <div className="border rounded flex-grow mr-4 mb-4 p-2 text-sm" key={`${dataIndex}-${itemIndex}`}>
+                <div className="flex">
+                  <div className="flex-none">제품명 : </div>
+                  <div className="flex-grow font-bold ">{tagData.title[itemIndex]}</div>
+                </div>
+                <div className="flex">
+                  <div className="flex-none">가격 : </div>
+                  <div>₩ {tagData.price[itemIndex]}</div>
+                </div>
+                <div className="flex">
+                  <div className="flex-none">사이즈 : </div>
+                  <div className="text-btn-color">{tagData.size[itemIndex]}</div>
+                </div>
+              </div>
+            ))
+          ))
+        }
       </div>
+    </div>
+
       <div className="flex justify-end mt-4">
         <button onClick={inappropriateviewBtn} className="focus:outline-none">
           <RiAlarmWarningFill />

@@ -1,7 +1,5 @@
 import BackButton from "../components/atoms/BackButton";
-import Feed from "../components/atoms/Feed";
-import React, { useState } from "react";
-import BlueButton from "../components/atoms/BlueButton";
+// import FollowButton from "../components/atoms/Followbutton";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -183,7 +181,7 @@ function Profile() {
         <BackButton />
         <div>
         <div className="float-right">
-            <BlueButton label="팔로우"  onClick={followClick} />
+            {/* <button label="팔로우"  onClick={followClick} /> */}
         </div>
         <img src={userData[0].userphoto}  className='w-[80px] h-[80px] rounded-full float-left mr-4' />
       
