@@ -40,7 +40,6 @@ function App() {
               <Route path="/mypage/:page" element={<MyPage />} />
               <Route path="/login" element={<LoginPage />}></Route>
               <Route path="/signup" element={<SignupPage />}></Route>
-
               <Route path="/profile" element={<Profile />}></Route>
               <Route path="/oauthloading" element={<OauthLoadingPage />}></Route>
               <Route path="/alarmpage" element={<Alarm />}></Route>
