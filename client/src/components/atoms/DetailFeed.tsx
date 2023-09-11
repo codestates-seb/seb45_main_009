@@ -35,9 +35,8 @@ function TagModal({
   );
 }
 
-function DetailFeedInd() {
   // 피드 데이터
-  let feedData: {
+  const feedData: {
     photo: string[];
     date: string;
     content: string;
@@ -49,21 +48,23 @@ function DetailFeedInd() {
     tag: ["크로스핏", "헬스"],
   };
 
-  // 정보 태그 데이터
-  let tagDatas = [
-    {
-      taglocation: ["15% 5%", "90% 10%", "30% 90%"],
-      title: ["adidas", "Nike", "adidas"],
-      size: ["XL", "280", "s"],
-      price: [33000, 99000, 20000],
-    },
-    {
-      taglocation: ["50% 50%", "10% 30%", "90% 90%"],
-      title: ["2adidas", "2Nike", "2adidas"],
-      size: ["XL", "280", "s"],
-      price: [233000, 299000, 220000],
-    },
-  ];
+    // 정보 태그 데이터
+    const tagDatas = [
+      {
+        taglocation: ["15% 5%", "90% 10%", "30% 90%"],
+        title: ["adidas", "Nike", "adidas"],
+        size: ["XL", "280", "s"],
+        price: [33000, 99000, 20000],
+      },
+      {
+        taglocation: ["50% 50%", "10% 30%", "90% 90%"],
+        title: ["2adidas", "2Nike", "2adidas"],
+        size: ["XL", "280", "s"],
+        price: [233000, 299000, 220000],
+      },
+    ];
+
+function DetailFeedInd() {
 
   // 좋아요
   const [isLiked, setIsLiked] = useState(false);
@@ -143,28 +144,30 @@ function DetailFeedInd() {
             </span>
           ))}
         </div>
+
         <div className="mt-[40px] flex flex-wrap">
-        {
-          tagDatas.map((tagData, dataIndex) => (
-            tagData.title.map((_, itemIndex) => (
-              <div className="border rounded flex-grow mr-4 mb-4 p-2 text-sm" key={`${dataIndex}-${itemIndex}`}>
-                <div className="flex">
-                  <div className="flex-none">제품명 : </div>
-                  <div className="flex-grow font-bold ">{tagData.title[itemIndex]}</div>
+          {
+            tagDatas.map((tagData, dataIndex) => (
+              tagData.title.map((_, itemIndex) => (
+                <div className="border rounded flex-grow mr-4 mb-4 p-2 text-sm" key={`${dataIndex}-${itemIndex}`}>
+                  <div className="flex">
+                    <div className="flex-none" style={{ width: "60px" }}>제품명 : </div>
+                    <div className="flex-grow font-bold">{tagData.title[itemIndex]}</div>
+                  </div>
+                  <div className="flex">
+                    <div className="flex-none " style={{ width: "60px" }}>가격 : </div>
+                    <div>₩ {tagData.price[itemIndex]}</div>
+                  </div>
+                  <div className="flex">
+                    <div className="flex-none" style={{ width: "60px" }}>사이즈 : </div>
+                    <div className="text-btn-color">{tagData.size[itemIndex]}</div>
+                  </div>
                 </div>
-                <div className="flex">
-                  <div className="flex-none">가격 : </div>
-                  <div>₩ {tagData.price[itemIndex]}</div>
-                </div>
-                <div className="flex">
-                  <div className="flex-none">사이즈 : </div>
-                  <div className="text-btn-color">{tagData.size[itemIndex]}</div>
-                </div>
-              </div>
+              ))
             ))
-          ))
-        }
-      </div>
+          }
+        </div>
+
     </div>
 
       <div className="flex justify-end mt-4">
