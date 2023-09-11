@@ -18,6 +18,8 @@ function SignupPage() {
   const [isValidEmail, setIsValidEmail] = useState<boolean | null>(null);
   const [isValidPassWord, setIsValidPassword] = useState<boolean | null>(null);
   const [isValidNickname, setIsValidNickname] = useState<boolean | null>(null);
+  const [passwordConfirm, setPasswordConfirm] = useState<string>("");
+  const [isPasswordsMatch, setIsPasswordsMatch] = useState<boolean | null>(null);
   //회원가입 필수 입력
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -51,6 +53,11 @@ function SignupPage() {
   const handleBioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBio(e.target.value);
   };
+
+  const handlePasswordConfirmChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPasswordConfirm(e.target.value);
+  };
+
   const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = parseFloat(e.target.value);
     if (!isNaN(inputValue)) {
@@ -101,6 +108,13 @@ function SignupPage() {
     setIsValidPassword(null);
   };
 
+  //비밀번호 재확인 검사
+  const checkPasswordsMatch = () => {
+    setIsPasswordsMatch(password === passwordConfirm);
+  };
+  const clearPasswordsMatchValidation = () => {
+    setIsPasswordsMatch(null);
+  };
   //닉네임 유효성 검사
   const nicknameRegEx = /^[A-Za-z0-9]{6,20}$/;
 
@@ -119,7 +133,7 @@ function SignupPage() {
   const onSubmitHandler = async () => {
     //개인회원
     if (selectedType === "개인회원") {
-      if (isValidEmail && isValidPassWord && isValidNickname) {
+      if (isValidEmail && isValidPassWord && isValidNickname && isPasswordsMatch) {
         try {
           const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/join/user`, {
             email,
@@ -137,6 +151,8 @@ function SignupPage() {
           alert("올바른 이메일을 입력해주세요.");
         } else if (!isValidPassWord) {
           alert("올바른 비밀번호를 입력해주세요.");
+        } else if (!isPasswordsMatch) {
+          alert("비밀번호가 일치하지 않습니다.");
         } else if (!isValidNickname) {
           alert("올바른 닉네임을 입력해주세요.");
         }
@@ -144,13 +160,15 @@ function SignupPage() {
     }
     //기업회원
     else {
-      if (isValidEmail && isValidPassWord && isValidNickname) {
+      if (isValidEmail && isValidPassWord && isValidNickname && isPasswordsMatch) {
         setIsSubmitted(true);
       } else {
         if (!isValidEmail) {
           alert("올바른 이메일을 입력해주세요.");
         } else if (!isValidPassWord) {
           alert("올바른 비밀번호를 입력해주세요.");
+        } else if (!isPasswordsMatch) {
+          alert("비밀번호가 일치하지 않습니다.");
         } else if (!isValidNickname) {
           alert("올바른 닉네임을 입력해주세요.");
         }
@@ -194,7 +212,7 @@ function SignupPage() {
           console.error("Error:", error);
         }
       } else {
-        if (location === "") {
+        if (location.trim() === "") {
           alert("지역을 선택해주세요.");
         } else if (sport.trim() === "") {
           alert("스포츠 종목을 입력해주세요.");
@@ -255,7 +273,17 @@ function SignupPage() {
         {isValidPassWord === false && (
           <p className="text-[12px] text-isValid-text-red">유효하지 않은 비밀번호 형식입니다.</p>
         )}
-
+        <CommonInput
+          placeholder="비밀번호를 다시 입력해주세요."
+          label="비밀번호 확인"
+          type="password"
+          onChange={handlePasswordConfirmChange}
+          onBlur={checkPasswordsMatch}
+          onFocus={clearPasswordsMatchValidation}
+        />
+        {isPasswordsMatch === false && (
+          <p className="text-[12px] text-isValid-text-red">비밀번호가 일치하지 않습니다.</p>
+        )}
         <CommonInput
           placeholder="닉네임을 입력해주세요."
           label="닉네임"
