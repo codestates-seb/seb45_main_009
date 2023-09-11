@@ -249,11 +249,12 @@ const Feed = ({ selectedFilter }: FeedProps) => {
   return (
     <section className="flex justify-center flex-col items-center ">
       <div>
-        <div className="flex justify-end mr-4">
-          <Link to={currentFeed}>
-            <button className="px-8 py-2 rounded-xl mb-5 bg-feedbtn-color hover:bg-feedbtnhover-color">
-              피드 올리기
-            </button>
+        <div className="flex justify-center md:justify-end mr-4">
+          <Link
+            to={currentFeed}
+            className="fixed bottom-0 md:static px-8 py-2 rounded-xl mb-5 bg-feedbtn-color hover:bg-feedbtnhover-color"
+          >
+            피드 올리기
           </Link>
         </div>
 
