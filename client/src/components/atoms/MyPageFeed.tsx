@@ -27,15 +27,45 @@ const MyPageFeed = () => {
   const startIndex = (page - 1) * PAGE_SIZE;
   const chunkData = tempData.slice(0, startIndex + PAGE_SIZE);
 
+  const IntroductionCss =
+    " border border-gray-400 rounded-xl  p-10 h-full min-h-[200px] m-8";
+
+  const MainBodyCss = " flex justify-center mt-10 ";
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    console.log(windowWidth);
+
+    // 이벤트 리스너 등록
+    window.addEventListener("resize", handleResize);
+
+    // 컴포넌트가 언마운트될 때 이벤트 리스너 제거
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [windowWidth]);
+
   return (
-    <div>
-      <div className="flex justify-center mt-10">
-        <div className=" border border-gray-400 rounded-xl mr-20 p-10 h-full min-h-[200px] sticky top-24">
+    <section>
+      <div
+        className={`flex w-max-xl ${
+          windowWidth < 768 ? "flex-col" : "flex-row"
+        }  ${MainBodyCss} `}
+      >
+        <aside
+          className={` ${
+            windowWidth < 768 ? "" : " sticky top-24"
+          } md:${IntroductionCss}`}
+        >
           <div className="flex items-center flex-col mb-10">
             <img
               src={tempData[8].proFileImg}
               alt="myimg"
-              className="mb-5 w-[150px] border rounded-full "
+              className="mb-5 w-[10vw] border rounded-full "
             />
             <div className="font-bold text-xl">{tempData[8].userId}</div>
           </div>
@@ -52,21 +82,21 @@ const MyPageFeed = () => {
               <div className="max-w-[200]">안녕하세요</div>
             </div>
           </div>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-2 h-full mb-24">
+        </aside>
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 h-full mb-24">
           {chunkData.map((user: UserData, idx: number) => (
-            <div key={idx}>
+            <article key={idx} className="flex justify-center items-center">
               <img
                 src={user.feedImg}
                 alt={`ProfileImg of ${user.userId}`}
-                className="w-[200px] h-[200px] object-cover"
+                className="w-[80vw] h-[80vw] object-cover md:w-[25vw] md:h-[25vw] lg:w-[15vw] lg:h-[15vw]"
               ></img>
-            </div>
+            </article>
           ))}
-        </div>
+        </section>
       </div>
-      <div ref={ref}>gdgdgd</div>
-    </div>
+      <div ref={ref}></div>
+    </section>
   );
 };
 

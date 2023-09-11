@@ -118,16 +118,16 @@ const Filter = ({ setSelectedFilter }: FilterProps) => {
   }, [selectedExerciseFilters, selectedLocationFilters]);
 
   return (
-    <div className="max-w-6xl my-7 w-full flex items-center">
+    <section className="max-w-6xl my-7 w-full flex items-center">
       <BsFilter
-        size="50"
+        size="40"
         onClick={filterClickHandler}
-        className="hover:cursor-pointer mr-5"
+        className="hover:cursor-pointer mr-5 "
       />
 
       {showFilters && (
         <div className=" animate-slide-down">
-          <div>
+          <div className="max-w-[90vw]">
             {exerciseFilters.map((filter, index) => (
               <Filterbtn
                 key={index}
@@ -137,18 +137,20 @@ const Filter = ({ setSelectedFilter }: FilterProps) => {
               />
             ))}
           </div>
-          {showLocationFilters &&
-            locationFilters.map((filter, index) => (
-              <Filterbtn
-                key={index}
-                name={filter}
-                isSelected={selectedLocationFilters.includes(filter)}
-                onClick={() => handleLocationFilterButtonClick(filter)}
-              />
-            ))}
+          <div className="max-w-[90vw]">
+            {showLocationFilters &&
+              locationFilters.map((filter, index) => (
+                <Filterbtn
+                  key={index}
+                  name={filter}
+                  isSelected={selectedLocationFilters.includes(filter)}
+                  onClick={() => handleLocationFilterButtonClick(filter)}
+                />
+              ))}
+          </div>
         </div>
       )}
-    </div>
+    </section>
   );
 };
 

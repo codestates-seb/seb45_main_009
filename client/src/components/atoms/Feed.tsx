@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
+import globalAxios from "../../data/data";
 
 interface UserData {
   proFileImg: string;
@@ -63,7 +64,7 @@ const tempData: UserData[] = [
     userInfo: "오늘은 날씨가 좋네요",
     tags: "크로스핏",
     location: "인천",
-    },
+  },
   {
     proFileImg: "/asset/gym1.png",
     userId: "ID123ABC",
@@ -204,6 +205,8 @@ const Feed = ({ selectedFilter }: FeedProps) => {
 
   const [ref, inView] = useInView();
 
+  const [abc, setABC] = useState();
+
   useEffect(() => {
     if (inView) {
       setPage((prevPage) => prevPage + 1);
@@ -227,20 +230,37 @@ const Feed = ({ selectedFilter }: FeedProps) => {
   const currentDetail =
     location.pathname === "/" ? "/feeddetailind" : "/feeddetailcor";
 
+  const getMainListData = async () => {
+    try {
+      const response = await globalAxios.get("/feed/detail/1");
+      const getData = response.data;
+      //setAllData(getData.data);
+      setABC(getData.data);
+      console.log("response >>", getData);
+    } catch (err) {
+      console.log("Error >>", err);
+    }
+  };
+
+  useEffect(() => {
+    getMainListData();
+  }, []);
+
   return (
-    <div className="flex justify-center flex-col items-center ">
-      <div className="">
-        <div className="flex justify-end mr-4">
-          <Link to={currentFeed}>
-            <button className="px-8 py-2 rounded-xl mb-5 bg-feedbtn-color hover:bg-feedbtnhover-color">
-              피드 올리기
-            </button>
+    <section className="flex justify-center flex-col items-center ">
+      <div>
+        <div className="flex justify-center md:justify-end mr-4">
+          <Link
+            to={currentFeed}
+            className="fixed bottom-0 md:static px-8 py-2 rounded-xl mb-5 bg-feedbtn-color hover:bg-feedbtnhover-color"
+          >
+            피드 올리기
           </Link>
         </div>
 
-        <div className="grid grid-cols-4 gap-4  mb-24">
-          {filteredData.map((user, idx) => (
-            <div key={idx} className=" mx-4 mb-4">
+        <section className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4  mb-24">
+          {filteredData.map((user) => (
+            <article key={user.userId} className="  mb-4 min-w-[250px]">
               <div className="flex mb-4">
                 <img
                   src={user.proFileImg}
@@ -257,17 +277,17 @@ const Feed = ({ selectedFilter }: FeedProps) => {
                   <img
                     src={user.feedImg}
                     alt={`FeedImg of ${user.userId}`}
-                    className="w-[250px] h-[300px] object-cover"
+                    className="w-[13vw] h-[30vh] object-cover min-w-[250px] border"
                   />
                 </div>
               </Link>
-            </div>
+            </article>
           ))}
-        </div>
+        </section>
       </div>
 
-      <div ref={ref}>xxxxxxxxxxxxxxxxxxx</div>
-    </div>
+      <div ref={ref}></div>
+    </section>
   );
 };
 

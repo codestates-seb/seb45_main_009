@@ -12,16 +12,13 @@ const MyPage = () => {
   const { page } = useParams();
 
   return (
-    <div>
-      <MyPageTop />
+    <>
       {page === "feed" && <MyPageFeed />}
       {page === "follow" && <MyPageFollow />}
       {page === "edit" && <MyPageEditInfo />}
       {page === "changepassword" && <ChangePassword />}
       {page === "withdraw" && <Withdraw />}
-
-      <Up />
-    </div>
+    </>
   );
 };
 
