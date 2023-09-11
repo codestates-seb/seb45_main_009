@@ -6,16 +6,14 @@ import Comment from "../components/atoms/Comment";
 
 function FeedDetailPageInd() {
   return (
-    <div className="w-[1000px] ml-[100px] ">
+    <div>
       <BackButton />
       <ProfileInd />
-        <div className=" mt-[60px] flex justify-center">
-          <div>
-            <DetailFeed />
-            <Comment />
-          </div>
-        </div>
+      <div className=" mt-[60px]">
+        <DetailFeed />
+        <Comment />
       </div>
+    </div>
   );
 }
 

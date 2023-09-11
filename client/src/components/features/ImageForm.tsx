@@ -16,6 +16,7 @@ interface TagData {
 }
 
 interface ImageData {
+  file: File | null;
   src: string;
   tags: TagData[];
 }
@@ -26,36 +27,59 @@ function ImageForm({ previewImg, setPreviewImg }: ImageFormProps) {
   const [selectedTagIndex, setSelectedTagIndex] = useState<number | null>(null);
 
   const insertImg = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (previewImg.length >= 5) return;
-    let reader = new FileReader();
-    if (e.target.files && e.target.files[0]) {
-      reader.readAsDataURL(e.target.files[0]);
-    }
-    reader.onloadend = () => {
-      const previewImgUrl = reader.result;
-      if (typeof previewImgUrl === "string") {
-        const newImgData: ImageData = {
-          src: previewImgUrl,
-          tags: [],
-        };
-        setPreviewImg([...previewImg, newImgData]);
-        setSelectedImgIndex(previewImg.length);
+    setIsTaggingMode(false);
+    if (e.target.files) {
+      // 선택된 파일들을 배열로 가져옴
+      const files = Array.from(e.target.files);
+
+      //5MB
+      const maxFileSize = 5 * 1024 * 1024;
+      //파일 크기 검사
+      const oversizedFiles = files.filter((file) => file.size > maxFileSize);
+      if (oversizedFiles.length > 0) {
+        alert("파일 크기가 너무 큽니다! 5MB 이하의 사진만 업로드해주세요.");
+        return;
       }
-    };
-    reader.onerror = () => {
-      alert("사진 업로드 실패, 잠시 후 다시 시도해 주세요");
-      console.error("An error occurred while reading the file.");
-    };
+
+      // 이미 추가된 이미지와 새로 선택된 이미지의 합계가 5를 초과하는 경우, 초과분 제거
+      const availableSlots = 5 - previewImg.length;
+      if (files.length > availableSlots) {
+        files.splice(availableSlots, files.length - availableSlots);
+      }
+
+      files.forEach((file) => {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+
+        reader.onloadend = () => {
+          const previewImgUrl = reader.result;
+          if (typeof previewImgUrl === "string") {
+            const newImgData: ImageData = {
+              file: file,
+              src: previewImgUrl,
+              tags: [],
+            };
+            setPreviewImg((prev) => [...prev, newImgData]);
+            setSelectedImgIndex(previewImg.length);
+          }
+        };
+
+        reader.onerror = () => {
+          alert("사진 업로드 실패, 잠시 후 다시 시도해 주세요");
+          console.error("An error occurred while reading the file.");
+        };
+      });
+    }
   };
 
   const handleImageClick = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
     if (!isTaggingMode || selectedImgIndex === null) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
 
+    const rect = e.currentTarget.getBoundingClientRect();
+    const xRatio = (e.clientX - rect.left) / rect.width;
+    const yRatio = (e.clientY - rect.top) / rect.height;
     const updatedImg = { ...previewImg[selectedImgIndex] };
-    updatedImg.tags.push({ x, y });
+    updatedImg.tags.push({ x: xRatio, y: yRatio });
     const updatedPreview = [...previewImg];
     updatedPreview[selectedImgIndex] = updatedImg;
 
@@ -129,7 +153,7 @@ function ImageForm({ previewImg, setPreviewImg }: ImageFormProps) {
         <img
           src={previewImg.length > 0 ? selectedImg : upload}
           alt="selectedImg"
-          className="w-full h-auto object-contain"
+          className="w-[420px] h-auto object-contain "
           onClick={handleImageClick}
         />
         {previewImg.length !== 0 ? (
@@ -146,11 +170,21 @@ function ImageForm({ previewImg, setPreviewImg }: ImageFormProps) {
             <React.Fragment key={index}>
               <AiFillPlusCircle
                 className="text-[#5ea1db] hover:text-[#3688cf] cursor-pointer w-5 h-5"
-                style={{ position: "absolute", top: tag.y, left: tag.x }}
+                style={{
+                  position: "absolute",
+                  top: `calc(${tag.y * 100}% - 12px)`,
+                  left: `calc(${tag.x * 100}% - 12px)`,
+                }}
                 onClick={() => handleTagSelect(index)}
               />
               {selectedTagIndex === index && (
-                <div style={{ position: "absolute", top: tag.y + 18, left: tag.x - 62 }}>
+                <div
+                  style={{
+                    position: "absolute",
+                    top: `calc(${tag.y * 100}% + 6px)`,
+                    left: `calc(${tag.x * 100}% - 74px)`,
+                  }}
+                >
                   <BallonTag
                     data={tag.data}
                     onDelete={() => deleteTag(index)}
@@ -193,6 +227,7 @@ function ImageForm({ previewImg, setPreviewImg }: ImageFormProps) {
           accept="image/*"
           className="absolute inset-0 overflow-hidden h-0 w-0"
           onChange={insertImg}
+          multiple
         />
       </form>
     </div>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Filterbtn from "./Filterbtn";
+import { BsFilter } from "react-icons/bs";
 
 const locationFilters = [
   "전체",
@@ -113,20 +114,20 @@ const Filter = ({ setSelectedFilter }: FilterProps) => {
       selectedExerciseFilters.length === 0 ? ["전체"] : selectedExerciseFilters;
     const selectedLocations =
       selectedLocationFilters.length === 0 ? ["전체"] : selectedLocationFilters;
-    setSelectedFilter(selectedLocations, selectedExercises);
+    setSelectedFilter(selectedExercises, selectedLocations);
   }, [selectedExerciseFilters, selectedLocationFilters]);
-  // console.log(selectedLocationFilters, selectedExerciseFilters);
+
   return (
-    <div className="max-w-6xl my-7 w-full flex items-center">
-      <img
-        src="/asset/filter.png"
-        alt="filter"
+    <section className="max-w-6xl my-7 w-full flex items-center">
+      <BsFilter
+        size="40"
         onClick={filterClickHandler}
-        className="hover:cursor-pointer mr-5"
+        className="hover:cursor-pointer mr-5 "
       />
+
       {showFilters && (
         <div className=" animate-slide-down">
-          <div>
+          <div className="max-w-[90vw]">
             {exerciseFilters.map((filter, index) => (
               <Filterbtn
                 key={index}
@@ -136,18 +137,20 @@ const Filter = ({ setSelectedFilter }: FilterProps) => {
               />
             ))}
           </div>
-          {showLocationFilters &&
-            locationFilters.map((filter, index) => (
-              <Filterbtn
-                key={index}
-                name={filter}
-                isSelected={selectedLocationFilters.includes(filter)}
-                onClick={() => handleLocationFilterButtonClick(filter)}
-              />
-            ))}
+          <div className="max-w-[90vw]">
+            {showLocationFilters &&
+              locationFilters.map((filter, index) => (
+                <Filterbtn
+                  key={index}
+                  name={filter}
+                  isSelected={selectedLocationFilters.includes(filter)}
+                  onClick={() => handleLocationFilterButtonClick(filter)}
+                />
+              ))}
+          </div>
         </div>
       )}
-    </div>
+    </section>
   );
 };
 

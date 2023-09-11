@@ -1,5 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { AiFillGithub } from "react-icons/ai";
+import { LuMail } from "react-icons/lu";
+import { useLocation } from "react-router-dom";
 
 const members = [
   { name: "손승범", github: "깃허브링크1", mail: "이메일주소1" },
@@ -12,25 +15,34 @@ const members = [
 ];
 
 function Footer() {
+  //oauthloading에서 제외
+  const location = useLocation();
+  if (location.pathname === "/oauthloading") {
+    return null;
+  }
+
   return (
-    <div className="flex justify-center items-center  bg-slate-200 absolute bottom-0 w-full mt-5 ">
+    <footer className="flex justify-center items-center  bg-slate-200  min-h-[80px] ">
       <Link to={"/"}>
-        <div className=" mr-44 hover:cursor-pointer">
-          <img src="/asset/fitfolio.png" alt="logo" />
+        <div className="hover:cursor-pointer md:mr-4">
+          <img src="/asset/fitfolio.svg" alt="logo" />
         </div>
       </Link>
-      <div className="flex justify-center">
+      <div className="flex justify-center text-lg">
         {members.map((member, index) => (
-          <div key={index} className="mx-9">
-            <p>{member.name}</p>
-            <div className="flex">
-              <img className="mr-2" src="asset/github.png" alt="githubimg" />
-              <img src="asset/mail.png" alt="mailimg" />
+          <div
+            key={index}
+            className="text-[0.5rem] mr-1 font-bold sm:mr-2 sm:text-sm md:mr-4 md:text-base lg:mr-8 lg:text-lg"
+          >
+            <p className="">{member.name}</p>
+            <div className="flex justify-between ">
+              <AiFillGithub size={15} />
+              <LuMail size={15} />
             </div>
           </div>
         ))}
       </div>
-    </div>
+    </footer>
   );
 }
 

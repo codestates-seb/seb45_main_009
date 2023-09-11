@@ -1,7 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
+import { BiArrowBack } from 'react-icons/bi';
 
 function BackButton() {
 
@@ -9,13 +7,12 @@ function BackButton() {
   const navigate = useNavigate();
   const handleClick =() =>{ navigate(-1);}
 
-  return(
+  return(  
       <button
-            className="w-10 h-10 rounded-full" 
+            className="w-10 h-10 rounded-full text-2xl sm:px-8 lg:mx-20 m-2" 
             onClick={handleClick}>
-                <FontAwesomeIcon icon={faArrowLeft} />
+              <BiArrowBack />
       </button>
-
   ) 
 }
 
