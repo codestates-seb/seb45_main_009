@@ -135,15 +135,34 @@ function SignupPage() {
     if (selectedType === "개인회원") {
       if (isValidEmail && isValidPassWord && isValidNickname && isPasswordsMatch) {
         try {
-          const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/join/user`, {
+          const formData = new FormData();
+
+          // requestBody 부분 추가
+          const requestBodyData = {
             email,
             password,
             nickname,
+          };
+
+          const blob = new Blob([JSON.stringify(requestBodyData)], {
+            type: "application/json",
+          });
+          formData.append("requestBody", blob);
+
+          const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/join/user`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
           });
           console.log("response:", response);
           setIsSubmitted(true);
-        } catch (error) {
+        } catch (error: any) {
           //에러 처리 로직..
+          if (error.response.data.message === "회원이 존재합니다") {
+            alert("중복된 이메일입니다");
+          } else if (error.response.data.message === "닉네임이 존재합니다") {
+            alert("중복된 닉네임입니다");
+          }
           console.error("Error:", error);
         }
       } else {
@@ -176,6 +195,10 @@ function SignupPage() {
     }
   };
 
+  //imgProps
+  const [previewImg, setPreviewImg] = useState<ImageData | null>(null);
+  useEffect(() => console.log(previewImg), [previewImg]);
+
   const onAdditionSubmitHandler = async () => {
     if (selectedType === "개인회원") {
       try {
@@ -194,9 +217,18 @@ function SignupPage() {
     }
     //기업회원
     else {
-      if (location.trim() !== "" && sport.trim() !== "" && bio.trim() !== "" && priceInfo.trim() !== "") {
+      if (
+        location.trim() !== "" &&
+        sport.trim() !== "" &&
+        bio.trim() !== "" &&
+        priceInfo.trim() !== "" &&
+        previewImg !== null
+      ) {
         try {
-          const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/join/store`, {
+          const formData = new FormData();
+
+          // requestBody 부분 추가
+          const requestBodyData = {
             email,
             password,
             nickname,
@@ -204,6 +236,20 @@ function SignupPage() {
             location,
             bio,
             price: priceInfo,
+          };
+
+          const blob = new Blob([JSON.stringify(requestBodyData)], {
+            type: "application/json",
+          });
+          formData.append("requestBody", blob);
+
+          if (previewImg && previewImg.file) {
+            formData.append("imageUrl", previewImg.file);
+          }
+          const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/join/store`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
           });
           console.log("response:", response);
           navigate("/login");
@@ -220,13 +266,12 @@ function SignupPage() {
           alert("기업소개를 작성해주세요.");
         } else if (priceInfo.trim() === "") {
           alert("가격 정보를 입력해주세요.");
+        } else if (previewImg === null) {
+          alert("사진을 등록해주세요.");
         }
       }
     }
   };
-
-  //imgProps
-  const [previewImg, setPreviewImg] = useState<ImageData | null>(null);
 
   if (isSubmitted) {
     return (
