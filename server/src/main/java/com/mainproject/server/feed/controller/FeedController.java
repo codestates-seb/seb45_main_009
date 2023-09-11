@@ -6,7 +6,7 @@ import com.mainproject.server.feed.dto.FeedResponseDto;
 import com.mainproject.server.feed.enitiy.Feed;
 import com.mainproject.server.feed.mapper.FeedMapper;
 import com.mainproject.server.feed.service.FeedService;
-import com.mainproject.server.user.service.UserService;
+import com.mainproject.server.imagetag.mapper.ImageTagMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +20,7 @@ public class FeedController {
     private final FeedService feedService;
     private final FeedMapper feedMapper;
 
-    public FeedController(FeedService feedService, FeedMapper feedMapper, UserService userService) {
+    public FeedController(FeedService feedService, FeedMapper feedMapper) {
         this.feedService = feedService;
         this.feedMapper = feedMapper;
     }

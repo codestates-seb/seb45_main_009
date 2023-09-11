@@ -5,9 +5,9 @@ import com.mainproject.server.exception.ExceptionCode;
 import com.mainproject.server.feed.enitiy.Feed;
 import com.mainproject.server.feed.repository.FeedRepository;
 import com.mainproject.server.image.entity.Image;
+import com.mainproject.server.image.repository.ImageRepository;
 import com.mainproject.server.image.service.ImageService;
 import com.mainproject.server.user.entity.User;
-import com.mainproject.server.user.repository.UserRepository;
 import com.mainproject.server.user.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,14 +22,16 @@ public class FeedService {
     private final FeedRepository feedRepository;
     private final ImageService imageService;
     private final UserService userService;
+    private final ImageRepository imageRepository;
 
-    public FeedService(FeedRepository feedRepository, ImageService imageService, UserService userService) {
+    public FeedService(FeedRepository feedRepository, ImageService imageService, UserService userService, ImageRepository imageRepository) {
         this.feedRepository = feedRepository;
         this.imageService = imageService;
         this.userService = userService;
+        this.imageRepository = imageRepository;
     }
 
-    //피드 등록
+    // 피드 등록
     public Feed createFeed(long userId, Feed feed, List<MultipartFile> imageFiles) {
         // 현재 사용자 가져오기
         User findCreateUser = userService.findVerifiedUser(userId);
@@ -48,14 +50,20 @@ public class FeedService {
                     .feed(savedFeed)    // 이미지와 연결할 피드 설정 (자바 엔티티 = 데이터베이스 id)
                     .build();
 
-            // 이미지 객체를 피드에 추가
-            savedFeed.getImages().add(image);
-        }
+            // 이미지를 데이터베이스에 저장
+            Image savedImage = imageRepository.save(image);
 
+            // 이미지 객체를 피드에 추가
+            savedFeed.getImages().add(savedImage);
+
+            // 이미지 ID를 이미지 객체에서 다시 설정
+            image.setImageId(savedImage.getImageId());
+        }
         return feedRepository.save(savedFeed);
     }
 
-    // 피드 수정(단일 이미지 수정)
+
+    // 피드 수정(단일 이미지만 수정 - 이미지 태그도 새로 생성)
     public Feed updateFeedImage(long userId, Feed feed, MultipartFile imageFile, Long imageIdToUpdate) {
         // 현재 사용자 가져오기
         User currentUser = userService.findVerifiedUser(userId);
@@ -76,20 +84,22 @@ public class FeedService {
             if (imageId.equals(imageIdToUpdate) && imageFile != null) {
                 String imageUrl = imageService.updateImage(imageId, imageFile);
                 updatedImageUrls.add(imageUrl);
+
+                // 이미지 객체를 업데이트
+                Image updatedImage = imageRepository.save(image);
+
+                // 이미지 객체를 다시 추가하는 대신, 기존 이미지를 업데이트한 이미지로 대체합니다.
+                int imageIndex = updateFeed.getImages().indexOf(image);
+                updateFeed.getImages().set(imageIndex, updatedImage);
+
             } else {
                 updatedImageUrls.add(image.getImageUrl());
             }
         }
 
-        // 업데이트된 이미지 URL 적용
-        for (int imageIndex = 0; imageIndex < updateFeed.getImages().size(); imageIndex++) {
-            updateFeed.getImages().get(imageIndex).setImageUrl(updatedImageUrls.get(imageIndex));
-        }
-
         // 관련 태그 및 수정 시간 업데이트
         updateFeed.setRelatedTags(feed.getRelatedTags());
         updateFeed.setModifiedAt(LocalDateTime.now());
-
         // 업데이트된 피드 저장
         return feedRepository.save(updateFeed);
     }

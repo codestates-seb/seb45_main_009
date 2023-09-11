@@ -29,9 +29,12 @@ public class FeedResponseDto {
         @Setter
         @Builder
         public static class ImageTagDto {
-            private Long x;
-            private Long y;
-            private String tagContent;
+            private Long imageTagId;
+            private String productName;
+            private String productPrice;
+            private String productInfo;
+            private Long positionX;
+            private Long positionY;
         }
     }
 }

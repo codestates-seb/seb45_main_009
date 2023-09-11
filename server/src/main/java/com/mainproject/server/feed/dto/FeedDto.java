@@ -1,5 +1,6 @@
 package com.mainproject.server.feed.dto;
 
+import com.mainproject.server.imagetag.entity.ImageTag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,8 +18,7 @@ public class FeedDto {
 
         private String content;
         private List<String> relatedTags;
-
-//        private List<ImageTag> imageTags;
+        private List<ImageTag> imageTags;
     }
 
     @Getter
@@ -29,7 +29,6 @@ public class FeedDto {
         private long imageId;
         private String content;
         private List<String> relatedTags;
-
-//        private List<ImageTag> imageTags;
+        private List<ImageTag> imageTags;
     }
 }
