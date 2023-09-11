@@ -6,7 +6,6 @@ import { UserInfo } from "../../types/types";
 import { BiSearch } from "react-icons/bi/";
 import { IoNotificationsOutline } from "react-icons/io5/";
 import { RiMenuUnfoldFill, RiMenuFoldFill } from "react-icons/ri";
-import { useLocation } from "react-router-dom";
 
 interface RootState {
   login: {
@@ -18,8 +17,9 @@ interface RootState {
 function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector((state: RootState) => state.login.isAuthenticated);
-  const userInfo = useSelector((state: RootState) => state.login.userInfo);
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.login.isAuthenticated
+  );
 
   const logoutHandler = () => {
     dispatch(logout());
@@ -27,6 +27,7 @@ function Header() {
     sessionStorage.removeItem("user_info");
     navigate("/");
   };
+
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const isMobile = windowWidth < 768;
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -56,18 +57,15 @@ function Header() {
       closeModal();
     }
   };
-  //oauthloading에서 제외
-  const location = useLocation();
-  if (location.pathname === "/oauthloading") {
-    return null;
-  }
 
   return (
     <header className="flex justify-center items-center m-2">
       <Link to="/">
-        <div className="flex justify-center hover:cursor-pointer">
-          <img src="/asset/fitfolio.svg" alt="logo" />
-        </div>
+        {!isMobile && (
+          <div className="flex justify-center hover:cursor-pointer">
+            <img src="/asset/fitfolio.svg" alt="logo" />
+          </div>
+        )}
       </Link>
       <div className="flex items-center h-[3vh] w-[50vw] max-w-[500px] border rounded-3xl p-1 sm:mr-2 sm:h-[4vh]">
         <BiSearch size="24" />
@@ -76,15 +74,20 @@ function Header() {
           placeholder="검색하실 ID 또는 #태그를 입력하세요."
         />
       </div>
-
-      {isAuthenticated ? <span className="ml-2 text-[12px]">{userInfo?.userNickname}</span> : null}
       {isMobile ? (
         <>
           <div className="ml-3" onClick={toggleModal}>
-            {isModalOpen ? <RiMenuFoldFill size="24" /> : <RiMenuUnfoldFill size="24" />}
+            {isModalOpen ? (
+              <RiMenuFoldFill size="24" />
+            ) : (
+              <RiMenuUnfoldFill size="24" />
+            )}
           </div>
           {isModalOpen && (
             <div className="fixed top-0 right-0 bottom-0 left-0 bg-white z-50 flex flex-col items-center animate-slide-right">
+              <div className="flex justify-center hover:cursor-pointer">
+                <img src="/asset/fitfolio.svg" alt="logo" />
+              </div>
               {isAuthenticated ? (
                 <>
                   <button
@@ -97,7 +100,10 @@ function Header() {
                     로그아웃
                   </button>
                   <Link to="/mypage/:page">
-                    <button className="mb-4 hover:text-btn-color" onClick={handleMenuClick}>
+                    <button
+                      className="mb-4 hover:text-btn-color"
+                      onClick={handleMenuClick}
+                    >
                       마이페이지
                     </button>
                   </Link>
@@ -105,12 +111,18 @@ function Header() {
               ) : (
                 <>
                   <Link to="/login">
-                    <button className="my-4 hover:text-btn-color" onClick={handleMenuClick}>
+                    <button
+                      className="my-4 hover:text-btn-color"
+                      onClick={handleMenuClick}
+                    >
                       로그인
                     </button>
                   </Link>
                   <Link to="/signup">
-                    <button className="mb-4 hover:text-btn-color" onClick={handleMenuClick}>
+                    <button
+                      className="mb-4 hover:text-btn-color"
+                      onClick={handleMenuClick}
+                    >
                       회원가입
                     </button>
                   </Link>
@@ -145,12 +157,18 @@ function Header() {
         !isMobile && (
           <div className="flex">
             <Link to="/login">
-              <button className="text-xs mr-2 sm:mr-4 sm:text-base hover:text-btn-color" onClick={handleMenuClick}>
+              <button
+                className="text-xs mr-2 sm:mr-4 sm:text-base hover:text-btn-color"
+                onClick={handleMenuClick}
+              >
                 로그인
               </button>
             </Link>
             <Link to="/signup">
-              <button className="text-xs sm:text-base hover:text-btn-color" onClick={handleMenuClick}>
+              <button
+                className="text-xs sm:text-base hover:text-btn-color"
+                onClick={handleMenuClick}
+              >
                 회원가입
               </button>
             </Link>
