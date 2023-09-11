@@ -6,6 +6,8 @@ import com.mainproject.server.feed.dto.FeedResponseDto;
 import com.mainproject.server.feed.enitiy.Feed;
 import com.mainproject.server.feed.mapper.FeedMapper;
 import com.mainproject.server.feed.service.FeedService;
+import com.mainproject.server.imagetag.dto.ImageTagDto;
+import com.mainproject.server.imagetag.mapper.ImageTagMapper;
 import com.mainproject.server.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +21,12 @@ import java.util.List;
 public class FeedController {
     private final FeedService feedService;
     private final FeedMapper feedMapper;
+    private final ImageTagMapper imageTagMapper;
 
-    public FeedController(FeedService feedService, FeedMapper feedMapper, UserService userService) {
+    public FeedController(FeedService feedService, FeedMapper feedMapper, ImageTagMapper imageTagMapper) {
         this.feedService = feedService;
         this.feedMapper = feedMapper;
+        this.imageTagMapper = imageTagMapper;
     }
 
     // 피드 등록

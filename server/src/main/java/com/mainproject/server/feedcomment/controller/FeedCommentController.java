@@ -87,7 +87,6 @@ public class FeedCommentController {
     public ResponseEntity deleteComment(@LoginUserId Long userId,
                                         @PathVariable("feedcomment-id") long feedCommentId){
 
-
         // 코멘트 삭제 요청을 FeedCommentService에 전달
         feedCommentService.deleteFeedComment(userId, feedCommentId);
 

@@ -10,9 +10,10 @@ public enum ExceptionCode {
     NO_PERMISSION_EDITING_USER(403, "사용자 정보를 편집할 권한이 없습니다."),
     IMAGE_NOT_FOUND(404, "이미지를 찾을 수 없습니다."),
     IMAGE_UPLOAD_ERROR(500, "이미지 업로드 중 오류가 발생했습니다."),
+    IMAGE_TAG_NOT_FOUND(404, "이미지 태그를 찾을 수 없습니다."),
 
     INVALID_INPUT(400, "잘못된 입력입니다."),
-    INVALID_PASSWORD(400, "비밀번호가 유효하지 않습니다"), // 비밀번호 유효성 검사 실패 예외 코드 추가
+    INVALID_PASSWORD(400, "비밀번호가 유효하지 않습니다"), // 비밀번호 유효성 검사 실패 예외 코드 추가,
     FEED_NOT_FOUND(404, "피드를 찾을 수 없습니다."),
     COMMENT_NOT_FOUND(404,"코멘트를 찾을 수 없습니다."),
     NO_PERMISSION_EDITING_COMMENT(403, "코멘트를 편집할 권한이 없습니다."),

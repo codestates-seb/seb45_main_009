@@ -2,6 +2,8 @@ package com.mainproject.server.image.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import com.mainproject.server.exception.BusinessLogicException;
+import com.mainproject.server.exception.ExceptionCode;
 import com.mainproject.server.image.entity.Image;
 import com.mainproject.server.image.repository.ImageRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -65,7 +67,7 @@ public class ImageService {
     public Image findImage(long imageId) {
 
         Optional<Image> optionalImage = imageRepository.findById(imageId);
-        return optionalImage.orElseThrow(() -> new EntityNotFoundException("Image not found with ID : " + imageId));
+        return optionalImage.orElseThrow(() -> new BusinessLogicException(ExceptionCode.IMAGE_TAG_NOT_FOUND));
     }
 
     public void deleteImage(long imageId) {
