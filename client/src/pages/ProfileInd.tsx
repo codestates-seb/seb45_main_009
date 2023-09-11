@@ -5,7 +5,7 @@ import { AiFillHeart } from 'react-icons/ai';
 
 import BackButton from "../components/atoms/BackButton";
 
-let userData = [
+const userData = [
   {
     username: 'Lee seeun',
     useremail: 'lse0522@gmail.com',
@@ -52,7 +52,7 @@ const Modal = ({ onClose } :any) => {
     )
 };
 
-function Profile() {
+function ProfileInd() {
       const tempData = [
         {
           proFileImg: "/asset/profile.png",
@@ -292,4 +292,4 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default ProfileInd;
