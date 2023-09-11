@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const globalAxios = axios.create({
-  baseURL: "https://eeab-1-225-48-23.ngrok-free.app",
+  baseURL: "https://13.125.146.181:8080",
   timeout: 5000,
   headers: {
     "Content-Type": `application/json`,
