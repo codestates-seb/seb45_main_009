@@ -1,4 +1,3 @@
-import React from "react";
 import { useState, useRef, useEffect } from "react";
 import { FaEllipsisH } from 'react-icons/fa';
 
@@ -49,7 +48,7 @@ const Modal = ({ onClose } :any) => {
 };
 
 function ProfileCor() {
-  // 모달창 열기 닫기
+  // 모달창
   const [isModalOpen, setModalOpen] = useState(false);
 
   const handleOpenModal = () => {
@@ -62,10 +61,18 @@ function ProfileCor() {
   };
 
   // 팔로우
-  const followClick =() =>{
-    console.log('팔로우하기')
-  }
-// FaEllipsisH
+  const [isFollowing, setIsFollowing] = useState(false);
+
+  const followClick = () => {
+    if (isFollowing) {
+      console.log('팔로우 취소');
+    } else {
+      console.log('팔로우하기');
+    }
+    // 팔로우 상태 토글
+    setIsFollowing(!isFollowing);
+  };
+
 
 return(
 <div className='max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8'>
@@ -87,7 +94,9 @@ return(
   </div>
 
   <div className="flex items-center justify-end md:justify-start">
-    <button className="ml-[200px] mr-4 w-[100px] h-[30px] rounded-[4px] text-[14px] font-medium bg-btn-color text-white" onClick={followClick}>팔로우</button>
+    <button className="ml-[200px] mr-4 w-[100px] h-[30px] rounded-[4px] text-[14px] font-medium bg-btn-color text-white" onClick={followClick}>
+      {isFollowing ? '팔로잉' : '팔로우'} 
+    </button>
     <button onClick={handleOpenModal}  className='relative'><FaEllipsisH /></button>
     {isModalOpen && <Modal onClose={handleCloseModal} /> }
   </div>

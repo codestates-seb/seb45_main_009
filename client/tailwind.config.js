@@ -6,6 +6,7 @@ module.exports = {
     extend: {
       colors: {
         "btn-color": "#7FBCD9",
+        "tag-btn-color" : "#FEF000",
         "feedbtn-color": "#FFF99A",
         "feedbtnhover-color": "#FFF000",
         "modify-btn-color": "#97EBF0",

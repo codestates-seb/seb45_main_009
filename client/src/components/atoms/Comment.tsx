@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 
-
 function Comment() {
 
 
@@ -33,15 +32,14 @@ function Comment() {
         setIsComment(false)
       }
 
-
-    const handleSaveClick = () => {
-      setComment(prevArr => [commentInputValue, ...prevArr]);
-        const now = new Date();
-        const dateString = now.toLocaleDateString();
-        const timeString = now.toLocaleTimeString(); 
-        setCommentDate(dateArr => [dateString, ...dateArr]);
-        setCurrentTime(timeArr => [timeString, ...timeArr]);
-    }
+  const handleSaveClick = () => {
+    setComment((prevArr) => [ ...prevArr,commentInputValue]);
+    const now = new Date();
+    const dateString = now.toLocaleDateString();
+    const timeString = now.toLocaleTimeString();
+    setCommentDate((dateArr) => [...dateArr, dateString]);
+    setCurrentTime((timeArr) => [ ...timeArr, timeString]);
+  };
 
     const handleDeleteComment = (index:number) =>{
         console.log('삭제버튼 클릭')

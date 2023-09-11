@@ -1,5 +1,3 @@
-// import CommonInput from '../components/atoms/CommonInput'
-import BlueButton from '../components/atoms/BlueButton' 
 import React, { useState } from 'react';
 import UserInfoForm from  '../components/atoms/UserIndfrom';
 import UserCorForm from  '../components/atoms/UserCorfrom';
