@@ -2,6 +2,7 @@ package com.mainproject.server.auth.handler;
 
 import com.mainproject.server.auth.jwt.JwtTokenizer;
 import com.mainproject.server.auth.utils.CustomAuthorityUtils;
+import com.mainproject.server.image.entity.Image;
 import com.mainproject.server.user.entity.User;
 import com.mainproject.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -68,7 +69,12 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         User user = new User();
         user.setNickname(name);
         user.setEmail(email+"1");
-        user.setProfileimg(image);
+
+        // 프로필 이미지 URL을 문자열로 저장
+        Image profileimg = new Image();
+        profileimg.setImageUrl(image);
+        profileimg.setUser(user);
+        user.setProfileimg(profileimg);
 
         return user;
     }

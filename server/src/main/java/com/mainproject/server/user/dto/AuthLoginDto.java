@@ -3,6 +3,8 @@ package com.mainproject.server.user.dto;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.mainproject.server.image.entity.Image;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +21,6 @@ public class AuthLoginDto {
     @Size(min = 2, max = 20)
     private String name;
 
-    private String profileimg;
+    private Image profileimg;
 
 }
