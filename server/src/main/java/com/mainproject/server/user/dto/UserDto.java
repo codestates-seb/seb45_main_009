@@ -1,11 +1,12 @@
 package com.mainproject.server.user.dto;
 
-import com.mainproject.server.user.entity.User;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.mainproject.server.image.entity.Image;
 import lombok.*;
 
 
-import javax.persistence.ElementCollection;
-import javax.persistence.FetchType;
+
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
@@ -41,7 +42,7 @@ public class UserDto {
 
         private String location;
 
-        private String profileimg;
+        private Image profileimg;
 
         @Size(max = 200)
         private String price;
@@ -68,22 +69,21 @@ public class UserDto {
     @AllArgsConstructor
     public static class PatchDto{
         private Long userId;
-
-
         private String nickname;
-
-        private String profileimg;
+        private Image profileimg;
         private String price;
         private String bio;
         private int height;
         private int weight;
-
         private String location;
-
         private String password;
+<<<<<<< be-feat/follow
+        private String sport;
+=======
 
         private String sport;
 
+>>>>>>> dev-be
 
     }
 
@@ -93,6 +93,7 @@ public class UserDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class ResponseDto {
         private Long userId;
         private String nickname;
@@ -107,9 +108,8 @@ public class UserDto {
         private String location;
         private String sport;
         private List<String> roles = new ArrayList<>();
-
-
-
+//        private List<Long> followerList; // 팔로워 리스트
+//        private List<Long> followList;   // 팔로우 리스트
 
     }
 
