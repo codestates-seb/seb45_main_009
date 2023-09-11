@@ -10,6 +10,7 @@ public enum ExceptionCode {
     NO_PERMISSION_EDITING_USER(403, "사용자 정보를 편집할 권한이 없습니다."),
     IMAGE_NOT_FOUND(404, "이미지를 찾을 수 없습니다."),
     IMAGE_UPLOAD_ERROR(500, "이미지 업로드 중 오류가 발생했습니다."),
+    IMAGE_TAG_NOT_FOUND(404, "이미지 태그를 찾을 수 없습니다."),
     SELF_FOLLOW_NOT_ALLOWED(400, "본인을 팔로우할 수 없습니다."),
 
     INVALID_INPUT(400, "잘못된 입력입니다."),
