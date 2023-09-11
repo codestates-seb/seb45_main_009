@@ -1,12 +1,11 @@
 package com.mainproject.server.image.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.mainproject.server.feed.enitiy.Feed;
-import com.mainproject.server.imagetag.entity.ImageTag;
+import com.mainproject.server.user.entity.User;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @NoArgsConstructor
@@ -22,18 +21,19 @@ public class Image {
     @JoinColumn
     private String imageUrl;
 
-    //feed와 매핑(다대일)
     @ManyToOne
     @JoinColumn(name = "feedId")
     private Feed feed;
 
-    // imageTag와 매핑(일대다)
-    @OneToMany(mappedBy = "image", cascade = CascadeType.ALL)
-    private List<ImageTag> imageTags = new ArrayList<>();
+    @OneToOne
+    @JoinColumn(name = "userId") // User와의 관계를 설정
+    @JsonBackReference // // User와의 관계를 설정
+    private User user;
 
     public static class Builder {
         private String imageUrl;
         private Feed feed;
+        private User user;
 
         public Builder imageUrl(String imageUrl) {
             this.imageUrl = imageUrl;
@@ -45,10 +45,16 @@ public class Image {
             return this;
         }
 
+        public Builder user(User user){
+            this.user = user;
+            return this;
+        }
+
         public Image build() {
             Image image = new Image();
             image.setImageUrl(this.imageUrl);
             image.setFeed(this.feed);
+            image.setUser(this.user);
             return image;
         }
     }
