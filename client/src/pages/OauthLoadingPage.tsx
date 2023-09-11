@@ -36,25 +36,25 @@ const OauthLoadingPage = () => {
         window.location.href = "/login";
       } else {
         //서버로 정보 보내기
-        const url = "URL";
-        const serverLoginResponse = await axios.post(`${url}/kakao`, {
+        console.log(kakaoUserInfoResponse);
+        const serverResponse = await axios.post(`${process.env.REACT_APP_BASE_URL}/kakao`, {
           email: kakaoemail,
           profileimg: kakaoimg,
         });
-
+        console.log(serverResponse);
         //서버에서 정보 받아서 저장-자체 로그인과 동일
-        const accessToken = serverLoginResponse.headers["Authorization"];
-        const userType = serverLoginResponse.headers["Roles"][0];
-        const userNickname = serverLoginResponse.headers["Nickname"];
+        const accessToken = serverResponse.headers["authorization"];
+        const rolesString = serverResponse.headers["roles"];
+        const userType = rolesString.slice(1, -1);
+        const userNickname = serverResponse.headers["nickname"];
         const userInfo: UserInfo = { userType, userNickname };
-
         sessionStorage.setItem("access_token", accessToken);
         const userInfoString = JSON.stringify(userInfo);
         sessionStorage.setItem("user_info", userInfoString);
 
         dispatch(login({ userInfo }));
 
-        navigate("/login");
+        navigate("/");
       }
     } catch (error) {
       console.error("OAuth login error:", error);
