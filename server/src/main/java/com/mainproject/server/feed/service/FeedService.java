@@ -63,7 +63,7 @@ public class FeedService {
     }
 
 
-    // 피드 수정(단일 이미지만 수정 - 이미지 태그도 새로 생성)
+    // 피드 수정(단일 이미지만 수정)
     public Feed updateFeedImage(long userId, Feed feed, MultipartFile imageFile, Long imageIdToUpdate) {
         // 현재 사용자 가져오기
         User currentUser = userService.findVerifiedUser(userId);
