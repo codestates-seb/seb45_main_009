@@ -20,7 +20,9 @@ function Header() {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state: RootState) => state.login.isAuthenticated);
   const userInfo = useSelector((state: RootState) => state.login.userInfo);
-
+  console.log("Is authenticated:", isAuthenticated);
+  console.log("User Info:", userInfo);
+  console.log("Parsed user info:", userInfo);
   const logoutHandler = () => {
     dispatch(logout());
     sessionStorage.removeItem("access_token");
