@@ -228,61 +228,67 @@ function Profile() {
 
 
   return (
-    <div >
-      <BackButton />
-      <div className='max-w-screen-lg mx-auto px-4 sm:px-4 lg:px-8'>
-        <div className="grid md:grid-cols-2 gap-4 ">
+    <div className="flex justify-center min-h-screen">
+    <BackButton />
+    <div className='max-w-screen-lg mx-auto px-4 sm:px-4 lg:px-8 mt-[100px]'>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
 
         <div className="flex items-center ">
           <img src={userData[0].userphoto} className="w-[80px] h-[80px] rounded-full mr-4 " />
           
           <div className="flex flex-col">
-          
             <div className="font-bold text-xl ">{userData[0].username}</div>
             <div className="font-bold text-gray-400 text-sm flex">
               <div className='mr-[4px]'>{userData[0].userheight}cm</div>
               <div>{userData[0].userweight}kg</div>
             </div>
-
           </div>
         </div>
 
-        
-        <div className="flex items-center justify-end md:justify-start">
+        <div className="md:hidden flex items-center space-x-4">
+          <button className="w-[100px] h-[30px] rounded-[4px] text-[14px] font-medium bg-btn-color text-white" onClick={followClick}>
+            {isFollowing ? '팔로잉' : '팔로우'} 
+          </button>
+          <button onClick={handleOpenModal} className='relative'><FaEllipsisH /></button>
+          {isModalOpen && <Modal onClose={handleCloseModal} />}
+        </div>
+
+
+
+        <div className="hidden md:flex items-center justify-end md:justify-start">  
           <button className="ml-[200px] mr-4 w-[100px] h-[30px] rounded-[4px] text-[14px] font-medium bg-btn-color text-white" onClick={followClick}>
             {isFollowing ? '팔로잉' : '팔로우'} 
           </button>
           <button onClick={handleOpenModal}  className='relative'><FaEllipsisH /></button>
-          {isModalOpen && <Modal onClose={handleCloseModal} /> }
+          {isModalOpen && <Modal onClose={handleCloseModal} />}
         </div>
 
         <div className="mt-[20px]">
           <div className="flex items-center space-x-2">
-            <div className=" text-gray-400"><AiFillHeart /></div>
+            <div className="text-gray-400"><AiFillHeart /></div>
             <div>{userData[0].userexercise}</div>
           </div>
           <div className="flex items-center space-x-2">
-            <div className=" text-gray-400" ><FaUserAlt /></div>
+            <div className="text-gray-400"><FaUserAlt /></div>
             <div>{userData[0].userintroduction}</div>
           </div>
         </div>
         
-        </div>
+      </div>
 
-        <div className=" mt-[60px]">
-         {
-             tempData
-             .filter(item => item.userId === "ID888888")
-             .map((item, index) => (
-                 <div key={index} className='float-left flex '>
-                    <img className="w-[250px] h-[300px] mr-[24px] mb-[24px]" src={item.feedImg}/>
-                 </div>
-             ))
-          }
-        </div>
+      <div className=" mt-[60px]">
+       {
+           tempData
+           .filter(item => item.userId === "ID888888")
+           .map((item, index) => (
+               <div key={index} className='float-left flex '>
+                  <img className="w-[250px] h-[300px] mr-[24px] mb-[24px]" src={item.feedImg}/>
+               </div>
+           ))
+        }
       </div>
     </div>
-
+  </div>
   );
 }
 
