@@ -2,10 +2,13 @@ package com.mainproject.server.image.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.mainproject.server.feed.enitiy.Feed;
+import com.mainproject.server.imagetag.entity.ImageTag;
 import com.mainproject.server.user.entity.User;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @NoArgsConstructor
@@ -24,6 +27,9 @@ public class Image {
     @ManyToOne
     @JoinColumn(name = "feedId")
     private Feed feed;
+
+    @OneToMany(mappedBy = "image", cascade = CascadeType.ALL)
+    private List<ImageTag> imageTags = new ArrayList<>();
 
     @OneToOne
     @JoinColumn(name = "userId") // User와의 관계를 설정
