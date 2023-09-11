@@ -77,13 +77,8 @@ public class UserDto {
         private int weight;
         private String location;
         private String password;
-<<<<<<< be-feat/follow
-        private String sport;
-=======
-
         private String sport;
 
->>>>>>> dev-be
 
     }
 
