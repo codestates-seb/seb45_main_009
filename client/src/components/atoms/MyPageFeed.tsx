@@ -28,7 +28,7 @@ const MyPageFeed = () => {
   const chunkData = tempData.slice(0, startIndex + PAGE_SIZE);
 
   const IntroductionCss =
-    " border border-gray-400 rounded-xl  p-10 h-full min-h-[200px] m-8 w-[50%]";
+    " border border-gray-400 rounded-xl  p-10 h-full min-h-[200px] m-8 w-[50%] md:w-auto";
 
   const MainBodyCss = " flex justify-center mt-10 items-center md:items-start";
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
