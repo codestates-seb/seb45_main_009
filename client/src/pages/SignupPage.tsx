@@ -253,8 +253,13 @@ function SignupPage() {
           });
           console.log("response:", response);
           navigate("/login");
-        } catch (error) {
+        } catch (error: any) {
           //에러 처리 로직..
+          if (error.response.data.message === "회원이 존재합니다") {
+            alert("중복된 이메일입니다");
+          } else if (error.response.data.message === "닉네임이 존재합니다") {
+            alert("중복된 닉네임입니다");
+          }
           console.error("Error:", error);
         }
       } else {
