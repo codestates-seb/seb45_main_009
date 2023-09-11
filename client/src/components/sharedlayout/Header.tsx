@@ -17,10 +17,8 @@ interface RootState {
 function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.login.isAuthenticated
-  );
-
+  const isAuthenticated = useSelector((state: RootState) => state.login.isAuthenticated);
+  const userInfo = useSelector((state: RootState) => state.login.userInfo);
   const logoutHandler = () => {
     dispatch(logout());
     sessionStorage.removeItem("access_token");
