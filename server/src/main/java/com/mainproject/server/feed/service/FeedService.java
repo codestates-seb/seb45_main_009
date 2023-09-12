@@ -187,6 +187,7 @@ public class FeedService {
         for (Image image : images) {
             imageService.deleteImage(image.getImageId());
         }
+        currentUser.hasDeletedFeed(); // 피드 카운트 감소
 
         feedRepository.delete(deletedFeed);
     }
