@@ -4,7 +4,6 @@ import { RiAlarmWarningFill } from "react-icons/ri";
 import { AiFillPlusCircle } from "react-icons/ai";
 import React from "react";
 
-
 function TagModal({
   title,
   size,
@@ -88,40 +87,6 @@ function DetailFeedInd() {
     tagIndex: number;
   } | null>(null);
 
-  type ResponseDataType = {
-    feedId: number;
-    content: string;
-    relatedTags: string[];
-    images: Array<{
-      imageId: number;
-      imageUrl: string;
-      imageTags: any[];
-    }>;
-  };
-
-  // api 불러오기
-  // 피드 가져오기
-  const [responseData, setResponseData] = useState<ResponseDataType | null>(null);
-
-  const fetchData = async () => {
-    try {
-      // 피드 가져오기
-      const response = await fetch('http://13.125.146.181:8080/feed/detail/8');
-      const data = await response.json();
-      setResponseData(data);
-
-    } catch (error) {
-      console.error("Error fetching the data:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-
-
-
   return (
     <div className="w-full sm:max-w-screen-sm  mx-auto px-4 sm:px-4 lg:px-8">
       {feedData.photo.map((photo, photoIndex) => (
@@ -157,9 +122,9 @@ function DetailFeedInd() {
         </div>
       ))}
       <div className="font-bold text-gray-400 text-sm mt-[10px]">
-        2022
+        {feedData.date}
       </div>
-      <div className=" mt-[20px]">{responseData?.content}</div>
+      <div className=" mt-[20px]">{feedData.content}</div>
       <div className=" mt-[20px]">
         {isLiked === false ? (
           <AiOutlineHeart onClick={handleLikeClick} />
