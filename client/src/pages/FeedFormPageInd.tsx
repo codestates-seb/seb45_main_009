@@ -111,35 +111,34 @@ function FeedFormPageInd() {
         },
       });
       console.log(response);
-      const imageIds = response.data.images.map((imageData: any) => imageData.imageId);
+      // const imageIds = response.data.images.map((imageData: any) => imageData.imageId);
 
-      for (let i = 0; i < imageIds.length; i++) {
-        const imageId = imageIds[i];
-        const imgTagData = previewImg[i].tags;
+      // for (let i = 0; i < imageIds.length; i++) {
+      //   const imageId = imageIds[i];
+      //   const imgTagData = previewImg[i].tags;
 
-        for (const tagData of imgTagData) {
-          const tagPostData = {
-            productName: tagData.data?.name,
-            productPrice: tagData.data?.price,
-            productInfo: tagData.data?.info,
-            positionX: tagData.x,
-            positionY: tagData.y,
-          };
+      //   for (const tagData of imgTagData) {
+      //     const tagPostData = {
+      //       productName: tagData.data?.name,
+      //       productPrice: tagData.data?.price,
+      //       productInfo: tagData.data?.info,
+      //       positionX: tagData.x,
+      //       positionY: tagData.y,
+      //     };
 
-          const requestData = {
-            imageTag: JSON.stringify(tagPostData),
-          };
+      //     const requestData = {
+      //       imageTag: JSON.stringify(tagPostData),
+      //     };
 
-          try {
-            await axios.post(`http://13.125.146.181:8080/image/${imageId}`, requestData);
-          } catch (error) {
-            console.error("error", error);
-          }
-        }
-      }
-      // response.data.images
-      // alert("포스팅 성공");
-      // navigate("/");
+      //     try {
+      //       await axios.post(`http://13.125.146.181:8080/image/${imageId}`, requestData);
+      //     } catch (error) {
+      //       console.error("error", error);
+      //     }
+      //   }
+      // }
+      alert("포스팅 성공");
+      navigate("/");
     } catch (error: any) {
       console.error("서버 오류:", error.response ? error.response.data : error.message);
     }
