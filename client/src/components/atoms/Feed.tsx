@@ -62,8 +62,34 @@ const Feed = ({ selectedFilter }: FeedProps) => {
       selectedFilter.includes("지역전체") ||
       selectedFilter.some((tag) => user.relatedTags.includes(tag));
 
-    return hasExerciseTag && hasLocationTag;
+    if (
+      selectedFilter.includes("운동전체") &&
+      selectedFilter.includes("지역전체")
+    ) {
+      return true; // 운동전체와 지역전체가 선택된 경우 모든 데이터 표시
+    } else if (selectedFilter.includes("운동전체") && hasLocationTag) {
+      return true; // 운동전체만 선택하고 지역 필터에 해당하는 데이터 표시
+    } else if (selectedFilter.includes("지역전체") && hasExerciseTag) {
+      return true; // 지역전체만 선택하고 운동 필터에 해당하는 데이터 표시
+    } else {
+      // 지역태그와 운동태그를 각각 선택한 경우
+      const selectedExerciseTags = selectedFilter.filter(
+        (tag) => tag !== "운동전체"
+      );
+      const selectedLocationTags = selectedFilter.filter(
+        (tag) => tag !== "지역전체"
+      );
+      const exerciseMatch = selectedExerciseTags.every((tag) =>
+        user.relatedTags.includes(tag)
+      );
+      const locationMatch = selectedLocationTags.every((tag) =>
+        user.relatedTags.includes(tag)
+      );
+
+      return exerciseMatch && locationMatch;
+    }
   });
+
   console.log(selectedFilter, "여기랍니다");
   useEffect(() => {
     getMainListData();
