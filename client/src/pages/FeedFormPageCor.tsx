@@ -113,7 +113,6 @@ function FeedFormPageCor() {
 
     // feedPostDto 부분 추가
     const feedPostDto = {
-      usertype: false,
       content: bodyValue,
       relatedTags: [...addedTags, ...regionTags, ...selectedTags],
     };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import { TiDelete } from "react-icons/ti";
@@ -86,7 +86,6 @@ function FeedFormPageInd() {
 
     // feedPostDto 부분 추가
     const feedPostDto = {
-      usertype: false,
       content: bodyValue,
       relatedTags: [...addedTags, ...selectedTags],
     };
@@ -111,12 +110,14 @@ function FeedFormPageInd() {
           Authorization: `${accessToken}`,
         },
       });
-      alert("포스팅 성공");
-      navigate("/");
+      console.log(response);
+      // alert("포스팅 성공");
+      // navigate("/");
     } catch (error: any) {
       console.error("서버 오류:", error.response ? error.response.data : error.message);
     }
   };
+  useEffect(() => console.log(previewImg), [previewImg]);
   return (
     <div className="flex justify-center items-center flex-col my-20 ">
       <div className="flex flex-row relative max-mobile:flex-col max-mobile:mx-1 max-tablet:flex-col">

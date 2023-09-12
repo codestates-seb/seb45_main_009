@@ -86,7 +86,7 @@ function FeedFormPageCor() {
     "경남",
     "부산",
     "제주",
-    "기타",
+    "해외",
   ];
 
   //imageform props
@@ -113,7 +113,6 @@ function FeedFormPageCor() {
 
     // feedPostDto 부분 추가
     const feedPostDto = {
-      usertype: false,
       content: bodyValue,
       relatedTags: [...addedTags, ...regionTags, ...selectedTags],
     };
