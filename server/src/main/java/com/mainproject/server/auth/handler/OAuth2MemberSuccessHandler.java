@@ -32,42 +32,38 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     private final CustomAuthorityUtils authorityUtils;
     private final UserService userService;
 
-
-    @Autowired
-    public OAuth2MemberSuccessHandler(UserService userService,JwtTokenizer jwtTokenizer,CustomAuthorityUtils authorityUtils) {
-        this.userService = userService;
-        this.jwtTokenizer = jwtTokenizer;
-        this.authorityUtils = authorityUtils;
-    }
-
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        // OAuth2 인증이 성공했을 때 호출되는 메서드
+
+        // OAuth2User 객체를 가져옵니다.
         var oAuth2User = (OAuth2User)authentication.getPrincipal();
 
-        String name = String.valueOf(oAuth2User.getAttributes().get("name"));
+        // 사용자의 이메일 및 프로필 이미지 URL을 추출합니다.
         String email = String.valueOf(oAuth2User.getAttributes().get("email"));
         String profileimg = (String) oAuth2User.getAttributes().get("picture");
         if (profileimg == null) {
             profileimg = (String) oAuth2User.getAttributes().get("profile_image");
         }
 
-
+        // 사용자의 권한을 생성하고 사용자 정보를 빌드합니다.
         List<String> authorities = authorityUtils.createRoles(email);
-        User user = buildOAuth2User(name, email, profileimg);
+        User user = buildOAuth2User(email, profileimg);
 
+        // 사용자가 데이터베이스에 존재하지 않으면 새로운 사용자를 저장하고 리디렉션합니다.
         if (!userService.existsByEmail(user.getEmail())) {
             User savedUser = saveUser(user);
             redirect(request, response, savedUser, authorities);
         } else {
-            // 이미 userService 인스턴스가 주입되었으므로 주입된 인스턴스를 사용합니다.
+            // 이미 존재하는 사용자인 경우, 기존 사용자 정보를 가져와 리디렉션합니다.
             User findUser = userService.findVerifiedUser(user.getEmail());
             redirect(request, response, findUser, authorities);
         }
     }
 
-    private User buildOAuth2User(String name, String email, String image) {
+    private User buildOAuth2User(String email, String image) {
+        // OAuth2User에서 추출한 정보를 사용하여 User 객체를 빌드합니다.
         User user = new User();
-        user.setNickname(name);
         user.setEmail(email+"1");
 
         // 프로필 이미지 URL을 문자열로 저장
@@ -79,61 +75,79 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return user;
     }
 
-
     private User saveUser(User user) {
-
+        // 사용자 정보를 저장하고 반환합니다.
         return userService.createUserOAuth2(user);
     }
 
     private void redirect(HttpServletRequest request, HttpServletResponse response, User user, List<String> authorities) throws IOException {
+        // 사용자를 리디렉션하고 인증 토큰 및 리프레시 토큰을 설정합니다.
+
+        // 액세스 토큰 및 리프레시 토큰을 생성하고 설정합니다.
         String accessToken = delegateAccessToken(user, authorities);
         String refreshToken = delegateRefreshToken(user);
 
+        // 리디렉션 URI를 생성합니다.
         String uri = createURI(request, accessToken, refreshToken).toString();
 
+        // HTTP 응답 헤더에 토큰 정보를 설정합니다.
         String headerValue = "Bearer " + accessToken;
         response.setHeader("Authorization", headerValue);
         response.setHeader("Refresh", refreshToken);
 
+        // 클라이언트를 리디렉션합니다.
         getRedirectStrategy().sendRedirect(request, response, uri);
     }
 
     private String delegateAccessToken(User user, List<String> authorities) {
+        // 액세스 토큰을 위한 클레임과 정보를 사용하여 액세스 토큰을 생성합니다.
+
+        // 클레임을 설정합니다.
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", user.getUserId());
         claims.put("roles", authorities);
 
+        // 액세스 토큰의 주제와 만료 날짜를 설정합니다.
         String subject = user.getEmail();
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
 
+        // 액세스 토큰을 생성합니다.
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-
         String accessToken = jwtTokenizer.generateAccessToken(claims, subject, expiration, base64EncodedSecretKey);
 
         return accessToken;
     }
 
     private String delegateRefreshToken(User user) {
+        // 리프레시 토큰을 생성합니다.
+
+        // 리프레시 토큰의 주제와 만료 날짜를 설정합니다.
         String subject = user.getEmail();
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
 
+        // 리프레시 토큰을 생성합니다.
         String refreshToken = jwtTokenizer.generateRefreshToken(subject, expiration, base64EncodedSecretKey);
 
         return refreshToken;
     }
 
     private URI createURI(HttpServletRequest request, String accessToken, String refreshToken) {
+        // 리디렉션 URI를 생성합니다.
+
+        // 쿼리 매개변수를 설정합니다.
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add("access_token", accessToken);
         queryParams.add("refresh_token", refreshToken);
 
+        // URI를 생성하여 반환합니다.
         return UriComponentsBuilder
                 .newInstance()
                 .scheme("http")
-                .host("localhost")
-                .port(8080)
-                .path("/join")
+//                .host("http://fitfolio1.s3-website.ap-northeast-2.amazonaws.com")
+                .host("http://localhost:8080")
+                .port(80)
+                .path("/oauthloading")
                 .queryParams(queryParams)
                 .build()
                 .toUri();
