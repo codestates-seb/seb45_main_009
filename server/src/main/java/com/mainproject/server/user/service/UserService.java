@@ -2,7 +2,6 @@ package com.mainproject.server.user.service;
 
 
 import com.mainproject.server.auth.jwt.JwtTokenizer;
-import com.mainproject.server.auth.utils.CustomAuthorityUtils;
 import com.mainproject.server.exception.BusinessLogicException;
 import com.mainproject.server.exception.ExceptionCode;
 
@@ -11,6 +10,8 @@ import com.mainproject.server.image.service.ImageService;
 
 import com.mainproject.server.user.entity.User;
 import com.mainproject.server.user.repository.UserRepository;
+import com.mainproject.server.userprofile.entity.UserProfile;
+import com.mainproject.server.userprofile.repository.UserProfileRepository;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,8 @@ public class UserService {
 
 
     private final UserRepository userRepository;
-    private final CustomAuthorityUtils authorityUtils;
     private final ImageService imageService;
+    private final UserProfileRepository userProfileRepository;
 
     @Autowired
     private final JwtTokenizer jwtTokenizer;
@@ -76,7 +77,21 @@ public class UserService {
             profileImage.setImageUrl(imageUrl);
             profileImage.setUser(user);
             user.setProfileimg(profileImage);
+        } else {
+            // 프로필 사진이 없는 경우 기본 이미지 URL을 설정
+            Image defaultProfileImage = new Image();
+            defaultProfileImage.setImageUrl("https://fitfolio-photo.s3.ap-northeast-2.amazonaws.com/default+image/default.png");
+            defaultProfileImage.setUser(user);
+            user.setProfileimg(defaultProfileImage);
         }
+        // UserProfile 생성 및 설정
+        UserProfile userProfile = new UserProfile();
+        userProfile.setUser(user);
+        // 여기서 다른 UserProfile 필드 값들도 설정할 수 있음
+        userProfile.setFeedCount(0L);
+        userProfile.setFollowerCount(0L);
+        userProfile.setFollowCount(0L);
+        user.setUserProfile(userProfile);
 
 
         return userRepository.save(user);
@@ -303,6 +318,12 @@ public class UserService {
         return refreshToken;
     }
 
+    // 사용자 저장 또는 업데이트
+    public User saveUser(User user) {
+        return userRepository.save(user);
+    }
+
+
 //    // 이미지 ID를 가져오는 메서드
 //    private Long getImageIdFromUser(User user) {
 //        if (user != null && user.getProfileimg() != null) {
@@ -319,9 +340,6 @@ public class UserService {
 //        }
 //        return null;
 //    }
-
-
-
 
 
 

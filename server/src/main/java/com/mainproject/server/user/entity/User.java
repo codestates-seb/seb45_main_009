@@ -2,7 +2,9 @@ package com.mainproject.server.user.entity;
 
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.mainproject.server.feed.enitiy.Feed;
 import com.mainproject.server.follow.entity.Follow;
 import com.mainproject.server.image.entity.Image;
 import com.mainproject.server.userprofile.entity.UserProfile;
@@ -81,6 +83,9 @@ public class User {
     @OneToMany(mappedBy = "follower",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private final List<Follow> followList = new ArrayList<>(); // 내가 팔로우 하는 유저들의 리스트
 
+    @OneToMany(mappedBy = "user" ,fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private final List<Feed> feedList = new ArrayList<>();
+
 
     public void hasFollowed(){
         this.userProfile.followerCountPlus();
@@ -96,9 +101,18 @@ public class User {
         this.userProfile.followCountMinus();
     }
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(nullable = true)
+    public void hasWroteFeed(){
+        this.userProfile.feedCountPlus();
+    }
+    public void hasDeletedFeed(){
+        this.userProfile.feedCountMinus();
+    }
+
+    @JsonBackReference
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_profile_id")
     private UserProfile userProfile;
+
     // 마이 페이지
 
 

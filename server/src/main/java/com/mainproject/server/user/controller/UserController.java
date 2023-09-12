@@ -45,7 +45,7 @@ public class UserController {
     // 유저 등록
     @PostMapping("join/user")
     public ResponseEntity postUser(@Valid @RequestPart UserDto.PostDto requestBody,
-                                   @RequestPart("imageUrl") MultipartFile imageFiles) {
+                                   @RequestPart(value = "imageUrl", required = false) MultipartFile imageFiles) {
 
         log.info("### user login start! ###");
         User user = mapper.postToUser(requestBody);

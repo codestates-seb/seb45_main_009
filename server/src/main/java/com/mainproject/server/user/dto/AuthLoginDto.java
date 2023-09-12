@@ -21,6 +21,6 @@ public class AuthLoginDto {
     @Size(min = 2, max = 20)
     private String name;
 
-    private Image profileimg;
+    private String profileimg;
 
 }

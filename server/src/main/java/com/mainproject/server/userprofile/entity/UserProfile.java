@@ -1,8 +1,10 @@
 package com.mainproject.server.userprofile.entity;
 
 import com.mainproject.server.user.entity.User;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
@@ -11,29 +13,30 @@ import javax.persistence.*;
 @NoArgsConstructor
 @DynamicUpdate
 @Entity
+@Setter
 public class UserProfile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(mappedBy = "userProfile", fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id") // User 테이블의 외래키
     private User user;
 
-//    @Column(nullable = false)
-//    private Long feedCount;
+    @Column(nullable = false)
+    private Long feedCount;
 
     @Column(nullable = false)
-    private Long followerCount; // who follow me?
+    private Long followerCount; // 나를 팔로우
 
     @Column(nullable = false)
-    private Long followCount; // me follow who?
+    private Long followCount; // 내가 팔로우
 
-    public UserProfile(//Long feedCount,
-                       Long followerCount, Long followCount) {
-       // this.feedCount = feedCount;
-        this.followerCount = followerCount;
-        this.followCount = followCount;
+
+    public UserProfile(Long id, User user) {
+        this.id = id;
+        this.user = user;
     }
 
     public static UserProfileBuilder builder() {
@@ -63,20 +66,14 @@ public class UserProfile {
             return this;
         }
 
-        public UserProfile build() {
-            return new UserProfile(//feedCount,
-                    followerCount, followCount);
-        }
 
         public String toString() {
-            return "UserInfo.UserInfoBuilder(feedCount=" + this.feedCount + ", followerCount=" + this.followerCount + ", followCount=" + this.followCount + ")";
+            return "UserProfile.UserProfileBuilder(feedCount=" + this.feedCount + ", followerCount=" + this.followerCount + ", followCount=" + this.followCount + ")";
         }
     }
 
 
-//    public void feedCountPlus(){
-//        this.feedCount += 1L ;
-//    }
+    public void feedCountPlus(){ this.feedCount += 1L; }
 
     public void followerCountPlus(){
         this.followerCount += 1L;
@@ -86,9 +83,7 @@ public class UserProfile {
         this.followCount += 1L;
     }
 
-//    public void feedCountMinus(){
-//        this.feedCount -= 1L;
-//    }
+    public void feedCountMinus(){ this.feedCount -= 1L; }
 
     public void followerCountMinus(){
         this.followerCount -= 1L;
