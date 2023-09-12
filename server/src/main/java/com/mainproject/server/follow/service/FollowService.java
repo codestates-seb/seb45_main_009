@@ -51,13 +51,18 @@ public class FollowService {
         // 이미 팔로우 중인 경우 언팔로우를 수행, 그렇지 않은 경우 팔로우를 수행
         if (isFollowing) {
             unfollowUser(loggedInUser, preyUser);
+            loggedInUser.hasUnFollowing(); // 로그인한 사용자의 팔로잉 카운트 감소
+            preyUser.hasUnFollowed(); // 팔로우 대상 사용자의 팔로워 카운트 감소
         } else {
             followUser(loggedInUser, preyUser);
+            loggedInUser.hasFollowing(); // 로그인한 사용자의 팔로잉 카운트 증가
+            preyUser.hasFollowed(); // 팔로우 대상 사용자의 팔로워 카운트 증가
         }
 
         // 새로운 팔로우 상태를 반환 (true: 팔로우한 경우, false: 언팔로우한 경우).
         return !isFollowing;
     }
+
 
     // 사용자를 팔로우
     @Transactional

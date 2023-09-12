@@ -9,7 +9,10 @@ import com.mainproject.server.image.service.ImageService;
 import com.mainproject.server.user.entity.User;
 import com.mainproject.server.user.repository.UserRepository;
 import com.mainproject.server.user.service.UserService;
+import com.mainproject.server.userprofile.repository.UserProfileRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
@@ -17,19 +20,23 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class FeedService {
 
     private final FeedRepository feedRepository;
     private final ImageService imageService;
     private final UserService userService;
+    private final UserProfileRepository userProfileRepository;
 
-    public FeedService(FeedRepository feedRepository, ImageService imageService, UserService userService) {
-        this.feedRepository = feedRepository;
-        this.imageService = imageService;
-        this.userService = userService;
-    }
+
+//    public FeedService(FeedRepository feedRepository, ImageService imageService, UserService userService) {
+//        this.feedRepository = feedRepository;
+//        this.imageService = imageService;
+//        this.userService = userService;
+//    }
 
     //피드 등록
+    @Transactional
     public Feed createFeed(long userId, Feed feed, List<MultipartFile> imageFiles) {
         // 현재 사용자 가져오기
         User findCreateUser = userService.findVerifiedUser(userId);
@@ -37,6 +44,8 @@ public class FeedService {
         feed.setUser(findCreateUser);
         // 피드를 데이터베이스에 저장
         Feed savedFeed = feedRepository.save(feed);
+
+
 
         // 이미지 업로드와 URL 가져오기
         for (MultipartFile imageFile : imageFiles) {
@@ -51,6 +60,10 @@ public class FeedService {
             // 이미지 객체를 피드에 추가
             savedFeed.getImages().add(image);
         }
+
+        findCreateUser.hasWroteFeed(); // 피드 카운트 증가
+
+
 
         return feedRepository.save(savedFeed);
     }
@@ -160,6 +173,7 @@ public class FeedService {
     }
 
     // 피드 삭제
+    @Transactional
     public void deleteFeed(Long userId, long feedId) {
         // 현재 사용자 가져오기
         User currentUser = userService.findVerifiedUser(userId);
@@ -168,10 +182,16 @@ public class FeedService {
         // 권한 검증
         verifyAccess(deletedFeed, currentUser.getUserId());
 
+
+
         List<Image> images = new ArrayList<>(deletedFeed.getImages());
         for (Image image : images) {
             imageService.deleteImage(image.getImageId());
         }
+
+        currentUser.hasDeletedFeed(); // 피드 카운트 감소
+
+
 
         feedRepository.delete(deletedFeed);
     }
@@ -193,6 +213,7 @@ public class FeedService {
 
         deletedFeed.setImages(deleteImages);
         feedRepository.save(deletedFeed);
+
 
         // 이미지 서비스를 사용하여 이미지를 실제로 삭제
         imageService.deleteImage(imageIdToDelete);

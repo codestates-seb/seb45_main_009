@@ -3,6 +3,7 @@ package com.mainproject.server.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mainproject.server.image.entity.Image;
+import com.mainproject.server.userprofile.entity.UserProfile;
 import lombok.*;
 
 
@@ -58,6 +59,7 @@ public class UserDto {
 
         private String sport;
 
+
     }
 
 
@@ -73,8 +75,8 @@ public class UserDto {
         private Image profileimg;
         private String price;
         private String bio;
-        private int height;
-        private int weight;
+        private Integer height;
+        private Integer weight;
         private String location;
         private String password;
         private String sport;
@@ -97,11 +99,13 @@ public class UserDto {
         private String bio;
         private String profileimg;
         private String price;
-        private int height;
-        private int weight;
+        private Integer height;
+        private Integer weight;
         private String location;
         private String sport;
         private List<String> roles = new ArrayList<>();
+
+
 //        private List<Long> followerList; // 팔로워 리스트
 //        private List<Long> followList;   // 팔로우 리스트
 

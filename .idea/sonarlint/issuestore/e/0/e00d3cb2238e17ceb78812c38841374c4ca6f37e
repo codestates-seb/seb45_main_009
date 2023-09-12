@@ -1,11 +1,10 @@
 
 R
-java:S1066Ğ"/Merge this if statement with the enclosing one.(çéËüÿÿÿÿ8çêï§¦1
+java:S1066Ó"/Merge this if statement with the enclosing one.(çéËüÿÿÿÿ8ëÂ»–¨1
 ^
-java:S4973h"<Strings and Boxed types should be compared using "equals()".(ÖÂØ½şÿÿÿÿ8èêï§¦1
+java:S4973l"<Strings and Boxed types should be compared using "equals()".(ÖÂØ½şÿÿÿÿ8íÂ»–¨1
 Š
-java:S1845"lRename method "verifyExistNickname" to prevent any misunderstanding/clash with method "verifyExistNickName".(Ò«Œà8¯ëï§¦1
+java:S1845„"lRename method "verifyExistNickname" to prevent any misunderstanding/clash with method "verifyExistNickName".(Ò«Œà8÷Ã»–¨1
 ;
-java:S2119ï"Save and re-use this "Random".(¼İÅf8½ëï§¦1
-U
-java:S1144´"7Remove this unused private "getImageIdFromUser" method.(³¥Ãó8¾ä™§1
+java:S2119ò"Save and re-use this "Random".(¼İÅf8ƒÄ»–¨1
+^	java:S125·"<This block of commented-out lines of code should be removed.(çóşÈÿÿÿÿÿ8†Ä»–¨1
