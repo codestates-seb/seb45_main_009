@@ -24,12 +24,12 @@ public class FeedService {
     private final UserService userService;
     private final ImageRepository imageRepository;
 
-    public FeedService(FeedRepository feedRepository, ImageService imageService, UserService userService, ImageRepository imageRepository) {
-        this.feedRepository = feedRepository;
-        this.imageService = imageService;
-        this.userService = userService;
-        this.imageRepository = imageRepository;
-    }
+    // public FeedService(FeedRepository feedRepository, ImageService imageService, UserService userService, ImageRepository imageRepository) {
+    //     this.feedRepository = feedRepository;
+    //     this.imageService = imageService;
+    //     this.userService = userService;
+    //     this.imageRepository = imageRepository;
+    // }
 
     // 피드 등록
     public Feed createFeed(long userId, Feed feed, List<MultipartFile> imageFiles) {
