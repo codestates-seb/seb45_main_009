@@ -1,9 +1,8 @@
 package com.mainproject.server.feed.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mainproject.server.imagetag.entity.ImageTag;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -30,5 +29,19 @@ public class FeedDto {
         private String content;
         private List<String> relatedTags;
         private List<ImageTag> imageTags;
+    }
+
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public static class FeedInfo {
+        private Long feedId;
+        private String content;
+        private List<String> relatedTags;
+        private List<String> images;
     }
 }
