@@ -41,7 +41,4 @@ public interface UserMapper {
 
           return image;
      }
-
-
-
 }
