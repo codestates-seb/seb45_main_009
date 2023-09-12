@@ -14,7 +14,7 @@ function Comment() {
 
   const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputUpdateValue(event.target.value);
-    // console.log(inputUpdateValue);
+    console.log(inputUpdateValue);
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,13 +40,13 @@ function Comment() {
   };
 
   const handleDeleteComment = (index: number) => {
-    // console.log("삭제버튼 클릭");
-    // console.log(index);
+    console.log("삭제버튼 클릭");
+    console.log(index);
     const newdelete = [...comment];
     newdelete.splice(index, 1);
     setComment(newdelete);
   };
-  // console.log(commentdate, currentTime);
+  console.log(commentdate, currentTime);
 
   const [page, setPage] = useState(2);
 
