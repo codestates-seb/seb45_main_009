@@ -1,11 +1,10 @@
 import axios from "axios";
 
 const globalAxios = axios.create({
-  baseURL: "https://13.125.146.181:8080",
+  baseURL: "http://13.125.146.181:8080",
   timeout: 5000,
   headers: {
     "Content-Type": `application/json`,
-    "ngrok-skip-browser-warning": "69420",
   },
 });
 
