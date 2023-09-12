@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import { TiDelete } from "react-icons/ti";
@@ -86,7 +86,6 @@ function FeedFormPageInd() {
 
     // feedPostDto 부분 추가
     const feedPostDto = {
-      usertype: false,
       content: bodyValue,
       relatedTags: [...addedTags, ...selectedTags],
     };
@@ -111,12 +110,41 @@ function FeedFormPageInd() {
           Authorization: `${accessToken}`,
         },
       });
-      alert("포스팅 성공");
-      navigate("/");
+      console.log(response);
+      const imageIds = response.data.images.map((imageData: any) => imageData.imageId);
+
+      for (let i = 0; i < imageIds.length; i++) {
+        const imageId = imageIds[i];
+        const imgTagData = previewImg[i].tags;
+
+        for (const tagData of imgTagData) {
+          const tagPostData = {
+            productName: tagData.data?.name,
+            productPrice: tagData.data?.price,
+            productInfo: tagData.data?.info,
+            positionX: tagData.x,
+            positionY: tagData.y,
+          };
+
+          const requestData = {
+            imageTag: JSON.stringify(tagPostData),
+          };
+
+          try {
+            await axios.post(`http://13.125.146.181:8080/image/${imageId}`, requestData);
+          } catch (error) {
+            console.error("error", error);
+          }
+        }
+      }
+      // response.data.images
+      // alert("포스팅 성공");
+      // navigate("/");
     } catch (error: any) {
       console.error("서버 오류:", error.response ? error.response.data : error.message);
     }
   };
+  useEffect(() => console.log(previewImg), [previewImg]);
   return (
     <div className="flex justify-center items-center flex-col my-20 ">
       <div className="flex flex-row relative max-mobile:flex-col max-mobile:mx-1 max-tablet:flex-col">

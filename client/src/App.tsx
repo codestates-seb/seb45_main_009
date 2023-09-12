@@ -19,6 +19,7 @@ import MyPage from "./pages/MyPage";
 import ScrollToTop from "./components/features/ScrollToTop";
 import Layout from "./components/atoms/Layout";
 import { useUserSession } from "./hooks/useUserSession";
+import FeedUpdataePageInd from "./pages/FeedUpdatePageInd";
 
 function App() {
   useUserSession();
@@ -37,6 +38,7 @@ function App() {
               <Route path="/feeddetailind" element={<FeedDetailPageInd />} />
               <Route path="/feedformcor" element={<FeedFormPageCor />} />
               <Route path="/feedformind" element={<FeedFormPageInd />} />
+              <Route path="/feedupdateind" element={<FeedUpdataePageInd />} />
               <Route path="/mypage/:page" element={<MyPage />} />
               <Route path="/login" element={<LoginPage />}></Route>
               <Route path="/signup" element={<SignupPage />}></Route>
