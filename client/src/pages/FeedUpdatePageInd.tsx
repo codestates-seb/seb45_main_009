@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 
 import ImageUpdateForm from "../components/features/ImageUpdateForm";
 import { TiDelete } from "react-icons/ti";
@@ -107,7 +106,7 @@ function FeedUpdataePageInd() {
 
     const accessToken = sessionStorage.getItem("access_token");
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/feed/add`, formData, {
+      const response = await globalAxios.post("/feed/add", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `${accessToken}`,

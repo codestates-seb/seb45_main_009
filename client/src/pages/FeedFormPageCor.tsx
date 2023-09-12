@@ -4,6 +4,7 @@ import axios from "axios";
 import { TiDelete } from "react-icons/ti";
 import ImageForm from "../components/features/ImageForm";
 import { useNavigate } from "react-router";
+import globalAxios from "../data/data";
 
 interface ImageData {
   file: File | null;
@@ -111,7 +112,6 @@ function FeedFormPageCor() {
 
     const formData = new FormData();
 
-    // feedPostDto 부분 추가
     const feedPostDto = {
       content: bodyValue,
       relatedTags: [...addedTags, ...regionTags, ...selectedTags],
@@ -122,7 +122,6 @@ function FeedFormPageCor() {
     });
     formData.append("feedPostDto", blob);
 
-    // imageUrl 부분 추가
     previewImg.forEach((img, index) => {
       if (img.file) {
         formData.append("imageUrl", img.file, `image_${index}.jpg`);
@@ -131,16 +130,49 @@ function FeedFormPageCor() {
 
     const accessToken = sessionStorage.getItem("access_token");
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/feed/add`, formData, {
+      const response = await globalAxios.post("/feed/add", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `${accessToken}`,
         },
       });
+      console.log(response);
+      const imageIds = response.data.images.map((imageData: any) => imageData.imageId);
+      for (let i = 0; i < imageIds.length; i++) {
+        const imageId = imageIds[i];
+        const imgTagData = previewImg[i].tags;
+
+        for (const tagData of imgTagData) {
+          const tagPostData = {
+            productName: tagData.data?.name,
+            productPrice: tagData.data?.price,
+            productInfo: tagData.data?.info,
+            positionX: tagData.x,
+            positionY: tagData.y,
+          };
+          console.log(tagPostData);
+          const formData = new FormData();
+          const blob = new Blob([JSON.stringify(tagPostData)], {
+            type: "application/json",
+          });
+          formData.append("imageTag", blob);
+
+          try {
+            const response = await globalAxios.post(`/image/${imageId}`, formData, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            });
+            console.log(response);
+          } catch (error) {
+            console.error("error", error);
+          }
+        }
+      }
       alert("포스팅 성공");
       navigate("/");
     } catch (error: any) {
-      console.error("서버 오류:", error.response ? error.response.data : error.message);
+      console.error("erro:", error);
     }
   };
   return (
