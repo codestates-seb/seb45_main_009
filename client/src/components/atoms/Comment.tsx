@@ -22,13 +22,12 @@ type CommentsDataType = {
   pageInfo: PageInfo;
 };
 
+
 function Comment() {
   // 댓글생성
   const [commentInputValue, setCommentInputValue] = useState<string>("");
-  let [comment, setComment] = useState<string[]>(["멋있어요"]);
-  // 댓긋 시간 arr 저장
-  let [commentdate, setCommentDate] = useState<string[]>(["2023.07.22"]);
-  let [currentTime, setCurrentTime] = useState<string[]>(["10시"]);
+  const [comment, setComment] = useState<string[]>(["멋있어요"]);
+
 
   const [iscomment, setIsComment] = useState(false);
   const [inputUpdateValue, setInputUpdateValue] = useState<string>("");
@@ -51,35 +50,31 @@ function Comment() {
 
   // 댓글 등록!!
   const handleSaveClick = async () => {
-    setComment((prevArr) => [ ...prevArr,commentInputValue]);
-    const now = new Date();
-    const dateString = now.toLocaleDateString();
-    const timeString = now.toLocaleTimeString();
-    setCommentDate((dateArr) => [ ...dateArr, dateString]);
-    setCurrentTime((timeArr) => [...timeArr, timeString]);
+    console.log("댓글등록 버튼 클릭")
   };
   
   // const handleSaveClick = async () => {
+
+  //   const accessToken = sessionStorage.getItem('Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJJZCI6MTEsImVtYWlsIjoibHNlMDUyMkBnbWFpbC5jb20iLCJzdWIiOiJsc2UwNTIyQGdtYWlsLmNvbSIsImlhdCI6MTY5NDUxNzM3NiwiZXhwIjoxNjk0NTI0NTc2fQ.FLTGUeqW6l6DO26BZSKpcGkIKW2QDHZZq3sI7GRVMrAYhcOWT9i2SO4522Epa6a3');
   //   try {
-  //     const response = await fetch('http://13.125.146.181:8080/feed/detail/1/comment', {
+  //     const response = await fetch('http://13.125.146.181:8080/feed/detail/8/comment', {
   //       method: 'POST',
   //       headers: {
-  //         'Content-Type': 'application/json'
+  //         'Content-Type': 'application/json',
+  //         Authorization: `${accessToken}`,
   //       },
   //       body: JSON.stringify({
-  //         'content': commentInputValue
+  //           "content": commentInputValue,
   //       })
   //     });
   
-  //     if (!response.ok) {
-  //       throw new Error('Failed to post comment');
-  //     }
   //     const responseData = await response.json();
-  
-  //     // 댓글 전체 데이터를 추가합니다.
   //     setComments(prevComments => [...prevComments, responseData]);
   
   //     console.log("댓글이 성공적으로 저장되었습니다.");
+  //     comments.forEach((comment, index) => {
+  //       console.log(`댓글 ${index}:`, comment);
+  //     });
   
   //   } catch (error) {
   //     console.error("댓글 저장 중 에러 발생:", error);
@@ -107,43 +102,26 @@ function Comment() {
   const startIndex = (page - 1) * PAGE_SIZE;
 
 
-  const [responseData, setResponseData] = useState<CommentsDataType | null>(null);
+    // 댓글 업데이트
+    const feedid = 8;
+    
+  const [comments, setComments] = useState<CommentData[]>([]);
 
-  const fetchData = async () => {
-    try {
-      // 댓글 가져오기
-      const response = await fetch('http://13.125.146.181:8080/feed/detail/1/comments');
-      const data = await response.json();
-      setResponseData(data);
-
-    } catch (error) {
-      console.error("Error fetching the data:", error);
-    }
-  };
-  
   useEffect(() => {
+    const fetchData = async () => {
+      // const accessToken = sessionStorage.getItem("access_token");
+      // console.log(accessToken)
+      try {
+        const response = await fetch(`http://13.125.146.181:8080/feed/detail/${feedid}/comments`);
+        const data: CommentsDataType = await response.json();
+        setComments(data.feedCommentData);
+      } catch (error) {
+        console.error("Error fetching the data:", error);
+      }
+    };
+    
     fetchData();
   }, []);
-
-  console.log(responseData)
-
-  // API 데이터를 상태로 관리합니다.
-const [comments, setComments] = useState<CommentData[]>([]);
-
-useEffect(() => {
-  // 데이터를 가져오는 함수입니다.
-  const fetchData = async () => {
-    try {
-      const response = await fetch('http://13.125.146.181:8080/feed/detail/1/comments');
-      const data: CommentsDataType = await response.json();
-      setComments(data.feedCommentData); // 상태를 업데이트합니다.
-    } catch (error) {
-      console.error("Error fetching the data:", error);
-    }
-  };
-  
-  fetchData();
-}, []);
 
 
   return (

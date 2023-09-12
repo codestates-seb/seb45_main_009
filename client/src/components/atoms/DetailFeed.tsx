@@ -65,19 +65,22 @@ function DetailFeedInd() {
   };
 
   // 피드 가져오기
+  const feedid = 8;
+
   const [responseData, setResponseData] = useState<ResponseDataType | null>(null);
 
-  const fetchData = async () => {
+  async function fetchData() {
     try {
-      // 피드 가져오기
-      const response = await fetch('http://13.125.146.181:8080/feed/detail/1');
+      const response = await fetch(`http://13.125.146.181:8080/feed/detail/${feedid}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
       const data = await response.json();
       setResponseData(data);
-
     } catch (error) {
       console.error("Error fetching the data:", error);
     }
-  };
+  }
   
   useEffect(() => {
     fetchData();
@@ -111,7 +114,7 @@ function DetailFeedInd() {
 
   return (
     <div className="w-full sm:max-w-screen-sm  mx-auto px-4 sm:px-4 lg:px-8">
-
+      
       {responseData?.images.map((image, index) => (
         <div key={index} className="mb-8 relative">
           <img src={image.imageUrl} alt={`Image ${index}`} className="w-full h-auto" />
