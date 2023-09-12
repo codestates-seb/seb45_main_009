@@ -69,7 +69,7 @@ function ProfileCor() {
       <div className="flex flex-col">
         <div className="grid grid-cols-[3fr,1fr] items-center">
           <div className="font-bold text-xl truncate ">{userData[0].username}</div>
-          <div><BsFillBookmarkStarFill /></div>
+          <div><BsFillBookmarkStarFill className="text-btn-color ml-[10px]" /></div>
       </div>
         <div className="text-gray-400 text-xs ">
           <div className="mt-[2px]">{userData[0].useraddress}</div>

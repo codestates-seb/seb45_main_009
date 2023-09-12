@@ -7,9 +7,9 @@ function BackButton() {
   const navigate = useNavigate();
   const handleClick =() =>{ navigate(-1);}
 
-  return(
+  return(  
       <button
-            className="w-10 h-10 rounded-full" 
+            className="w-10 h-10 rounded-full text-2xl sm:px-8 lg:mx-20 m-2" 
             onClick={handleClick}>
               <BiArrowBack />
       </button>

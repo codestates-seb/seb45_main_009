@@ -52,6 +52,14 @@ function SignupAddition({
   const insertImg = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
+      // 5MB
+      const maxFileSize = 5 * 1024 * 1024;
+
+      // 파일 크기 검사
+      if (file.size > maxFileSize) {
+        alert("파일 크기가 너무 큽니다! 5MB 이하의 사진만 업로드해주세요.");
+        return;
+      }
       let reader = new FileReader();
       reader.readAsDataURL(file);
 
