@@ -3,6 +3,7 @@ package com.mainproject.server.feed.enitiy;
 
 import com.mainproject.server.feedcomment.entity.FeedComment;
 import com.mainproject.server.image.entity.Image;
+import com.mainproject.server.liked.entity.Liked;
 import com.mainproject.server.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,6 +49,10 @@ public class Feed {
     //user와 매핑(다대일)
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+
+    //liked와 매핑(일대다)
+    @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = false)
+    private final List<Liked> likedList = new ArrayList<>();
 
 
 //    // 말풍선 태그와 매핑(일대다)
