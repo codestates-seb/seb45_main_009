@@ -1,47 +1,64 @@
-package com.mainproject.server.user.mapper;
+package com.mainproject.server.feed.enitiy;
 
 
-
+import com.mainproject.server.feedcomment.entity.FeedComment;
 import com.mainproject.server.image.entity.Image;
-import com.mainproject.server.user.dto.AuthLoginDto;
-import com.mainproject.server.user.dto.UserDto;
+import com.mainproject.server.liked.entity.Liked;
 import com.mainproject.server.user.entity.User;
-import org.mapstruct.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+@NoArgsConstructor
+@Getter
+@Setter
+@Entity
+public class Feed {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long feedId;
+
+    @Column(columnDefinition = "TEXT")
+    private String content;
+
+    // 중복 태그
+    @Column
+    @ElementCollection
+    private List<String> relatedTags = new ArrayList<>();
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Column(nullable = false)
+    private LocalDateTime modifiedAt = LocalDateTime.now();
+
+    // feedComment와 매핑(일대다)
+    @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL)
+    private List<FeedComment> feedComment = new ArrayList<>();
+
+    // image와 매핑(일대다)
+    @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL)
+    private List<Image> images = new ArrayList<>();
+
+    //user와 매핑(다대일)
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
+
+    //liked와 매핑(일대다)
+    @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = false)
+    private final List<Liked> likedList = new ArrayList<>();
 
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface UserMapper {
-
-     User postToUser(UserDto.PostDto postDto);
-
-     User patchToUser(UserDto.PatchDto patchDto);
+//    // 말풍선 태그와 매핑(일대다)
+//    @OneToMany(mappedby = "feed", cascade = CascadeType.ALL)
+//    private List<Imagetag> imageTags;
 
 
+    }
 
-     @Mapping(source = "profileimg.imageUrl", target = "profileimg")
-     UserDto.ResponseDto userToResponse(User user);
-
-     List<UserDto.ResponseDto> UsersToResponses(List<User> users);
-
-     @Mapping(source = "profileimg", target = "profileimg" ,qualifiedByName = "stringToImage")
-     User AuthLoginDtoUser(AuthLoginDto authLoginDto);
-
-     @Named("stringToImage")
-     default Image stringToImage(String profileimg) {
-          if (profileimg == null || profileimg.isEmpty()) {
-               return null; // Handle null or empty string appropriately, or return a default Image if needed
-          }
-
-          // Implement the conversion logic here, e.g., parse the string and create an Image object
-          Image image = new Image();
-          image.setImageUrl(profileimg); // Assuming there's a setter for the image URL
-
-          return image;
-     }
-
-
-
-}
