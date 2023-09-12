@@ -48,5 +48,10 @@ public class Feed {
     //user와 매핑(다대일)
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+
+    //liked와 매핑(일대다)
+    @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = false)
+    private final List<Liked> likedList = new ArrayList<>();
+    
 }
 
