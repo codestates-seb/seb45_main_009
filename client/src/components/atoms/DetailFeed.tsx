@@ -65,6 +65,37 @@ function TagModal({
     ];
 
 function DetailFeedInd() {
+  type ResponseDataType = {
+    feedId: number;
+    content: string;
+    relatedTags: string[];
+    images: Array<{
+      imageId: number;
+      imageUrl: string;
+      imageTags: any[];
+    }>;
+  };
+
+  const [responseData, setResponseData] = useState<ResponseDataType | null>(null);
+  
+  const fetchData = async () => {
+    try {
+      let response = await fetch('http://13.125.146.181:8080/feed/detail/8');
+      let data = await response.json();
+      setResponseData(data);
+    } catch (error) {
+      console.error("Error fetching the data:", error);
+    }
+  };
+  
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // console.log("받아온 데이터: " + JSON.stringify(responseData, null, 2));
+
+  // const data = JSON.stringify(responseData, null, 2);
+  // console.log(data)
 
   // 좋아요
   const [isLiked, setIsLiked] = useState(false);
@@ -88,13 +119,19 @@ function DetailFeedInd() {
     tagIndex: number;
   } | null>(null);
 
+
   return (
     <div className="w-full sm:max-w-screen-sm  mx-auto px-4 sm:px-4 lg:px-8">
+      {/* {responseData?.images.map((image, index) => (
+          <div key={index} className="image-container">
+              <img src={image.imageUrl} alt={`Image ${index}`} />
+          </div>
+      ))}
+
       {feedData.photo.map((photo, photoIndex) => (
         <div key={photoIndex} className="mb-8 relative">
           <img src={photo} alt=" " className="w-full h-auto" />
           {tagDatas[photoIndex].taglocation.map((location, tagIndex) => {
-            // 띄어쓰기로 top,left 나누기
             const [top, left] = location.split(" ");
             return (
               <div
@@ -105,7 +142,6 @@ function DetailFeedInd() {
                 onMouseLeave={() => setShowTagModal(null)}
               >
                 <AiFillPlusCircle className="w-[20px] h-[20px] text-tag-btn-color" />
-                {/* 만약 div위에 마우스 올린게 이미지index와 태그 index가 맞으면 모달창 보여주기 */}
                 {showTagModal?.photoIndex === photoIndex &&
                   showTagModal?.tagIndex === tagIndex && (
                     <TagModal
@@ -121,11 +157,45 @@ function DetailFeedInd() {
             );
           })}
         </div>
-      ))}
+      ))} */}
+
+{responseData?.images.map((image, index) => (
+  <div key={index} className="mb-8 relative">
+    <img src={image.imageUrl} alt={`Image ${index}`} className="w-full h-auto" />
+
+    {tagDatas[index]?.taglocation.map((location, tagIndex) => {
+      // 띄어쓰기로 top,left 나누기
+      const [top, left] = location.split(" ");
+      return (
+        <div
+          key={tagIndex}
+          className="w-[20px] h-[20px] rounded-full absolute"
+          style={{ top, left }}
+          onMouseEnter={() => setShowTagModal({ photoIndex: index, tagIndex })}
+          onMouseLeave={() => setShowTagModal(null)}
+        >
+          <AiFillPlusCircle className="w-[20px] h-[20px] text-tag-btn-color" />
+          {/* 만약 div위에 마우스 올린게 이미지index와 태그 index가 맞으면 모달창 보여주기 */}
+          {showTagModal?.photoIndex === index && showTagModal?.tagIndex === tagIndex && (
+            <TagModal
+              title={tagDatas[index]?.title[tagIndex]}
+              size={tagDatas[index]?.size[tagIndex]}
+              price={tagDatas[index]?.price[tagIndex]}
+              // 위치값 전달
+              top={top}
+              left={left}
+            />
+          )}
+        </div>
+      );
+    })}
+  </div>
+))}
+
       <div className="font-bold text-gray-400 text-sm mt-[10px]">
         {feedData.date}
       </div>
-      <div className=" mt-[20px]">{feedData.content}</div>
+      <div className=" mt-[20px]">{responseData?.content}</div>
       <div className=" mt-[20px]">
         {isLiked === false ? (
           <AiOutlineHeart onClick={handleLikeClick} />
@@ -138,9 +208,9 @@ function DetailFeedInd() {
           연관태그
         </div>
         <div>
-          {feedData.tag.map((item, index) => (
+          {responseData?.relatedTags.map((tag, index) => (
             <span className=" p-1 bg-blue-100 rounded  mr-2" key={index}>
-              {item}
+              {tag}
             </span>
           ))}
         </div>
