@@ -1,6 +1,27 @@
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 
+type CommentData = {
+  feedCommentId: number;
+  feedId: number;
+  content: string;
+  userNickname: string;
+  createdAt: string;
+  modifiedAt: string;
+};
+
+type PageInfo = {
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+};
+
+type CommentsDataType = {
+  feedCommentData: CommentData[];
+  pageInfo: PageInfo;
+};
+
 function Comment() {
   // 댓글생성
   const [commentInputValue, setCommentInputValue] = useState<string>("");
@@ -14,7 +35,6 @@ function Comment() {
 
   const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputUpdateValue(event.target.value);
-    console.log(inputUpdateValue);
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,14 +43,14 @@ function Comment() {
 
   const handleEditComment = () => {
     setIsComment(true);
-    console.log("버튼 클릭");
   };
   const handleUpdateComment = (index: number) => {
     comment[index] = inputUpdateValue;
     setIsComment(false);
   };
 
-  const handleSaveClick = () => {
+  // 댓글 등록!!
+  const handleSaveClick = async () => {
     setComment((prevArr) => [ ...prevArr,commentInputValue]);
     const now = new Date();
     const dateString = now.toLocaleDateString();
@@ -38,6 +58,33 @@ function Comment() {
     setCommentDate((dateArr) => [ ...dateArr, dateString]);
     setCurrentTime((timeArr) => [...timeArr, timeString]);
   };
+  
+  // const handleSaveClick = async () => {
+  //   try {
+  //     const response = await fetch('http://13.125.146.181:8080/feed/detail/1/comment', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json'
+  //       },
+  //       body: JSON.stringify({
+  //         'content': commentInputValue
+  //       })
+  //     });
+  
+  //     if (!response.ok) {
+  //       throw new Error('Failed to post comment');
+  //     }
+  //     const responseData = await response.json();
+  
+  //     // 댓글 전체 데이터를 추가합니다.
+  //     setComments(prevComments => [...prevComments, responseData]);
+  
+  //     console.log("댓글이 성공적으로 저장되었습니다.");
+  
+  //   } catch (error) {
+  //     console.error("댓글 저장 중 에러 발생:", error);
+  //   }
+  // };
 
   const handleDeleteComment = (index: number) => {
     console.log("삭제버튼 클릭");
@@ -46,7 +93,6 @@ function Comment() {
     newdelete.splice(index, 1);
     setComment(newdelete);
   };
-  console.log(commentdate, currentTime);
 
   const [page, setPage] = useState(2);
 
@@ -59,7 +105,46 @@ function Comment() {
   }, [inView]);
   const PAGE_SIZE = 4;
   const startIndex = (page - 1) * PAGE_SIZE;
-  const chunkData = comment.slice(0, startIndex + PAGE_SIZE);
+
+
+  const [responseData, setResponseData] = useState<CommentsDataType | null>(null);
+
+  const fetchData = async () => {
+    try {
+      // 댓글 가져오기
+      const response = await fetch('http://13.125.146.181:8080/feed/detail/1/comments');
+      const data = await response.json();
+      setResponseData(data);
+
+    } catch (error) {
+      console.error("Error fetching the data:", error);
+    }
+  };
+  
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  console.log(responseData)
+
+  // API 데이터를 상태로 관리합니다.
+const [comments, setComments] = useState<CommentData[]>([]);
+
+useEffect(() => {
+  // 데이터를 가져오는 함수입니다.
+  const fetchData = async () => {
+    try {
+      const response = await fetch('http://13.125.146.181:8080/feed/detail/1/comments');
+      const data: CommentsDataType = await response.json();
+      setComments(data.feedCommentData); // 상태를 업데이트합니다.
+    } catch (error) {
+      console.error("Error fetching the data:", error);
+    }
+  };
+  
+  fetchData();
+}, []);
+
 
   return (
     <div className="mb-14  max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8">
@@ -85,14 +170,14 @@ function Comment() {
       </div>
 
       <div className="mt-10 mb-[100px]">
-        {chunkData.map((item, index) => (
-          <div key={index} className="mt-10">
+        {comments.map((comment, index) => (
+          <div key={comment.feedCommentId} className="mt-10">
             <div className="grid grid-cols-6 gap-4 items-center mb-2">
               <img
                 src="/asset/img.png"
                 className="w-8 h-8 rounded-full col-span-1"
               />
-              <div className="font-bold col-span-3">Lee seeun</div>
+              <div className="font-bold col-span-3">{comment.userNickname}</div>
               <div className="col-span-2 flex justify-end gap-2">
                 <button
                   className="text-gray-400 text-sm"
@@ -108,10 +193,11 @@ function Comment() {
                 </button>
               </div>
             </div>
+
             {iscomment === false ? (
               <div className="grid grid-cols-6 gap-4 items-center">
                 <div className="w-8 h-8 rounded-full col-span-1"></div>
-                <div className="col-span-3">{item}</div>
+                <div className="col-span-3">{comment.content}</div>
                 <div className="col-span-2 flex justify-end gap-2"></div>
               </div>
             ) : (
@@ -119,7 +205,7 @@ function Comment() {
                 <input
                   className="border rounded col-span-3"
                   type="text"
-                  placeholder={item}
+                  placeholder={comment.content}
                   onChange={handleCommentChange}
                 />
                 <button
@@ -130,15 +216,16 @@ function Comment() {
                 </button>
               </div>
             )}
-            <div className="grid grid-cols-6 gap-4 items-center">
-              <div className="w-8 h-8 rounded-full col-span-1"></div>
-              <div className="col-span-3 text-gray-400 text-sm">
-                {commentdate[index]} {currentTime[index]}
-              </div>
-              <div className="col-span-2 flex justify-end gap-2"></div>
-            </div>
-          </div>
-        ))}
+
+    <div className="grid grid-cols-6 gap-4 items-center">
+      <div className="w-8 h-8 rounded-full col-span-1"></div>
+      <div className="col-span-3 text-gray-400 text-sm">
+        {new Date(comment.createdAt).toLocaleString()}
+      </div>
+      <div className="col-span-2 flex justify-end gap-2"></div>
+    </div>
+  </div>
+))}
       </div>
       <div ref={ref}>이게 보이면 무한 스크롤</div>
     </div>
