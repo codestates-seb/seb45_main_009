@@ -79,7 +79,7 @@ function Comment({ feedId }: CommentProps) {
     // feedPostDto 부분 추가
     const feedCommentPostDto = {
       "feedCommentId": 6,
-      "feedId": 6,
+      "feedId": feedId,
       "content": "댓글등록",
       "userNickname": "test",
       "createdAt": "2023-09-13T07:14:52.546276",
@@ -94,11 +94,12 @@ function Comment({ feedId }: CommentProps) {
 
   // 댓글 등록!!
   const handleSaveClick = async () => {
-    console.log("댓글등록 버튼 클릭")
+    console.log("댓글등록 버튼 클릭");
+
     const accessToken = sessionStorage.getItem('access_token');
 
     try {
-      const response =  globalAxios.post('/feed/detail/6/comment', formData, {
+      const response =  globalAxios.post(`/feed/detail/${feedId}/comment`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `${accessToken}`,
@@ -114,6 +115,21 @@ function Comment({ feedId }: CommentProps) {
 
   };
   
+  const deleteComment = async (feedCommentId: number) => {
+    const accessToken = sessionStorage.getItem('access_token');
+    try {
+      const response = await globalAxios.delete(`http://13.125.146.181:8080/feed/detail/comment/${feedCommentId}`, {
+        headers: {
+          Authorization: `${accessToken}`,
+        },
+      });
+  
+      if (response.status === 200) {
+      }
+    } catch (error) {
+      console.error("Error deleting the comment:", error);
+    }
+  }
   
 
   const handleDeleteComment = (index: number) => {
@@ -122,6 +138,7 @@ function Comment({ feedId }: CommentProps) {
     const newdelete = [...comment];
     newdelete.splice(index, 1);
     setComment(newdelete);
+
   };
 
   const [page, setPage] = useState(2);
@@ -179,7 +196,10 @@ function Comment({ feedId }: CommentProps) {
               </button>
               <button
                 className="text-gray-400 text-sm"
-                onClick={() => handleDeleteComment(index)}
+                onClick={() => {
+                  handleDeleteComment(index);
+                  deleteComment(comment.feedCommentId);
+                }}
               >
                 삭제
               </button>
