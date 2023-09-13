@@ -75,17 +75,12 @@ function FeedUpdataePageCor() {
       alert("사진을 하나 이상 등록해주세요.");
       return;
     }
-    const accessToken = sessionStorage.getItem("access_token");
     // 이미지 삭제 API
     if (imageToDelete.length !== 0) {
       for (let i = 0; i < imageToDelete.length; i++) {
         try {
           const imageUrl = `/feed/detail/${feedId}/image/${imageToDelete[i]}`;
-          const response = await globalAxios.delete(imageUrl, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          });
+          const response = await globalAxios.delete(imageUrl);
           console.log("이미지 삭제 성공", response);
         } catch (error) {
           console.error("이미지 삭제 중 오류 발생:", error);
@@ -115,7 +110,6 @@ function FeedUpdataePageCor() {
       const response = await globalAxios.patch(`/feed/detail/${feedId}/images`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${accessToken}`,
         },
       });
       console.log("피드 수정 성공", response);
