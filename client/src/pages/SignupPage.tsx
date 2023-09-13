@@ -155,6 +155,7 @@ function SignupPage() {
             },
           });
           console.log("response:", response);
+          alert("회원가입 완료");
           setIsSubmitted(true);
         } catch (error: any) {
           //에러 처리 로직..
@@ -252,6 +253,7 @@ function SignupPage() {
             },
           });
           console.log("response:", response);
+          alert("회원가입 완료");
           navigate("/login");
         } catch (error: any) {
           //에러 처리 로직..

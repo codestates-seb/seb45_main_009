@@ -34,7 +34,7 @@ function App() {
               <Route path="/" element={<MainPageInd />}></Route>
               <Route path="/store" element={<MainPageCor />}></Route>
               <Route path="/feeddetailcor" element={<FeedDetailPageCor />} />
-              <Route path="/feeddetailind" element={<FeedDetailPageInd />} />
+              <Route path="/feeddetailind/:feedId" element={<FeedDetailPageInd />} />
               <Route path="/feedformcor" element={<FeedFormPageCor />} />
               <Route path="/feedformind" element={<FeedFormPageInd />} />
               <Route path="/mypage/:page" element={<MyPage />} />

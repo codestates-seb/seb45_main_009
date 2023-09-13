@@ -33,6 +33,17 @@ const OauthLoadingPage = () => {
       const kakaoimg = kakaoUserInfoResponse.data.properties.profile_image;
 
       if (!kakaoemail) {
+        const kakaoUnlink = await axios.post(
+          "https://kapi.kakao.com/v1/user/unlink",
+          {},
+          {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+              Authorization: `Bearer ${kakaoTokenResponse.data.access_token}`,
+            },
+          }
+        );
+        console.log(kakaoUnlink);
         alert("이메일 제공에 동의를 하시지 않으면 로그인이 불가능합니다.");
         window.location.href = "/login";
       } else {
