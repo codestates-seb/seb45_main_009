@@ -97,7 +97,7 @@ function FeedUpdataePageCor() {
 
     const feedPatchDto = {
       content: bodyValue,
-      relatedTags: [...addedTags, ...selectedTags],
+      relatedTags: [...addedTags, ...selectedTags, ...regionTags],
     };
 
     const blob = new Blob([JSON.stringify(feedPatchDto)], {
@@ -178,6 +178,8 @@ function FeedUpdataePageCor() {
       relativeTags.forEach((tag: string) => {
         if (healthCategory.includes(tag)) {
           exerciseTags.push(tag);
+        } else if (regionCategory.includes(tag)) {
+          regionTags.push(tag);
         } else {
           additionalTags.push(tag);
         }
