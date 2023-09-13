@@ -24,6 +24,7 @@ public class FeedResponseDto {
     @Getter
     @Setter
     @Builder
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class FeedImageDto {
         private Long imageId;
         private String imageUrl;
@@ -32,6 +33,7 @@ public class FeedResponseDto {
         @Getter
         @Setter
         @Builder
+        @JsonInclude(JsonInclude.Include.NON_NULL)
         public static class ImageTagDto {
             private Long imageTagId;
             private String productName;
