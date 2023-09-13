@@ -4,18 +4,7 @@ import { TiDelete } from "react-icons/ti";
 import ImageForm from "../components/features/ImageForm";
 import { useNavigate } from "react-router";
 import globalAxios from "../data/data";
-
-interface ImageData {
-  file: File | null;
-  src: string;
-  tags: TagData[];
-}
-
-interface TagData {
-  x: number;
-  y: number;
-  data?: { name: string; price: string; info: string };
-}
+import { ImageData } from "../types/types";
 
 function FeedFormPageInd() {
   const navigate = useNavigate();
@@ -109,6 +98,7 @@ function FeedFormPageInd() {
         },
       });
       console.log(response);
+      //말풍선태그 추가api
       const imageIds = response.data.images.map((imageData: any) => imageData.imageId);
       for (let i = 0; i < imageIds.length; i++) {
         const imageId = imageIds[i];
