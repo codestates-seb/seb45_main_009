@@ -101,5 +101,4 @@ public class User {
     private UserProfile userProfile;
     // 마이 페이지
 
-
 }
