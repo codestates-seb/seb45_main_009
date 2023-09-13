@@ -1,7 +1,6 @@
 package com.mainproject.server.feed.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mainproject.server.image.entity.Image;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
