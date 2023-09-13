@@ -47,10 +47,12 @@ function Comment({ feedId }: CommentProps) {
 
   // 댓글생성
   const [commentInputValue, setCommentInputValue] = useState<string>("");
-  const [comment, setComment] = useState<string[]>(["멋있어요"]);
+  // const [comment, setComment] = useState<string[]>(["멋있어요"]);
 
 
   const [iscomment, setIsComment] = useState(false);
+
+  // 댓글 수정한 값 저장
   const [inputUpdateValue, setInputUpdateValue] = useState<string>("");
 
   const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,10 +66,6 @@ function Comment({ feedId }: CommentProps) {
   const handleEditComment = () => {
     setIsComment(true);
   };
-  const handleUpdateComment = (index: number) => {
-    comment[index] = inputUpdateValue;
-    setIsComment(false);
-  };
 
   let userInfo: any = null;
 
@@ -76,29 +74,7 @@ function Comment({ feedId }: CommentProps) {
       userInfo = JSON.parse(userInfoString);
   }
 
-  // 댓글 등록!!
-  // const handleSaveClick = async () => {
-  //   console.log("댓글등록 버튼 클릭");
-
-  //   const accessToken = sessionStorage.getItem('access_token');
-
-  //   try {
-  //     const response =  globalAxios.post(`/feed/detail/${feedId}/comment`, formData, {
-  //       headers: {
-  //         "Content-Type": "multipart/form-data",
-  //         Authorization: `${accessToken}`,
-  //       },
-  //     });
-  //     console.log("결과",response)
-  //     console.log("댓글 입력시 가는 데이터", JSON.stringify(feedCommentPostDto))
-
-  //   } catch (error) {
-  //     console.error("Error saving the comment:", error);
-  //   }
-
-
-  // };
-
+  // 시간
   function getCurrentDateTimeFormatted(): string {
     const now = new Date();
   
@@ -113,11 +89,9 @@ function Comment({ feedId }: CommentProps) {
     return `${year}. ${month}. ${day}. ${period} ${hours % 12 || 12}:${minutes}:${seconds}`;
   }
   const commentdate = getCurrentDateTimeFormatted();
-  console.log("등록 날짜",commentdate)
 
-
+  // 댓글 등록 !!
   const handleSaveClick = async () => {
-    // const accessToken = sessionStorage.getItem('access_token');
 
    const formData = new FormData();
 
@@ -139,7 +113,6 @@ function Comment({ feedId }: CommentProps) {
       const response = await globalAxios.post(`/feed/detail/${feedId}/comment`,formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          // Authorization: `${accessToken}`,
         },
         });
       if (response.status === 200) {
@@ -150,8 +123,7 @@ function Comment({ feedId }: CommentProps) {
     }
   }
 
-  
-  // 댓글 삭제 
+  // 댓글 삭제 !!
   const deleteComment = async (feedCommentId: number) => {
     try {
       const response = await globalAxios.delete(`/feed/detail/comment/${feedCommentId}`);
@@ -161,6 +133,77 @@ function Comment({ feedId }: CommentProps) {
       console.error("Error deleting the comment:", error);
     }
   }
+
+
+
+//   const handleUpdateComment = async (feedCommentId: number) => {
+//     console.log("댓글 수정하고 저장함", inputUpdateValue , feedCommentId);
+
+//     const formData = new FormData();
+
+//    const feedCommentPostDto = {
+//      "feedCommentId": feedCommentId,
+//      "feedId": feedId,
+//      "content": inputUpdateValue,
+//      "userNickname": userInfo ? userInfo.userNickname : "",
+//      "createdAt": commentdate,
+//      "modifiedAt": commentdate,
+//    };
+
+//    const blob = new Blob([JSON.stringify(feedCommentPostDto)], {
+//      type: "application/json",
+//    });
+//    formData.append("feedCommentPostDto", blob);
+
+//     try {
+//       const response = await globalAxios.post(`/feed/detail/${feedId}/comment`,formData, {
+//         headers: {
+//           "Content-Type": "multipart/form-data",
+//         },
+//         });
+//       if (response.status === 200) {
+//         // fetcCommentsData();  
+//       }
+//     } catch (error) {
+//       console.error("Error deleting the comment:", error);
+//     }
+
+// };
+const handleUpdateComment = async (feedCommentId: number) => {
+
+  const formData = new FormData();
+
+  const feedCommentPatchDto = {
+      "feedCommentId": feedCommentId,
+      "feedId": feedId,
+      "content": inputUpdateValue,
+      "userNickname": userInfo ? userInfo.userNickname : "",
+      "createdAt": commentdate,
+      "modifiedAt": commentdate,
+  };
+
+  const blob = new Blob([JSON.stringify(feedCommentPatchDto)], {
+      type: "application/json",
+  });
+  formData.append("feedCommentPatchDto", blob);
+
+  try {
+      // 수정 요청을 위해 PATCH 메서드를 사용합니다.
+      const response = await globalAxios.patch(`/feed/detail/comment/${feedCommentId}`, formData, {
+          headers: {
+              "Content-Type": "multipart/form-data",
+          },
+      });
+
+      if (response.status === 200) {
+          // 수정이 성공적으로 이루어진 후 댓글 목록을 다시 불러옵니다.
+          // fetcCommentsData();  
+      }
+  } catch (error) {
+      console.error("Error updating the comment:", error);
+  }
+};
+
 
 
   const [page, setPage] = useState(2);
@@ -233,7 +276,7 @@ function Comment({ feedId }: CommentProps) {
               <div className="col-span-2 flex justify-end gap-2"></div>
             </div>
           ) : (
-            <div className="grid grid-cols-5 gap-4 items-center ml-10">
+            <div className="grid grid-cols-5 gap-4 items-center ml-20 border">
               <input
                 className="border rounded col-span-3"
                 type="text"
@@ -242,7 +285,7 @@ function Comment({ feedId }: CommentProps) {
               />
               <button
                 className="text-gray-400 text-sm col-span-2"
-                onClick={() => handleUpdateComment(index)}
+                onClick={() => handleUpdateComment(comment.feedCommentId)}
               >
                 저장
               </button>
