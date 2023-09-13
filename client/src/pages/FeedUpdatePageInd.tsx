@@ -1,25 +1,16 @@
 import React, { useState, useEffect } from "react";
 
+import ImageForm from "../components/features/ImageForm";
 import ImageUpdateForm from "../components/features/ImageUpdateForm";
 import { TiDelete } from "react-icons/ti";
 import { useNavigate } from "react-router";
 import globalAxios from "../data/data";
 import loading from "../assets/images/loading.gif";
-
-interface ImageData {
-  file: File | null;
-  src: string;
-  tags: TagData[];
-}
-
-interface TagData {
-  x: number;
-  y: number;
-  data?: { name: string; price: string; info: string };
-}
+import { ImageData, FetcedImageData } from "../types/types";
+import { healthCategory } from "../data/category";
 
 function FeedUpdataePageInd() {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const [bodyValue, setBodyValue] = useState<string>("");
 
@@ -55,24 +46,15 @@ function FeedUpdataePageInd() {
       setInputTag("");
     }
   };
-  const healthCategory: string[] = [
-    "헬스",
-    "필라테스",
-    "크로스핏",
-    "러닝",
-    "수영",
-    "요가",
-    "홈트",
-    "축구",
-    "농구",
-    "기타",
-  ];
-
   //imageform props
-  //미리보기만
-  const [previewImg, setPreviewImg] = useState<ImageData[]>([]);
+
+  let feedId: number = 3;
   //새롭게 추가되는 파일
-  const [addedImg, setAddedImg] = useState<ImageData[]>([]);
+  const [previewImg, setPreviewImg] = useState<ImageData[]>([]);
+  //기존 사진-삭제만 가능
+  const [updatePreviewImg, setUpdatePreviewImg] = useState<FetcedImageData[]>([]);
+  //그중에 삭제할 이미지들
+  const [imageToDelete, setImageToDelete] = useState<number[]>([]);
 
   const submitForm = async () => {
     if (bodyValue.trim().length === 0) {
@@ -83,52 +65,103 @@ function FeedUpdataePageInd() {
       alert("연관 태그를 하나 이상 선택해주세요.");
       return;
     }
-    if (previewImg.length === 0) {
+    if (previewImg.length === 0 && updatePreviewImg.length === 0) {
       alert("사진을 하나 이상 등록해주세요.");
       return;
     }
-
+    const accessToken = sessionStorage.getItem("access_token");
+    // 이미지 삭제 API
+    if (imageToDelete.length !== 0) {
+      for (let i = 0; i < imageToDelete.length; i++) {
+        try {
+          const imageUrl = `/feed/detail/${feedId}/image/${imageToDelete[i]}`;
+          const response = await globalAxios.delete(imageUrl, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
+          console.log("이미지 삭제 성공", response);
+        } catch (error) {
+          console.error("이미지 삭제 중 오류 발생:", error);
+        }
+      }
+    }
+    // 이미지 추가/정보 수정 API
     const formData = new FormData();
 
-    // feedPostDto 부분 추가
-    const feedPostDto = {
+    const feedPatchDto = {
       content: bodyValue,
       relatedTags: [...addedTags, ...selectedTags],
     };
 
-    const blob = new Blob([JSON.stringify(feedPostDto)], {
+    const blob = new Blob([JSON.stringify(feedPatchDto)], {
       type: "application/json",
     });
-    formData.append("feedPostDto", blob);
+    formData.append("feedPatchDto", blob);
 
-    // imageUrl 부분 추가
-    addedImg.forEach((img, index) => {
+    previewImg.forEach((img, index) => {
       if (img.file) {
         formData.append("imageUrl", img.file, `image_${index}.jpg`);
       }
     });
 
-    const accessToken = sessionStorage.getItem("access_token");
     try {
-      const response = await globalAxios.post("/feed/add", formData, {
+      const response = await globalAxios.patch(`/feed/detail/${feedId}/images`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
-      alert("포스팅 성공");
+      console.log("피드 수정 성공", response);
+      //말풍선태그 추가api
+      const imageIds = response.data.images.slice(-previewImg.length).map((imageData: any) => imageData.imageId);
+      if (imageIds.length !== 0) {
+        for (let i = 0; i < imageIds.length; i++) {
+          const imageId = imageIds[i];
+          const imgTagData = previewImg[i].tags;
+
+          for (const tagData of imgTagData) {
+            const tagPostData = {
+              productName: tagData.data?.name,
+              productPrice: tagData.data?.price,
+              productInfo: tagData.data?.info,
+              positionX: tagData.x,
+              positionY: tagData.y,
+            };
+            const formData = new FormData();
+            const blob = new Blob([JSON.stringify(tagPostData)], {
+              type: "application/json",
+            });
+            formData.append("imageTag", blob);
+
+            try {
+              const response = await globalAxios.post(`/image/${imageId}`, formData, {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              });
+              console.log("말풍선 태그 등록 성공", response);
+            } catch (error) {
+              console.error("말풍선 태그 등록중 오류 발생:", error);
+            }
+          }
+        }
+      }
+      alert("피드 수정 성공");
       navigate("/");
     } catch (error: any) {
-      console.error("서버 오류:", error.response ? error.response.data : error.message);
+      console.error("피드 수정 중 오류 발생(전쳬):", error);
     }
   };
 
-  //////////////update
+  //////////////getData
   const getFeedData = async () => {
     try {
-      const response = await globalAxios.get(`/feed/detail/${18}`);
+      const response = await globalAxios.get(`/feed/detail/${feedId}`);
       const feedData = response.data;
-
+      console.log(feedData);
+      //피드id넣기
+      feedId = feedData.feedId;
       // 본문 넣기
       setBodyValue(feedData.content);
 
@@ -147,11 +180,12 @@ function FeedUpdataePageInd() {
       setAddedTags(additionalTags);
 
       // 이미지 넣기
-      const imagesData: ImageData[] = feedData.images.map((img: any) => ({
+      const imagesData: FetcedImageData[] = feedData.images.map((img: any) => ({
+        imageId: img.imageId,
         src: img.imageUrl,
-        tags: null,
+        tags: img.imageTags,
       }));
-      setPreviewImg(imagesData);
+      setUpdatePreviewImg(imagesData);
 
       // 로딩 상태 종료
       setIsLoading(false);
@@ -163,9 +197,6 @@ function FeedUpdataePageInd() {
     getFeedData();
   }, []);
 
-  useEffect(() => {
-    console.log(previewImg);
-  }, [previewImg]);
   return (
     <div className="flex justify-center items-center flex-col my-20 ">
       {isLoading ? (
@@ -175,7 +206,13 @@ function FeedUpdataePageInd() {
       ) : (
         <div className="flex flex-row relative max-mobile:flex-col max-mobile:mx-1 max-tablet:flex-col">
           <div className="flex flex-col  min-w-[300px] max-w-[420px] mr-10 max-mobile:mr-1 max-tablet:mr-1">
-            <ImageUpdateForm previewImg={previewImg} setPreviewImg={setPreviewImg}></ImageUpdateForm>
+            <ImageUpdateForm
+              updatePreviewImg={updatePreviewImg}
+              setUpdatePreviewImg={setUpdatePreviewImg}
+              imageToDelete={imageToDelete}
+              setImageToDelete={setImageToDelete}
+            ></ImageUpdateForm>
+            <ImageForm previewImg={previewImg} setPreviewImg={setPreviewImg}></ImageForm>
           </div>
           <div className="flex flex-col min-w-[300px] max-w-[420px]  max-mobile:mt-4 max-tablet:mt-4">
             <textarea
