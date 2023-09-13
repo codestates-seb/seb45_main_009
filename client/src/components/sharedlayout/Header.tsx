@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/reducers/loginSlice";
-import { UserInfo } from "../../types/types";
+import { setFilteredData } from "../../redux/reducers/feedSlice";
+import { RootStates, UserInfo } from "../../types/types";
 import { BiSearch } from "react-icons/bi/";
 import { IoNotificationsOutline } from "react-icons/io5/";
 import { RiMenuUnfoldFill, RiMenuFoldFill } from "react-icons/ri";
@@ -58,6 +59,20 @@ function Header() {
     }
   };
 
+  const { allFeedData } = useSelector((state: RootStates) => state.feed);
+  const [search, setSearch] = useState("");
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    setSearch(inputValue);
+
+    const filteredData = allFeedData.filter((feed) => {
+      return feed.userNickname === inputValue;
+    });
+
+    dispatch(setFilteredData(filteredData));
+  };
+
   return (
     <header className="flex justify-center items-center m-2">
       <Link to="/">
@@ -72,6 +87,8 @@ function Header() {
         <input
           className="w-full outline-none text-[8px] sm:text-sm"
           placeholder="검색하실 ID 또는 #태그를 입력하세요."
+          value={search}
+          onChange={handleInputChange}
         />
       </div>
       {isMobile ? (

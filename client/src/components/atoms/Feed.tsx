@@ -2,7 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
 import globalAxios from "../../data/data";
-
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setAllFeedData,
+  setAllUserData,
+  setPage,
+  setLoading,
+  setHasMore,
+} from "../../redux/reducers/feedSlice";
+import { RootStates } from "../../types/types";
 interface UserData {
   bio: string;
   createdAt: string;
@@ -37,12 +45,11 @@ interface FeedProps {
 }
 
 const Feed = ({ selectedFilter }: FeedProps) => {
-  const [allFeedData, setAllFeedData] = useState<FeedData[]>([]);
-  const [allUserData, setAllUserData] = useState<UserData[]>([]);
+  const dispatch = useDispatch();
+  const { allFeedData, allUserData, page, loading, hasMore, filteredDatas } =
+    useSelector((state: RootStates) => state.feed);
 
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
+  const usethis = filteredDatas.length !== 0 ? filteredDatas : allFeedData;
 
   const [ref, inView] = useInView();
 
@@ -57,7 +64,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
 
   const getMainListData = async () => {
     try {
-      setLoading(true);
+      dispatch(setLoading(true));
 
       // 서버에서 페이지네이션을 고려하여 데이터를 가져옴
       const response = await globalAxios.get(currentPage, {
@@ -67,17 +74,17 @@ const Feed = ({ selectedFilter }: FeedProps) => {
 
       if (getData.length === 0) {
         // 더 이상 데이터가 없는 경우
-        setHasMore(false);
+        dispatch(setHasMore(false));
       } else {
         // 이전 데이터와 새로운 데이터 합치기
-        setAllFeedData((prevData) => [...prevData, ...getData]);
-        setPage((prevPage) => prevPage + 1);
+        dispatch(setAllFeedData(getData));
+        dispatch(setPage(page + 1));
       }
 
-      setLoading(false);
+      dispatch(setLoading(false));
     } catch (err) {
       console.log("Error >>", err);
-      setLoading(false);
+      dispatch(setLoading(false));
     }
   };
 
@@ -85,7 +92,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
     try {
       const response = await globalAxios.get("/users");
       const getData = response.data.content;
-      setAllUserData(getData);
+      dispatch(setAllUserData(getData));
     } catch (err) {
       console.log("Error >>", err);
     }
@@ -96,11 +103,9 @@ const Feed = ({ selectedFilter }: FeedProps) => {
       getMainListData();
       getUserData();
     }
-    console.log(allUserData);
-    console.log(allFeedData);
   }, [inView, loading, hasMore]);
 
-  const filteredData = allFeedData.filter((user) => {
+  const filteredData = usethis.filter((user) => {
     const hasExerciseTag =
       selectedFilter.includes("운동전체") ||
       selectedFilter.some((filter) => user.relatedTags.includes(filter));
