@@ -193,4 +193,3 @@ function DetailFeedInd() {
 }
 
 export default DetailFeedInd;
-
