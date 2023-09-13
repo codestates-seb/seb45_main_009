@@ -4,6 +4,7 @@ import { RiAlarmWarningFill } from "react-icons/ri";
 import { AiFillPlusCircle } from "react-icons/ai";
 import React from "react";
 import axios from 'axios';
+// import { useParams } from "react-router-dom";
 
 
 function TagModal({
@@ -37,20 +38,20 @@ function TagModal({
   );
 }
     // 정보 태그 데이터
-    const tagDatas = [
-      {
-        taglocation: ["15% 5%", "90% 10%", "30% 90%"],
-        title: ["adidas", "Nike", "adidas"],
-        size: ["XL", "280", "s"],
-        price: [33000, 99000, 20000],
-      },
-      {
-        taglocation: ["50% 50%", "10% 30%", "90% 90%"],
-        title: ["2adidas", "2Nike", "2adidas"],
-        size: ["XL", "280", "s"],
-        price: [233000, 299000, 220000],
-      },
-    ];
+    // const tagDatas = [
+    //   {
+    //     taglocation: ["15% 5%", "90% 10%", "30% 90%"],
+    //     title: ["adidas", "Nike", "adidas"],
+    //     size: ["XL", "280", "s"],
+    //     price: [33000, 99000, 20000],
+    //   },
+    //   {
+    //     taglocation: ["50% 50%", "10% 30%", "90% 90%"],
+    //     title: ["2adidas", "2Nike", "2adidas"],
+    //     size: ["XL", "280", "s"],
+    //     price: [233000, 299000, 220000],
+    //   },
+    // ];
 
 function DetailFeedInd() {
   type ResponseDataType = {
@@ -65,13 +66,15 @@ function DetailFeedInd() {
   };
 
   // 피드 가져오기
-  const feedid = 18;
+  // const { number } = useParams();
+  // const feedId = Number(number); 
+  const feedId = 18;
 
   const [responseData, setResponseData] = useState<ResponseDataType | null>(null);
 
   async function fetchData() {
     try {
-      const response = await fetch(`http://13.125.146.181:8080/feed/detail/${feedid}`);
+      const response = await fetch(`http://13.125.146.181:8080/feed/detail/${feedId}`);
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -86,8 +89,7 @@ function DetailFeedInd() {
     fetchData();
   }, []);
 
-  console.log("피드데이터" + responseData)
-
+  console.log(responseData?.feedId)
 
   // 좋아요
   const [isLiked, setIsLiked] = useState(false);
@@ -172,20 +174,20 @@ function DetailFeedInd() {
         <div className="mt-[40px] flex flex-wrap">
           
           {
-            tagDatas.map((tagData, dataIndex) => (
-              tagData.title.map((_, itemIndex) => (
-                <div className="border rounded flex-grow mr-4 mb-4 p-2 text-sm" key={`${dataIndex}-${itemIndex}`}>
+            responseData?.images.map((image, imageIndex) => (
+              image.imageTags.map((tag, tagIndex) => (
+                <div className="border rounded flex-grow mr-4 mb-4 p-2 text-sm" key={`${imageIndex}-${tagIndex}`}>
                   <div className="flex">
                     <div className="flex-none" style={{ width: "70px" }}>제품명 : </div>
-                    <div className="flex-grow font-bold">{tagData.title[itemIndex]}</div>
+                    <div className="flex-grow font-bold">{tag.productName}</div>
                   </div>
                   <div className="flex">
                     <div className="flex-none " style={{ width: "70px" }}>가격 : </div>
-                    <div>₩ {tagData.price[itemIndex]}</div>
+                    <div>₩ {parseInt(tag.productPrice)}</div>
                   </div>
                   <div className="flex">
                     <div className="flex-none" style={{ width: "70px" }}>추가정보 : </div>
-                    <div className="text-btn-color">{tagData.size[itemIndex]}</div>
+                    <div className="text-btn-color">{tag.productInfo}</div>
                   </div>
                 </div>
               ))
