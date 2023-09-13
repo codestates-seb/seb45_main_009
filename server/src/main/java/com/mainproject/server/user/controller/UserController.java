@@ -50,9 +50,13 @@ public class UserController {
         log.info("### user login start! ###");
         User user = mapper.postToUser(requestBody);
 
-        // "ROLE_USER" 역할을 설정
-        user.getRoles().add("USER");
-
+        //"ROLE_ADMIN" 생성
+        if("admin@gmail.com".equals(user.getEmail())){
+            user.getRoles().add("ADMIN");
+        }else {
+            // "ROLE_USER" 역할을 설정
+            user.getRoles().add("USER");
+        }
         // UserService를 사용하여 유저 생성
         User createdUser = userService.createUser(user, imageFiles);
 
@@ -101,8 +105,7 @@ public class UserController {
         user.getRoles().add("USER");
         // 닉네임을 kakao로 설정
         user.setNickname("kakao");
-        // 이메일에 "3"을 추가 (이 부분은 필요에 따라 변경 가능)
-        user.setEmail(user.getEmail() + "3");
+        user.setEmail(user.getEmail());
 
         // 사용자가 이메일로 이미 가입했는지 확인
         if (!userService.existsByEmail(user.getEmail())) {

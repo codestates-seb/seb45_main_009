@@ -36,9 +36,10 @@ public class LikedService {
                     feed.get().getLikedList().remove(liked);
                     liked.disconnectFeed();
                     likedRepository.delete(liked);
-                    return false;
+                    return false; // 좋아요를 취소하고 반환
                 }
             }
+            // 좋아요를 추가하고 반환
             likedRepository.save(Liked.builder()
                     .user(user)
                     .feed(feed.get())
@@ -55,6 +56,7 @@ public class LikedService {
 
         if (feedOptional.isPresent()) {
             Feed feed = feedOptional.get();
+            // 피드에 좋아요를 누른 사용자 목록을 가져와서 사용자 ID 목록으로 매핑
             return feed.getLikedList()
                     .stream()
                     .map(liked -> liked.getUser().getUserId())
@@ -64,6 +66,15 @@ public class LikedService {
         }
     }
 
-
-
+    // 피드에 좋아요 누른 사용자 목록 카운트
+    public long countLikedUsers(Long feedId) {
+        Optional<Feed> feedOptional = feedRepository.findById(feedId);
+        if (feedOptional.isPresent()) {
+            Feed feed = feedOptional.get();
+            // 좋아요 누른 사용자 목록의 크기를 반환
+            return feed.getLikedList().size();
+        } else {
+            throw new BusinessLogicException(ExceptionCode.FEED_NOT_FOUND);
+        }
+    }
 }

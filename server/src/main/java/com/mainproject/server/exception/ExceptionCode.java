@@ -12,7 +12,8 @@ public enum ExceptionCode {
     IMAGE_UPLOAD_ERROR(500, "이미지 업로드 중 오류가 발생했습니다."),
     IMAGE_TAG_NOT_FOUND(404, "이미지 태그를 찾을 수 없습니다."),
     SELF_FOLLOW_NOT_ALLOWED(400, "본인을 팔로우할 수 없습니다."),
-
+    SELF_REPORT_NOT_ALLOWED(400, "본인 게시물을 신고할 수 없습니다."),
+    ALREADY_REPORT(400, "게시물을 이미 신고하셨습니다."),
     INVALID_INPUT(400, "잘못된 입력입니다."),
     INVALID_PASSWORD(400, "비밀번호가 유효하지 않습니다"), // 비밀번호 유효성 검사 실패 예외 코드 추가
     FEED_NOT_FOUND(404, "피드를 찾을 수 없습니다."),

@@ -6,7 +6,7 @@ import com.mainproject.server.feed.dto.FeedResponseDto;
 import com.mainproject.server.feed.enitiy.Feed;
 import com.mainproject.server.feed.mapper.FeedMapper;
 import com.mainproject.server.feed.service.FeedService;
-import com.mainproject.server.imagetag.mapper.ImageTagMapper;
+import com.mainproject.server.liked.service.LikedService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +19,12 @@ import java.util.List;
 public class FeedController {
     private final FeedService feedService;
     private final FeedMapper feedMapper;
+    private final LikedService likedService;
 
-    public FeedController(FeedService feedService, FeedMapper feedMapper) {
+    public FeedController(FeedService feedService, FeedMapper feedMapper, LikedService likedService) {
         this.feedService = feedService;
         this.feedMapper = feedMapper;
+        this.likedService = likedService;
     }
 
     // 피드 등록
@@ -88,7 +90,15 @@ public class FeedController {
 
         // 피드가 있는지 조회
         Feed feed = feedService.findFeed(feedId);
-        return new ResponseEntity<>(feedMapper.feedToFeedResponseDto(feed), HttpStatus.OK);
+
+        // 피드에 좋아요를 누른 사용자 목록의 카운트 조회
+        long likeCount = likedService.countLikedUsers(feedId);
+
+        // 피드와 좋아요 누른 사용자 목록의 카운트를 함께 반환
+        FeedResponseDto responseDto = feedMapper.feedToFeedResponseDto(feed);
+        responseDto.setLikeCount(likeCount);
+
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     // 피드 삭제(이미지도 함께 삭제됨)
