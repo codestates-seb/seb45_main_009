@@ -7,6 +7,7 @@ import { useNavigate } from "react-router";
 import globalAxios from "../data/data";
 import loading from "../assets/images/loading.gif";
 import { ImageData, FetcedImageData } from "../types/types";
+import { healthCategory } from "../data/category";
 
 function FeedUpdataePageInd() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -45,19 +46,6 @@ function FeedUpdataePageInd() {
       setInputTag("");
     }
   };
-  const healthCategory: string[] = [
-    "헬스",
-    "필라테스",
-    "크로스핏",
-    "러닝",
-    "수영",
-    "요가",
-    "홈트",
-    "축구",
-    "농구",
-    "기타",
-  ];
-
   //imageform props
 
   let feedId: number = 2;

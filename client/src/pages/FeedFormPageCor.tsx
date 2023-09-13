@@ -1,22 +1,11 @@
 import React, { useState } from "react";
-import axios from "axios";
 
 import { TiDelete } from "react-icons/ti";
 import ImageForm from "../components/features/ImageForm";
 import { useNavigate } from "react-router";
 import globalAxios from "../data/data";
-
-interface ImageData {
-  file: File | null;
-  src: string;
-  tags: TagData[];
-}
-
-interface TagData {
-  x: number;
-  y: number;
-  data?: { name: string; price: string; info: string };
-}
+import { ImageData } from "../types/types";
+import { healthCategory, regionCategory } from "../data/category";
 
 function FeedFormPageCor() {
   const navigate = useNavigate();
@@ -62,33 +51,6 @@ function FeedFormPageCor() {
       setInputTag("");
     }
   };
-  const healthCategory: string[] = [
-    "헬스",
-    "필라테스",
-    "크로스핏",
-    "러닝",
-    "수영",
-    "요가",
-    "홈트",
-    "축구",
-    "농구",
-    "기타",
-  ];
-  const regionCategory: string[] = [
-    "서울",
-    "경기",
-    "인천",
-    "강원",
-    "충북",
-    "충남",
-    "전북",
-    "전남",
-    "경북",
-    "경남",
-    "부산",
-    "제주",
-    "기타",
-  ];
 
   //imageform props
   const [previewImg, setPreviewImg] = useState<ImageData[]>([]);
