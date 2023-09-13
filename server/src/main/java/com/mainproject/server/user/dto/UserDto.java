@@ -83,6 +83,18 @@ public class UserDto {
 
     }
 
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public static class UserInfo {
+        private Long userId;
+        private String nickname;
+        private String profileimg;
+    }
+
 
     @Getter
     @Setter

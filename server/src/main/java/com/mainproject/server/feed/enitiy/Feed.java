@@ -1,6 +1,7 @@
 package com.mainproject.server.feed.enitiy;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mainproject.server.feedcomment.entity.FeedComment;
 import com.mainproject.server.image.entity.Image;
 import com.mainproject.server.liked.entity.Liked;

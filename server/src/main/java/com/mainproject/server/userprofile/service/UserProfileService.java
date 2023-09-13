@@ -73,6 +73,10 @@ public class UserProfileService {
                 .feedCount(userProfile.getFeedCount())
                 .followerCount(userProfile.getFollowerCount())
                 .followCount(userProfile.getFollowCount())
+                .bio(user.getBio())
+                .price(user.getPrice())
+                .height(user.getHeight())
+                .weight(user.getWeight())
                 .feedList(feedList)
                 .build();
 

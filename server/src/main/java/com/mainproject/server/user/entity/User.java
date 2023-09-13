@@ -3,6 +3,7 @@ package com.mainproject.server.user.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mainproject.server.feed.enitiy.Feed;
 import com.mainproject.server.follow.entity.Follow;
