@@ -69,7 +69,11 @@ function FeedUpdataePageInd() {
   ];
 
   //imageform props
+  //미리보기만
   const [previewImg, setPreviewImg] = useState<ImageData[]>([]);
+  //새롭게 추가되는 파일
+  const [addedImg, setAddedImg] = useState<ImageData[]>([]);
+
   const submitForm = async () => {
     if (bodyValue.trim().length === 0) {
       alert("내용을 입력해주세요.");
@@ -98,7 +102,7 @@ function FeedUpdataePageInd() {
     formData.append("feedPostDto", blob);
 
     // imageUrl 부분 추가
-    previewImg.forEach((img, index) => {
+    addedImg.forEach((img, index) => {
       if (img.file) {
         formData.append("imageUrl", img.file, `image_${index}.jpg`);
       }
@@ -122,11 +126,13 @@ function FeedUpdataePageInd() {
   //////////////update
   const getFeedData = async () => {
     try {
-      const response = await globalAxios.get(`/feed/detail/${1}`);
+      const response = await globalAxios.get(`/feed/detail/${18}`);
       const feedData = response.data;
-      //본문넣기
+
+      // 본문 넣기
       setBodyValue(feedData.content);
-      //태그넣기
+
+      // 태그 넣기
       const relativeTags = feedData.relatedTags;
       const exerciseTags: string[] = [];
       const additionalTags: string[] = [];
@@ -139,23 +145,15 @@ function FeedUpdataePageInd() {
       });
       setSelectedTags(exerciseTags);
       setAddedTags(additionalTags);
-      //이미지 넣기
-      console.log(feedData.images);
-      // const imagesData: ImageData[] = await Promise.all(
-      //   feedData.images.map(async (img: any) => {
-      //     // 이미지 URL을 파일로 변환하는 함수 (위에서 제안한 fetch와 Blob를 사용한 함수)
-      //     const file = await urlToFile(img.imageUrl, `image_${img.id}.jpg`);
-      //     return {
-      //       file: file,
-      //       src: img.imageUrl,
-      //       tags: null,
-      //     };
-      //   })
-      // );
 
-      // setPreviewImg(imagesData);
+      // 이미지 넣기
+      const imagesData: ImageData[] = feedData.images.map((img: any) => ({
+        src: img.imageUrl,
+        tags: null,
+      }));
+      setPreviewImg(imagesData);
 
-      // 모든 작업이 끝난 후 로딩 상태 종료
+      // 로딩 상태 종료
       setIsLoading(false);
     } catch (error: any) {
       console.error("error", error);
@@ -164,6 +162,10 @@ function FeedUpdataePageInd() {
   useEffect(() => {
     getFeedData();
   }, []);
+
+  useEffect(() => {
+    console.log(previewImg);
+  }, [previewImg]);
   return (
     <div className="flex justify-center items-center flex-col my-20 ">
       {isLoading ? (
