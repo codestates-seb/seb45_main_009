@@ -70,24 +70,12 @@ function Comment({ feedId }: CommentProps) {
     setIsComment(false);
   };
 
+  let userInfo: any = null;
 
-   const formData = new FormData();
-
-    // feedPostDto 부분 추가
-    const feedCommentPostDto = {
-      "feedCommentId": 6,
-      "feedId": feedId,
-      "content": commentInputValue,
-      "userNickname": "test",
-      "createdAt": "2023-09-13T07:14:52.546276",
-      "modifiedAt": "2023-09-13T07:14:52.546278"
-    };
-
-    const blob = new Blob([JSON.stringify(feedCommentPostDto)], {
-      type: "application/json",
-    });
-    formData.append("feedCommentPostDto", blob);
-
+  const userInfoString = sessionStorage.getItem('user_info');
+  if (userInfoString) {
+      userInfo = JSON.parse(userInfoString);
+  }
 
   // 댓글 등록!!
   // const handleSaveClick = async () => {
@@ -112,8 +100,44 @@ function Comment({ feedId }: CommentProps) {
 
   // };
 
+  function getCurrentDateTimeFormatted(): string {
+    const now = new Date();
+  
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1; // 월은 0부터 시작하므로 1을 더합니다.
+    const day = now.getDate();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const seconds = now.getSeconds();
+    const period = hours >= 12 ? '오후' : '오전';
+  
+    return `${year}. ${month}. ${day}. ${period} ${hours % 12 || 12}:${minutes}:${seconds}`;
+  }
+  const commentdate = getCurrentDateTimeFormatted();
+  console.log("등록 날짜",commentdate)
+
+
   const handleSaveClick = async () => {
     const accessToken = sessionStorage.getItem('access_token');
+    // const currentDateTime = getCurrentDateTimeFormatted();
+
+
+   const formData = new FormData();
+
+   const feedCommentPostDto = {
+     "feedCommentId": 6,
+     "feedId": feedId,
+     "content": commentInputValue,
+     "userNickname": userInfo ? userInfo.userNickname : "",
+     "createdAt": commentdate,
+     "modifiedAt": commentdate,
+   };
+
+   const blob = new Blob([JSON.stringify(feedCommentPostDto)], {
+     type: "application/json",
+   });
+   formData.append("feedCommentPostDto", blob);
+
     try {
       const response = await globalAxios.post(`/feed/detail/${feedId}/comment`,formData, {
         headers: {
