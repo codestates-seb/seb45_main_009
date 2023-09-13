@@ -4,16 +4,32 @@ import { useInView } from "react-intersection-observer";
 import globalAxios from "../../data/data";
 
 interface UserData {
+  bio: string;
+  createdAt: string;
+  email: string;
+  height: number;
+  location: string;
+  modifiedAt: string;
+  nickname: string;
+  price: number | string;
   profileimg: string;
-  feedId: string;
+  roles: string[];
+  sport: string;
+  userId: number;
+  weight: number;
+}
+
+interface FeedData {
+  feedId: number;
+  userNickname: string;
+  profileImageUrl: string;
+  content: string;
+  relatedTags: string[];
   images: {
     imageId: number;
     imageUrl: string;
     imageTags: string[];
   }[];
-  userInfo: string;
-  relatedTags: string[];
-  location: string;
 }
 
 interface FeedProps {
@@ -21,9 +37,12 @@ interface FeedProps {
 }
 
 const Feed = ({ selectedFilter }: FeedProps) => {
-  const [allData, setAllData] = useState<UserData[]>([]);
-  const [allProfileData, setAllProfileData] = useState<UserData[]>([]);
-  const [page, setPage] = useState(2);
+  const [allFeedData, setAllFeedData] = useState<FeedData[]>([]);
+  const [allUserData, setAllUserData] = useState<UserData[]>([]);
+
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
   const [ref, inView] = useInView();
 
@@ -34,40 +53,57 @@ const Feed = ({ selectedFilter }: FeedProps) => {
     location.pathname === "/" ? "/feeddetailind" : "/feeddetailcor";
   const currentPage = location.pathname === "/" ? "/" : "/store";
 
+  const PAGE_SIZE = 4; // 페이지당 데이터 개수
+
   const getMainListData = async () => {
     try {
-      const response = await globalAxios.get(currentPage);
-      const getData = response.data;
-      setAllData(getData);
-      console.log("response MainList >>", getData);
+      setLoading(true);
+
+      // 서버에서 페이지네이션을 고려하여 데이터를 가져옴
+      const response = await globalAxios.get(currentPage, {
+        params: { page, pageSize: PAGE_SIZE },
+      });
+      const getData = response.data.feedList;
+
+      console.log(getData);
+
+      if (getData.length === 0) {
+        // 더 이상 데이터가 없는 경우
+        setHasMore(false);
+      } else {
+        // 이전 데이터와 새로운 데이터 합치기
+        setAllFeedData((prevData) => [...prevData, ...getData]);
+        setPage((prevPage) => prevPage + 1);
+      }
+
+      setLoading(false);
+    } catch (err) {
+      console.log("Error >>", err);
+      setLoading(false);
+    }
+  };
+
+  const getUserData = async () => {
+    try {
+      const response = await globalAxios.get("/users");
+      const getData = response.data.content;
+      setAllUserData(getData);
+      console.log("user", getData);
     } catch (err) {
       console.log("Error >>", err);
     }
   };
 
   useEffect(() => {
-    if (inView) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  }, [inView]);
-  const PAGE_SIZE = 4;
-  const startIndex = (page - 1) * PAGE_SIZE;
-  const chunkData = allData.slice(0, startIndex + PAGE_SIZE);
-
-  const filteredData = chunkData.filter((user) => {
-    const hasExerciseTag =
-      selectedFilter.includes("운동전체") ||
-      selectedFilter.some((filter) => user.relatedTags.includes(filter));
-    const hasLocationTag =
-      selectedFilter.includes("지역전체") ||
-      selectedFilter.some((tag) => user.relatedTags.includes(tag));
-
-    return hasExerciseTag && hasLocationTag;
-  });
-  console.log(selectedFilter, "여기랍니다");
-  useEffect(() => {
-    getMainListData();
+    getUserData();
   }, []);
+
+  useEffect(() => {
+    if (inView && !loading && hasMore) {
+      getMainListData();
+      getUserData();
+    }
+  }, [inView, loading, hasMore]);
 
   return (
     <section className="flex justify-center flex-col items-center ">
@@ -82,30 +118,36 @@ const Feed = ({ selectedFilter }: FeedProps) => {
         </div>
 
         <section className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4  mb-24">
-          {filteredData.map((user, idx) => (
-            <article key={idx} className="  mb-4 min-w-[250px]">
-              <div className="flex mb-4">
-                <img
-                  src={user.profileimg}
-                  alt={`ProfileImg of ${user.feedId}`}
-                  className="rounded-full border mr-2 w-10 h-10"
-                />
-                <div className="ml-2">
-                  <p>{user.feedId}</p>
-                  <p className="text-gray-400">{user.userInfo}</p>
-                </div>
-              </div>
-              <Link to={currentDetail}>
-                <div>
+          {allFeedData.map((feed, idx) => {
+            const user = allUserData.find(
+              (userData) => userData.nickname === feed.userNickname
+            );
+
+            return (
+              <article key={idx} className="  mb-4 min-w-[250px]">
+                <div className="flex mb-4">
                   <img
-                    src={user.images[0].imageUrl}
-                    alt={`FeedImg of ${user.feedId}`}
-                    className="w-[13vw] h-[30vh] object-cover min-w-[250px] border"
+                    src={feed.profileImageUrl}
+                    alt={`ProfileImg of ${feed.feedId}`}
+                    className="rounded-full border mr-2 w-10 h-10"
                   />
+                  <div className="ml-2">
+                    <p>{feed.userNickname}</p>
+                    {user && <p className="text-gray-400">{user.bio}</p>}
+                  </div>
                 </div>
-              </Link>
-            </article>
-          ))}
+                <Link to={`${currentDetail}/${feed.feedId}`}>
+                  <div>
+                    <img
+                      src={feed.images[0].imageUrl}
+                      alt={`FeedImg of ${feed.feedId}`}
+                      className="w-[13vw] h-[30vh] object-cover min-w-[250px] border"
+                    />
+                  </div>
+                </Link>
+              </article>
+            );
+          })}
         </section>
       </div>
 
