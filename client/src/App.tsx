@@ -35,6 +35,7 @@ function App() {
               <Route path="/" element={<MainPageInd />}></Route>
               <Route path="/store" element={<MainPageCor />}></Route>
               <Route path="/feeddetailcor" element={<FeedDetailPageCor />} />
+
               <Route path="/feeddetailind/:feedId" element={<FeedDetailPageInd />} />
               <Route path="/feedformcor" element={<FeedFormPageCor />} />
               <Route path="/feedformind" element={<FeedFormPageInd />} />
@@ -43,7 +44,10 @@ function App() {
               <Route path="/login" element={<LoginPage />}></Route>
               <Route path="/signup" element={<SignupPage />}></Route>
               <Route path="/profile" element={<Profile />}></Route>
-              <Route path="/oauthloading" element={<OauthLoadingPage />}></Route>
+              <Route
+                path="/oauthloading"
+                element={<OauthLoadingPage />}
+              ></Route>
               <Route path="/alarmpage" element={<Alarm />}></Route>
               <Route path="*" element={<Not404 />} />
             </Routes>
