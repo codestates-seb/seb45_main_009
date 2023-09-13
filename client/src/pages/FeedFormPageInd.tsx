@@ -89,12 +89,10 @@ function FeedFormPageInd() {
       }
     });
 
-    const accessToken = sessionStorage.getItem("access_token");
     try {
       const response = await globalAxios.post("/feed/add", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `${accessToken}`,
         },
       });
       console.log(response);

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import TextareaAutosize from "react-textarea-autosize";
+import globalAxios from "../../data/data";
 
 interface FormData {
   introduction: string;
@@ -14,6 +15,14 @@ interface FormData {
 }
 
 const MyPageEditInfo = () => {
+  const getData = async () => {
+    try {
+    } catch (error) {}
+  };
+  useEffect(() => {
+    getData();
+  }, []);
+
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState<FormData>({
@@ -47,9 +56,7 @@ const MyPageEditInfo = () => {
     }
   }, []);
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -159,13 +166,7 @@ const MyPageEditInfo = () => {
             <p>남자</p>
           </div>
           <div className="flex">
-            <input
-              className="ml-[10px]"
-              id="여자"
-              value="여자"
-              name="gender"
-              type="radio"
-            />
+            <input className="ml-[10px]" id="여자" value="여자" name="gender" type="radio" />
             <p>여자</p>
           </div>
         </div>
