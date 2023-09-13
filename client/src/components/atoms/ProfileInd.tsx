@@ -31,7 +31,12 @@ const Modal = ({ onClose } :any) => {
     )
 };
 
-function ProfileInd() {
+
+interface ProfileIndProps {
+  feedId: number;
+}
+
+function ProfileInd({ feedId }: ProfileIndProps) {
   // 모달창
   const [isModalOpen, setModalOpen] = useState(false);
 
@@ -57,9 +62,6 @@ function ProfileInd() {
     setIsFollowing(!isFollowing);
   };
 
-  // 피드 유저 불러오기
-  const feedid = 3;
-
   type ResponseDataType = {
     feedId: number;
     userNickname: string;
@@ -78,7 +80,7 @@ function ProfileInd() {
   useEffect(() => {
     async function fetcFeedData() {
       try {
-        const response = await globalAxios.get(`/feed/detail/${feedid}`);
+        const response = await globalAxios.get(`/feed/detail/${feedId}`);
         if (response.status === 200) {
           setFeedUserData(response.data);
         }

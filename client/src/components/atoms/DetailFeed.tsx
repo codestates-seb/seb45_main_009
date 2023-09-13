@@ -2,10 +2,11 @@ import { useState, useRef, useEffect } from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { RiAlarmWarningFill } from "react-icons/ri";
 import { AiFillPlusCircle } from "react-icons/ai";
-import React from "react";
-import axios from 'axios';
-// import { useParams } from "react-router-dom";
+import globalAxios from '../../data/data'
 
+interface DetailFeedProps {
+  feedId: number;
+}
 
 function TagModal({
   title,
@@ -38,7 +39,7 @@ function TagModal({
   );
 }
 
-function DetailFeedInd() {
+function DetailFeedInd({ feedId }: DetailFeedProps) {
   type ResponseDataType = {
     feedId: number;
     content: string;
@@ -51,27 +52,21 @@ function DetailFeedInd() {
   };
 
   // 피드 가져오기
-  // const { number } = useParams();
-  // const feedId = Number(number); 
-  const feedId = 1;
 
   const [responseData, setResponseData] = useState<ResponseDataType | null>(null);
 
-  async function fetchData() {
-    try {
-      const response = await fetch(`http://13.125.146.181:8080/feed/detail/${feedId}`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const data = await response.json();
-      setResponseData(data);
-    } catch (error) {
-      console.error("Error fetching the data:", error);
-    }
-  }
-  
   useEffect(() => {
-    fetchData();
+    async function fetcFeedData() {
+      try {
+        const response = await globalAxios.get(`/feed/detail/${feedId}`);
+        if (response.status === 200) {
+          setResponseData(response.data);
+        }
+      } catch (error) {
+        console.error("API 요청 실패:", error);
+      }
+    }
+    fetcFeedData();
   }, []);
 
   console.log(responseData?.feedId)

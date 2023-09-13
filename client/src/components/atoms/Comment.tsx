@@ -2,8 +2,12 @@ import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import globalAxios from '../../data/data'
 
+interface CommentProps {
+  feedId: number;
+}
 
-function Comment() {
+
+function Comment({ feedId }: CommentProps) {
   interface Comment {
     feedCommentId: number;
     feedId: number;
@@ -25,26 +29,20 @@ function Comment() {
     pageInfo: PageInfo;
   }
 
-  // 댓글 가져오기
-  const feedId = 3;
-
   const [commentData, setCommentData] = useState<CommentData | null>(null);
 
-  async function fetchData() {
-    try {
-      const response = await fetch(`http://13.125.146.181:8080/feed/detail/${feedId}/comments`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const data = await response.json();
-      setCommentData(data);
-    } catch (error) {
-      console.error("Error fetching the data:", error);
-    }
-  }
-
   useEffect(() => {
-    fetchData();
+    async function fetcFeedData() {
+      try {
+        const response = await globalAxios.get(`/feed/detail/${feedId}/comments`);
+        if (response.status === 200) {
+          setCommentData(response.data);
+        }
+      } catch (error) {
+        console.error("API 요청 실패:", error);
+      }
+    }
+    fetcFeedData();
   }, []);
 
   console.log(commentData)
@@ -80,9 +78,9 @@ function Comment() {
 
     // feedPostDto 부분 추가
     const feedCommentPostDto = {
-      "feedCommentId": 1,
-      "feedId": {feedId},
-      "content": commentInputValue,
+      "feedCommentId": 6,
+      "feedId": 6,
+      "content": "댓글등록",
       "userNickname": "test",
       "createdAt": "2023-09-13T07:14:52.546276",
       "modifiedAt": "2023-09-13T07:14:52.546278"
@@ -100,13 +98,14 @@ function Comment() {
     const accessToken = sessionStorage.getItem('access_token');
 
     try {
-      const response =  globalAxios.post(`/feed/detail/${feedId}/comment`, formData, {
+      const response =  globalAxios.post('/feed/detail/6/comment', formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `${accessToken}`,
         },
       });
-      console.log(response)
+      console.log("결과",response)
+      console.log("댓글 입력시 가는 데이터", JSON.stringify(feedCommentPostDto))
 
     } catch (error) {
       console.error("Error saving the comment:", error);
@@ -114,6 +113,7 @@ function Comment() {
 
 
   };
+  
   
 
   const handleDeleteComment = (index: number) => {
