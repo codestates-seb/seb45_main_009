@@ -16,8 +16,8 @@ public class ImageTagDto {
         private String productName;
         private String productPrice;
         private String productInfo;
-        private Long positionX;
-        private Long positionY;
+        private Double positionX;
+        private Double positionY;
     }
 
     @Getter
@@ -28,8 +28,8 @@ public class ImageTagDto {
         private String productName;
         private String productPrice;
         private String productInfo;
-        private Long positionX;
-        private Long positionY;
+        private Double positionX;
+        private Double positionY;
     }
 }
 

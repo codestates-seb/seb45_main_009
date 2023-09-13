@@ -28,10 +28,10 @@ public class ImageTag {
     private String productInfo;
 
     @Column
-    private Long positionX;
+    private Double positionX;
 
     @Column
-    private Long positionY;
+    private Double positionY;
 
     //image와 매핑(다대일)
     @ManyToOne
