@@ -31,23 +31,20 @@ function Comment({ feedId }: CommentProps) {
 
   const [commentData, setCommentData] = useState<CommentData | null>(null);
 
-  useEffect(() => {
-    async function fetcFeedData() {
-      try {
-        const response = await globalAxios.get(`/feed/detail/${feedId}/comments`);
-        if (response.status === 200) {
-          setCommentData(response.data);
-        }
-      } catch (error) {
-        console.error("API 요청 실패:", error);
+  const fetchCommentData = async () => {
+    try {
+      const response = await globalAxios.get(`/feed/detail/${feedId}/comments`);
+      if (response.status === 200) {
+        setCommentData(response.data);
       }
+    } catch (error) {
+      console.error("API 요청 실패:", error);
     }
-    fetcFeedData();
+  }
+
+  useEffect(() => {
+    fetchCommentData();
   }, []);
-
-  console.log(commentData)
-
-
 
   // 댓글생성
   const [commentInputValue, setCommentInputValue] = useState<string>("");
@@ -80,7 +77,7 @@ function Comment({ feedId }: CommentProps) {
     const feedCommentPostDto = {
       "feedCommentId": 6,
       "feedId": feedId,
-      "content": "댓글등록",
+      "content": commentInputValue,
       "userNickname": "test",
       "createdAt": "2023-09-13T07:14:52.546276",
       "modifiedAt": "2023-09-13T07:14:52.546278"
@@ -93,28 +90,47 @@ function Comment({ feedId }: CommentProps) {
 
 
   // 댓글 등록!!
+  // const handleSaveClick = async () => {
+  //   console.log("댓글등록 버튼 클릭");
+
+  //   const accessToken = sessionStorage.getItem('access_token');
+
+  //   try {
+  //     const response =  globalAxios.post(`/feed/detail/${feedId}/comment`, formData, {
+  //       headers: {
+  //         "Content-Type": "multipart/form-data",
+  //         Authorization: `${accessToken}`,
+  //       },
+  //     });
+  //     console.log("결과",response)
+  //     console.log("댓글 입력시 가는 데이터", JSON.stringify(feedCommentPostDto))
+
+  //   } catch (error) {
+  //     console.error("Error saving the comment:", error);
+  //   }
+
+
+  // };
+
   const handleSaveClick = async () => {
-    console.log("댓글등록 버튼 클릭");
-
     const accessToken = sessionStorage.getItem('access_token');
-
     try {
-      const response =  globalAxios.post(`/feed/detail/${feedId}/comment`, formData, {
+      const response = await globalAxios.post(`/feed/detail/${feedId}/comment`,formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `${accessToken}`,
         },
-      });
-      console.log("결과",response)
-      console.log("댓글 입력시 가는 데이터", JSON.stringify(feedCommentPostDto))
-
+        });
+      if (response.status === 200) {
+        fetchCommentData();  
+      }
     } catch (error) {
-      console.error("Error saving the comment:", error);
+      console.error("Error deleting the comment:", error);
     }
+  }
 
-
-  };
   
+  // 댓글 삭제 
   const deleteComment = async (feedCommentId: number) => {
     const accessToken = sessionStorage.getItem('access_token');
     try {
@@ -125,21 +141,13 @@ function Comment({ feedId }: CommentProps) {
       });
   
       if (response.status === 200) {
+        fetchCommentData();  
       }
     } catch (error) {
       console.error("Error deleting the comment:", error);
     }
   }
-  
 
-  const handleDeleteComment = (index: number) => {
-    console.log("삭제버튼 클릭");
-    console.log(index);
-    const newdelete = [...comment];
-    newdelete.splice(index, 1);
-    setComment(newdelete);
-
-  };
 
   const [page, setPage] = useState(2);
 
@@ -178,7 +186,6 @@ function Comment({ feedId }: CommentProps) {
       </div>
 
       <div className="mt-10 mb-[100px]">
-
       {commentData && commentData.feedCommentData.map((comment, index) => (
         <div key={comment.feedCommentId} className="mt-10">
           <div className="grid grid-cols-6 gap-4 items-center mb-2">
@@ -197,7 +204,6 @@ function Comment({ feedId }: CommentProps) {
               <button
                 className="text-gray-400 text-sm"
                 onClick={() => {
-                  handleDeleteComment(index);
                   deleteComment(comment.feedCommentId);
                 }}
               >
