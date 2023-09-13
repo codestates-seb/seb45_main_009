@@ -50,7 +50,8 @@ function LoginPage() {
         const rolesString = response.headers["roles"];
         const userType = rolesString.slice(1, -1);
         const userNickname = response.headers["nickname"];
-        const userInfo: UserInfo = { userType, userNickname };
+        const userId = response.headers["userid"];
+        const userInfo: UserInfo = { userType, userNickname, userId };
         sessionStorage.setItem("access_token", accessToken);
         const userInfoString = JSON.stringify(userInfo);
         sessionStorage.setItem("user_info", userInfoString);
