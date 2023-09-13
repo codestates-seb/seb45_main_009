@@ -15,6 +15,8 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FeedResponseDto {
     private Long feedId;
+    private String userNickname;  // 유저 닉네임
+    private String profileImageUrl; // 유저 프로필 이미지 url
     private String content;
     private List<String> relatedTags;
     private List<FeedImageDto> images;  // 이미지 정보가 여러 개일 수 있으므로 리스트
