@@ -128,7 +128,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
                   <p className="text-gray-400">{feed.content}</p>
                 </div>
               </div>
-              <Link to={`/feed/detail/${feed.feedId}`}>
+              <Link to={`/feeddetailind/${feed.feedId}`}>
                 <div>
                   <img
                     src={feed.images[0].imageUrl}
