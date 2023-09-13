@@ -1,6 +1,7 @@
 package com.mainproject.server.image.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mainproject.server.feed.enitiy.Feed;
 import com.mainproject.server.imagetag.entity.ImageTag;
 import com.mainproject.server.user.entity.User;

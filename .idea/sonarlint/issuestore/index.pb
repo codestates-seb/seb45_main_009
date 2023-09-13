@@ -363,11 +363,11 @@ Oserver/src/main/java/com/mainproject/server/userprofile/dto/UserProfileDto.java
 ]server/src/main/java/com/mainproject/server/userprofile/repository/UserProfileRepository.java,2/5/257b6adc47ceaa312429ffda29ebdbc1a9a46a49
 q
 Aserver/src/main/java/com/mainproject/server/feed/enitiy/Feed.java,9/5/953a1d50b832928557a28788076d0241d19fa582
-†
-Vserver/src/main/java/com/mainproject/server/userprofile/service/UserPofileService.java,3/5/35037acf31b551c7ff9d6fe2117f45fb68563a40
 y
 Iserver/src/main/java/com/mainproject/server/feed/service/FeedService.java,2/b/2b3fb16fb82a2903f6f9611bfac3d1a2376c1d81
 
 Oserver/src/main/java/com/mainproject/server/userprofile/entity/UserProfile.java,9/7/979e3170b4f4d6003f0cc3f9b9874ef1233e0b90
 s
 Cserver/src/main/java/com/mainproject/server/image/entity/Image.java,4/9/4969122d80ca99110dfbb840dc0e284c8edb4b57
+u
+Eserver/src/main/java/com/mainproject/server/search/dto/SearchDto.java,b/e/be58b32f61f12089379c4577049561e213e82c67
