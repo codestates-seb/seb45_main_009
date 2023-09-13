@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
+import globalAxios from '../../data/data'
 
 
 function Comment() {
@@ -25,7 +26,7 @@ function Comment() {
   }
 
   // 댓글 가져오기
-  const feedId = 18;
+  const feedId = 1;
 
   const [commentData, setCommentData] = useState<CommentData | null>(null);
 
@@ -74,29 +75,38 @@ function Comment() {
     setIsComment(false);
   };
 
+
+   const formData = new FormData();
+
+    // feedPostDto 부분 추가
+    const feedCommentPostDto = {
+      "feedCommentId": 4,
+      "feedId": 1,
+      "content": "000000",
+      "userNickname": "test",
+      "createdAt": "2023-09-13T07:14:52.546276",
+      "modifiedAt": "2023-09-13T07:14:52.546278"
+    };
+
+    const blob = new Blob([JSON.stringify(feedCommentPostDto)], {
+      type: "application/json",
+    });
+    formData.append("feedCommentPostDto", blob);
+
+
   // 댓글 등록!!
   const handleSaveClick = async () => {
     console.log("댓글등록 버튼 클릭")
     const accessToken = sessionStorage.getItem('access_token');
 
-      try {
-      const response = await fetch(`http://13.125.146.181:8080/feed/detail/${feedId}/comment`, {
-        method: 'POST',
+    try {
+      const response =  globalAxios.post('/feed/detail/1/comment', formData, {
         headers: {
+          "Content-Type": "multipart/form-data",
           Authorization: `${accessToken}`,
-          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          content: commentInputValue,
-        }),
       });
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const data = await response.json();
-      console.log(data);
-
-      fetchData();
+      console.log(response)
 
     } catch (error) {
       console.error("Error saving the comment:", error);

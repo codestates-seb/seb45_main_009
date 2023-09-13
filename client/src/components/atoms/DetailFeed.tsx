@@ -37,21 +37,6 @@ function TagModal({
     </div>
   );
 }
-    // 정보 태그 데이터
-    // const tagDatas = [
-    //   {
-    //     taglocation: ["15% 5%", "90% 10%", "30% 90%"],
-    //     title: ["adidas", "Nike", "adidas"],
-    //     size: ["XL", "280", "s"],
-    //     price: [33000, 99000, 20000],
-    //   },
-    //   {
-    //     taglocation: ["50% 50%", "10% 30%", "90% 90%"],
-    //     title: ["2adidas", "2Nike", "2adidas"],
-    //     size: ["XL", "280", "s"],
-    //     price: [233000, 299000, 220000],
-    //   },
-    // ];
 
 function DetailFeedInd() {
   type ResponseDataType = {
@@ -68,7 +53,7 @@ function DetailFeedInd() {
   // 피드 가져오기
   // const { number } = useParams();
   // const feedId = Number(number); 
-  const feedId = 18;
+  const feedId = 1;
 
   const [responseData, setResponseData] = useState<ResponseDataType | null>(null);
 
