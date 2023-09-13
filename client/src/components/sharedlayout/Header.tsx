@@ -68,6 +68,7 @@ function Header() {
 
     const filteredData = allFeedData.filter((feed) => {
       return feed.userNickname === inputValue;
+      // return feed.userNickname.includes(inputValue);
     });
 
     dispatch(setFilteredData(filteredData));

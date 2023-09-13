@@ -1,4 +1,3 @@
-// store.js
 import { createSlice } from "@reduxjs/toolkit";
 import { FeedData, UserData } from "../../types/types";
 
@@ -8,7 +7,7 @@ export type FeedState = {
   page: number;
   loading: boolean;
   hasMore: boolean;
-  filteredDatas: FeedData[]; // filteredData 필드 추가
+  filteredDatas: FeedData[];
 };
 
 const feedSlice = createSlice({
@@ -19,7 +18,7 @@ const feedSlice = createSlice({
     page: 1,
     loading: false,
     hasMore: true,
-    filteredDatas: [] as FeedData[], // 초기 상태에서 빈 배열로 설정
+    filteredDatas: [] as FeedData[],
   },
   reducers: {
     setAllFeedData: (state, action) => {
@@ -38,7 +37,7 @@ const feedSlice = createSlice({
       state.hasMore = action.payload;
     },
     setFilteredData: (state, action) => {
-      state.filteredDatas = action.payload; // filteredData를 설정하는 액션 추가
+      state.filteredDatas = action.payload;
     },
   },
 });
@@ -49,7 +48,7 @@ export const {
   setPage,
   setLoading,
   setHasMore,
-  setFilteredData, // 새로 추가한 액션을 내보내줍니다.
+  setFilteredData,
 } = feedSlice.actions;
 
 export default feedSlice.reducer;
