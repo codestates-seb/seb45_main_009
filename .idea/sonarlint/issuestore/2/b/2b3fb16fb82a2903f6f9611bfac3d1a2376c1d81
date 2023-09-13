@@ -1,12 +1,8 @@
 
 a
-java:S2583w"DChange this condition so that it does not always evaluate to "false"(ˆ¢ßã8É•õ–¨1
-X	java:S125 "<This block of commented-out lines of code should be removed.(çÊˆã8Ì•õ–¨1
+java:S2583z"DChange this condition so that it does not always evaluate to "false"(ˆ¢ßã8åÞ“À¨1
 e
-java:S1612Q"CReplace this lambda with method reference 'updateFeed::setContent'.(÷áãìúÿÿÿÿ8Ð•õ–¨1
-f
-java:S1612}"DReplace this lambda with method reference 'updatedFeed::setContent'.(ÉœÈ¼üÿÿÿÿ8Ó•õ–¨1
-Y	java:S125¡"<This block of commented-out lines of code should be removed.(äìð×8Ô•õ–¨1
-n
-java:S1128
-"RRemove this unused import 'com.mainproject.server.user.repository.UserRepository'.(Ì¡Û:8Ô¯—¨1
+java:S1612R"CReplace this lambda with method reference 'updateFeed::setContent'.(÷áãìúÿÿÿÿ8ëÞ“À¨1
+g
+java:S1612€"DReplace this lambda with method reference 'updatedFeed::setContent'.(ÉœÈ¼üÿÿÿÿ8ïÞ“À¨1
+Y	java:S125¤"<This block of commented-out lines of code should be removed.(äìð×8òÞ“À¨1

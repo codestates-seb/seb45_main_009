@@ -116,5 +116,4 @@ public class User {
 
     // 마이 페이지
 
-
 }
