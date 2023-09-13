@@ -3,9 +3,12 @@ package com.mainproject.server.feed.controller;
 import com.mainproject.server.auth.loginResolver.LoginUserId;
 import com.mainproject.server.feed.dto.FeedDto;
 import com.mainproject.server.feed.dto.FeedResponseDto;
+import com.mainproject.server.feed.dto.FeedRolesPageDto;
+import com.mainproject.server.feed.dto.FeedPageInfo;
 import com.mainproject.server.feed.enitiy.Feed;
 import com.mainproject.server.feed.mapper.FeedMapper;
 import com.mainproject.server.feed.service.FeedService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -65,20 +68,27 @@ public class FeedController {
 
     // 유저 페이지 피드 조회(리스트) - 메인페이지
     @GetMapping("/")
-    public ResponseEntity fineUserFeeds() {
+    public ResponseEntity findUserFeeds(@RequestParam(defaultValue = "1") int page,
+                                        @RequestParam(defaultValue = "10") int size) {
 
-        List<Feed> userFeeds = feedService.findUserFeeds();
-        List<FeedResponseDto> userFeedResponse = feedMapper.feedToFeedResponseDtos(userFeeds);
-        return new ResponseEntity<>(userFeedResponse, HttpStatus.OK);
+        Page<Feed> userFeeds = feedService.findUserFeeds(page -1, size);
+        FeedPageInfo userPageInfo = new FeedPageInfo(page, size, (int) userFeeds.getTotalElements(), userFeeds.getTotalPages());
+        List<Feed> userFeedList = userFeeds.getContent();
+//        List<FeedResponseDto> userFeedResponse = feedMapper.feedToFeedResponseDtos(userFeedList);
+
+        return new ResponseEntity<>(new FeedRolesPageDto(feedMapper.feedToFeedResponseDtos(userFeedList), userPageInfo), HttpStatus.OK);
     }
 
     // 기업 페이지 피드 조회(리스트)
     @GetMapping("/store")
-    public ResponseEntity findStoreFeed() {
+    public ResponseEntity findStoreFeed(@RequestParam(defaultValue = "1") int page,
+                                        @RequestParam(defaultValue = "10") int size) {
 
-        List<Feed> storeFeeds = feedService.findStoreFeeds();
-        List<FeedResponseDto> storeFeedResponse = feedMapper.feedToFeedResponseDtos(storeFeeds);
-        return new ResponseEntity<>(storeFeedResponse, HttpStatus.OK);
+        Page<Feed> storeFeeds = feedService.findStoreFeeds(page -1, size);
+        FeedPageInfo storePageInfo = new FeedPageInfo(page, size, (int) storeFeeds.getTotalElements(), storeFeeds.getTotalPages());
+        List<Feed> storeFeedList = storeFeeds.getContent();
+
+        return new ResponseEntity<>(new FeedRolesPageDto(feedMapper.feedToFeedResponseDtos(storeFeedList), storePageInfo), HttpStatus.OK);
     }
 
     // 피드 상세 조회(단건)
