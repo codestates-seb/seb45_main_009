@@ -3,6 +3,9 @@ import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { RiAlarmWarningFill } from "react-icons/ri";
 import { AiFillPlusCircle } from "react-icons/ai";
 import React from "react";
+import axios from 'axios';
+// import { useParams } from "react-router-dom";
+
 
 function TagModal({
   title,
@@ -36,34 +39,42 @@ function TagModal({
 }
 
 function DetailFeedInd() {
-  // 피드 데이터
-  let feedData: {
-    photo: string[];
-    date: string;
+  type ResponseDataType = {
+    feedId: number;
     content: string;
-    tag: string[];
-  } = {
-    photo: ["/asset/gym2.jpeg", "/asset/gym3.jpeg"],
-    date: "2023.08.11",
-    content: "오운완!!",
-    tag: ["크로스핏", "헬스"],
+    relatedTags: string[];
+    images: Array<{
+      imageId: number;
+      imageUrl: string;
+      imageTags: any[];
+    }>;
   };
 
-  // 정보 태그 데이터
-  let tagDatas = [
-    {
-      taglocation: ["15% 5%", "90% 10%", "30% 90%"],
-      title: ["adidas", "Nike", "adidas"],
-      size: ["XL", "280", "s"],
-      price: [33000, 99000, 20000],
-    },
-    {
-      taglocation: ["50% 50%", "10% 30%", "90% 90%"],
-      title: ["2adidas", "2Nike", "2adidas"],
-      size: ["XL", "280", "s"],
-      price: [233000, 299000, 220000],
-    },
-  ];
+  // 피드 가져오기
+  // const { number } = useParams();
+  // const feedId = Number(number); 
+  const feedId = 1;
+
+  const [responseData, setResponseData] = useState<ResponseDataType | null>(null);
+
+  async function fetchData() {
+    try {
+      const response = await fetch(`http://13.125.146.181:8080/feed/detail/${feedId}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      setResponseData(data);
+    } catch (error) {
+      console.error("Error fetching the data:", error);
+    }
+  }
+  
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  console.log(responseData?.feedId)
 
   // 좋아요
   const [isLiked, setIsLiked] = useState(false);
@@ -87,44 +98,45 @@ function DetailFeedInd() {
     tagIndex: number;
   } | null>(null);
 
+
   return (
     <div className="w-full sm:max-w-screen-sm  mx-auto px-4 sm:px-4 lg:px-8">
-      {feedData.photo.map((photo, photoIndex) => (
-        <div key={photoIndex} className="mb-8 relative">
-          <img src={photo} alt=" " className="w-full h-auto" />
-          {tagDatas[photoIndex].taglocation.map((location, tagIndex) => {
-            // 띄어쓰기로 top,left 나누기
-            const [top, left] = location.split(" ");
+      
+      {responseData?.images.map((image, index) => (
+        <div key={index} className="mb-8 relative">
+          <img src={image.imageUrl} alt={`Image ${index}`} className="w-full h-auto" />
+          {image.imageTags.map((tag, tagIndex) => {
+            const top = `${tag.positionY}%`;
+            const left = `${tag.positionX}%`;
             return (
               <div
                 key={tagIndex}
                 className="w-[20px] h-[20px] rounded-full absolute"
                 style={{ top, left }}
-                onMouseEnter={() => setShowTagModal({ photoIndex, tagIndex })}
+                onMouseEnter={() => setShowTagModal({ photoIndex: index, tagIndex })}
                 onMouseLeave={() => setShowTagModal(null)}
               >
                 <AiFillPlusCircle className="w-[20px] h-[20px] text-tag-btn-color" />
                 {/* 만약 div위에 마우스 올린게 이미지index와 태그 index가 맞으면 모달창 보여주기 */}
-                {showTagModal?.photoIndex === photoIndex &&
-                  showTagModal?.tagIndex === tagIndex && (
-                    <TagModal
-                      title={tagDatas[photoIndex].title[tagIndex]}
-                      size={tagDatas[photoIndex].size[tagIndex]}
-                      price={tagDatas[photoIndex].price[tagIndex]}
-                      // 위치값 전달
-                      top={top}
-                      left={left}
-                    />
-                  )}
+                {showTagModal?.photoIndex === index && showTagModal?.tagIndex === tagIndex && (
+                  <TagModal
+                    title={tag.productName}
+                    size={tag.productInfo}
+                    price={parseInt(tag.productPrice)}
+                    top={top}
+                    left={left}
+                  />
+                )}
               </div>
             );
           })}
         </div>
       ))}
+
       <div className="font-bold text-gray-400 text-sm mt-[10px]">
-        {feedData.date}
+        2022
       </div>
-      <div className=" mt-[20px]">{feedData.content}</div>
+      <div className=" mt-[20px]">{responseData?.content}</div>
       <div className=" mt-[20px]">
         {isLiked === false ? (
           <AiOutlineHeart onClick={handleLikeClick} />
@@ -137,34 +149,37 @@ function DetailFeedInd() {
           연관태그
         </div>
         <div>
-          {feedData.tag.map((item, index) => (
+          {responseData?.relatedTags.map((tag, index) => (
             <span className=" p-1 bg-blue-100 rounded  mr-2" key={index}>
-              {item}
+              {tag}
             </span>
           ))}
         </div>
+
         <div className="mt-[40px] flex flex-wrap">
-        {
-          tagDatas.map((tagData, dataIndex) => (
-            tagData.title.map((_, itemIndex) => (
-              <div className="border rounded flex-grow mr-4 mb-4 p-2 text-sm" key={`${dataIndex}-${itemIndex}`}>
-                <div className="flex">
-                  <div className="flex-none">제품명 : </div>
-                  <div className="flex-grow font-bold ">{tagData.title[itemIndex]}</div>
+          
+          {
+            responseData?.images.map((image, imageIndex) => (
+              image.imageTags.map((tag, tagIndex) => (
+                <div className="border rounded flex-grow mr-4 mb-4 p-2 text-sm" key={`${imageIndex}-${tagIndex}`}>
+                  <div className="flex">
+                    <div className="flex-none" style={{ width: "70px" }}>제품명 : </div>
+                    <div className="flex-grow font-bold">{tag.productName}</div>
+                  </div>
+                  <div className="flex">
+                    <div className="flex-none " style={{ width: "70px" }}>가격 : </div>
+                    <div>₩ {parseInt(tag.productPrice)}</div>
+                  </div>
+                  <div className="flex">
+                    <div className="flex-none" style={{ width: "70px" }}>추가정보 : </div>
+                    <div className="text-btn-color">{tag.productInfo}</div>
+                  </div>
                 </div>
-                <div className="flex">
-                  <div className="flex-none">가격 : </div>
-                  <div>₩ {tagData.price[itemIndex]}</div>
-                </div>
-                <div className="flex">
-                  <div className="flex-none">사이즈 : </div>
-                  <div className="text-btn-color">{tagData.size[itemIndex]}</div>
-                </div>
-              </div>
+              ))
             ))
-          ))
-        }
-      </div>
+          }
+        </div>
+
     </div>
 
       <div className="flex justify-end mt-4">
@@ -172,8 +187,10 @@ function DetailFeedInd() {
           <RiAlarmWarningFill />
         </button>
       </div>
+
     </div>
   );
 }
 
 export default DetailFeedInd;
+
