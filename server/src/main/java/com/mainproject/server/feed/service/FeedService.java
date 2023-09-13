@@ -4,11 +4,15 @@ import com.mainproject.server.exception.BusinessLogicException;
 import com.mainproject.server.exception.ExceptionCode;
 import com.mainproject.server.feed.enitiy.Feed;
 import com.mainproject.server.feed.repository.FeedRepository;
+import com.mainproject.server.feedcomment.entity.FeedComment;
 import com.mainproject.server.image.entity.Image;
 import com.mainproject.server.image.repository.ImageRepository;
 import com.mainproject.server.image.service.ImageService;
 import com.mainproject.server.user.entity.User;
 import com.mainproject.server.user.service.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -164,14 +168,22 @@ public class FeedService {
 //                findFeedId(feedId);
     }
 
+
     // 유저 페이지 피드 조회
-    public List<Feed> findUserFeeds() {
-        return feedRepository.findUserFeeds();
+    public Page<Feed> findUserFeeds(int page, int size) {
+
+        PageRequest pageRequest = PageRequest.of(page, 4, Sort.by("feedId").ascending());
+        Page<Feed> feedUserPage = feedRepository.findUserFeeds(pageRequest);
+
+        return feedUserPage;
     }
 
     // 기업 페이지 피드 조회
-    public List<Feed> findStoreFeeds() {
-        return feedRepository.findStoreFeeds();
+    public Page<Feed> findStoreFeeds(int page, int size) {
+
+        PageRequest pageRequest = PageRequest.of(page, 4, Sort.by("feedId").ascending());
+        Page<Feed> feedStorePage = feedRepository.findStoreFeeds(pageRequest);
+        return feedStorePage;
     }
 
     // 피드 삭제
