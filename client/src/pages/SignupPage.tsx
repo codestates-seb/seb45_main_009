@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router";
+import globalAxios from "../data/data";
 //컴포넌트 불러오기
 import CommonInput from "../components/atoms/CommonInput";
 import MembershipButtonGroup from "../components/atoms/MembershipButtonGroup";
@@ -149,7 +149,7 @@ function SignupPage() {
           });
           formData.append("requestBody", blob);
 
-          const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/join/user`, formData, {
+          const response = await globalAxios.post("/join/user", formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
@@ -203,7 +203,7 @@ function SignupPage() {
   const onAdditionSubmitHandler = async () => {
     if (selectedType === "개인회원") {
       try {
-        const response = await axios.patch(`${process.env.REACT_APP_BASE_URL}/mypage/update`, {
+        const response = await globalAxios.patch("/mypage/update", {
           location,
           bio,
           height,
@@ -247,7 +247,7 @@ function SignupPage() {
           if (previewImg && previewImg.file) {
             formData.append("imageUrl", previewImg.file);
           }
-          const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/join/store`, formData, {
+          const response = await globalAxios.post("/join/store", formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
