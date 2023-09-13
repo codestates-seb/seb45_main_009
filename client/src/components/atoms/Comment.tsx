@@ -31,19 +31,18 @@ function Comment({ feedId }: CommentProps) {
 
   const [commentData, setCommentData] = useState<CommentData | null>(null);
 
-  const fetchCommentData = async () => {
-    try {
-      const response = await globalAxios.get(`/feed/detail/${feedId}/comments`);
-      if (response.status === 200) {
-        setCommentData(response.data);
+    useEffect(() => {
+    async function fetcCommentsData() {
+      try {
+        const response = await globalAxios.get(`/feed/detail/${feedId}/comments`);
+        if (response.status === 200) {
+          setCommentData(response.data);
+        }
+      } catch (error) {
+        console.error("API 요청 실패:", error);
       }
-    } catch (error) {
-      console.error("API 요청 실패:", error);
     }
-  }
-
-  useEffect(() => {
-    fetchCommentData();
+    fetcCommentsData();
   }, []);
 
   // 댓글생성
@@ -118,9 +117,7 @@ function Comment({ feedId }: CommentProps) {
 
 
   const handleSaveClick = async () => {
-    const accessToken = sessionStorage.getItem('access_token');
-    // const currentDateTime = getCurrentDateTimeFormatted();
-
+    // const accessToken = sessionStorage.getItem('access_token');
 
    const formData = new FormData();
 
@@ -142,11 +139,11 @@ function Comment({ feedId }: CommentProps) {
       const response = await globalAxios.post(`/feed/detail/${feedId}/comment`,formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `${accessToken}`,
+          // Authorization: `${accessToken}`,
         },
         });
       if (response.status === 200) {
-        fetchCommentData();  
+        // fetcCommentsData();  
       }
     } catch (error) {
       console.error("Error deleting the comment:", error);
@@ -156,16 +153,9 @@ function Comment({ feedId }: CommentProps) {
   
   // 댓글 삭제 
   const deleteComment = async (feedCommentId: number) => {
-    const accessToken = sessionStorage.getItem('access_token');
     try {
-      const response = await globalAxios.delete(`http://13.125.146.181:8080/feed/detail/comment/${feedCommentId}`, {
-        headers: {
-          Authorization: `${accessToken}`,
-        },
-      });
-  
+      const response = await globalAxios.delete(`/feed/detail/comment/${feedCommentId}`);
       if (response.status === 200) {
-        fetchCommentData();  
       }
     } catch (error) {
       console.error("Error deleting the comment:", error);
