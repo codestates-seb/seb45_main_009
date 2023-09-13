@@ -1,20 +1,66 @@
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
+import globalAxios from '../../data/data'
+
 
 function Comment() {
+  interface Comment {
+    feedCommentId: number;
+    feedId: number;
+    content: string;
+    userNickname: string;
+    createdAt: string;
+    modifiedAt: string;
+  }
+  
+  interface PageInfo {
+    page: number;
+    size: number;
+    totalElements: number;
+    totalPages: number;
+  }
+  
+  interface CommentData {
+    feedCommentData: Comment[];
+    pageInfo: PageInfo;
+  }
+
+  // 댓글 가져오기
+  const feedId = 1;
+
+  const [commentData, setCommentData] = useState<CommentData | null>(null);
+
+  async function fetchData() {
+    try {
+      const response = await fetch(`http://13.125.146.181:8080/feed/detail/${feedId}/comments`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      setCommentData(data);
+    } catch (error) {
+      console.error("Error fetching the data:", error);
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  console.log(commentData)
+
+
+
   // 댓글생성
   const [commentInputValue, setCommentInputValue] = useState<string>("");
-  let [comment, setComment] = useState<string[]>(["멋있어요"]);
-  // 댓긋 시간 arr 저장
-  let [commentdate, setCommentDate] = useState<string[]>(["2023.07.22"]);
-  let [currentTime, setCurrentTime] = useState<string[]>(["10시"]);
+  const [comment, setComment] = useState<string[]>(["멋있어요"]);
+
 
   const [iscomment, setIsComment] = useState(false);
   const [inputUpdateValue, setInputUpdateValue] = useState<string>("");
 
   const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputUpdateValue(event.target.value);
-    console.log(inputUpdateValue);
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,21 +69,52 @@ function Comment() {
 
   const handleEditComment = () => {
     setIsComment(true);
-    console.log("버튼 클릭");
   };
   const handleUpdateComment = (index: number) => {
     comment[index] = inputUpdateValue;
     setIsComment(false);
   };
 
-  const handleSaveClick = () => {
-    setComment((prevArr) => [ ...prevArr,commentInputValue]);
-    const now = new Date();
-    const dateString = now.toLocaleDateString();
-    const timeString = now.toLocaleTimeString();
-    setCommentDate((dateArr) => [ ...dateArr, dateString]);
-    setCurrentTime((timeArr) => [...timeArr, timeString]);
+
+   const formData = new FormData();
+
+    // feedPostDto 부분 추가
+    const feedCommentPostDto = {
+      "feedCommentId": 4,
+      "feedId": 1,
+      "content": "000000",
+      "userNickname": "test",
+      "createdAt": "2023-09-13T07:14:52.546276",
+      "modifiedAt": "2023-09-13T07:14:52.546278"
+    };
+
+    const blob = new Blob([JSON.stringify(feedCommentPostDto)], {
+      type: "application/json",
+    });
+    formData.append("feedCommentPostDto", blob);
+
+
+  // 댓글 등록!!
+  const handleSaveClick = async () => {
+    console.log("댓글등록 버튼 클릭")
+    const accessToken = sessionStorage.getItem('access_token');
+
+    try {
+      const response =  globalAxios.post('/feed/detail/1/comment', formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `${accessToken}`,
+        },
+      });
+      console.log(response)
+
+    } catch (error) {
+      console.error("Error saving the comment:", error);
+    }
+
+
   };
+  
 
   const handleDeleteComment = (index: number) => {
     console.log("삭제버튼 클릭");
@@ -46,7 +123,6 @@ function Comment() {
     newdelete.splice(index, 1);
     setComment(newdelete);
   };
-  console.log(commentdate, currentTime);
 
   const [page, setPage] = useState(2);
 
@@ -59,7 +135,7 @@ function Comment() {
   }, [inView]);
   const PAGE_SIZE = 4;
   const startIndex = (page - 1) * PAGE_SIZE;
-  const chunkData = comment.slice(0, startIndex + PAGE_SIZE);
+
 
   return (
     <div className="mb-14  max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8">
@@ -85,61 +161,64 @@ function Comment() {
       </div>
 
       <div className="mt-10 mb-[100px]">
-        {chunkData.map((item, index) => (
-          <div key={index} className="mt-10">
-            <div className="grid grid-cols-6 gap-4 items-center mb-2">
-              <img
-                src="/asset/img.png"
-                className="w-8 h-8 rounded-full col-span-1"
-              />
-              <div className="font-bold col-span-3">Lee seeun</div>
-              <div className="col-span-2 flex justify-end gap-2">
-                <button
-                  className="text-gray-400 text-sm"
-                  onClick={handleEditComment}
-                >
-                  수정
-                </button>
-                <button
-                  className="text-gray-400 text-sm"
-                  onClick={() => handleDeleteComment(index)}
-                >
-                  삭제
-                </button>
-              </div>
-            </div>
-            {iscomment === false ? (
-              <div className="grid grid-cols-6 gap-4 items-center">
-                <div className="w-8 h-8 rounded-full col-span-1"></div>
-                <div className="col-span-3">{item}</div>
-                <div className="col-span-2 flex justify-end gap-2"></div>
-              </div>
-            ) : (
-              <div className="grid grid-cols-5 gap-4 items-center ml-10">
-                <input
-                  className="border rounded col-span-3"
-                  type="text"
-                  placeholder={item}
-                  onChange={handleCommentChange}
-                />
-                <button
-                  className="text-gray-400 text-sm col-span-2"
-                  onClick={() => handleUpdateComment(index)}
-                >
-                  저장
-                </button>
-              </div>
-            )}
-            <div className="grid grid-cols-6 gap-4 items-center">
-              <div className="w-8 h-8 rounded-full col-span-1"></div>
-              <div className="col-span-3 text-gray-400 text-sm">
-                {commentdate[index]} {currentTime[index]}
-              </div>
-              <div className="col-span-2 flex justify-end gap-2"></div>
+
+      {commentData && commentData.feedCommentData.map((comment, index) => (
+        <div key={comment.feedCommentId} className="mt-10">
+          <div className="grid grid-cols-6 gap-4 items-center mb-2">
+            <img
+              src="/asset/img.png"
+              className="w-8 h-8 rounded-full col-span-1"
+            />
+            <div className="font-bold col-span-3">{comment.userNickname}</div>
+            <div className="col-span-2 flex justify-end gap-2">
+              <button
+                className="text-gray-400 text-sm"
+                onClick={handleEditComment}
+              >
+                수정
+              </button>
+              <button
+                className="text-gray-400 text-sm"
+                onClick={() => handleDeleteComment(index)}
+              >
+                삭제
+              </button>
             </div>
           </div>
-        ))}
-      </div>
+
+          {iscomment === false ? (
+            <div className="grid grid-cols-6 gap-4 items-center">
+              <div className="w-8 h-8 rounded-full col-span-1"></div>
+              <div className="col-span-3">{comment.content}</div>
+              <div className="col-span-2 flex justify-end gap-2"></div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-5 gap-4 items-center ml-10">
+              <input
+                className="border rounded col-span-3"
+                type="text"
+                placeholder={comment.content}
+                onChange={handleCommentChange}
+              />
+              <button
+                className="text-gray-400 text-sm col-span-2"
+                onClick={() => handleUpdateComment(index)}
+              >
+                저장
+              </button>
+            </div>
+          )}
+
+          <div className="grid grid-cols-6 gap-4 items-center">
+            <div className="w-8 h-8 rounded-full col-span-1"></div>
+            <div className="col-span-3 text-gray-400 text-sm">
+              {new Date(comment.createdAt).toLocaleString()}
+            </div>
+            <div className="col-span-2 flex justify-end gap-2"></div>
+          </div>
+        </div>
+      ))}
+    </div>
       <div ref={ref}>이게 보이면 무한 스크롤</div>
     </div>
   );
