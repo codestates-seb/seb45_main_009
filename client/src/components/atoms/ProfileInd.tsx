@@ -1,28 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import { FaEllipsisH } from 'react-icons/fa';
-
-let userData = [
-  {
-    username: 'Lee seeun',
-    useremail: 'lse0522@gmail.com',
-    pw: '1234',
-    userheight : 170,
-    userweight : 60,
-    userphoto : '/asset/img.png',
-    userintroduction : '헬스를 좋아합니다~'
-  }
-];
+import globalAxios from '../../data/data'
 
 const Modal = ({ onClose } :any) => {
   const modalRef = useRef<HTMLDivElement | null>(null);
-  // const modalRef = useRef(null);
 
   useEffect(() => {
-    // 클릭 이벤트를 처리하는 함수
     const handleClickOutside = (event: MouseEvent) => {
-      // 만약 event.target as Node 가 !modalRef.current의 자손 or 동일한 노드인 경우 true 그렇지 않으면 false 반환한다.
-      // 모달참조의 자신이 아닌 경우 클릭했을때 모달을 닫아야 한다.
-
       // modalRef.current 타입을 never로 
         if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
             onClose();
@@ -47,7 +31,7 @@ const Modal = ({ onClose } :any) => {
     )
 };
 
-function ProfileCor() {
+function ProfileInd() {
   // 모달창
   const [isModalOpen, setModalOpen] = useState(false);
 
@@ -73,28 +57,52 @@ function ProfileCor() {
     setIsFollowing(!isFollowing);
   };
 
+  // 피드 유저 불러오기
+  const feedid = 3;
+
+  type ResponseDataType = {
+    feedId: number;
+    userNickname: string;
+    profileImageUrl: string;
+    content: string;
+    relatedTags: string[];
+    images: Array<{
+      imageId: number;
+      imageUrl: string;
+      imageTags: any[];
+    }>;
+  };
+
+  const [feedUserData, setFeedUserData] = useState<ResponseDataType | null>(null);
+
+  useEffect(() => {
+    async function fetcFeedData() {
+      try {
+        const response = await globalAxios.get(`/feed/detail/${feedid}`);
+        if (response.status === 200) {
+          setFeedUserData(response.data);
+        }
+      } catch (error) {
+        console.error("API 요청 실패:", error);
+      }
+    }
+    fetcFeedData();
+  }, []);
 
 return(
 <div className='max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8'>
   <div className="grid md:grid-cols-2 gap-4 ">
 
-  <div className="flex items-center ">
-    <img src={userData[0].userphoto} className="w-[80px] h-[80px] rounded-full mr-4 " />
-    
+  <div className="flex items-center">
+    <img src={feedUserData?.profileImageUrl} className=" mr-2 w-10 h-10 rounded-full" />
     <div className="flex flex-col">
-    
-      <div className="font-bold text-xl ">{userData[0].username}</div>
-      <div className="font-bold text-gray-400 text-sm flex">
-        <div className='mr-[4px]'>{userData[0].userheight}cm</div>
-        <div>{userData[0].userweight}kg</div>
-      </div>
-      <div>{userData[0].userintroduction}</div>
-
+      <div className="font-bold text-lg ">{feedUserData?.userNickname}</div>
+      <div>{feedUserData?.content}</div>
     </div>
   </div>
 
   <div className="flex items-center justify-end md:justify-start">
-    <button className="ml-[200px] mr-4 w-[100px] h-[30px] rounded-[4px] text-[14px] font-medium bg-btn-color text-white" onClick={followClick}>
+    <button className=" mr-4 w-full sm:w-[200px] h-[30px] rounded-[4px] text-[14px] font-medium bg-btn-color text-white" onClick={followClick}>
       {isFollowing ? '팔로잉' : '팔로우'} 
     </button>
     <button onClick={handleOpenModal}  className='relative'><FaEllipsisH /></button>
@@ -105,5 +113,4 @@ return(
 </div>
 ) 
 }
-
-export default ProfileCor;
+export default ProfileInd;

@@ -26,7 +26,7 @@ function Comment() {
   }
 
   // 댓글 가져오기
-  const feedId = 1;
+  const feedId = 3;
 
   const [commentData, setCommentData] = useState<CommentData | null>(null);
 
@@ -80,9 +80,9 @@ function Comment() {
 
     // feedPostDto 부분 추가
     const feedCommentPostDto = {
-      "feedCommentId": 4,
-      "feedId": 1,
-      "content": "000000",
+      "feedCommentId": 1,
+      "feedId": {feedId},
+      "content": commentInputValue,
       "userNickname": "test",
       "createdAt": "2023-09-13T07:14:52.546276",
       "modifiedAt": "2023-09-13T07:14:52.546278"
@@ -100,7 +100,7 @@ function Comment() {
     const accessToken = sessionStorage.getItem('access_token');
 
     try {
-      const response =  globalAxios.post('/feed/detail/1/comment', formData, {
+      const response =  globalAxios.post(`/feed/detail/${feedId}/comment`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `${accessToken}`,
