@@ -19,6 +19,8 @@ import MyPage from "./pages/MyPage";
 import ScrollToTop from "./components/features/ScrollToTop";
 import Layout from "./components/atoms/Layout";
 import { useUserSession } from "./hooks/useUserSession";
+import FeedUpdataePageInd from "./pages/FeedUpdatePageInd";
+import FeedUpdataePageCor from "./pages/FeedUpdatePageCor";
 
 function App() {
   useUserSession();
@@ -33,15 +35,27 @@ function App() {
             <Routes>
               <Route path="/" element={<MainPageInd />}></Route>
               <Route path="/store" element={<MainPageCor />}></Route>
-              <Route path="/feeddetailcor" element={<FeedDetailPageCor />} />
-              <Route path="/feeddetailind/:feedId" element={<FeedDetailPageInd />} />
+              <Route
+                path="/feeddetailcor/:feedId"
+                element={<FeedDetailPageCor />}
+              />
+
+              <Route
+                path="/feeddetailind/:feedId"
+                element={<FeedDetailPageInd />}
+              />
               <Route path="/feedformcor" element={<FeedFormPageCor />} />
               <Route path="/feedformind" element={<FeedFormPageInd />} />
+              <Route path="/feedupdateind" element={<FeedUpdataePageInd />} />
+              <Route path="/feedupdatecor" element={<FeedUpdataePageCor />} />
               <Route path="/mypage/:page" element={<MyPage />} />
               <Route path="/login" element={<LoginPage />}></Route>
               <Route path="/signup" element={<SignupPage />}></Route>
               <Route path="/profile" element={<Profile />}></Route>
-              <Route path="/oauthloading" element={<OauthLoadingPage />}></Route>
+              <Route
+                path="/oauthloading"
+                element={<OauthLoadingPage />}
+              ></Route>
               <Route path="/alarmpage" element={<Alarm />}></Route>
               <Route path="*" element={<Not404 />} />
             </Routes>

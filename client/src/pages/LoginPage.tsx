@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { login } from "../redux/reducers/loginSlice";
 import { Link } from "react-router-dom";
 import kakao from "../assets/images/kakaotalk.png";
@@ -7,6 +6,7 @@ import kakao from "../assets/images/kakaotalk.png";
 import CommonInput from "../components/atoms/CommonInput";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
+import globalAxios from "../data/data";
 
 import { UserInfo } from "../types/types";
 
@@ -45,12 +45,13 @@ function LoginPage() {
   const onSubmitHandler = async () => {
     if (isValidEmail) {
       try {
-        const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/login`, { email, password });
+        const response = await globalAxios.post("/login", { email, password });
         const accessToken = response.headers["authorization"];
         const rolesString = response.headers["roles"];
         const userType = rolesString.slice(1, -1);
         const userNickname = response.headers["nickname"];
-        const userInfo: UserInfo = { userType, userNickname };
+        const userId = response.headers["userid"];
+        const userInfo: UserInfo = { userType, userNickname, userId };
         sessionStorage.setItem("access_token", accessToken);
         const userInfoString = JSON.stringify(userInfo);
         sessionStorage.setItem("user_info", userInfoString);

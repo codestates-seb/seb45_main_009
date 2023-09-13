@@ -5,8 +5,22 @@ const globalAxios = axios.create({
   timeout: 5000,
   headers: {
     "Content-Type": `application/json`,
-    "ngrok-skip-browser-warning": "69420",
   },
 });
 
 export default globalAxios;
+
+globalAxios.interceptors.request.use(
+  (config) => {
+    const accessToken = sessionStorage.getItem("access_token");
+
+    if (accessToken) {
+      config.headers["Authorization"] = `Bearer ${accessToken}`;
+    }
+
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
