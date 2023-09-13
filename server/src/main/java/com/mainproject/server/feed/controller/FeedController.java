@@ -8,6 +8,7 @@ import com.mainproject.server.feed.dto.FeedPageInfo;
 import com.mainproject.server.feed.enitiy.Feed;
 import com.mainproject.server.feed.mapper.FeedMapper;
 import com.mainproject.server.feed.service.FeedService;
+import com.mainproject.server.liked.service.LikedService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +22,12 @@ import java.util.List;
 public class FeedController {
     private final FeedService feedService;
     private final FeedMapper feedMapper;
+    private final LikedService likedService;
 
-    public FeedController(FeedService feedService, FeedMapper feedMapper) {
+    public FeedController(FeedService feedService, FeedMapper feedMapper, LikedService likedService) {
         this.feedService = feedService;
         this.feedMapper = feedMapper;
+        this.likedService = likedService;
     }
 
     // 피드 등록
@@ -69,7 +72,7 @@ public class FeedController {
     // 유저 페이지 피드 조회(리스트) - 메인페이지
     @GetMapping("/")
     public ResponseEntity findUserFeeds(@RequestParam(defaultValue = "1") int page,
-                                        @RequestParam(defaultValue = "10") int size) {
+                                        @RequestParam(defaultValue = "4") int size) {
 
         Page<Feed> userFeeds = feedService.findUserFeeds(page -1, size);
         FeedPageInfo userPageInfo = new FeedPageInfo(page, size, (int) userFeeds.getTotalElements(), userFeeds.getTotalPages());
@@ -82,7 +85,7 @@ public class FeedController {
     // 기업 페이지 피드 조회(리스트)
     @GetMapping("/store")
     public ResponseEntity findStoreFeed(@RequestParam(defaultValue = "1") int page,
-                                        @RequestParam(defaultValue = "10") int size) {
+                                        @RequestParam(defaultValue = "4") int size) {
 
         Page<Feed> storeFeeds = feedService.findStoreFeeds(page -1, size);
         FeedPageInfo storePageInfo = new FeedPageInfo(page, size, (int) storeFeeds.getTotalElements(), storeFeeds.getTotalPages());
@@ -97,6 +100,14 @@ public class FeedController {
 
         // 피드가 있는지 조회
         Feed feed = feedService.findFeed(feedId);
+
+        // 피드에 좋아요를 누른 사용자 목록의 카운트 조회
+        long likeCount = likedService.countLikedUsers(feedId);
+
+        // 피드와 좋아요 누른 사용자 목록의 카운트를 함께 반환
+        FeedResponseDto responseDto = feedMapper.feedToFeedResponseDto(feed);
+        responseDto.setLikeCount(likeCount);
+
         return new ResponseEntity<>(feedMapper.feedToFeedResponseDto(feed), HttpStatus.OK);
     }
 

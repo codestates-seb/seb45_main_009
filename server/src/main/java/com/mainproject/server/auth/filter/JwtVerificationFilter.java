@@ -3,7 +3,6 @@ package com.mainproject.server.auth.filter;
 import com.mainproject.server.auth.dto.TokenPrincipalDto;
 import com.mainproject.server.auth.jwt.JwtTokenizer;
 import com.mainproject.server.auth.utils.CustomAuthorityUtils;
-import com.mainproject.server.user.entity.User;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;

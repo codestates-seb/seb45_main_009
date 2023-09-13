@@ -4,9 +4,7 @@ import com.mainproject.server.auth.filter.JwtAuthenticationFilter;
 import com.mainproject.server.auth.filter.JwtVerificationFilter;
 import com.mainproject.server.auth.handler.*;
 import com.mainproject.server.auth.jwt.JwtTokenizer;
-import com.mainproject.server.auth.userdetails.MemberDetailsService;
 import com.mainproject.server.auth.utils.CustomAuthorityUtils;
-import com.mainproject.server.user.repository.UserRepository;
 import com.mainproject.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -82,10 +80,15 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                         .antMatchers(HttpMethod.DELETE, "/feed/detail/*/comment/**").hasAnyRole("USER", "STORE")
 
                         // # follow 관련
+                        .antMatchers(HttpMethod.POST, "/follow/*").hasAnyRole("USER", "STORE")
+                        .antMatchers(HttpMethod.GET, "/follow/**").permitAll()
 
                         // # like 관련
+                        .antMatchers(HttpMethod.POST, "/feed/detail/*/like").hasAnyRole("USER", "STORE")
 
                         // # report 관련
+                        .antMatchers(HttpMethod.POST, "/feed/detail/*/report").hasAnyRole("USER", "STORE")
+                        .antMatchers(HttpMethod.GET, "/reports").hasRole("ADMIN")
 
 
                         .anyRequest().permitAll()

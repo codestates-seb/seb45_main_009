@@ -1,11 +1,10 @@
 package com.mainproject.server.auth.userdetails;
 
-import com.mainproject.server.user.entity.User;
-import com.mainproject.server.user.repository.UserRepository;
 import com.mainproject.server.auth.utils.CustomAuthorityUtils;
 import com.mainproject.server.exception.BusinessLogicException;
 import com.mainproject.server.exception.ExceptionCode;
-import lombok.RequiredArgsConstructor;
+import com.mainproject.server.user.entity.User;
+import com.mainproject.server.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,9 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Component
 @Slf4j

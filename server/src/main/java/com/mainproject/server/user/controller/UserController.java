@@ -50,8 +50,13 @@ public class UserController {
         log.info("### user login start! ###");
         User user = mapper.postToUser(requestBody);
 
-        // "ROLE_USER" 역할을 설정
-        user.getRoles().add("USER");
+        //"ROLE_ADMIN" 생성
+        if("admin@gmail.com".equals(user.getEmail())){
+            user.getRoles().add("ADMIN");
+        }else {
+            // "ROLE_USER" 역할을 설정
+            user.getRoles().add("USER");
+        }
 
         // UserService를 사용하여 유저 생성
         User createdUser = userService.createUser(user, imageFiles);
