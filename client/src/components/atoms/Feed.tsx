@@ -5,7 +5,7 @@ import globalAxios from "../../data/data";
 
 interface UserData {
   profileimg: string;
-  feedId: string;
+  feedId: number;
   images: {
     imageId: number;
     imageUrl: string;
@@ -13,7 +13,6 @@ interface UserData {
   }[];
   userInfo: string;
   relatedTags: string[];
-  location: string;
 }
 
 interface FeedProps {
@@ -22,8 +21,7 @@ interface FeedProps {
 
 const Feed = ({ selectedFilter }: FeedProps) => {
   const [allData, setAllData] = useState<UserData[]>([]);
-  const [allProfileData, setAllProfileData] = useState<UserData[]>([]);
-  const [page, setPage] = useState(2);
+  const [page, setPage] = useState(1);
 
   const [ref, inView] = useInView();
 
@@ -36,9 +34,13 @@ const Feed = ({ selectedFilter }: FeedProps) => {
 
   const getMainListData = async () => {
     try {
-      const response = await globalAxios.get(currentPage);
+      const response = await globalAxios.get(currentPage, {
+        params: { page }, // 페이지 번호를 쿼리 매개변수로 전달
+      });
       const getData = response.data;
-      setAllData(getData);
+
+      // 이전 데이터와 새로운 데이터 합치기
+      setAllData((prevData) => [...prevData, ...getData]);
       console.log("response MainList >>", getData);
     } catch (err) {
       console.log("Error >>", err);
@@ -48,6 +50,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
   useEffect(() => {
     if (inView) {
       setPage((prevPage) => prevPage + 1);
+      getMainListData();
     }
   }, [inView]);
   const PAGE_SIZE = 4;
