@@ -65,7 +65,7 @@ function DetailFeedInd() {
   };
 
   // 피드 가져오기
-  const feedid = 8;
+  const feedid = 18;
 
   const [responseData, setResponseData] = useState<ResponseDataType | null>(null);
 
@@ -86,7 +86,7 @@ function DetailFeedInd() {
     fetchData();
   }, []);
 
-  console.log(responseData)
+  console.log("피드데이터" + responseData)
 
 
   // 좋아요
@@ -118,10 +118,9 @@ function DetailFeedInd() {
       {responseData?.images.map((image, index) => (
         <div key={index} className="mb-8 relative">
           <img src={image.imageUrl} alt={`Image ${index}`} className="w-full h-auto" />
-
-          {tagDatas[index]?.taglocation.map((location, tagIndex) => {
-            // 띄어쓰기로 top,left 나누기
-            const [top, left] = location.split(" ");
+          {image.imageTags.map((tag, tagIndex) => {
+            const top = `${tag.positionY}%`;
+            const left = `${tag.positionX}%`;
             return (
               <div
                 key={tagIndex}
@@ -134,10 +133,9 @@ function DetailFeedInd() {
                 {/* 만약 div위에 마우스 올린게 이미지index와 태그 index가 맞으면 모달창 보여주기 */}
                 {showTagModal?.photoIndex === index && showTagModal?.tagIndex === tagIndex && (
                   <TagModal
-                    title={tagDatas[index]?.title[tagIndex]}
-                    size={tagDatas[index]?.size[tagIndex]}
-                    price={tagDatas[index]?.price[tagIndex]}
-                    // 위치값 전달
+                    title={tag.productName}
+                    size={tag.productInfo}
+                    price={parseInt(tag.productPrice)}
                     top={top}
                     left={left}
                   />
