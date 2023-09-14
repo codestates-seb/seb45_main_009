@@ -14,11 +14,10 @@ function FeedDetailPageInd() {
     return <div>Invalid feedId</div>;
   }
 
-
   return (
     <div>
       <BackButton />
-      <ProfileInd  feedId={feedId}/>
+      <ProfileInd feedId={feedId} />
       <div className=" mt-[60px]">
         <DetailFeed feedId={feedId} />
         <Comment feedId={feedId} />
