@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +27,7 @@ public class MessageService {
     public Message createMessage(Message message) {
         userService.findUser(message.getSender().getUserId());
         userService.findUser(message.getReceiver().getUserId());
+        message.setCreatedAt(LocalDateTime.now());
         Message savedMessage = messageRepository.save(message);
         sseEmitters.count(message.getReceiver().getUserId());
         return savedMessage;

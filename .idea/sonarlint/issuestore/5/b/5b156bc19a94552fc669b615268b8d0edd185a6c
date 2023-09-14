@@ -1,16 +1,4 @@
 
-Q
-java:S3740/"/Provide the parametrized type for this generic.(ÜÐƒËýÿÿÿÿ8õâ­è¨1
-L
-java:S3740I"/Provide the parametrized type for this generic.(±ó´æ8õâ­è¨1
-L
-java:S3740["/Provide the parametrized type for this generic.(ÞÓá—8å¾ùñ¨1
-M
-java:S3740‘"/Provide the parametrized type for this generic.(½Ž¸¹8å¾ùñ¨1
 J
-java:S5411q"(Use a primitive boolean expression here.(ÏîŠ«üÿÿÿÿ8öâ­è¨1
-I
-java:S1452ª"&Remove usage of generic wildcard type.(Èš¾ýøÿÿÿÿ8†ã­è¨1
-D
-java:S1452º"&Remove usage of generic wildcard type.(‹åÎ²8†ã­è¨1
-^	java:S125Ä"<This block of commented-out lines of code should be removed.(Ä‡©ýÿÿÿÿ8‡ã­è¨1
+java:S5411q"(Use a primitive boolean expression here.(ÏîŠ«üÿÿÿÿ8çï§¦1
+^	java:S125Ä"<This block of commented-out lines of code should be removed.(Ä‡©ýÿÿÿÿ8žçï§¦1

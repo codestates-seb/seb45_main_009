@@ -65,7 +65,7 @@ public class UserService {
         user.setPassword(encryptedPassword);
 
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         String formattedDateTime = LocalDateTime.now().format(formatter);
 
         LocalDateTime createdAt = LocalDateTime.parse(formattedDateTime, formatter);
@@ -131,6 +131,13 @@ public class UserService {
             findUser.setNickname(verifyExistNickName(user.getNickname()));
         }
 
+        if (user.getWeight() != null) {
+            findUser.setWeight(user.getWeight());
+        }
+
+        if (user.getHeight() != null) {
+            findUser.setHeight(user.getHeight());
+        }
 
         // 이미지 업데이트
         String newImageUrl = updateProfileImage(findUser, profileimg);

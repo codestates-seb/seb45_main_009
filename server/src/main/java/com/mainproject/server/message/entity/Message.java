@@ -6,11 +6,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
-public class Message extends Auditable {
+public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long messageId;
@@ -27,6 +28,9 @@ public class Message extends Auditable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "RECEIVER_ID")
     private User receiver;
+
+    @Column(name = "CREATED_AT", updatable = false)
+    private LocalDateTime createdAt;
 
     public boolean getIsRead() {
         return isRead;

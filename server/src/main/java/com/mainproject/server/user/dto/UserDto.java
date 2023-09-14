@@ -107,7 +107,7 @@ public class UserDto {
         private Long userId;
         private String nickname;
         private String email;
-        private LocalDateTime createdAt;
+        private String createdAt;
         private LocalDateTime modifiedAt;
         private String bio;
         private String profileimg;

@@ -40,7 +40,7 @@ public class MessageController {
     }
 
     @GetMapping("/{message-id}")
-    public ResponseEntity getMessage(@PathVariable("message-id") Long messageId) {
+    public ResponseEntity getMessage(@PathVariable("message-id") Long messageId ) {
         Message message = messageService.findMessage(messageId);
 
         return ResponseEntity.ok(
