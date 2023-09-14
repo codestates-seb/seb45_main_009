@@ -48,7 +48,7 @@ function FeedUpdataePageInd() {
   };
   //imageform props
 
-  let feedId: number = 3;
+  let feedId: number = 6;
   //새롭게 추가되는 파일
   const [previewImg, setPreviewImg] = useState<ImageData[]>([]);
   //기존 사진-삭제만 가능

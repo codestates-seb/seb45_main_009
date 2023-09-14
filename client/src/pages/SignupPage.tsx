@@ -18,11 +18,11 @@ function SignupPage() {
   const [isValidEmail, setIsValidEmail] = useState<boolean | null>(null);
   const [isValidPassWord, setIsValidPassword] = useState<boolean | null>(null);
   const [isValidNickname, setIsValidNickname] = useState<boolean | null>(null);
-  const [passwordConfirm, setPasswordConfirm] = useState<string>("");
   const [isPasswordsMatch, setIsPasswordsMatch] = useState<boolean | null>(null);
   //회원가입 필수 입력
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [passwordConfirm, setPasswordConfirm] = useState<string>("");
   const [nickname, setNickname] = useState<string>("");
   //회원가입 추가 입력
   //개인-기업 공통 추가 입력

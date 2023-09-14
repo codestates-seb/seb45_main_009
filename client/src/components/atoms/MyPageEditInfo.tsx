@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { UserInfo, RootState } from "../../types/types";
 import profileDefault from "../../assets/images/profileDefault.png";
 import styled from "styled-components";
+import ConfirmButton from "./ConfirmButton";
 interface userData {
   nickname: string;
   bio: string;
@@ -210,57 +211,30 @@ function MyPageEditInfo() {
           </form>
         </div>
       </div>
-      <div className="w-[300px] mt-4">
+      <div className="w-[300px]  max-tablet:mt-4">
         {userInfo.userType === "USER" ? (
           <div className="flex flex-col">
-            <div>
-              <CommonInput value={nickname} label="닉네임" onChange={handleNicknameChange} />
-            </div>
+            <CommonInput value={nickname} label="닉네임" onChange={handleNicknameChange} />
             <div className="flex flex-row">
-              <CommonInput value={height} type="number" label="키(cm)" onChange={handleHeightChange} />
-              <div className="w-4"></div>
+              <CommonInput value={height} type="number" label="키(cm)" onChange={handleHeightChange} className="mr-2" />
               <CommonInput value={weight} type="number" label="몸무게(kg)" onChange={handleWeightChange} />
             </div>
-            <div>
-              <CommonInput value={sport} label="주 운동 종목" onChange={handleSportChange} />
-            </div>
-            <div>
-              <CommonInput value={bio} label="자기 소개" onChange={handleBioChange} />
-            </div>
+            <CommonInput value={sport} label="주 운동 종목" onChange={handleSportChange} />
+            <CommonInput value={bio} label="자기 소개" onChange={handleBioChange} />
           </div>
         ) : (
           <div className="flex flex-col">
-            <div>
-              <CommonInput value={nickname} label="닉네임" onChange={handleNicknameChange} />
-            </div>
-            <div>
-              <CommonInput value={location} label="주소" onChange={handleLocationChange} />
-            </div>
-            <div>
-              <CommonInput value={sport} label="주 운동 종목" onChange={handleSportChange} />
-            </div>
-            <div>
-              <CommonInput value={bio} label="기업 소개" onChange={handleBioChange} />
-            </div>
-            <div>
-              <CommonInput value={priceInfo} label="가격 정보" onChange={handlePriceInfoChange} />
-            </div>
+            <CommonInput value={nickname} label="닉네임" onChange={handleNicknameChange} />
+            <CommonInput value={location} label="주소" onChange={handleLocationChange} />
+            <CommonInput value={sport} label="주 운동 종목" onChange={handleSportChange} />
+            <CommonInput value={bio} label="기업 소개" onChange={handleBioChange} />
+            <CommonInput value={priceInfo} label="가격 정보" onChange={handlePriceInfoChange} />
           </div>
         )}
 
         <div className="flex flex-row items-center justify-center mt-[16px]">
-          <button
-            onClick={onSubmit}
-            className="w-[300px] py-2 rounded-[4px] text-[14px] mt-[25px] font-medium text-white transition bg-sbc hover:bg-sbc-hover mr-2"
-          >
-            수정하기
-          </button>
-          <button
-            onClick={getData}
-            className="w-[300px] py-2 rounded-[4px] text-[14px] mt-[25px] font-medium text-white transition bg-sbc hover:bg-sbc-hover"
-          >
-            되돌리기
-          </button>
+          <ConfirmButton label="수정하기" onClick={onSubmit} className="mr-2"></ConfirmButton>
+          <ConfirmButton label="되돌리기" onClick={getData} />
         </div>
         <Link to={"/mypage/changepassword"}>
           <div className="my-10">
