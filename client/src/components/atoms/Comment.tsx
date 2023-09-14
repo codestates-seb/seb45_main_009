@@ -134,41 +134,6 @@ function Comment({ feedId }: CommentProps) {
     }
   }
 
-
-
-//   const handleUpdateComment = async (feedCommentId: number) => {
-//     console.log("댓글 수정하고 저장함", inputUpdateValue , feedCommentId);
-
-//     const formData = new FormData();
-
-//    const feedCommentPostDto = {
-//      "feedCommentId": feedCommentId,
-//      "feedId": feedId,
-//      "content": inputUpdateValue,
-//      "userNickname": userInfo ? userInfo.userNickname : "",
-//      "createdAt": commentdate,
-//      "modifiedAt": commentdate,
-//    };
-
-//    const blob = new Blob([JSON.stringify(feedCommentPostDto)], {
-//      type: "application/json",
-//    });
-//    formData.append("feedCommentPostDto", blob);
-
-//     try {
-//       const response = await globalAxios.post(`/feed/detail/${feedId}/comment`,formData, {
-//         headers: {
-//           "Content-Type": "multipart/form-data",
-//         },
-//         });
-//       if (response.status === 200) {
-//         // fetcCommentsData();  
-//       }
-//     } catch (error) {
-//       console.error("Error deleting the comment:", error);
-//     }
-
-// };
 const handleUpdateComment = async (feedCommentId: number) => {
 
   const formData = new FormData();
@@ -188,7 +153,6 @@ const handleUpdateComment = async (feedCommentId: number) => {
   formData.append("feedCommentPatchDto", blob);
 
   try {
-      // 수정 요청을 위해 PATCH 메서드를 사용합니다.
       const response = await globalAxios.patch(`/feed/detail/comment/${feedCommentId}`, formData, {
           headers: {
               "Content-Type": "multipart/form-data",
@@ -196,8 +160,6 @@ const handleUpdateComment = async (feedCommentId: number) => {
       });
 
       if (response.status === 200) {
-          // 수정이 성공적으로 이루어진 후 댓글 목록을 다시 불러옵니다.
-          // fetcCommentsData();  
       }
   } catch (error) {
       console.error("Error updating the comment:", error);
@@ -271,12 +233,13 @@ const handleUpdateComment = async (feedCommentId: number) => {
 
           {iscomment === false ? (
             <div className="grid grid-cols-6 gap-4 items-center">
-              <div className="w-8 h-8 rounded-full col-span-1"></div>
+              <div className="w-8 h-8 rounded-full col-span-1 "></div>
               <div className="col-span-3">{comment.content}</div>
               <div className="col-span-2 flex justify-end gap-2"></div>
             </div>
           ) : (
-            <div className="grid grid-cols-5 gap-4 items-center ml-20 border">
+            <div className="grid grid-cols-6 gap-4 items-center ">
+              <div className="w-8 h-8 rounded-full col-span-1 "></div>
               <input
                 className="border rounded col-span-3"
                 type="text"

@@ -2,31 +2,26 @@ import { useState, useRef, useEffect } from "react";
 import { FaEllipsisH } from 'react-icons/fa';
 import globalAxios from '../../data/data'
 
-const Modal = ({ onClose } :any) => {
+const Modal = ({ onClose, onDelete, onEdit } :any) => {
   const modalRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      // modalRef.current 타입을 never로 
         if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
             onClose();
         }
     }
 
-    // 이벤트 리스너를 문서에 추가
     document.addEventListener("mousedown", handleClickOutside);
-    
-    // 컴포넌트가 언마운트될 때 이벤트 리스너 제거
     return () => {
         document.removeEventListener("mousedown", handleClickOutside);
     };
 }, [onClose]);
 
   return(
-    <div ref={modalRef} className='flex flex-col border rounded-[4px] w-[100px] 
-      absolute  md:right-[60px] right-[100px] md:top-[200px] top-[280px] '>
-      <button onClick={onClose} className='border-b'>삭제</button>
-      <button onClick={onClose}>수정</button>
+    <div ref={modalRef} className='flex flex-col border rounded-[4px] w-[100px]'>
+      <button onClick={onDelete} className='border-b'>삭제</button>
+      <button onClick={onEdit}>수정</button> 
     </div>
     )
 };
@@ -91,6 +86,28 @@ function ProfileInd({ feedId }: ProfileIndProps) {
     fetcFeedData();
   }, []);
 
+  const handleDelete = async (feedId:number) => {
+    try {
+        const response = await globalAxios.delete(`/feed/detail/${feedId}`);
+        
+        if (response.status === 200) {
+            console.log("글이 성공적으로 삭제되었습니다.");
+        } 
+    } catch (error) {
+        console.error("글 삭제 실패:", error);
+    }
+    
+    handleCloseModal(); 
+};
+
+
+
+const handleEdit = () => {
+  console.log(feedId); 
+  handleCloseModal(); 
+  // window.location.href = 피드 수정 페이지 이동;
+};
+
 return(
 <div className='max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8'>
   <div className="grid md:grid-cols-2 gap-4 ">
@@ -107,8 +124,11 @@ return(
     <button className=" mr-4 w-full sm:w-[200px] h-[30px] rounded-[4px] text-[14px] font-medium bg-btn-color text-white" onClick={followClick}>
       {isFollowing ? '팔로잉' : '팔로우'} 
     </button>
-    <button onClick={handleOpenModal}  className='relative'><FaEllipsisH /></button>
-    {isModalOpen && <Modal onClose={handleCloseModal} /> }
+    {
+            isModalOpen ? 
+            <Modal onClose={handleCloseModal} onDelete={handleDelete} onEdit={handleEdit}/> :
+            <button onClick={handleOpenModal}><FaEllipsisH /></button>
+          }
   </div>
 
   </div>
