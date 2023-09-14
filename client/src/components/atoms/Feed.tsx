@@ -65,8 +65,6 @@ const Feed = ({ selectedFilter }: FeedProps) => {
       });
       const getData = response.data.feedList;
 
-      console.log(getData);
-
       if (getData.length === 0) {
         // 더 이상 데이터가 없는 경우
         setHasMore(false);
@@ -88,22 +86,55 @@ const Feed = ({ selectedFilter }: FeedProps) => {
       const response = await globalAxios.get("/users");
       const getData = response.data.content;
       setAllUserData(getData);
-      console.log("user", getData);
     } catch (err) {
       console.log("Error >>", err);
     }
   };
 
   useEffect(() => {
-    getUserData();
-  }, []);
-
-  useEffect(() => {
     if (inView && !loading && hasMore) {
       getMainListData();
       getUserData();
     }
+    console.log(allUserData);
+    console.log(allFeedData);
   }, [inView, loading, hasMore]);
+
+  const filteredData = allFeedData.filter((user) => {
+    const hasExerciseTag =
+      selectedFilter.includes("운동전체") ||
+      selectedFilter.some((filter) => user.relatedTags.includes(filter));
+    const hasLocationTag =
+      selectedFilter.includes("지역전체") ||
+      selectedFilter.some((tag) => user.relatedTags.includes(tag));
+
+    if (
+      selectedFilter.includes("운동전체") &&
+      selectedFilter.includes("지역전체")
+    ) {
+      return true; // 운동전체와 지역전체가 선택된 경우 모든 데이터 표시
+    } else if (selectedFilter.includes("운동전체") && hasLocationTag) {
+      return true; // 운동전체만 선택하고 지역 필터에 해당하는 데이터 표시
+    } else if (selectedFilter.includes("지역전체") && hasExerciseTag) {
+      return true; // 지역전체만 선택하고 운동 필터에 해당하는 데이터 표시
+    } else {
+      // 지역태그와 운동태그를 각각 선택한 경우
+      const selectedExerciseTags = selectedFilter.filter(
+        (tag) => tag !== "운동전체"
+      );
+      const selectedLocationTags = selectedFilter.filter(
+        (tag) => tag !== "지역전체"
+      );
+      const exerciseMatch = selectedExerciseTags.every((tag) =>
+        user.relatedTags.includes(tag)
+      );
+      const locationMatch = selectedLocationTags.every((tag) =>
+        user.relatedTags.includes(tag)
+      );
+
+      return exerciseMatch && locationMatch;
+    }
+  });
 
   return (
     <section className="flex justify-center flex-col items-center ">
@@ -118,7 +149,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
         </div>
 
         <section className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4  mb-24">
-          {allFeedData.map((feed, idx) => {
+          {filteredData.map((feed, idx) => {
             const user = allUserData.find(
               (userData) => userData.nickname === feed.userNickname
             );
