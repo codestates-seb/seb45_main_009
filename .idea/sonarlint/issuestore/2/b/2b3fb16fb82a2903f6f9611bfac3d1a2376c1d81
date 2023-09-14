@@ -1,8 +1,16 @@
 
+
+java:S1488°"dImmediately return this expression instead of assigning it to the temporary variable "feedUserPage".(¿“38Éøƒò¨1
+ˆ
+java:S1488¹"eImmediately return this expression instead of assigning it to the temporary variable "feedStorePage".(ÅÏ¶Àüÿÿÿÿ8Éøƒò¨1
+
+java:S1488è"\Immediately return this expression instead of assigning it to the temporary variable "feed".(™ãÑ€ÿÿÿÿÿ8µ²ëÁ¨1
 a
-java:S2583z"DChange this condition so that it does not always evaluate to "false"(ˆ¢ßã8åŞ“À¨1
+java:S2583~"DChange this condition so that it does not always evaluate to "false"(ˆ¢ßã8ïøƒò¨1
 e
-java:S1612R"CReplace this lambda with method reference 'updateFeed::setContent'.(÷áãìúÿÿÿÿ8ëŞ“À¨1
+java:S1612V"CReplace this lambda with method reference 'updateFeed::setContent'.(÷áãìúÿÿÿÿ8ôøƒò¨1
 g
-java:S1612€"DReplace this lambda with method reference 'updatedFeed::setContent'.(ÉœÈ¼üÿÿÿÿ8ïŞ“À¨1
-Y	java:S125¤"<This block of commented-out lines of code should be removed.(äìğ×8òŞ“À¨1
+java:S1612„"DReplace this lambda with method reference 'updatedFeed::setContent'.(ÉœÈ¼üÿÿÿÿ8öøƒò¨1
+Y	java:S125¨"<This block of commented-out lines of code should be removed.(äìğ×8÷øƒò¨1
+n
+java:S1128"RRemove this unused import 'com.mainproject.server.feedcomment.entity.FeedComment'.(ÚŸw8ûøƒò¨1

@@ -11,10 +11,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessLogicException.class)
     public ResponseEntity<ErrorResponse> handleBusinessLogicException(BusinessLogicException ex) {
-        HttpStatus status = HttpStatus.CONFLICT; // 예시로 409 상태 코드 사용
-        ErrorResponse errorResponse = new ErrorResponse(status.value(), ex.getMessage());
+        ExceptionCode exceptionCode = ex.getExceptionCode();
+        HttpStatus status = HttpStatus.valueOf(exceptionCode.getStatus());
+        ErrorResponse errorResponse = new ErrorResponse(status.value(), exceptionCode.getMessage());
         return new ResponseEntity<>(errorResponse, status);
     }
-
-    // 다른 예외 유형에 대한 처리 메서드 추가 가능
 }

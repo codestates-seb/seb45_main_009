@@ -1,9 +1,6 @@
 package com.mainproject.server.auth.utils;
 
-import com.google.gson.Gson;
-import com.mainproject.server.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
