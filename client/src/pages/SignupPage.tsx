@@ -26,7 +26,7 @@ function SignupPage() {
   const [nickname, setNickname] = useState<string>("");
   //회원가입 추가 입력
   //개인-기업 공통 추가 입력
-  const [location, setLocation] = useState<string>("서울");
+  const [location, setLocation] = useState<string>("");
   const [bio, setBio] = useState<string>("");
   //개인 추가 입력
   const [height, setHeight] = useState<number | null>(null);
@@ -228,7 +228,6 @@ function SignupPage() {
       ) {
         try {
           const formData = new FormData();
-
           // requestBody 부분 추가
           const requestBodyData = {
             email,
@@ -240,6 +239,7 @@ function SignupPage() {
             price: priceInfo,
           };
 
+          console.log(requestBodyData);
           const blob = new Blob([JSON.stringify(requestBodyData)], {
             type: "application/json",
           });
@@ -267,7 +267,7 @@ function SignupPage() {
         }
       } else {
         if (location.trim() === "") {
-          alert("지역을 선택해주세요.");
+          alert("주소를 입력해주세요.");
         } else if (sport.trim() === "") {
           alert("스포츠 종목을 입력해주세요.");
         } else if (bio.trim() === "") {
@@ -294,14 +294,20 @@ function SignupPage() {
         handleSportChange={handleSportChange}
         previewImg={previewImg}
         setPreviewImg={setPreviewImg}
+        setIsSubmitted={setIsSubmitted}
       />
     );
   }
+  const handleLastInputKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    validateNicknameHandler();
+    if (e.key === "Enter") {
+      onSubmitHandler();
+    }
+  };
   return (
     <div className=" flex justify-center pt-[20px] mt-[20px] mb-[40px]  h-4/6 items-center ">
       <div className="w-[300px]">
         <MembershipButtonGroup selectedType={selectedType} onChange={handleMembershipChange} />
-
         <CommonInput
           placeholder="이메일을 입력해주세요."
           label="이메일"
@@ -344,6 +350,7 @@ function SignupPage() {
           onChange={handleNicknameChange}
           onBlur={validateNicknameHandler}
           onFocus={clearNicknameValidation}
+          onKeyUp={handleLastInputKeyUp}
         />
         <p className="text-[12px]">영문자, 숫자를 혼합하여 6~20자로 입력해주세요. </p>
         {isValidNickname === false && (

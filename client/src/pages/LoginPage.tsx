@@ -65,6 +65,12 @@ function LoginPage() {
     }
   };
 
+  const handleLastInputKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      onSubmitHandler();
+    }
+  };
+
   //카카오톡 로그인
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_REST_API_KEY}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code`;
   const kakaoLoginHandler = () => {
@@ -91,6 +97,7 @@ function LoginPage() {
           label="비밀번호"
           type="password"
           onChange={handlePasswordChange}
+          onKeyUp={handleLastInputKeyUp}
         />
 
         <button
@@ -99,7 +106,6 @@ function LoginPage() {
         >
           로그인
         </button>
-
         <div className="text-[12px] w-full mt-[10px] flex justify-center  font-medium text-gray-400 mb-[10px]">
           아직 FitFolio의 회원이 아니라면?{" "}
           <Link to="/signup" className="underline ml-1">

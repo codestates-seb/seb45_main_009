@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CommonInput from "../atoms/CommonInput";
 import upload from "../../assets/images/upload.jpeg";
 import { MdDelete } from "react-icons/md";
@@ -15,6 +15,7 @@ interface SignupAdditionProps {
   handleSportChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   previewImg: ImageData | null;
   setPreviewImg: React.Dispatch<React.SetStateAction<ImageData | null>>;
+  setIsSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
 }
 interface ImageData {
   file: File | null;
@@ -32,6 +33,7 @@ function SignupAddition({
   handleSportChange,
   previewImg,
   setPreviewImg,
+  setIsSubmitted,
 }: SignupAdditionProps) {
   const insertImg = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -68,10 +70,17 @@ function SignupAddition({
   const deleteImg = () => {
     setPreviewImg(null);
   };
-
+  const handleLastInputKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      onSubmit();
+    }
+  };
   return (
     <div className="flex justify-center items-center h-4/5">
       <div className="w-[300px] mt-4">
+        <div onClick={() => setIsSubmitted(false)}>
+          <span>뒤로가기 아이콘</span>
+        </div>
         <div className="flex justify-center">
           <form encType="multipart/form-data">
             <div className="relative">
@@ -117,7 +126,12 @@ function SignupAddition({
             <CommonInput placeholder="주소" onChange={handleLocationChange} />
             <CommonInput placeholder="주 운동 종목" type="text" onChange={handleSportChange} />
             <CommonInput placeholder="기업소개" type="text" onChange={handleBioChange} />
-            <CommonInput placeholder="가격정보" type="text" onChange={handlePriceInfoChange} />
+            <CommonInput
+              placeholder="가격정보"
+              type="text"
+              onChange={handlePriceInfoChange}
+              onKeyUp={handleLastInputKeyUp}
+            />
           </>
         )}
 
