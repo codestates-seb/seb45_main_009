@@ -59,7 +59,13 @@ function LoginPage() {
         dispatch(login(userInfo));
 
         navigate("/");
-      } catch (error) {
+      } catch (error: any) {
+        const errorMessage = error.response.data.message;
+        if (errorMessage === "Unauthorized") {
+          alert("등록된 회원이 없습니다");
+        } else if (errorMessage === "Bad credentials (password incorrect)") {
+          alert("비밀번호가 틀렸습니다");
+        }
         console.error("Error during login:", error);
       }
     }
