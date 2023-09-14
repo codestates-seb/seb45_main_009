@@ -47,7 +47,7 @@ function SignupPage() {
   const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
   };
-  const handleLocationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLocation(e.target.value);
   };
   const handleBioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -156,7 +156,8 @@ function SignupPage() {
           });
           console.log("response:", response);
           alert("회원가입 완료");
-          setIsSubmitted(true);
+          navigate("/login");
+          // setIsSubmitted(true); 개인회원은 loginaddition 없앰
         } catch (error: any) {
           //에러 처리 로직..
           if (error.response.data.message === "회원이 존재합니다") {

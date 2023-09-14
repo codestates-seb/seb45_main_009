@@ -7,7 +7,7 @@ import { MdDelete } from "react-icons/md";
 interface SignupAdditionProps {
   selectedType: "개인회원" | "기업회원";
   onSubmit: () => void;
-  handleLocationChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleLocationChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleBioChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleHeightChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleWeightChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -16,26 +16,10 @@ interface SignupAdditionProps {
   previewImg: ImageData | null;
   setPreviewImg: React.Dispatch<React.SetStateAction<ImageData | null>>;
 }
-
 interface ImageData {
   file: File | null;
   src: string;
 }
-const locations = [
-  "서울",
-  "경기",
-  "인천",
-  "강원",
-  "충북",
-  "충남",
-  "전북",
-  "전남",
-  "경북",
-  "경남",
-  "부산",
-  "제주",
-  "기타",
-];
 
 function SignupAddition({
   selectedType,
@@ -117,21 +101,7 @@ function SignupAddition({
         </div>
         {selectedType === "개인회원" ? (
           <>
-            <div className="flex flex-col">
-              <div className="w-[65px]">
-                <select
-                  id="locationSelect"
-                  name="locations"
-                  className="border w-full h-[40px] rounded-[4px] pl-[8px] text-[14px] mt-[20px]"
-                  onChange={handleLocationChange}
-                >
-                  {locations.map((location, index) => (
-                    <option key={index} value={location.toLowerCase()}>
-                      {location}
-                    </option>
-                  ))}
-                </select>
-              </div>
+            {/* <div className="flex flex-col">
               <div className="w-1/2">
                 <CommonInput placeholder="키" type="number" onChange={handleHeightChange} />
               </div>
@@ -140,27 +110,11 @@ function SignupAddition({
               </div>
 
               <CommonInput placeholder="자기소개" type="text" onChange={handleBioChange} />
-            </div>
+            </div> */}
           </>
         ) : (
           <>
-            <div className="flex flex-col">
-              <div className="w-[65px]">
-                <select
-                  id="locationSelect"
-                  name="locations"
-                  className="border w-full h-[40px] rounded-[4px] pl-[8px] text-[14px] mt-[20px]"
-                  onChange={handleLocationChange}
-                >
-                  {locations.map((location, index) => (
-                    <option key={index} value={location.toLowerCase()}>
-                      {location}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
+            <CommonInput placeholder="주소" onChange={handleLocationChange} />
             <CommonInput placeholder="주 운동 종목" type="text" onChange={handleSportChange} />
             <CommonInput placeholder="기업소개" type="text" onChange={handleBioChange} />
             <CommonInput placeholder="가격정보" type="text" onChange={handlePriceInfoChange} />
