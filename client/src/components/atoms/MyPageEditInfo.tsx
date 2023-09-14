@@ -9,7 +9,7 @@ import CommonInput from "./CommonInput";
 import { useDispatch, useSelector } from "react-redux";
 import { UserInfo, RootState } from "../../types/types";
 import profileDefault from "../../assets/images/profileDefault.png";
-
+import styled from "styled-components";
 interface userData {
   nickname: string;
   bio: string;
@@ -43,8 +43,8 @@ function MyPageEditInfo() {
   const [bio, setBio] = useState<string>("");
   const [sport, setSport] = useState<string>("");
   //개인 추가 입력
-  const [height, setHeight] = useState<number>(0);
-  const [weight, setWeight] = useState<number>(0);
+  const [height, setHeight] = useState<string>("");
+  const [weight, setWeight] = useState<string>("");
   //기업 추가 입력
   const [priceInfo, setPriceInfo] = useState<string>("");
   const [location, setLocation] = useState<string>("");
@@ -66,22 +66,19 @@ function MyPageEditInfo() {
   const handleSportChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSport(e.target.value);
   };
+
   const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = parseFloat(e.target.value);
-    if (!isNaN(inputValue)) {
-      // isNaN 체크는 변환된 값이 유효한 숫자인지 확인합니다.
-      setHeight(inputValue);
-    } else {
-      setHeight(0);
-    }
+    setHeight(e.target.value);
   };
+
   const handleWeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = parseFloat(e.target.value);
-    if (!isNaN(inputValue)) {
-      setWeight(inputValue);
-    } else {
-      setWeight(0);
-    }
+    // const inputValue = parseFloat(e.target.value);
+    // if (!isNaN(inputValue)) {
+    //   setWeight(inputValue);
+    // } else {
+    //   setWeight(0);
+    // }
+    setWeight(e.target.value);
   };
 
   const insertImg = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -124,17 +121,19 @@ function MyPageEditInfo() {
     try {
       const response = await globalAxios.get("/mypage");
       const data: userData = response.data.data;
-      console.log(data);
+      console.log("data:", data);
       const preProfileImg = { file: null, src: data.profileimg };
       if ((preProfileImg.src = "https://fitfolio-photo.s3.ap-northeast-2.amazonaws.com/default+image/default.png")) {
       } else {
         setPreviewImg(preProfileImg);
       }
       setNickname(data.nickname);
-      setWeight(data.weight);
-      setHeight(data.height);
+      setWeight(data.weight.toString());
+      setHeight(data.height.toString());
       setSport(data.sport);
       setBio(data.bio);
+      setPriceInfo(data.price);
+      setLocation(data.location);
     } catch (error: any) {
       console.log(error);
     }
@@ -147,10 +146,12 @@ function MyPageEditInfo() {
     const formData = new FormData();
     const requestBody = {
       nickname: nickname,
-      weight: weight,
-      height: height,
+      weight: parseInt(weight, 10),
+      height: parseInt(height, 10),
       sport: sport,
       bio: bio,
+      location: location,
+      priceInfo: priceInfo,
     };
     console.log(requestBody);
     const blob = new Blob([JSON.stringify(requestBody)], {
@@ -166,6 +167,7 @@ function MyPageEditInfo() {
           "Content-Type": "multipart/form-data",
         },
       });
+      alert("개인정보 수정 성공");
       console.log("patch성공", response);
     } catch (error) {
       console.log("error", error);
@@ -232,7 +234,7 @@ function MyPageEditInfo() {
               <CommonInput value={nickname} label="닉네임" onChange={handleNicknameChange} />
             </div>
             <div>
-              <CommonInput value={location} label="지역" onChange={handleLocationChange} />
+              <CommonInput value={location} label="주소" onChange={handleLocationChange} />
             </div>
             <div>
               <CommonInput value={sport} label="주 운동 종목" onChange={handleSportChange} />
@@ -241,7 +243,7 @@ function MyPageEditInfo() {
               <CommonInput value={bio} label="기업 소개" onChange={handleBioChange} />
             </div>
             <div>
-              <CommonInput value={bio} label="가격 정보" onChange={handleBioChange} />
+              <CommonInput value={priceInfo} label="가격 정보" onChange={handlePriceInfoChange} />
             </div>
           </div>
         )}
