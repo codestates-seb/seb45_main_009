@@ -1,7 +1,6 @@
 package com.mainproject.server.message.entity;
-
 import com.mainproject.server.user.entity.User;
-import com.mainproject.server.util.Auditable;
+
 import lombok.Getter;
 import lombok.Setter;
 
