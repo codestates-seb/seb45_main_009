@@ -28,6 +28,9 @@ public class Feed {
     @Column
     private String nickname;
 
+    @Column
+    private String location;
+
     @Column(columnDefinition = "TEXT")
     private String content;
 

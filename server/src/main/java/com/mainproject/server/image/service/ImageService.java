@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -93,16 +94,33 @@ public class ImageService {
         imageRepository.delete(deletedImage);
     }
 
-    // 이미지 URL로 이미지 조회
+//    // 이미지 URL로 이미지 조회
+//    public Image findImageByImageUrl(String imageUrl) {
+//        // 이미지 URL을 사용하여 이미지를 데이터베이스에서 조회
+//        Image image = imageRepository.findByImageUrl(imageUrl);
+//        if (image == null) {
+//            // 이미지가 존재하지 않을 경우 예외
+//            throw new EntityNotFoundException("Image not found with URL: " + imageUrl);
+//        }
+//        return image;
+//
+//    }
+
+
+
+    // 이미지 URL로 이미지 조회(수정)
     public Image findImageByImageUrl(String imageUrl) {
-        // 이미지 URL을 사용하여 이미지를 데이터베이스에서 조회
-        Image image = imageRepository.findByImageUrl(imageUrl);
-        if (image == null) {
-            // 이미지가 존재하지 않을 경우 예외
-            throw new EntityNotFoundException("Image not found with URL: " + imageUrl);
+        List<Image> images = imageRepository.findDistinctByImageUrl(imageUrl);
+        if (images != null && !images.isEmpty()) {
+            // 중복된 이미지 중 첫 번째 이미지를 반환
+            return images.get(0);
         }
-        return image;
+        return null; // 이미지가 없는 경우 null 반환
     }
+
+
+
+
 
     // 프로필 이미지 URL 가져오기
     public String getProfileImageUrl(User user) {

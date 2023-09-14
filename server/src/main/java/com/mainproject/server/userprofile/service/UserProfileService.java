@@ -77,11 +77,27 @@ public class UserProfileService {
                 .price(user.getPrice())
                 .height(user.getHeight())
                 .weight(user.getWeight())
+                .roles(user.getRoles())
                 .feedList(feedList)
                 .build();
 
         return userProfileDto;
     }
+
+    // 사용자의 프로필 이미지 URL 검색
+//    private String getProfileImageUrl(User user) {
+//        String profileImageUrl = null;
+//        if (user != null && user.getProfileimg() != null) {
+//            String imageUrl = user.getProfileimg().getImageUrl();
+//            Image image = imageService.findImageByImageUrl(imageUrl);
+//
+//            if (image != null) {
+//                profileImageUrl = image.getImageUrl();
+//            }
+//        }
+//        return profileImageUrl;
+//    }
+
 
     // 사용자의 프로필 이미지 URL 검색
     private String getProfileImageUrl(User user) {
@@ -91,9 +107,11 @@ public class UserProfileService {
             Image image = imageService.findImageByImageUrl(imageUrl);
 
             if (image != null) {
+                // 중복된 이미지 주소인 경우 중복된 이미지 중 하나만 사용하도록 수정
                 profileImageUrl = image.getImageUrl();
             }
         }
         return profileImageUrl;
     }
+
 }

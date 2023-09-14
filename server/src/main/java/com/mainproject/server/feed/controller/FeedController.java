@@ -130,5 +130,38 @@ public class FeedController {
         feedService.deleteFeedImage(userId, feedId, imageId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
+
+   // @GetMapping("/filter")
+//    public Page<Feed> filterFeeds(@RequestParam(required = false) List<String> relatedTags,
+//                                  @RequestParam(required = false) List<String> location, Pageable pageable) {
+//        List<Feed> userFeeds = feedRepository.findUserFeeds();
+//
+//        // 필터링을 위한 조건을 검사합니다.
+//        if (relatedTags.isEmpty() && location.isEmpty()) {
+//            // 관련 태그와 위치가 모두 제공되지 않은 경우 처리합니다.
+//            // 모든 피드를 반환하거나 요구 사항에 따라 처리할 수 있습니다.
+//            return new PageImpl<>(userFeeds, pageable, userFeeds.size());
+//        } else if (relatedTags.isEmpty()) {
+//            // 관련 태그만 제공된 경우 처리합니다.
+//            List<Feed> filteredFeeds = userFeeds.stream()
+//                    .filter(feed -> location.contains(feed.getLocation()))
+//                    .collect(Collectors.toList());
+//            return new PageImpl<>(filteredFeeds, pageable, filteredFeeds.size());
+//        } else if (location.isEmpty()) {
+//            // 위치만 제공된 경우 처리합니다.
+//            List<Feed> filteredFeeds = userFeeds.stream()
+//                    .filter(feed -> feed.getRelatedTags().stream().anyMatch(relatedTags::contains))
+//                    .collect(Collectors.toList());
+//            return new PageImpl<>(filteredFeeds, pageable, filteredFeeds.size());
+//        } else {
+//            // 관련 태그와 위치가 모두 제공된 경우 처리합니다.
+//            List<Feed> filteredFeeds = userFeeds.stream()
+//                    .filter(feed -> location.contains(feed.getLocation())
+//                            && feed.getRelatedTags().stream().anyMatch(relatedTags::contains))
+//                    .collect(Collectors.toList());
+//            return new PageImpl<>(filteredFeeds, pageable, filteredFeeds.size());
+//        }
+
+
 }
 

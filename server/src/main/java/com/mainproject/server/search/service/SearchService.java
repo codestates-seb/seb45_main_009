@@ -56,6 +56,7 @@ public class SearchService {
                 .userId(user.getUserId())
                 .nickname(user.getNickname())
                 .profileimg(user.getProfileimg() != null ? user.getProfileimg().getImageUrl() : null)
+                .roles(user.getRoles())
                 .build();
     }
 
@@ -64,6 +65,9 @@ public class SearchService {
                 .feedId(feed.getFeedId())
                 .content(feed.getContent())
                 .relatedTags(feed.getRelatedTags())
+                .userNickname(feed.getNickname())
+                .roles(feed.getUser().getRoles())
+                .profileImageUrl(feed.getUser().getProfileimg().getImageUrl())
                 .images(feed.getImages().stream()
                         .map(Image::getImageUrl)
                         .collect(Collectors.toList()))

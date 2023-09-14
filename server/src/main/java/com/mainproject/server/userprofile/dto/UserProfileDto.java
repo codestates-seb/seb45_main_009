@@ -25,4 +25,5 @@ public class UserProfileDto {
     private Long followerCount;
     private Long followCount;
     private List<FeedResponseDto> feedList;
+    private List<String> roles;
 }

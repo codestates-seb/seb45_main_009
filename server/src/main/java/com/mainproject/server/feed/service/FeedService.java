@@ -65,9 +65,9 @@ public class FeedService {
         }
 
         findCreateUser.hasWroteFeed(); // 피드 카운트 증가
-        
 
-        
+
+
         return feedRepository.save(savedFeed);
     }
 

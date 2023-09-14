@@ -93,6 +93,7 @@ public class UserDto {
         private Long userId;
         private String nickname;
         private String profileimg;
+        private List<String> roles;
     }
 
 

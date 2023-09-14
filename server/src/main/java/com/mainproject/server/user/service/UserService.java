@@ -81,12 +81,16 @@ public class UserService {
             profileImage.setUser(user);
             user.setProfileimg(profileImage);
         } else {
-            // 프로필 사진이 없는 경우 기본 이미지 URL을 설정
-            Image defaultProfileImage = new Image();
-            defaultProfileImage.setImageUrl("https://fitfolio-photo.s3.ap-northeast-2.amazonaws.com/default+image/default.png");
-            defaultProfileImage.setUser(user);
-            user.setProfileimg(defaultProfileImage);
+            // 이미지가 없는 경우, 이미지 URL이 있는지 확인
+            if (user.getProfileimg() == null || user.getProfileimg().getImageUrl() == null) {
+                // 이미지 URL도 없는 경우 기본 이미지 URL을 설정
+                Image defaultProfileImage = new Image();
+                defaultProfileImage.setImageUrl("https://fitfolio-photo.s3.ap-northeast-2.amazonaws.com/default+image/default.png");
+                defaultProfileImage.setUser(user);
+                user.setProfileimg(defaultProfileImage);
+            }
         }
+
         // UserProfile 생성 및 설정
         UserProfile userProfile = new UserProfile();
         userProfile.setUser(user);

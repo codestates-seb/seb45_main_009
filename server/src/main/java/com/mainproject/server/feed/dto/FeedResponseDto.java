@@ -16,6 +16,7 @@ import java.util.List;
 public class FeedResponseDto {
     private Long feedId;
     private String userNickname;
+    private String location;
     private String profileImageUrl;
     private String content;
     private List<String> relatedTags;
