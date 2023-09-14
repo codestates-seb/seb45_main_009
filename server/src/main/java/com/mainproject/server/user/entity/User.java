@@ -55,10 +55,10 @@ public class User {
     //위치를 업체 위치 태그에서 가져올 것인지 상의가 필요
 
     @Column
-    private int height;
+    private Integer height;
 
     @Column
-    private int weight;
+    private Integer weight;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @JoinColumn(name = "imageId")
