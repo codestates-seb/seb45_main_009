@@ -63,7 +63,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                         .antMatchers(HttpMethod.POST, "/logout").permitAll()
                         .antMatchers(HttpMethod.GET, "/mypage/**").hasAnyRole("USER", "STORE")
                         .antMatchers(HttpMethod.PATCH, "/mypage/**").hasAnyRole("USER", "STORE")
-                        .antMatchers(HttpMethod.DELETE, "/mypage/**").hasAnyRole("USER", "STORE")
+                        .antMatchers(HttpMethod.DELETE, "/mypage/**").hasAnyRole("USER", "STORE", "ADMIN")
 
 
                         // # feed 관련
@@ -72,12 +72,12 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                         .antMatchers(HttpMethod.GET, "/feed/detail/**").permitAll()
                         .antMatchers(HttpMethod.POST, "/feed/add/**").hasAnyRole("USER", "STORE")
                         .antMatchers(HttpMethod.PATCH, "/feed/detail/**").hasAnyRole("USER", "STORE")
-                        .antMatchers(HttpMethod.DELETE, "/feed/detail/**").hasAnyRole("USER", "STORE")
+                        .antMatchers(HttpMethod.DELETE, "/feed/detail/**").hasAnyRole("USER", "STORE", "ADMIN")
 
                         // # feed 댓글 관련
                         .antMatchers(HttpMethod.POST, "/feed/detail/*/comment").hasAnyRole("USER", "STORE")
                         .antMatchers(HttpMethod.PATCH, "/feed/detail/*/comment/**").hasAnyRole("USER", "STORE")
-                        .antMatchers(HttpMethod.DELETE, "/feed/detail/*/comment/**").hasAnyRole("USER", "STORE")
+                        .antMatchers(HttpMethod.DELETE, "/feed/detail/*/comment/**").hasAnyRole("USER", "STORE", "ADMIN")
 
                         // # follow 관련
                         .antMatchers(HttpMethod.POST, "/follow/*").hasAnyRole("USER", "STORE")
