@@ -2,197 +2,178 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import TextareaAutosize from "react-textarea-autosize";
 import globalAxios from "../../data/data";
+import { MdDelete } from "react-icons/md";
+import { regionCategory } from "../../data/category";
+import upload from "../../assets/images/upload.jpeg";
+import CommonInput from "./CommonInput";
+import { useDispatch, useSelector } from "react-redux";
+import { UserInfo, RootState } from "../../types/types";
 
 interface FormData {
   introduction: string;
   nickname: string;
-  phoneNumber: string;
-  birthdate: string;
   height: string;
   weight: string;
   primarySport: string;
-  gender: string;
 }
 
-const MyPageEditInfo = () => {
-  const getData = async () => {
-    try {
-    } catch (error) {}
-  };
-  useEffect(() => {
-    getData();
-  }, []);
-
+interface ImageData {
+  file: File | null;
+  src: string;
+}
+function MyPageEditInfo() {
   const navigate = useNavigate();
-
-  const [formData, setFormData] = useState<FormData>({
-    introduction: "",
-    nickname: "",
-    phoneNumber: "",
-    birthdate: "",
-    height: "",
-    weight: "",
-    primarySport: "",
-    gender: "",
-  });
-
-  const [previousData, setPreviousData] = useState<FormData>({
-    introduction: "",
-    nickname: "",
-    phoneNumber: "",
-    birthdate: "",
-    height: "",
-    weight: "",
-    primarySport: "",
-    gender: "",
-  });
-
+  const dispatch = useDispatch();
+  const userInfo = useSelector((state: RootState) => state.login.userInfo);
+  const [userType, setUserType] = useState(userInfo.userType);
   useEffect(() => {
-    const savedFormData = localStorage.getItem("formData");
-    if (savedFormData) {
-      const parsedData = JSON.parse(savedFormData);
-      setFormData(parsedData);
-      setPreviousData(parsedData);
+    setUserType((prevType) => userInfo.userType);
+  }, [userInfo]);
+  // const getData = async () => {
+  //   try {
+  //     const response = await globalAxios.get("/mypage");
+  //     console.log(response.data);
+  //   } catch (error: any) {
+  //     console.log(error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   getData();
+  // }, []);
+  const [previewImg, setPreviewImg] = useState<ImageData | null>(null);
+  //개인-기업 공통 추가 입력
+  const [bio, setBio] = useState<string>("");
+  //개인 추가 입력
+  const [height, setHeight] = useState<number | null>(null);
+  const [weight, setWeight] = useState<number | null>(null);
+  //기업 추가 입력
+  const [sport, setSport] = useState<string>("");
+  const [priceInfo, setPriceInfo] = useState<string>("");
+
+  const handleBioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setBio(e.target.value);
+  };
+
+  const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = parseFloat(e.target.value);
+    if (!isNaN(inputValue)) {
+      // isNaN 체크는 변환된 값이 유효한 숫자인지 확인합니다.
+      setHeight(inputValue);
+    } else {
+      setHeight(null);
     }
-  }, []);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+  };
+  const handleWeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = parseFloat(e.target.value);
+    if (!isNaN(inputValue)) {
+      setWeight(inputValue);
+    } else {
+      setWeight(null);
+    }
+  };
+  const handlePriceInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPriceInfo(e.target.value);
+  };
+  const handleSportChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSport(e.target.value);
   };
 
-  const handleSaveChanges = () => {
-    localStorage.setItem("formData", JSON.stringify(formData));
-    alert("변경된 정보가 저장되었습니다.");
-    navigate("/");
+  const insertImg = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      // 5MB
+      const maxFileSize = 5 * 1024 * 1024;
+
+      // 파일 크기 검사
+      if (file.size > maxFileSize) {
+        alert("파일 크기가 너무 큽니다! 5MB 이하의 사진만 업로드해주세요.");
+        return;
+      }
+      let reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onloadend = () => {
+        const previewImgUrl = reader.result;
+        if (typeof previewImgUrl === "string") {
+          const newImgData: ImageData = {
+            file: file,
+            src: previewImgUrl,
+          };
+          setPreviewImg(newImgData);
+        }
+      };
+
+      reader.onerror = () => {
+        alert("사진 업로드 실패, 잠시 후 다시 시도해 주세요");
+        console.error("An error occurred while reading the file.");
+      };
+    }
   };
 
-  const handleUndo = () => {
-    setFormData(previousData);
+  const deleteImg = () => {
+    setPreviewImg(null);
   };
 
   return (
-    <div className="flex justify-center flex-col items-center my-12">
-      <div className="w-[15vw] h-[15vw] min-w-[8rem] min-h-[8rem] rounded-full bg-gray-400 mb-10">
-        <div className="w-[15vw] h-[15vw] min-w-[8rem] min-h-[8rem] rounded-full bg-gray-400 mb-10 flex justify-center items-center text-xl">
-          +
+    <div className="flex justify-center items-center h-4/5">
+      <div className="w-[300px]">
+        <div className="flex justify-center">
+          <form encType="multipart/form-data">
+            <div className="relative">
+              <img
+                src={previewImg ? previewImg.src : upload}
+                alt="previewImg"
+                className="mt-4 rounded-full w-[200px] h-[200px] border object-cover"
+              />
+              <label
+                htmlFor="file"
+                className="absolute top-0 left-0 w-[200px] h-[200px] bg-transparent cursor-pointer border-0 rounded-full"
+              ></label>
+              {previewImg && (
+                <button onClick={deleteImg} className="absolute right-[-30] flex flex-row items-center">
+                  <MdDelete className="text-[#adaaaa] text-[20px] hover:text-[#595656] transition" />
+                </button>
+              )}
+            </div>
+            <input
+              type="file"
+              id="file"
+              accept="image/*"
+              className="absolute inset-0 overflow-hidden h-0 w-0"
+              onChange={insertImg}
+            />
+          </form>
         </div>
-      </div>
+        {userType === "USER" ? (
+          <>
+            <div className="flex flex-col">
+              <div className="w-1/2">
+                <CommonInput type="text" label="닉네임" />
+              </div>
+              <div className="w-1/2">
+                <CommonInput type="number" onChange={handleHeightChange} label="키" />
+              </div>
+              <div className="w-1/2">
+                <CommonInput type="number" onChange={handleWeightChange} label="몸무게" />
+              </div>
+              <CommonInput type="text" onChange={handleBioChange} label="자기소개" />
+              <div></div>
+            </div>
+          </>
+        ) : (
+          <>
+            <CommonInput type="text" onChange={handleSportChange} label="주 운동 종목" />
+            <CommonInput type="text" onChange={handleBioChange} label="기업소개" />
+            <CommonInput type="text" onChange={handlePriceInfoChange} label="가격정보" />
+          </>
+        )}
 
-      <div className="flex flex-col w-[70vw] max-w-xl">
-        <label htmlFor="introduction">자기소개 수정</label>
-        <TextareaAutosize
-          id="introduction"
-          cacheMeasurements
-          placeholder="자기소개 수정"
-          maxLength={150}
-          name="introduction"
-          value={formData.introduction}
-          onChange={handleInputChange}
-          className="border rounded-lg p-3 my-4 h-full"
-        ></TextareaAutosize>
-
-        <label htmlFor="nickname">닉네임 수정</label>
-        <input
-          type="text"
-          id="nickname"
-          placeholder="닉네임 수정"
-          name="nickname"
-          value={formData.nickname}
-          onChange={handleInputChange}
-          className="border rounded-lg p-3 my-4"
-        ></input>
-
-        <label htmlFor="phoneNumber">핸드폰 번호</label>
-        <input
-          type="number"
-          id="phoneNumber"
-          placeholder="핸드폰 번호"
-          name="phoneNumber"
-          value={formData.phoneNumber}
-          onChange={handleInputChange}
-          className="border rounded-lg p-3 my-4"
-        ></input>
-
-        <label htmlFor="birthdate">생년월일</label>
-        <input
-          type="date"
-          id="birthdate"
-          placeholder="생년월일"
-          name="birthdate"
-          value={formData.birthdate}
-          onChange={handleInputChange}
-          className="border rounded-lg p-3 my-4"
-        ></input>
-
-        <label htmlFor="height">키 수정</label>
-        <input
-          type="number"
-          id="height"
-          placeholder="키 수정"
-          name="height"
-          value={formData.height}
-          onChange={handleInputChange}
-          className="border rounded-lg p-3 my-4"
-        ></input>
-
-        <label htmlFor="weight">몸무게 수정</label>
-        <input
-          type="number"
-          id="weight"
-          placeholder="몸무게 수정"
-          name="weight"
-          value={formData.weight}
-          onChange={handleInputChange}
-          className="border rounded-lg p-3 my-4"
-        ></input>
-
-        <label htmlFor="primarySport">주 운동 종목</label>
-        <input
-          type="text"
-          id="primarySport"
-          placeholder="주 운동 종목"
-          name="primarySport"
-          value={formData.primarySport}
-          onChange={handleInputChange}
-          className="border rounded-lg p-3 my-4"
-        ></input>
-        <div className="flex justify-around my-3">
-          <div className="flex">
-            <input id="남자" value="남자" name="gender" type="radio" />
-            <p>남자</p>
-          </div>
-          <div className="flex">
-            <input className="ml-[10px]" id="여자" value="여자" name="gender" type="radio" />
-            <p>여자</p>
-          </div>
+        <div className="flex flex-col items-center justify-center mt-[30px]">
+          <button></button>
         </div>
-        <div className="flex justify-center my-3">
-          <button
-            className="px-4 py-2 w-full  sm:px-6 sm:py-2 rounded-xl mb-5 bg-modify-btn-color hover:text-white mr-5"
-            onClick={handleSaveChanges}
-          >
-            수정하기
-          </button>
-          <button
-            className="px-4 py-2 w-full  sm:px-6 sm:py-2 rounded-xl mb-5 bg-modify-btn-color hover:text-white"
-            onClick={handleUndo}
-          >
-            되돌리기
-          </button>
-        </div>
-        <Link to={"/mypage/changepassword"}>
-          <div className="flex items-center mb-4">비밀번호 변경 {" -> "}</div>
-        </Link>
-        <Link to={"/mypage/withdraw"}>
-          <div className=" flex justify-end text-red-500">회원 탈퇴</div>
-        </Link>
       </div>
     </div>
   );
-};
+}
 
 export default MyPageEditInfo;

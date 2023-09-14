@@ -19,3 +19,10 @@ export interface FetcedImageData {
   imageId: number;
   src: string;
 }
+
+export interface RootState {
+  login: {
+    isAuthenticated: boolean;
+    userInfo: UserInfo;
+  };
+}
