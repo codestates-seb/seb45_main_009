@@ -101,13 +101,13 @@ function DetailFeedInd({ feedId }: DetailFeedProps) {
         <div key={index} className="mb-8 relative">
           <img src={image.imageUrl} alt={`Image ${index}`} className="w-full h-auto" />
           {image.imageTags.map((tag, tagIndex) => {
-            const top = `${tag.positionY}%`;
-            const left = `${tag.positionX}%`;
+            const top = Math.round(tag.positionY * 100);
+            const left = Math.round(tag.positionX * 100);
             return (
               <div
                 key={tagIndex}
                 className="w-[20px] h-[20px] rounded-full absolute"
-                style={{ top, left }}
+                style={{ top: `${top}%`,  left: `${left}%` }}
                 onMouseEnter={() => setShowTagModal({ photoIndex: index, tagIndex })}
                 onMouseLeave={() => setShowTagModal(null)}
               >
@@ -118,10 +118,10 @@ function DetailFeedInd({ feedId }: DetailFeedProps) {
                     title={tag.productName}
                     size={tag.productInfo}
                     price={parseInt(tag.productPrice)}
-                    top={top}
-                    left={left}
+                    top={`${top}%`}
+                    left={`${left}%`}
                   />
-                )}
+                  )}
               </div>
             );
           })}
