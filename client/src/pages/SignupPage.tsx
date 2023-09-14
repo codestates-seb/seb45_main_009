@@ -58,23 +58,6 @@ function SignupPage() {
     setPasswordConfirm(e.target.value);
   };
 
-  const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = parseFloat(e.target.value);
-    if (!isNaN(inputValue)) {
-      // isNaN 체크는 변환된 값이 유효한 숫자인지 확인합니다.
-      setHeight(inputValue);
-    } else {
-      setHeight(null);
-    }
-  };
-  const handleWeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = parseFloat(e.target.value);
-    if (!isNaN(inputValue)) {
-      setWeight(inputValue);
-    } else {
-      setWeight(null);
-    }
-  };
   const handlePriceInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPriceInfo(e.target.value);
   };
@@ -290,8 +273,6 @@ function SignupPage() {
         onSubmit={onAdditionSubmitHandler}
         handleLocationChange={handleLocationChange}
         handleBioChange={handleBioChange}
-        handleHeightChange={handleHeightChange}
-        handleWeightChange={handleWeightChange}
         handlePriceInfoChange={handlePriceInfoChange}
         handleSportChange={handleSportChange}
         previewImg={previewImg}

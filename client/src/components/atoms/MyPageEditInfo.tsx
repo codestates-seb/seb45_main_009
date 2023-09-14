@@ -50,6 +50,8 @@ function MyPageEditInfo() {
   const [priceInfo, setPriceInfo] = useState<string>("");
   const [location, setLocation] = useState<string>("");
 
+  const [isValidNickname, setIsValidNickname] = useState<boolean | null>(true);
+
   const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
   };
@@ -73,13 +75,22 @@ function MyPageEditInfo() {
   };
 
   const handleWeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // const inputValue = parseFloat(e.target.value);
-    // if (!isNaN(inputValue)) {
-    //   setWeight(inputValue);
-    // } else {
-    //   setWeight(0);
-    // }
     setWeight(e.target.value);
+  };
+
+  //닉네임 유효성 검사
+  const nicknameRegEx = /^[A-Za-z0-9]{6,20}$/;
+
+  const validateNicknameHandler = () => {
+    if (nicknameRegEx.test(nickname)) {
+      setIsValidNickname(true);
+    } else {
+      setIsValidNickname(false);
+    }
+  };
+
+  const clearNicknameValidation = () => {
+    setIsValidNickname(null);
   };
 
   const insertImg = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -122,19 +133,19 @@ function MyPageEditInfo() {
     try {
       const response = await globalAxios.get("/mypage");
       const data: userData = response.data.data;
-      console.log("data:", data);
+      console.log("불러오기 성공, data:", data);
       const preProfileImg = { file: null, src: data.profileimg };
       if ((preProfileImg.src = "https://fitfolio-photo.s3.ap-northeast-2.amazonaws.com/default+image/default.png")) {
       } else {
         setPreviewImg(preProfileImg);
       }
       setNickname(data.nickname);
-      setWeight(data.weight.toString());
-      setHeight(data.height.toString());
+      setLocation(data.location);
       setSport(data.sport);
       setBio(data.bio);
       setPriceInfo(data.price);
-      setLocation(data.location);
+      setWeight(data.weight.toString());
+      setHeight(data.height.toString());
     } catch (error: any) {
       console.log(error);
     }
@@ -144,6 +155,10 @@ function MyPageEditInfo() {
   }, []);
 
   const onSubmit = async () => {
+    if (!isValidNickname) {
+      alert("올바른 닉네임을 입력해주세요.");
+      return;
+    }
     const formData = new FormData();
     const requestBody = {
       nickname: nickname,
@@ -152,7 +167,7 @@ function MyPageEditInfo() {
       sport: sport,
       bio: bio,
       location: location,
-      priceInfo: priceInfo,
+      price: priceInfo,
     };
     console.log(requestBody);
     const blob = new Blob([JSON.stringify(requestBody)], {
@@ -214,7 +229,17 @@ function MyPageEditInfo() {
       <div className="w-[300px]  max-tablet:mt-4">
         {userInfo.userType === "USER" ? (
           <div className="flex flex-col">
-            <CommonInput value={nickname} label="닉네임" onChange={handleNicknameChange} />
+            <CommonInput
+              value={nickname}
+              label="닉네임"
+              onChange={handleNicknameChange}
+              onBlur={validateNicknameHandler}
+              onFocus={clearNicknameValidation}
+            />
+            <p className="text-[12px]">영문자, 숫자를 혼합하여 6~20자로 입력해주세요. </p>
+            {isValidNickname === false && (
+              <p className="text-[12px] text-isValid-text-red">유효하지 않은 닉네임 형식입니다.</p>
+            )}
             <div className="flex flex-row">
               <CommonInput value={height} type="number" label="키(cm)" onChange={handleHeightChange} className="mr-2" />
               <CommonInput value={weight} type="number" label="몸무게(kg)" onChange={handleWeightChange} />

@@ -9,8 +9,6 @@ interface SignupAdditionProps {
   onSubmit: () => void;
   handleLocationChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleBioChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleHeightChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleWeightChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handlePriceInfoChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSportChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   previewImg: ImageData | null;
@@ -27,8 +25,6 @@ function SignupAddition({
   onSubmit,
   handleLocationChange,
   handleBioChange,
-  handleHeightChange,
-  handleWeightChange,
   handlePriceInfoChange,
   handleSportChange,
   previewImg,

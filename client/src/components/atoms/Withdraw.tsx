@@ -2,15 +2,24 @@ import React from "react";
 import { useNavigate } from "react-router";
 import ConfirmButton from "./ConfirmButton";
 import globalAxios from "../../data/data";
+import { useDispatch } from "react-redux";
+import { logout } from "../../redux/reducers/loginSlice";
 
 const Withdraw = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const logoutHandler = () => {
+    dispatch(logout());
+    sessionStorage.removeItem("access_token");
+    sessionStorage.removeItem("user_info");
+    navigate("/");
+  };
   const handleWithdraw = async () => {
     try {
       const response = await globalAxios.delete("/mypage/delete");
       console.log(response);
       alert("회원탈퇴 완료");
-      navigate("/");
+      logoutHandler();
     } catch (error) {
       console.log(error);
     }
