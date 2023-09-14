@@ -131,7 +131,14 @@ public class UserService {
             findUser.setNickname(verifyExistNickName(user.getNickname()));
         }
 
+        if (user.getWeight() != null) {
+            findUser.setWeight(user.getWeight());
+        }
 
+        if (user.getHeight() != null) {
+            findUser.setHeight(user.getHeight());
+        }
+        
         // 이미지 업데이트
         String newImageUrl = updateProfileImage(findUser, profileimg);
         if (newImageUrl != null) {
