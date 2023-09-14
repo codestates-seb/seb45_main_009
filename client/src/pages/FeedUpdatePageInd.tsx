@@ -8,8 +8,13 @@ import globalAxios from "../data/data";
 import loading from "../assets/images/loading.gif";
 import { ImageData, FetcedImageData } from "../types/types";
 import { healthCategory } from "../data/category";
+import { useParams } from "react-router-dom";
 
 function FeedUpdataePageInd() {
+  const { feedId: feedIdString } = useParams<{ feedId: string }>();
+
+  const feedId = Number(feedIdString) || 0;
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const [bodyValue, setBodyValue] = useState<string>("");
@@ -48,7 +53,6 @@ function FeedUpdataePageInd() {
   };
   //imageform props
 
-  let feedId: number = 6;
   //새롭게 추가되는 파일
   const [previewImg, setPreviewImg] = useState<ImageData[]>([]);
   //기존 사진-삭제만 가능
@@ -154,8 +158,6 @@ function FeedUpdataePageInd() {
       const response = await globalAxios.get(`/feed/detail/${feedId}`);
       const feedData = response.data;
       console.log(feedData);
-      //피드id넣기
-      feedId = feedData.feedId;
       // 본문 넣기
       setBodyValue(feedData.content);
 
@@ -190,6 +192,10 @@ function FeedUpdataePageInd() {
   useEffect(() => {
     getFeedData();
   }, []);
+
+  if (!feedId) {
+    return <div>Invalid feedId</div>;
+  }
 
   return (
     <div className="flex justify-center items-center flex-col my-20 ">
