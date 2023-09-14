@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/reducers/loginSlice";
 import { setFilteredData } from "../../redux/reducers/feedSlice";
@@ -59,14 +59,18 @@ function Header() {
     }
   };
 
-  const { allFeedData } = useSelector((state: RootStates) => state.feed);
+  const { allFeedDatas, allFeedDataB } = useSelector(
+    (state: RootStates) => state.feed
+  );
   const [search, setSearch] = useState("");
+  const location = useLocation();
+  const currentPage = location.pathname === "/" ? allFeedDatas : allFeedDataB;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     setSearch(inputValue);
 
-    const filteredData = allFeedData.filter((feed) => {
+    const filteredData = currentPage.filter((feed) => {
       return feed.userNickname === inputValue;
       // return feed.userNickname.includes(inputValue);
     });

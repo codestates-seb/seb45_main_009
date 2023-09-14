@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import { FeedData, UserData } from "../../types/types";
 
 export type FeedState = {
-  allFeedData: FeedData[];
+  allFeedDatas: FeedData[];
+  allFeedDataB: FeedData[];
   allUserData: UserData[];
   page: number;
   loading: boolean;
@@ -13,7 +14,8 @@ export type FeedState = {
 const feedSlice = createSlice({
   name: "feed",
   initialState: {
-    allFeedData: [] as FeedData[],
+    allFeedDatas: [] as FeedData[],
+    allFeedDataB: [] as FeedData[],
     allUserData: [] as UserData[],
     page: 1,
     loading: false,
@@ -21,8 +23,12 @@ const feedSlice = createSlice({
     filteredDatas: [] as FeedData[],
   },
   reducers: {
-    setAllFeedData: (state, action) => {
-      state.allFeedData = [...state.allFeedData, ...action.payload];
+    setAllFeedDatas: (state, action) => {
+      state.allFeedDatas = [...state.allFeedDatas, ...action.payload];
+    },
+
+    setAllFeedDataB: (state, action) => {
+      state.allFeedDataB = [...state.allFeedDataB, ...action.payload];
     },
     setAllUserData: (state, action) => {
       state.allUserData = action.payload;
@@ -43,7 +49,8 @@ const feedSlice = createSlice({
 });
 
 export const {
-  setAllFeedData,
+  setAllFeedDatas,
+  setAllFeedDataB,
   setAllUserData,
   setPage,
   setLoading,

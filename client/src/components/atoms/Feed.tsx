@@ -2,15 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
 import globalAxios from "../../data/data";
-import { useDispatch, useSelector } from "react-redux";
 import {
-  setAllFeedData,
-  setAllUserData,
-  setPage,
-  setLoading,
-  setHasMore,
+  setAllFeedDatas,
+  setAllFeedDataB,
 } from "../../redux/reducers/feedSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { RootStates } from "../../types/types";
+
 interface UserData {
   bio: string;
   createdAt: string;
@@ -46,10 +44,14 @@ interface FeedProps {
 
 const Feed = ({ selectedFilter }: FeedProps) => {
   const dispatch = useDispatch();
-  const { allFeedData, allUserData, page, loading, hasMore, filteredDatas } =
-    useSelector((state: RootStates) => state.feed);
+  const { filteredDatas } = useSelector((state: RootStates) => state.feed);
 
-  const usethis = filteredDatas.length !== 0 ? filteredDatas : allFeedData;
+  const [allFeedData, setAllFeedData] = useState<FeedData[]>([]);
+  const [allUserData, setAllUserData] = useState<UserData[]>([]);
+
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
   const [ref, inView] = useInView();
 
@@ -64,7 +66,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
 
   const getMainListData = async () => {
     try {
-      dispatch(setLoading(true));
+      setLoading(true);
 
       // 서버에서 페이지네이션을 고려하여 데이터를 가져옴
       const response = await globalAxios.get(currentPage, {
@@ -74,17 +76,21 @@ const Feed = ({ selectedFilter }: FeedProps) => {
 
       if (getData.length === 0) {
         // 더 이상 데이터가 없는 경우
-        dispatch(setHasMore(false));
+        setHasMore(false);
       } else {
         // 이전 데이터와 새로운 데이터 합치기
-        dispatch(setAllFeedData(getData));
-        dispatch(setPage(page + 1));
+        setAllFeedData((prevData) => [...prevData, ...getData]);
+
+        currentPage === "/"
+          ? dispatch(setAllFeedDatas(getData))
+          : dispatch(setAllFeedDataB(getData));
+        setPage((prevPage) => prevPage + 1);
       }
 
-      dispatch(setLoading(false));
+      setLoading(false);
     } catch (err) {
       console.log("Error >>", err);
-      dispatch(setLoading(false));
+      setLoading(false);
     }
   };
 
@@ -92,7 +98,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
     try {
       const response = await globalAxios.get("/users");
       const getData = response.data.content;
-      dispatch(setAllUserData(getData));
+      setAllUserData(getData);
     } catch (err) {
       console.log("Error >>", err);
     }
@@ -104,6 +110,8 @@ const Feed = ({ selectedFilter }: FeedProps) => {
       getUserData();
     }
   }, [inView, loading, hasMore]);
+
+  const usethis = filteredDatas.length !== 0 ? filteredDatas : allFeedData;
 
   const filteredData = usethis.filter((user) => {
     const hasExerciseTag =
@@ -140,7 +148,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
       return exerciseMatch && locationMatch;
     }
   });
-
+  console.log(filteredDatas);
   return (
     <section className="flex justify-center flex-col items-center ">
       <div>
@@ -159,6 +167,8 @@ const Feed = ({ selectedFilter }: FeedProps) => {
               (userData) => userData.nickname === feed.userNickname
             );
 
+            console.log(allUserData);
+
             return (
               <article key={idx} className="  mb-4 min-w-[250px]">
                 <div className="flex mb-4">
@@ -169,7 +179,11 @@ const Feed = ({ selectedFilter }: FeedProps) => {
                   />
                   <div className="ml-2">
                     <p>{feed.userNickname}</p>
-                    {user && <p className="text-gray-400">{user.bio}</p>}
+                    {user && (
+                      <p className="text-gray-400">
+                        {user.bio ? user.bio : "xx"}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <Link to={`${currentDetail}/${feed.feedId}`}>
