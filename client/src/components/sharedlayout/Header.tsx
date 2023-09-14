@@ -137,7 +137,9 @@ function Header() {
         <>
           {isAuthenticated && (
             <div className="items-center mx-2 sm:mr-4 hover:cursor-pointer">
-              <IoNotificationsOutline size="22" />
+              <Link to="/alarmpage">
+                <IoNotificationsOutline size="22" />
+              </Link>
             </div>
           )}
         </>

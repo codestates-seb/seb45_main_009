@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { FaEllipsisH } from 'react-icons/fa';
 import globalAxios from '../../data/data'
+import { Link } from "react-router-dom";
 
 const Modal = ({ onClose, onDelete, onEdit } :any) => {
   const modalRef = useRef<HTMLDivElement | null>(null);
@@ -112,6 +113,7 @@ return(
 <div className='max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8'>
   <div className="grid md:grid-cols-2 gap-4 ">
 
+  <Link to="/profile/1">
   <div className="flex items-center">
     <img src={feedUserData?.profileImageUrl} className=" mr-2 w-10 h-10 rounded-full" />
     <div className="flex flex-col">
@@ -119,6 +121,7 @@ return(
       <div>{feedUserData?.content}</div>
     </div>
   </div>
+  </Link>
 
   <div className="flex items-center justify-end md:justify-start">
     <button className=" mr-4 w-full sm:w-[200px] h-[30px] rounded-[4px] text-[14px] font-medium bg-btn-color text-white" onClick={followClick}>
