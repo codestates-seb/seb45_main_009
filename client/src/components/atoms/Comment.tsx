@@ -2,8 +2,12 @@ import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import globalAxios from '../../data/data'
 
+interface CommentProps {
+  feedId: number;
+}
 
-function Comment() {
+
+function Comment({ feedId }: CommentProps) {
   interface Comment {
     feedCommentId: number;
     feedId: number;
@@ -25,38 +29,30 @@ function Comment() {
     pageInfo: PageInfo;
   }
 
-  // 댓글 가져오기
-  const feedId = 1;
-
   const [commentData, setCommentData] = useState<CommentData | null>(null);
 
-  async function fetchData() {
-    try {
-      const response = await fetch(`http://13.125.146.181:8080/feed/detail/${feedId}/comments`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+    useEffect(() => {
+    async function fetcCommentsData() {
+      try {
+        const response = await globalAxios.get(`/feed/detail/${feedId}/comments`);
+        if (response.status === 200) {
+          setCommentData(response.data);
+        }
+      } catch (error) {
+        console.error("API 요청 실패:", error);
       }
-      const data = await response.json();
-      setCommentData(data);
-    } catch (error) {
-      console.error("Error fetching the data:", error);
     }
-  }
-
-  useEffect(() => {
-    fetchData();
+    fetcCommentsData();
   }, []);
-
-  console.log(commentData)
-
-
 
   // 댓글생성
   const [commentInputValue, setCommentInputValue] = useState<string>("");
-  const [comment, setComment] = useState<string[]>(["멋있어요"]);
+  // const [comment, setComment] = useState<string[]>(["멋있어요"]);
 
 
   const [iscomment, setIsComment] = useState(false);
+
+  // 댓글 수정한 값 저장
   const [inputUpdateValue, setInputUpdateValue] = useState<string>("");
 
   const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,59 +66,145 @@ function Comment() {
   const handleEditComment = () => {
     setIsComment(true);
   };
-  const handleUpdateComment = (index: number) => {
-    comment[index] = inputUpdateValue;
-    setIsComment(false);
-  };
 
+  let userInfo: any = null;
+
+  const userInfoString = sessionStorage.getItem('user_info');
+  if (userInfoString) {
+      userInfo = JSON.parse(userInfoString);
+  }
+
+  // 시간
+  function getCurrentDateTimeFormatted(): string {
+    const now = new Date();
+  
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1; // 월은 0부터 시작하므로 1을 더합니다.
+    const day = now.getDate();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const seconds = now.getSeconds();
+    const period = hours >= 12 ? '오후' : '오전';
+  
+    return `${year}. ${month}. ${day}. ${period} ${hours % 12 || 12}:${minutes}:${seconds}`;
+  }
+  const commentdate = getCurrentDateTimeFormatted();
+
+  // 댓글 등록 !!
+  const handleSaveClick = async () => {
 
    const formData = new FormData();
 
-    // feedPostDto 부분 추가
-    const feedCommentPostDto = {
-      "feedCommentId": 4,
-      "feedId": 1,
-      "content": "000000",
-      "userNickname": "test",
-      "createdAt": "2023-09-13T07:14:52.546276",
-      "modifiedAt": "2023-09-13T07:14:52.546278"
-    };
+   const feedCommentPostDto = {
+     "feedCommentId": 6,
+     "feedId": feedId,
+     "content": commentInputValue,
+     "userNickname": userInfo ? userInfo.userNickname : "",
+     "createdAt": commentdate,
+     "modifiedAt": commentdate,
+   };
 
-    const blob = new Blob([JSON.stringify(feedCommentPostDto)], {
-      type: "application/json",
-    });
-    formData.append("feedCommentPostDto", blob);
-
-
-  // 댓글 등록!!
-  const handleSaveClick = async () => {
-    console.log("댓글등록 버튼 클릭")
-    const accessToken = sessionStorage.getItem('access_token');
+   const blob = new Blob([JSON.stringify(feedCommentPostDto)], {
+     type: "application/json",
+   });
+   formData.append("feedCommentPostDto", blob);
 
     try {
-      const response =  globalAxios.post('/feed/detail/1/comment', formData, {
+      const response = await globalAxios.post(`/feed/detail/${feedId}/comment`,formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `${accessToken}`,
         },
-      });
-      console.log(response)
-
+        });
+      if (response.status === 200) {
+        // fetcCommentsData();  
+      }
     } catch (error) {
-      console.error("Error saving the comment:", error);
+      console.error("Error deleting the comment:", error);
     }
+  }
+
+  // 댓글 삭제 !!
+  const deleteComment = async (feedCommentId: number) => {
+    try {
+      const response = await globalAxios.delete(`/feed/detail/comment/${feedCommentId}`);
+      if (response.status === 200) {
+      }
+    } catch (error) {
+      console.error("Error deleting the comment:", error);
+    }
+  }
 
 
+
+//   const handleUpdateComment = async (feedCommentId: number) => {
+//     console.log("댓글 수정하고 저장함", inputUpdateValue , feedCommentId);
+
+//     const formData = new FormData();
+
+//    const feedCommentPostDto = {
+//      "feedCommentId": feedCommentId,
+//      "feedId": feedId,
+//      "content": inputUpdateValue,
+//      "userNickname": userInfo ? userInfo.userNickname : "",
+//      "createdAt": commentdate,
+//      "modifiedAt": commentdate,
+//    };
+
+//    const blob = new Blob([JSON.stringify(feedCommentPostDto)], {
+//      type: "application/json",
+//    });
+//    formData.append("feedCommentPostDto", blob);
+
+//     try {
+//       const response = await globalAxios.post(`/feed/detail/${feedId}/comment`,formData, {
+//         headers: {
+//           "Content-Type": "multipart/form-data",
+//         },
+//         });
+//       if (response.status === 200) {
+//         // fetcCommentsData();  
+//       }
+//     } catch (error) {
+//       console.error("Error deleting the comment:", error);
+//     }
+
+// };
+const handleUpdateComment = async (feedCommentId: number) => {
+
+  const formData = new FormData();
+
+  const feedCommentPatchDto = {
+      "feedCommentId": feedCommentId,
+      "feedId": feedId,
+      "content": inputUpdateValue,
+      "userNickname": userInfo ? userInfo.userNickname : "",
+      "createdAt": commentdate,
+      "modifiedAt": commentdate,
   };
-  
 
-  const handleDeleteComment = (index: number) => {
-    console.log("삭제버튼 클릭");
-    console.log(index);
-    const newdelete = [...comment];
-    newdelete.splice(index, 1);
-    setComment(newdelete);
-  };
+  const blob = new Blob([JSON.stringify(feedCommentPatchDto)], {
+      type: "application/json",
+  });
+  formData.append("feedCommentPatchDto", blob);
+
+  try {
+      // 수정 요청을 위해 PATCH 메서드를 사용합니다.
+      const response = await globalAxios.patch(`/feed/detail/comment/${feedCommentId}`, formData, {
+          headers: {
+              "Content-Type": "multipart/form-data",
+          },
+      });
+
+      if (response.status === 200) {
+          // 수정이 성공적으로 이루어진 후 댓글 목록을 다시 불러옵니다.
+          // fetcCommentsData();  
+      }
+  } catch (error) {
+      console.error("Error updating the comment:", error);
+  }
+};
+
+
 
   const [page, setPage] = useState(2);
 
@@ -161,7 +243,6 @@ function Comment() {
       </div>
 
       <div className="mt-10 mb-[100px]">
-
       {commentData && commentData.feedCommentData.map((comment, index) => (
         <div key={comment.feedCommentId} className="mt-10">
           <div className="grid grid-cols-6 gap-4 items-center mb-2">
@@ -179,7 +260,9 @@ function Comment() {
               </button>
               <button
                 className="text-gray-400 text-sm"
-                onClick={() => handleDeleteComment(index)}
+                onClick={() => {
+                  deleteComment(comment.feedCommentId);
+                }}
               >
                 삭제
               </button>
@@ -193,7 +276,7 @@ function Comment() {
               <div className="col-span-2 flex justify-end gap-2"></div>
             </div>
           ) : (
-            <div className="grid grid-cols-5 gap-4 items-center ml-10">
+            <div className="grid grid-cols-5 gap-4 items-center ml-20 border">
               <input
                 className="border rounded col-span-3"
                 type="text"
@@ -202,7 +285,7 @@ function Comment() {
               />
               <button
                 className="text-gray-400 text-sm col-span-2"
-                onClick={() => handleUpdateComment(index)}
+                onClick={() => handleUpdateComment(comment.feedCommentId)}
               >
                 저장
               </button>
