@@ -1,10 +1,10 @@
 package com.mainproject.server.message.sse;
 
+import com.mainproject.server.message.dto.MessageDto;
+import com.mainproject.server.message.repository.MessageRepository;
+import com.mainproject.server.response.SingleResponseDto;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import partypeople.server.dto.SingleResponseDto;
-import partypeople.server.message.dto.MessageDto;
-import partypeople.server.message.repository.MessageRepository;
 
 import java.io.IOException;
 import java.util.Map;
@@ -19,10 +19,10 @@ public class SseEmitters {
         this.messageRepository = messageRepository;
     }
 
-    public SseEmitter add(Long memberId, SseEmitter emitter) {
-        this.emitterMap.put(memberId, emitter);
+    public SseEmitter add(Long userId, SseEmitter emitter) {
+        this.emitterMap.put(userId, emitter);
         emitter.onCompletion(() -> {
-            this.emitterMap.remove(memberId);
+            this.emitterMap.remove(userId);
         });
         emitter.onTimeout(() -> {
             emitter.complete();
@@ -31,7 +31,7 @@ public class SseEmitters {
     }
 
     public void count(Long receiverId) {
-        Long notReadCount = messageRepository.countByReceiverMemberIdAndIsReadFalse(receiverId);
+        Long notReadCount = messageRepository.countByReceiverUserIdAndIsReadFalse(receiverId);
         try {
             if (emitterMap.containsKey(receiverId)) {
                 emitterMap.get(receiverId)

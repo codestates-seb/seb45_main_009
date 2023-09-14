@@ -1,10 +1,9 @@
 package com.mainproject.server.message.entity;
 
+import com.mainproject.server.user.entity.User;
+import com.mainproject.server.util.Auditable;
 import lombok.Getter;
 import lombok.Setter;
-import partypeople.server.audit.Auditable;
-import partypeople.server.companion.entity.Companion;
-import partypeople.server.member.entity.Member;
 
 import javax.persistence.*;
 
@@ -23,15 +22,11 @@ public class Message extends Auditable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SENDER_ID")
-    private Member sender;
+    private User sender;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "RECEIVER_ID")
-    private Member receiver;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "COMPANION_ID")
-    private Companion companion;
+    private User receiver;
 
     public boolean getIsRead() {
         return isRead;

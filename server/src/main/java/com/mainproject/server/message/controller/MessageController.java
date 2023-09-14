@@ -1,18 +1,19 @@
 package com.mainproject.server.message.controller;
 
+import com.mainproject.server.message.dto.MessageDto;
+import com.mainproject.server.message.entity.Message;
+import com.mainproject.server.message.mapper.MessageMapper;
+import com.mainproject.server.message.service.MessageService;
+import com.mainproject.server.message.sse.SseEmitters;
+import com.mainproject.server.response.SingleResponseDto;
+import com.mainproject.server.util.UriCreater;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import partypeople.server.dto.SingleResponseDto;
-import partypeople.server.message.dto.MessageDto;
-import partypeople.server.message.entity.Message;
-import partypeople.server.message.mapper.MessageMapper;
-import partypeople.server.message.service.MessageService;
-import partypeople.server.message.sse.SseEmitters;
-import partypeople.server.utils.UriCreator;
+
 
 import javax.validation.constraints.Positive;
 import java.net.URI;
@@ -27,6 +28,7 @@ public class MessageController {
     private final MessageService messageService;
     private final MessageMapper mapper;
     private final SseEmitters sseEmitters;
+    private UriCreater UriCreator;
 
     @PostMapping
     public ResponseEntity postMessage(@RequestBody MessageDto.Post requestBody) {
@@ -47,8 +49,8 @@ public class MessageController {
     }
 
     @GetMapping
-    public ResponseEntity getMessages(@RequestParam("memberId") Long memberId) {
-        List<Message> messages = messageService.findMessages(memberId);
+    public ResponseEntity getMessages(@RequestParam("userId") Long userId) {
+        List<Message> messages = messageService.findMessages(userId);
 
         return ResponseEntity.ok(
             new SingleResponseDto<>(mapper.messagesToMessageResponses(messages))
@@ -70,11 +72,11 @@ public class MessageController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(value = "/not-read/{member-id}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public ResponseEntity<SseEmitter> connect(@PathVariable("member-id") @Positive Long memberId) {
+    @GetMapping(value = "/not-read/{user-id}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public ResponseEntity<SseEmitter> connect(@PathVariable("user-id") @Positive Long userId) {
         SseEmitter emitter = new SseEmitter(10 * 1000L);
-        sseEmitters.add(memberId, emitter);
-        sseEmitters.count(memberId);
+        sseEmitters.add(userId, emitter);
+        sseEmitters.count(userId);
         return ResponseEntity.ok(emitter);
     }
 }

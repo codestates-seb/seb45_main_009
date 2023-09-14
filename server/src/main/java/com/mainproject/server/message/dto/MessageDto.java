@@ -19,8 +19,6 @@ public class MessageDto {
         private Long senderId;
         @Positive
         private Long receiverId;
-        @Positive
-        private Long companionId;
     }
 
     @Getter
@@ -35,9 +33,7 @@ public class MessageDto {
     public static class Response {
         private Long messageId;
         private String content;
-        private Long companionId;
         private Sender sender;
-        private String createdAt;
         private boolean isRead;
 
         @AllArgsConstructor
@@ -48,12 +44,10 @@ public class MessageDto {
             private String nickname;
         }
 
-        public Response(Long messageId, String content, Long companionId, Sender sender, LocalDateTime createdAt, Boolean isRead) {
+        public Response(Long messageId, String content, Sender sender, Boolean isRead) {
             this.messageId = messageId;
             this.content = content;
-            this.companionId = companionId;
             this.sender = sender;
-            this.createdAt = createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
             this.isRead = isRead;
         }
     }
