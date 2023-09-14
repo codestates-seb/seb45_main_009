@@ -6,6 +6,8 @@ import com.mainproject.server.feed.enitiy.Feed;
 import com.mainproject.server.feed.service.FeedService;
 import com.mainproject.server.feedcomment.entity.FeedComment;
 import com.mainproject.server.feedcomment.repository.FeedCommentRepository;
+import com.mainproject.server.notification.entity.Notification;
+import com.mainproject.server.notification.service.NotificationService;
 import com.mainproject.server.user.entity.User;
 import com.mainproject.server.user.service.UserService;
 import org.springframework.data.domain.Page;
@@ -24,13 +26,14 @@ public class FeedCommentService {
     private final FeedCommentRepository feedCommentRepository;
     private final FeedService feedService;
     private final UserService userService;
-
+    private final NotificationService notificationService;
 
     public FeedCommentService(FeedCommentRepository feedCommentRepository, FeedService feedService,
-                              UserService userService) {
+                              UserService userService, NotificationService notificationService) {
         this.feedCommentRepository = feedCommentRepository;
         this.feedService = feedService;
         this.userService = userService;
+        this.notificationService = notificationService;
     }
 
     @Transactional
@@ -47,6 +50,12 @@ public class FeedCommentService {
 
         // 답변 엔티티에 질문과 회원정보 설정
         feedComment.setFeed(feed);
+
+        // 댓글을 작성한 사용자와 피드 작성자가 다른 경우에만 알림 보내기
+        if (feed.getUser().getUserId() != loggedInUser.getUserId()) {
+            String content = loggedInUser.getNickname() + "님이 피드에 댓글을 등록했습니다.";
+            notificationService.send(feed.getUser(), Notification.NotificationType.NEW_COMMENT, content, "/{feed-id}/comment" + feed.getFeedId());
+        }
 
         // 설정된 FeedComment 엔티티를 저장하고 반환
         return feedCommentRepository.save(feedComment);
