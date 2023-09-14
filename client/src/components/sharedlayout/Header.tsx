@@ -87,7 +87,7 @@ function Header() {
                   >
                     로그아웃
                   </button>
-                  <Link to="/mypage/:page">
+                  <Link to="/mypage/feed">
                     <button className="mb-4 hover:text-btn-color" onClick={handleMenuClick}>
                       마이페이지
                     </button>

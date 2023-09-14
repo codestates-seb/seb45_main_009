@@ -87,7 +87,7 @@ function SignupAddition({
 
   return (
     <div className="flex justify-center items-center h-4/5">
-      <div className="w-[300px]">
+      <div className="w-[300px] mt-4">
         <div className="flex justify-center">
           <form encType="multipart/form-data">
             <div className="relative">
