@@ -62,7 +62,7 @@ public class SearchService {
                 .feedId(feed.getFeedId())
                 .content(feed.getContent())
                 .relatedTags(feed.getRelatedTags())
-                .userNickname(feed.getNickname())
+                .nickname(feed.getUser().getNickname())
                 .roles(feed.getUser().getRoles())
                 .profileImageUrl(feed.getUser().getProfileimg().getImageUrl())
                 .images(feed.getImages().stream()
