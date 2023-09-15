@@ -18,15 +18,15 @@ function SignupPage() {
   const [isValidEmail, setIsValidEmail] = useState<boolean | null>(null);
   const [isValidPassWord, setIsValidPassword] = useState<boolean | null>(null);
   const [isValidNickname, setIsValidNickname] = useState<boolean | null>(null);
-  const [passwordConfirm, setPasswordConfirm] = useState<string>("");
   const [isPasswordsMatch, setIsPasswordsMatch] = useState<boolean | null>(null);
   //회원가입 필수 입력
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [passwordConfirm, setPasswordConfirm] = useState<string>("");
   const [nickname, setNickname] = useState<string>("");
   //회원가입 추가 입력
   //개인-기업 공통 추가 입력
-  const [location, setLocation] = useState<string>("서울");
+  const [location, setLocation] = useState<string>("");
   const [bio, setBio] = useState<string>("");
   //개인 추가 입력
   const [height, setHeight] = useState<number | null>(null);
@@ -47,7 +47,7 @@ function SignupPage() {
   const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
   };
-  const handleLocationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLocation(e.target.value);
   };
   const handleBioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,23 +58,6 @@ function SignupPage() {
     setPasswordConfirm(e.target.value);
   };
 
-  const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = parseFloat(e.target.value);
-    if (!isNaN(inputValue)) {
-      // isNaN 체크는 변환된 값이 유효한 숫자인지 확인합니다.
-      setHeight(inputValue);
-    } else {
-      setHeight(null);
-    }
-  };
-  const handleWeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = parseFloat(e.target.value);
-    if (!isNaN(inputValue)) {
-      setWeight(inputValue);
-    } else {
-      setWeight(null);
-    }
-  };
   const handlePriceInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPriceInfo(e.target.value);
   };
@@ -156,7 +139,8 @@ function SignupPage() {
           });
           console.log("response:", response);
           alert("회원가입 완료");
-          setIsSubmitted(true);
+          navigate("/login");
+          // setIsSubmitted(true); 개인회원은 loginaddition 없앰
         } catch (error: any) {
           //에러 처리 로직..
           if (error.response.data.message === "회원이 존재합니다") {
@@ -227,7 +211,6 @@ function SignupPage() {
       ) {
         try {
           const formData = new FormData();
-
           // requestBody 부분 추가
           const requestBodyData = {
             email,
@@ -239,6 +222,7 @@ function SignupPage() {
             price: priceInfo,
           };
 
+          console.log(requestBodyData);
           const blob = new Blob([JSON.stringify(requestBodyData)], {
             type: "application/json",
           });
@@ -259,14 +243,16 @@ function SignupPage() {
           //에러 처리 로직..
           if (error.response.data.message === "회원이 존재합니다") {
             alert("중복된 이메일입니다");
+            setIsSubmitted(false);
           } else if (error.response.data.message === "닉네임이 존재합니다") {
             alert("중복된 닉네임입니다");
+            setIsSubmitted(false);
           }
           console.error("Error:", error);
         }
       } else {
         if (location.trim() === "") {
-          alert("지역을 선택해주세요.");
+          alert("주소를 입력해주세요.");
         } else if (sport.trim() === "") {
           alert("스포츠 종목을 입력해주세요.");
         } else if (bio.trim() === "") {
@@ -287,20 +273,24 @@ function SignupPage() {
         onSubmit={onAdditionSubmitHandler}
         handleLocationChange={handleLocationChange}
         handleBioChange={handleBioChange}
-        handleHeightChange={handleHeightChange}
-        handleWeightChange={handleWeightChange}
         handlePriceInfoChange={handlePriceInfoChange}
         handleSportChange={handleSportChange}
         previewImg={previewImg}
         setPreviewImg={setPreviewImg}
+        setIsSubmitted={setIsSubmitted}
       />
     );
   }
+  const handleLastInputKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    validateNicknameHandler();
+    if (e.key === "Enter") {
+      onSubmitHandler();
+    }
+  };
   return (
     <div className=" flex justify-center pt-[20px] mt-[20px] mb-[40px]  h-4/6 items-center ">
       <div className="w-[300px]">
         <MembershipButtonGroup selectedType={selectedType} onChange={handleMembershipChange} />
-
         <CommonInput
           placeholder="이메일을 입력해주세요."
           label="이메일"
@@ -343,6 +333,7 @@ function SignupPage() {
           onChange={handleNicknameChange}
           onBlur={validateNicknameHandler}
           onFocus={clearNicknameValidation}
+          onKeyUp={handleLastInputKeyUp}
         />
         <p className="text-[12px]">영문자, 숫자를 혼합하여 6~20자로 입력해주세요. </p>
         {isValidNickname === false && (

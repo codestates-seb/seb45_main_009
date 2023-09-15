@@ -11,9 +11,7 @@ import { RootState } from "../../types/types";
 function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.login.isAuthenticated
-  );
+  const isAuthenticated = useSelector((state: RootState) => state.login.isAuthenticated);
   const userInfo = useSelector((state: RootState) => state.login.userInfo);
   const logoutHandler = () => {
     dispatch(logout());
@@ -90,10 +88,7 @@ function Header() {
                     로그아웃
                   </button>
                   <Link to="/mypage/feed">
-                    <button
-                      className="mb-4 hover:text-btn-color"
-                      onClick={handleMenuClick}
-                    >
+                    <button className="mb-4 hover:text-btn-color" onClick={handleMenuClick}>
                       마이페이지
                     </button>
                   </Link>

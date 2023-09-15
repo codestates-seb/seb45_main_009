@@ -3,13 +3,15 @@ import styled from "styled-components";
 
 interface CommonInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
+
+  className?: string;
 }
 
-const CommonInput: React.FC<CommonInputProps> = ({ label, ...props }) => {
+const CommonInput: React.FC<CommonInputProps> = ({ label, className, ...props }) => {
   return (
-    <StyledCommonInput className="text-[14px] mt-[20px] ">
+    <StyledCommonInput className={`text-[14px] mt-[20px]  ${className}`}>
       {label && <label className="font-bold">{label}</label>}
-      <input className="border w-full h-[40px] rounded-[4px] pl-[8px] text-[14px] mt-[8px]" {...props} />
+      <input className={`border w-full h-[40px] rounded-[4px] pl-[8px] text-[14px] mt-[8px]`} {...props} />
     </StyledCommonInput>
   );
 };

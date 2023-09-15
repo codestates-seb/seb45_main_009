@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CommonInput from "../atoms/CommonInput";
 import upload from "../../assets/images/upload.jpeg";
 import { MdDelete } from "react-icons/md";
@@ -7,47 +7,29 @@ import { MdDelete } from "react-icons/md";
 interface SignupAdditionProps {
   selectedType: "개인회원" | "기업회원";
   onSubmit: () => void;
-  handleLocationChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleLocationChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleBioChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleHeightChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleWeightChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handlePriceInfoChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSportChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   previewImg: ImageData | null;
   setPreviewImg: React.Dispatch<React.SetStateAction<ImageData | null>>;
+  setIsSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
 }
-
 interface ImageData {
   file: File | null;
   src: string;
 }
-const locations = [
-  "서울",
-  "경기",
-  "인천",
-  "강원",
-  "충북",
-  "충남",
-  "전북",
-  "전남",
-  "경북",
-  "경남",
-  "부산",
-  "제주",
-  "기타",
-];
 
 function SignupAddition({
   selectedType,
   onSubmit,
   handleLocationChange,
   handleBioChange,
-  handleHeightChange,
-  handleWeightChange,
   handlePriceInfoChange,
   handleSportChange,
   previewImg,
   setPreviewImg,
+  setIsSubmitted,
 }: SignupAdditionProps) {
   const insertImg = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -84,10 +66,14 @@ function SignupAddition({
   const deleteImg = () => {
     setPreviewImg(null);
   };
-
+  const handleLastInputKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      onSubmit();
+    }
+  };
   return (
     <div className="flex justify-center items-center h-4/5">
-      <div className="w-[300px]">
+      <div className="w-[300px] mt-4">
         <div className="flex justify-center">
           <form encType="multipart/form-data">
             <div className="relative">
@@ -117,21 +103,7 @@ function SignupAddition({
         </div>
         {selectedType === "개인회원" ? (
           <>
-            <div className="flex flex-col">
-              <div className="w-[65px]">
-                <select
-                  id="locationSelect"
-                  name="locations"
-                  className="border w-full h-[40px] rounded-[4px] pl-[8px] text-[14px] mt-[20px]"
-                  onChange={handleLocationChange}
-                >
-                  {locations.map((location, index) => (
-                    <option key={index} value={location.toLowerCase()}>
-                      {location}
-                    </option>
-                  ))}
-                </select>
-              </div>
+            {/* <div className="flex flex-col">
               <div className="w-1/2">
                 <CommonInput placeholder="키" type="number" onChange={handleHeightChange} />
               </div>
@@ -140,30 +112,19 @@ function SignupAddition({
               </div>
 
               <CommonInput placeholder="자기소개" type="text" onChange={handleBioChange} />
-            </div>
+            </div> */}
           </>
         ) : (
           <>
-            <div className="flex flex-col">
-              <div className="w-[65px]">
-                <select
-                  id="locationSelect"
-                  name="locations"
-                  className="border w-full h-[40px] rounded-[4px] pl-[8px] text-[14px] mt-[20px]"
-                  onChange={handleLocationChange}
-                >
-                  {locations.map((location, index) => (
-                    <option key={index} value={location.toLowerCase()}>
-                      {location}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
+            <CommonInput placeholder="주소" onChange={handleLocationChange} />
             <CommonInput placeholder="주 운동 종목" type="text" onChange={handleSportChange} />
             <CommonInput placeholder="기업소개" type="text" onChange={handleBioChange} />
-            <CommonInput placeholder="가격정보" type="text" onChange={handlePriceInfoChange} />
+            <CommonInput
+              placeholder="가격정보"
+              type="text"
+              onChange={handlePriceInfoChange}
+              onKeyUp={handleLastInputKeyUp}
+            />
           </>
         )}
 
