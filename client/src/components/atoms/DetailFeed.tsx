@@ -4,6 +4,10 @@ import { RiAlarmWarningFill } from "react-icons/ri";
 import { AiFillPlusCircle } from "react-icons/ai";
 import globalAxios from "../../data/data";
 import { ResponseDataType } from "../../types/types";
+import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { RootState } from "../../types/types";
 //////태그 모달 시작
 function TagModal({
   title,
@@ -41,21 +45,47 @@ interface DetailFeedProps {
   responseData: ResponseDataType | null;
 }
 function DetailFeedInd({ feedId, responseData }: DetailFeedProps) {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const userInfo = useSelector((state: RootState) => state.login.userInfo);
   // 좋아요
-  const [isLiked, setIsLiked] = useState(false);
-  const handleLikeClick = () => {
+  const [isLiked, setIsLiked] = useState<boolean>(false);
+  //좋아요 리스트
+  const [likeList, setLikeList] = useState<number[]>([]);
+
+  const handleLikeClick = async () => {
     console.log("게시물 좋아요");
-    setIsLiked(true);
+    try {
+      const response = await globalAxios.post(`/feed/detail/${feedId}/like`);
+      console.log("좋아요 성공:", response);
+      getLikeList();
+    } catch (error) {
+      console.error("좋아요 실패", error);
+    }
   };
-
-  const handleLikeCancelClick = () => {
-    console.log("게시물 좋아요 취소");
-    setIsLiked(false);
-  };
-
   const inappropriateviewBtn = () => {
     console.log("게시물 신고");
   };
+
+  const getLikeList = async () => {
+    try {
+      const response = await globalAxios.get(`/feed/detail/${feedId}/likeduser`);
+      console.log("좋아요 리스트 get요청 성공", response.data);
+      setLikeList(response.data);
+      if (response.data.includes(userInfo.userId)) {
+        setIsLiked(true);
+      } else {
+        setIsLiked(false);
+      }
+    } catch (error) {
+      console.log("좋아요 리스트 get실패", error);
+    }
+  };
+
+  //좋아요 리스트 get요청
+  useEffect(() => {
+    getLikeList();
+  }, []);
 
   // 정보 태그 모달창
   const [showTagModal, setShowTagModal] = useState<{
@@ -98,12 +128,14 @@ function DetailFeedInd({ feedId, responseData }: DetailFeedProps) {
 
       <div className="font-bold text-gray-400 text-sm mt-[10px]">2022</div>
       <div className=" mt-[20px]">{responseData?.content}</div>
-      <div className=" mt-[20px]">
+      <div className="flex flex-row items-center mt-[20px]">
         {isLiked === false ? (
-          <AiOutlineHeart onClick={handleLikeClick} />
+          <AiOutlineHeart className="cursor-pointer" onClick={handleLikeClick} />
         ) : (
-          <AiFillHeart onClick={handleLikeCancelClick} />
+          <AiFillHeart className="cursor-pointer" onClick={handleLikeClick} />
         )}
+
+        <div className="ml-2 pb-[2px]">{likeList.length}</div>
       </div>
       <div className=" mt-[40px]">
         <div className="font-bold text-gray-400 text-sm mb-[10px]">연관태그</div>

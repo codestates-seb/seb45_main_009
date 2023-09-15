@@ -87,12 +87,12 @@ function ProfileInd({ feedId, responseData }: ProfileIndProps) {
   return (
     <div className="max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8">
       <div className="grid md:grid-cols-2 gap-4 ">
-        <Link to={`/profile/${feedId}`}>
+        <Link to={`/profile/${responseData?.userId}`}>
           <div className="flex items-center">
-            <img src={responseData?.profileImageUrl} className=" mr-2 w-10 h-10 rounded-full" />
+            <img src={responseData?.profileImageUrl} className=" mr-2 w-10 h-10 rounded-full" alt="profileImage" />
             <div className="flex flex-col">
               <div className="font-bold text-lg ">{responseData?.userNickname}</div>
-              <div>{responseData?.content}</div>
+              <div>{responseData?.bio}</div>
             </div>
           </div>
         </Link>
