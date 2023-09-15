@@ -90,7 +90,9 @@ function ProfileInd({ feedId }: ProfileIndProps) {
     fetcFeedData();
   }, []);
 
-  const handleDelete = async (feedId: number) => {
+  console.log("피드 유저 데터",feedUserData)
+
+  const handleDelete = async (feedId:number) => {
     try {
       const response = await globalAxios.delete(`/feed/detail/${feedId}`);
 
@@ -109,36 +111,33 @@ function ProfileInd({ feedId }: ProfileIndProps) {
     handleCloseModal();
   };
 
-  return (
-    <div className="max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8">
-      <div className="grid md:grid-cols-2 gap-4 ">
-        <Link to="/profile/1">
-          <div className="flex items-center">
-            <img src={feedUserData?.profileImageUrl} className=" mr-2 w-10 h-10 rounded-full" alt="profileImage" />
-            <div className="flex flex-col">
-              <div className="font-bold text-lg ">{feedUserData?.userNickname}</div>
-              <div>{feedUserData?.content}</div>
-            </div>
-          </div>
-        </Link>
+return(
+<div className='max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8'>
+  <div className="grid md:grid-cols-2 gap-4 ">
 
-        <div className="flex items-center justify-end md:justify-start">
-          <button
-            className=" mr-4 w-full sm:w-[200px] h-[30px] rounded-[4px] text-[14px] font-medium bg-btn-color text-white"
-            onClick={followClick}
-          >
-            {isFollowing ? "팔로잉" : "팔로우"}
-          </button>
-          {isModalOpen ? (
-            <Modal onClose={handleCloseModal} onDelete={handleDelete} onEdit={handleEdit} feedId={feedId} />
-          ) : (
-            <button onClick={handleOpenModal}>
-              <FaEllipsisH />
-            </button>
-          )}
-        </div>
-      </div>
+  <Link to={`/profile/${feedId}`} >
+  <div className="flex items-center">
+    <img src={feedUserData?.profileImageUrl} className=" mr-2 w-10 h-10 rounded-full" />
+    <div className="flex flex-col">
+      <div className="font-bold text-lg ">{feedUserData?.userNickname}</div>
+      <div>{feedUserData?.content}</div>
     </div>
-  );
+  </div>
+  </Link>
+
+  <div className="flex items-center justify-end md:justify-start">
+    <button className=" mr-4 w-full sm:w-[200px] h-[30px] rounded-[4px] text-[14px] font-medium bg-btn-color text-white" onClick={followClick}>
+      {isFollowing ? '팔로잉' : '팔로우'} 
+    </button>
+    {
+            isModalOpen ? 
+            <Modal onClose={handleCloseModal} onDelete={handleDelete} onEdit={handleEdit}/> :
+            <button onClick={handleOpenModal}><FaEllipsisH /></button>
+          }
+  </div>
+
+  </div>
+</div>
+) 
 }
 export default ProfileInd;
