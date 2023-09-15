@@ -51,8 +51,8 @@ public class Notification {
     }
 
     public enum NotificationType {
-        FOLLOW,
-        NEW_FEED,
-        NEW_COMMENT
+        FOLLOW, // 내가 팔로우 당했을 때
+        NEW_FEED, // 팔로우한 사람이 새 피드를 올렸을 때
+        NEW_COMMENT // 내 피드에 댓글이 달렸을 때
     }
 }

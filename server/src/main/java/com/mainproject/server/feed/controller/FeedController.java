@@ -57,7 +57,7 @@ public class FeedController {
     @PatchMapping("/feed/detail/{feed-id}/images")
     public ResponseEntity patchFeedImages(@LoginUserId Long userId,
                                           @PathVariable("feed-id") long feedId,
-                                          @RequestPart("imageUrl") List<MultipartFile> imageFiles,
+                                          @RequestPart(value = "imageUrl", required = false) List<MultipartFile> imageFiles,
                                           @RequestPart FeedDto.PatchDto feedPatchDto) {
         // 수정할 피드 찾기
         feedPatchDto.setFeedId(feedId);

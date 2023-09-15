@@ -161,33 +161,39 @@ public class FeedService {
 
         List<String> updatedImageUrls = new ArrayList<>();
 
-        for (Image image : updatedFeed.getImages()) {
-            updatedImageUrls.add(image.getImageUrl());
-        }
+//        for (Image image : updatedFeed.getImages()) {
+//            updatedImageUrls.add(image.getImageUrl());
+//        }
 
-        for (MultipartFile imageFile : imageFiles) {
-            String imageUrl = imageService.createImage(imageFile);
+        // 이미지가 선택되지 않은 경우에도 업데이트
+            if (imageFiles != null && !imageFiles.isEmpty()) {
+                for (Image image : updatedFeed.getImages()) {
+                    updatedImageUrls.add(image.getImageUrl());
+                }
 
-            Image newImage = new Image.Builder()
-                    .imageUrl(imageUrl)
-                    .feed(updatedFeed)
-                    .build();
+                for (MultipartFile imageFile : imageFiles) {
+                    String imageUrl = imageService.createImage(imageFile);
 
-            updatedFeed.getImages().add(newImage);
-            updatedImageUrls.add(newImage.getImageUrl());
-        }
+                    Image newImage = new Image.Builder()
+                            .imageUrl(imageUrl)
+                            .feed(updatedFeed)
+                            .build();
 
-        for (int imageIndex = 0; imageIndex < updatedFeed.getImages().size(); imageIndex++) {
-            updatedFeed.getImages().get(imageIndex).setImageUrl(updatedImageUrls.get(imageIndex));
-        }
+                    updatedFeed.getImages().add(newImage);
+                    updatedImageUrls.add(newImage.getImageUrl());
+                }
 
-        updatedFeed.setRelatedTags(feed.getRelatedTags());
-        updatedFeed.setModifiedAt(LocalDateTime.now());
+                for (int imageIndex = 0; imageIndex < updatedFeed.getImages().size(); imageIndex++) {
+                    updatedFeed.getImages().get(imageIndex).setImageUrl(updatedImageUrls.get(imageIndex));
+                }
+
+                updatedFeed.setRelatedTags(feed.getRelatedTags());
+                updatedFeed.setModifiedAt(LocalDateTime.now());
+            }
 
         // 피드 저장
         return feedRepository.save(updatedFeed);
     }
-
 
     // 피드 상세 조회
     public Feed findFeed(long feedId) {
