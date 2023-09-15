@@ -41,7 +41,7 @@ public class FeedDto {
     public static class FeedInfo {
         private Long feedId;
         private String content;
-        private String userNickname;
+        private String nickname;
         private String profileImageUrl;
         private List<String> roles;
         private List<String> relatedTags;
