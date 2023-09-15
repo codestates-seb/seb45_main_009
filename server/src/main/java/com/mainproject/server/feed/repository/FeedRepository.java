@@ -22,6 +22,7 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
 
 
     // relatedTags로 피드 검색
+    @Query("SELECT DISTINCT f FROM Feed f JOIN f.relatedTags t WHERE t LIKE %:keyword%")
     List<Feed> findFeedsByRelatedTagsContaining(String keyword);
 
     @Query("SELECT DISTINCT f FROM Feed f JOIN f.relatedTags t WHERE t LIKE %:keyword%")
