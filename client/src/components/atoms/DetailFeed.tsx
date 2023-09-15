@@ -178,11 +178,10 @@ function DetailFeedInd({ feedId, responseData, isMyFeed }: DetailFeedProps) {
           })}
         </div>
       ))}
-      <div className="flex text-sm opacity-50 mb-1">{formatRelativeTime(responseData?.createdAt)}</div>
-      <div className="flex flex-row">
-        {/* <span className="mr-2 font-medium">{responseData?.nickname}</span> */}
-        <span>{responseData?.content}</span>
+      <div className="flex text-sm opacity-50 mb-1 max-mobile:text-[12px]">
+        {formatRelativeTime(responseData?.createdAt)}
       </div>
+      <span className="max-mobile:text-[14px]">{responseData?.content}</span>
       <div className="flex flex-row items-center mt-[20px]">
         {isLiked === false ? (
           <AiOutlineHeart className="cursor-pointer text-red-400" onClick={handleLikeClick} size={20} />
@@ -232,7 +231,7 @@ function DetailFeedInd({ feedId, responseData, isMyFeed }: DetailFeedProps) {
         </div>
       </div>
 
-      <div className="flex justify-end mt-4">
+      <div className="flex justify-end ">
         {isMyFeed ? (
           <>
             <button className="m-2 text-[13px] opacity-75" onClick={handleUpdate}>
@@ -243,9 +242,9 @@ function DetailFeedInd({ feedId, responseData, isMyFeed }: DetailFeedProps) {
             </button>
           </>
         ) : (
-          <div onClick={handleReport} className="flex flex-row items-center hover:cursor-pointer  opacity-75">
-            <LuSiren className="" />
-          </div>
+          <button className="text-[13px] opacity-75" onClick={handleReport}>
+            신고
+          </button>
         )}
       </div>
     </div>

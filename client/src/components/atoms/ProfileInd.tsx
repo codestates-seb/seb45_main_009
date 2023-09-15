@@ -12,9 +12,10 @@ interface ProfileIndProps {
   feedId: number;
   responseData: ResponseDataType | null;
   userInfo: UserInfo;
+  isMyFeed: boolean;
 }
 
-function ProfileInd({ feedId, responseData, userInfo }: ProfileIndProps) {
+function ProfileInd({ feedId, responseData, userInfo, isMyFeed }: ProfileIndProps) {
   const navigate = useNavigate();
 
   //로딩 상태 - 팔로우 적용 때문에 깜빡거림 방지
@@ -73,25 +74,26 @@ function ProfileInd({ feedId, responseData, userInfo }: ProfileIndProps) {
             <span className="text-lg hover:cursor-pointer" onClick={handleNavigateProfile}>
               {responseData?.nickname}
             </span>
-            <span className="opacity-60 text-[13px]">{responseData?.bio}</span>
+            <span className="opacity-60 text-[13px] max-mobile:text-[12px]">{responseData?.bio}</span>
           </div>
         </div>
-
-        <div className="flex items-center justify-end">
-          <button
-            className={`whitespace-nowrap ml-2 rounded-[6px] text-[14px] 
+        {isMyFeed ? null : (
+          <div className="flex items-center justify-end">
+            <button
+              className={`whitespace-nowrap ml-2 rounded-[6px] text-[14px] 
             py-1.5 px-6 hover: font-medium transition  
             ${
               isFollowing
                 ? "text-[#000000] bg-[#efefef] hover:bg-[#dbdbdb]"
                 : "bg-[#0095f6] hover:bg-[#1877f2] text-white "
             }`}
-            onClick={handleFollow}
-            style={{ opacity: isLoading ? 0 : 1 }}
-          >
-            {isFollowing ? "팔로잉" : "팔로우"}
-          </button>
-        </div>
+              onClick={handleFollow}
+              style={{ opacity: isLoading ? 0 : 1 }}
+            >
+              {isFollowing ? "팔로잉" : "팔로우"}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

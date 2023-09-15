@@ -47,7 +47,7 @@ function FeedDetailPageInd() {
   return (
     <div>
       <BackButton />
-      <ProfileInd feedId={feedId} responseData={responseData} userInfo={userInfo} />
+      <ProfileInd feedId={feedId} responseData={responseData} userInfo={userInfo} isMyFeed={isMyFeed} />
       <div className=" mt-2">
         <DetailFeed
           feedId={feedId}
