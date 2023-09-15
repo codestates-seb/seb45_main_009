@@ -63,9 +63,6 @@ function DetailFeedInd({ feedId, responseData }: DetailFeedProps) {
       console.error("좋아요 실패", error);
     }
   };
-  const inappropriateviewBtn = () => {
-    console.log("게시물 신고");
-  };
 
   const getLikeList = async () => {
     try {
@@ -86,6 +83,19 @@ function DetailFeedInd({ feedId, responseData }: DetailFeedProps) {
   useEffect(() => {
     getLikeList();
   }, []);
+
+  const handleReport = async () => {
+    try {
+      const response = await globalAxios.post(`/feed/detail/${feedId}/report`, {
+        reason: "일단 내용은 하드코딩으로",
+      });
+      console.log("신고 성공", response);
+      alert("신고가 완료되었습니다");
+    } catch (error: any) {
+      console.log("신고 실패", error.response.data);
+      alert(error.response.data.message);
+    }
+  };
 
   // 정보 태그 모달창
   const [showTagModal, setShowTagModal] = useState<{
@@ -176,7 +186,7 @@ function DetailFeedInd({ feedId, responseData }: DetailFeedProps) {
       </div>
 
       <div className="flex justify-end mt-4">
-        <button onClick={inappropriateviewBtn} className="focus:outline-none">
+        <button onClick={handleReport} className="focus:outline-none">
           <RiAlarmWarningFill />
         </button>
       </div>
