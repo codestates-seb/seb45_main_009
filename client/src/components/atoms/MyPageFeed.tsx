@@ -128,10 +128,6 @@ const MyPageFeed = () => {
     (userData) => userData.userNickname === userInfo.userNickname
   );
 
-  console.log(allUserData);
-  console.log(userInfo.userNickname);
-  console.log(allFeedData);
-
   return (
     <section>
       <div

@@ -56,7 +56,7 @@ function LoginPage() {
         const userInfoString = JSON.stringify(userInfo);
         sessionStorage.setItem("user_info", userInfoString);
 
-        dispatch(login({ userInfo }));
+        dispatch(login(userInfo));
 
         navigate("/");
       } catch (error) {

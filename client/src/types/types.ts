@@ -23,8 +23,9 @@ export interface FetcedImageData {
 }
 
 export interface FeedData {
+  bio: string;
   feedId: number;
-  userNickname: string;
+  nickname: string;
   profileImageUrl: string;
   content: string;
   relatedTags: string[];
@@ -50,7 +51,47 @@ export interface UserData {
   userId: number;
   weight: number;
 }
-
+export interface RootState {
+  login: {
+    isAuthenticated: boolean;
+    userInfo: UserInfo;
+  };
+  allData: AllDataState;
+}
 export interface RootStates {
   feed: FeedState;
+}
+
+export interface User {
+  bio: string;
+  createdAt: string;
+  email: string;
+  height: number;
+  location: string;
+  modifiedAt: string;
+  nickname: string;
+  price: number | string;
+  profileimg: string;
+  roles: string[];
+  userId: number;
+  weight: number;
+}
+
+export interface Feed {
+  bio: string;
+  feedId: number;
+  nickname: string;
+  profileImageUrl: string;
+  content: string;
+  relatedTags: string[];
+  images: {
+    imageId: number;
+    imageUrl: string;
+    imageTags: string[];
+  }[];
+}
+
+export interface AllDataState {
+  users: User[];
+  feeds: Feed[];
 }
