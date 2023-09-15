@@ -1,6 +1,7 @@
 package com.mainproject.server.search.service;
 
-import com.mainproject.server.feed.dto.FeedDto;
+import com.mainproject.server.feed.dto.FeedResponseDto;
+
 import com.mainproject.server.feed.enitiy.Feed;
 import com.mainproject.server.feed.repository.FeedRepository;
 import com.mainproject.server.image.entity.Image;
@@ -8,24 +9,25 @@ import com.mainproject.server.search.dto.SearchDto;
 import com.mainproject.server.user.dto.UserDto;
 import com.mainproject.server.user.entity.User;
 import com.mainproject.server.user.repository.UserRepository;
+import com.mainproject.server.userprofile.dto.FeedInfoConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @Service
 public class SearchService {
 
-
-    private FeedRepository feedRepository;
-    private UserRepository userRepository;
+    private final FeedRepository feedRepository;
+    private final UserRepository userRepository;
+    private final FeedInfoConverter feedInfoConverter; // FeedInfoConverter 주입
 
     @Autowired
-    public SearchService(UserRepository userRepository, FeedRepository feedRepository) {
+    public SearchService(UserRepository userRepository, FeedRepository feedRepository, FeedInfoConverter feedInfoConverter) {
         this.userRepository = userRepository;
         this.feedRepository = feedRepository;
+        this.feedInfoConverter = feedInfoConverter; // 주입된 FeedInfoConverter를 필드에 저장
     }
 
     public SearchDto searchByKeyword(String keyword) {
@@ -39,11 +41,12 @@ public class SearchService {
         searchDto.setUsers(userInfos);
 
         // 피드 정보 가져오기
-        List<Feed> feeds = feedRepository.findFeedsByRelatedTags(keyword);
-        List<FeedDto.FeedInfo> feedInfos = feeds.stream()
+        List<Feed> feeds = feedRepository.findFeedsByRelatedTagsContaining(keyword);
+        List<FeedResponseDto> feedInfos = feeds.stream()
                 .map(this::convertToFeedInfo)
                 .collect(Collectors.toList());
         searchDto.setFeeds(feedInfos);
+
 
         return searchDto;
     }
@@ -53,22 +56,18 @@ public class SearchService {
                 .userId(user.getUserId())
                 .nickname(user.getNickname())
                 .profileimg(user.getProfileimg() != null ? user.getProfileimg().getImageUrl() : null)
+                .bio(user.getBio())
+                .feedCount(user.getUserProfile().getFeedCount())
+                .followCount(user.getUserProfile().getFollowCount())
+                .followerCount(user.getUserProfile().getFollowerCount())
+                .height(user.getHeight())
+                .weight(user.getWeight())
+                .price(user.getPrice())
                 .roles(user.getRoles())
                 .build();
     }
 
-    private FeedDto.FeedInfo convertToFeedInfo(Feed feed) {
-        return FeedDto.FeedInfo.builder()
-                .feedId(feed.getFeedId())
-                .content(feed.getContent())
-                .relatedTags(feed.getRelatedTags())
-                .nickname(feed.getUser().getNickname())
-                .roles(feed.getUser().getRoles())
-                .profileImageUrl(feed.getUser().getProfileimg().getImageUrl())
-                .images(feed.getImages().stream()
-                        .map(Image::getImageUrl)
-                        .collect(Collectors.toList()))
-                .build();
+    private FeedResponseDto convertToFeedInfo(Feed feed) {
+        return feedInfoConverter.convertToFeedInfo(feed);
     }
 }
-
