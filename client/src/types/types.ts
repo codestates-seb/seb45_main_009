@@ -26,3 +26,16 @@ export interface RootState {
     userInfo: UserInfo;
   };
 }
+
+export interface ResponseDataType {
+  feedId: number;
+  userNickname: string;
+  profileImageUrl: string;
+  content: string;
+  relatedTags: string[];
+  images: Array<{
+    imageId: number;
+    imageUrl: string;
+    imageTags: any[];
+  }>;
+}
