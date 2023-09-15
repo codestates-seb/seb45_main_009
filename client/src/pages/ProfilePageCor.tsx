@@ -10,7 +10,7 @@ function ProfilePageCor() {
   if (!userId) {
     return <div>Invalid userId</div>;
   }
-
+  console.log("기업")
   return (
     <div>
       <BackButton />

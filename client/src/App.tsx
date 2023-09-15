@@ -5,6 +5,7 @@ import Footer from "./components/sharedlayout/Footer";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import ProfilePageInd from "./pages/ProfilePageInd";
+import ProfilePageCor from "./pages/ProfilePageCor";
 import OauthLoadingPage from "./pages/OauthLoadingPage";
 import Alarm from "./pages/alarmpage";
 
@@ -46,6 +47,7 @@ function App() {
               <Route path="/login" element={<LoginPage />}></Route>
               <Route path="/signup" element={<SignupPage />}></Route>
               <Route path="/profile/:userId" element={<ProfilePageInd />}></Route>
+              <Route path="/profilecor/:userId" element={<ProfilePageCor />}></Route>
               <Route
                 path="/oauthloading"
                 element={<OauthLoadingPage />}

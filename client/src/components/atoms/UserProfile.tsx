@@ -1,8 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import globalAxios from '../../data/data'
-import { MdOutlineAttachMoney } from "react-icons/md";
+import { FaUser } from "react-icons/fa";
 import { AiFillHeart } from "react-icons/ai";
-import { BsBookmarkStarFill } from "react-icons/bs";
 
 interface ProfileIndProps {
     userId: number;
@@ -19,7 +18,6 @@ function UserProfile({ userId }: ProfileIndProps){
         "feedCount": number,
         "followerCount": number,
         "followCount": number,
-        "price" : string;
         "feedList": {
             feedId: number;
             content: string;
@@ -58,48 +56,54 @@ function UserProfile({ userId }: ProfileIndProps){
     };
 
     return(
-        <div>
-        <div className='max-w-screen-lg mx-auto px-4 sm:px-4 lg:px-8  justify-between '>
+<div>
+    <div className='max-w-screen-lg mx-auto px-4 sm:px-4 lg:px-8'>
         <div className="grid md:grid-cols-2">
-            <div className="flex items-center ">
-                <img src={responseData?.profileimg} className="mr-2 w-10 h-10 rounded-full " />
-                <div className="flex">
-                    <div className="font-bold text-lg mx-[10px]">{responseData?.nickname}</div>
-                    <div className="flex items-center"><BsBookmarkStarFill className="text-btn-color"/></div>
+            <div className="flex items-center">
+                <img src={responseData?.profileimg} className="mr-2 w-10 h-10 rounded-full" />
+                <div className="flex flex-col">
+                    <div className="font-bold text-lg">{responseData?.nickname}</div>
+                    {/* <div className="flex">
+                        <div className="mr-2.5 font-bold text-gray-400 text-sm">{responseData?.height} cm</div>
+                        <div className="font-bold text-gray-400 text-sm">{responseData?.weight} kg</div>
+                    </div> */}
+                    {(responseData?.height || responseData?.weight) && (
+                        <div className="flex">
+                            {responseData?.height && (
+                                <div className="mr-2.5 font-bold text-gray-400 text-sm">
+                                    {responseData?.height} cm
+                                </div>
+                            )}
+                            {responseData?.weight && (
+                                <div className="font-bold text-gray-400 text-sm">
+                                    {responseData?.weight} kg
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
-            <div className="flex justify-end ">
-                <button onClick={followClick} className="w-full h-[30px] mt-[10px] lg:w-[300px] sm:w-[200px]  rounded-[4px] text-[14px] font-medium bg-btn-color text-white">
+            <div className="flex justify-end">
+                <button onClick={followClick} className="w-full h-[30px] mt-[10px] lg:w-[300px] sm:w-[200px] rounded-[4px] text-[14px] font-medium bg-btn-color text-white">
                     {isFollowing ? '팔로잉' : '팔로우'}
                 </button>
             </div>
         </div>
-         <div className="mt-[40px]">
-           <div className="flex">
-               <AiFillHeart className="text-gray-400 mx-[10px] text-2xl" />
-               <div>{responseData?.bio}</div>
-           </div>
-           <div className="flex items-center mt-[6px]">
-               <MdOutlineAttachMoney className="text-gray-400 mx-[10px] text-2xl"/>
-               <div>{responseData?.price}</div>
-           </div>
-         </div>
-         <div className="mt-[100px] ">
-
-        <div className="flex flex-wrap">
-        {responseData?.feedList.map((feed, feedIndex) => (
-            <div key={feedIndex} className="mr-[10px] mb-[20px]">
-            {feed.images.map((image, imageIndex) => (
-                <img  key={imageIndex} src={image.imageUrl} alt={`Feed ${feedIndex} Image ${imageIndex}`} />
+        <div className="mt-[40px] flex items-center">
+            <AiFillHeart className="text-gray-400 mx-[10px] text-2xl"/>
+            <div>{responseData?.bio}</div>
+        </div>
+        <div className="my-[100px] flex flex-wrap">
+            {responseData?.feedList.map((feed, feedIndex) => (
+                <div key={feedIndex} className="mb-[10px]">
+                {feed.images.map((image, imageIndex) => (
+                    <img className="mr-[10px] min-w-[229px] w-[13vw] h-[30vh]" key={imageIndex} src={image.imageUrl} alt={`Feed ${feedIndex} Image ${imageIndex}`} />
+                ))}
+                </div>
             ))}
-            </div>
-        ))}
         </div>
-        </div>
+    </div>
 </div>
-</div>
-
-
 
     )
 }
