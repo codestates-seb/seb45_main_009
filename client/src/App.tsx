@@ -45,7 +45,7 @@ function App() {
               <Route path="/mypage/:page" element={<MyPage />} />
               <Route path="/login" element={<LoginPage />}></Route>
               <Route path="/signup" element={<SignupPage />}></Route>
-              <Route path="/profile/:feedId" element={<ProfilePageInd />}></Route>
+              <Route path="/profile/:userId" element={<ProfilePageInd />}></Route>
               <Route
                 path="/oauthloading"
                 element={<OauthLoadingPage />}

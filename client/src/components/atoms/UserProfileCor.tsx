@@ -1,14 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import globalAxios from '../../data/data'
-import { MdOutlineAttachMoney } from "react-icons/md";
+import { FaUser } from "react-icons/fa";
 import { AiFillHeart } from "react-icons/ai";
-import { BsBookmarkStarFill } from "react-icons/bs";
 
 interface ProfileIndProps {
     userId: number;
   }
 
-function UserProfile({ userId }: ProfileIndProps){
+function UserProfileCor({ userId }: ProfileIndProps){
 
     type ResponseType = {
         "nickname": string,
@@ -19,7 +18,6 @@ function UserProfile({ userId }: ProfileIndProps){
         "feedCount": number,
         "followerCount": number,
         "followCount": number,
-        "price" : string;
         "feedList": {
             feedId: number;
             content: string;
@@ -63,9 +61,12 @@ function UserProfile({ userId }: ProfileIndProps){
         <div className="grid md:grid-cols-2">
             <div className="flex items-center ">
                 <img src={responseData?.profileimg} className="mr-2 w-10 h-10 rounded-full " />
-                <div className="flex">
-                    <div className="font-bold text-lg mx-[10px]">{responseData?.nickname}</div>
-                    <div className="flex items-center"><BsBookmarkStarFill className="text-btn-color"/></div>
+                <div className="flex flex-col">
+                    <div className="font-bold text-lg">{responseData?.nickname}</div>
+                    <div className="flex">
+                        <div className="mr-2.5 font-bold text-gray-400 text-sm">{responseData?.height} cm</div>
+                        <div className="font-bold text-gray-400 text-sm">{responseData?.weight} kg</div>
+                    </div>
                 </div>
             </div>
             <div className="flex justify-end ">
@@ -76,12 +77,12 @@ function UserProfile({ userId }: ProfileIndProps){
         </div>
          <div className="mt-[40px]">
            <div className="flex">
-               <AiFillHeart className="text-gray-400 mx-[10px] text-2xl" />
-               <div>{responseData?.bio}</div>
+               <FaUser className="text-gray-400 flex-none mr-[10px]" />
+               <div className="flex-grow ">{responseData?.bio}</div>
            </div>
-           <div className="flex items-center mt-[6px]">
-               <MdOutlineAttachMoney className="text-gray-400 mx-[10px] text-2xl"/>
-               <div>{responseData?.price}</div>
+           <div className="flex items-center">
+               <AiFillHeart className="text-gray-400 mr-[10px] "/>
+               <div>{responseData?.bio}</div>
            </div>
          </div>
          <div className="mt-[100px] ">
@@ -104,4 +105,4 @@ function UserProfile({ userId }: ProfileIndProps){
     )
 }
 
-export default UserProfile;
+export default UserProfileCor;
