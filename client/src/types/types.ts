@@ -36,9 +36,10 @@ export interface RootState {
 }
 
 export interface ResponseDataType {
+  createdAt: string;
   feedId: number;
   userId: number;
-  userNickname: string;
+  nickname: string;
   profileImageUrl: string;
   content: string;
   bio: string;

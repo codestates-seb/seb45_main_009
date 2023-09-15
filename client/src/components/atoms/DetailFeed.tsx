@@ -1,13 +1,12 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { RiAlarmWarningFill } from "react-icons/ri";
 import { AiFillPlusCircle } from "react-icons/ai";
 import globalAxios from "../../data/data";
-import { ResponseDataType } from "../../types/types";
+import { ResponseDataType, UserInfo, RootState } from "../../types/types";
 import { useNavigate } from "react-router";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { RootState } from "../../types/types";
+import { useDispatch, useSelector } from "react-redux";
+import { LuSiren } from "react-icons/lu";
 //////태그 모달 시작
 function TagModal({
   title,
@@ -43,8 +42,11 @@ function TagModal({
 interface DetailFeedProps {
   feedId: number;
   responseData: ResponseDataType | null;
+  setIsMyFeed: React.Dispatch<React.SetStateAction<boolean>>;
+  isMyFeed: boolean;
+  userInfo: UserInfo;
 }
-function DetailFeedInd({ feedId, responseData }: DetailFeedProps) {
+function DetailFeedInd({ feedId, responseData, isMyFeed }: DetailFeedProps) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userInfo = useSelector((state: RootState) => state.login.userInfo);
@@ -97,16 +99,57 @@ function DetailFeedInd({ feedId, responseData }: DetailFeedProps) {
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      const response = await globalAxios.delete(`/feed/detail/${feedId}`);
+      console.log("글이 성공적으로 삭제되었습니다.", response);
+      alert("피드 삭제 완료");
+      navigate("/");
+    } catch (error) {
+      console.error("글 삭제 실패:", error);
+    }
+  };
+  const handleUpdate = () => {
+    navigate(`/feedupdateind/${feedId}`);
+  };
   // 정보 태그 모달창
   const [showTagModal, setShowTagModal] = useState<{
     photoIndex: number;
     tagIndex: number;
   } | null>(null);
 
+  function formatRelativeTime(dateString: any): string {
+    const now = new Date(new Date().getTime() - 9 * 60 * 60 * 1000); // 9시간 빼기/utc-한국차이
+    const inputDate = new Date(dateString);
+
+    const seconds = Math.floor((now.getTime() - inputDate.getTime()) / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    const months = Math.floor(days / 30);
+    const years = Math.floor(days / 365);
+
+    if (years > 1) return `${years} years ago`;
+    if (years === 1) return "1 year ago";
+
+    if (months > 1) return `${months} months ago`;
+    if (months === 1) return "1 month ago";
+
+    if (days > 1) return `${days} days ago`;
+    if (days === 1) return "1 day ago";
+
+    if (hours > 1) return `${hours} hours ago`;
+    if (hours === 1) return "1 hour ago";
+
+    if (minutes > 1) return `${minutes} minutes ago`;
+
+    return "1 minute ago";
+  }
+
   return (
     <div className="w-full sm:max-w-screen-sm  mx-auto px-4 sm:px-4 lg:px-8">
       {responseData?.images.map((image, index) => (
-        <div key={index} className="mb-8 relative">
+        <div key={index} className="mb-2 relative">
           <img src={image.imageUrl} alt={`Image ${index}`} className="w-full h-auto" />
           {image.imageTags.map((tag, tagIndex) => {
             const top = Math.round(tag.positionY * 100);
@@ -135,29 +178,33 @@ function DetailFeedInd({ feedId, responseData }: DetailFeedProps) {
           })}
         </div>
       ))}
-
-      <div className="font-bold text-gray-400 text-sm mt-[10px]">2022</div>
-      <div className=" mt-[20px]">{responseData?.content}</div>
+      <div className="flex text-sm opacity-50 mb-1">{formatRelativeTime(responseData?.createdAt)}</div>
+      <div className="flex flex-row">
+        {/* <span className="mr-2 font-medium">{responseData?.nickname}</span> */}
+        <span>{responseData?.content}</span>
+      </div>
       <div className="flex flex-row items-center mt-[20px]">
         {isLiked === false ? (
-          <AiOutlineHeart className="cursor-pointer" onClick={handleLikeClick} />
+          <AiOutlineHeart className="cursor-pointer text-red-400" onClick={handleLikeClick} size={20} />
         ) : (
-          <AiFillHeart className="cursor-pointer" onClick={handleLikeClick} />
+          <AiFillHeart className="cursor-pointer text-red-400" onClick={handleLikeClick} size={20} />
         )}
-
         <div className="ml-2 pb-[2px]">{likeList.length}</div>
       </div>
-      <div className=" mt-[40px]">
-        <div className="font-bold text-gray-400 text-sm mb-[10px]">연관태그</div>
-        <div>
+      <div className=" mt-2">
+        <div className="font-bold text-gray-400 text-sm mb-[10px]"></div>
+        <ul>
           {responseData?.relatedTags.map((tag, index) => (
-            <span className=" p-1 bg-blue-100 rounded  mr-2" key={index}>
-              {tag}
-            </span>
+            <li
+              className="inline-block px-2 py-1 border-bdc rounded mr-2.5 mb-2.5 transition bg-[#edf7ff] text-[#22a1ff] text-[13px]"
+              key={index}
+            >
+              {`#${tag}`}
+            </li>
           ))}
-        </div>
+        </ul>
 
-        <div className="mt-[40px] flex flex-wrap">
+        <div className="mt-2 flex flex-wrap">
           {responseData?.images.map((image, imageIndex) =>
             image.imageTags.map((tag, tagIndex) => (
               <div className="border rounded flex-grow mr-4 mb-4 p-2 text-sm" key={`${imageIndex}-${tagIndex}`}>
@@ -186,9 +233,20 @@ function DetailFeedInd({ feedId, responseData }: DetailFeedProps) {
       </div>
 
       <div className="flex justify-end mt-4">
-        <button onClick={handleReport} className="focus:outline-none">
-          <RiAlarmWarningFill />
-        </button>
+        {isMyFeed ? (
+          <>
+            <button className="m-2 text-[13px] opacity-75" onClick={handleUpdate}>
+              수정
+            </button>
+            <button className="text-[13px] opacity-75" onClick={handleDelete}>
+              삭제
+            </button>
+          </>
+        ) : (
+          <div onClick={handleReport} className="flex flex-row items-center hover:cursor-pointer  opacity-75">
+            <LuSiren className="" />
+          </div>
+        )}
       </div>
     </div>
   );
