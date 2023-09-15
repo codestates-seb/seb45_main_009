@@ -56,12 +56,24 @@ function LoginPage() {
         const userInfoString = JSON.stringify(userInfo);
         sessionStorage.setItem("user_info", userInfoString);
 
-        dispatch(login({ userInfo }));
+        dispatch(login(userInfo));
 
         navigate("/");
-      } catch (error) {
+      } catch (error: any) {
+        const errorMessage = error.response.data.message;
+        if (errorMessage === "Unauthorized") {
+          alert("등록된 회원이 없습니다");
+        } else if (errorMessage === "Bad credentials (password incorrect)") {
+          alert("비밀번호가 틀렸습니다");
+        }
         console.error("Error during login:", error);
       }
+    }
+  };
+
+  const handleLastInputKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      onSubmitHandler();
     }
   };
 
@@ -91,6 +103,7 @@ function LoginPage() {
           label="비밀번호"
           type="password"
           onChange={handlePasswordChange}
+          onKeyUp={handleLastInputKeyUp}
         />
 
         <button
@@ -99,7 +112,6 @@ function LoginPage() {
         >
           로그인
         </button>
-
         <div className="text-[12px] w-full mt-[10px] flex justify-center  font-medium text-gray-400 mb-[10px]">
           아직 FitFolio의 회원이 아니라면?{" "}
           <Link to="/signup" className="underline ml-1">

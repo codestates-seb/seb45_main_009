@@ -1,32 +1,35 @@
 import { useState, useRef, useEffect } from "react";
-import { FaEllipsisH } from 'react-icons/fa';
-import globalAxios from '../../data/data'
-import { Link } from "react-router-dom";
+import { FaEllipsisH } from "react-icons/fa";
+import globalAxios from "../../data/data";
+import { Link, useNavigate } from "react-router-dom";
 
-const Modal = ({ onClose, onDelete, onEdit } :any) => {
+const Modal = ({ onClose, onDelete, onEdit, feedId }: any) => {
   const modalRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-        if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-            onClose();
-        }
-    }
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
-}, [onClose]);
+  }, [onClose]);
 
-  return(
-    <div ref={modalRef} className='flex flex-col border rounded-[4px] w-[100px]'>
-      <button onClick={onDelete} className='border-b'>삭제</button>
-      <button onClick={onEdit}>수정</button> 
+  return (
+    <div ref={modalRef} className="flex flex-col border rounded-[4px] w-[100px]">
+      <button onClick={onDelete} className="border-b">
+        삭제
+      </button>
+      <Link to={`/feedupdateind/${feedId}`}>
+        <button onClick={onEdit}>수정</button>
+      </Link>
     </div>
-    )
+  );
 };
-
 
 interface ProfileIndProps {
   feedId: number;
@@ -38,9 +41,9 @@ function ProfileInd({ feedId }: ProfileIndProps) {
 
   const handleOpenModal = () => {
     setModalOpen(true);
-    console.log("모달 열기")
+    console.log("모달 열기");
   };
-  
+
   const handleCloseModal = () => {
     setModalOpen(false);
   };
@@ -50,9 +53,9 @@ function ProfileInd({ feedId }: ProfileIndProps) {
 
   const followClick = () => {
     if (isFollowing) {
-      console.log('팔로우 취소');
+      console.log("팔로우 취소");
     } else {
-      console.log('팔로우하기');
+      console.log("팔로우하기");
     }
     // 팔로우 상태 토글
     setIsFollowing(!isFollowing);
@@ -91,25 +94,22 @@ function ProfileInd({ feedId }: ProfileIndProps) {
 
   const handleDelete = async (feedId:number) => {
     try {
-        const response = await globalAxios.delete(`/feed/detail/${feedId}`);
-        
-        if (response.status === 200) {
-            console.log("글이 성공적으로 삭제되었습니다.");
-        } 
+      const response = await globalAxios.delete(`/feed/detail/${feedId}`);
+
+      if (response.status === 200) {
+        console.log("글이 성공적으로 삭제되었습니다.");
+      }
     } catch (error) {
-        console.error("글 삭제 실패:", error);
+      console.error("글 삭제 실패:", error);
     }
-    
-    handleCloseModal(); 
-};
 
+    handleCloseModal();
+  };
 
-
-const handleEdit = () => {
-  console.log(feedId); 
-  handleCloseModal(); 
-  // window.location.href = 피드 수정 페이지 이동;
-};
+  const handleEdit = () => {
+    console.log(feedId);
+    handleCloseModal();
+  };
 
 return(
 <div className='max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8'>
