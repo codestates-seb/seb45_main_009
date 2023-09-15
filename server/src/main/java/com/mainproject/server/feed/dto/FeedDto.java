@@ -32,19 +32,5 @@ public class FeedDto {
     }
 
 
-    @Getter
-    @Setter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class FeedInfo {
-        private Long feedId;
-        private String content;
-        private String nickname;
-        private String profileImageUrl;
-        private List<String> roles;
-        private List<String> relatedTags;
-        private List<String> images;
-    }
+
 }
