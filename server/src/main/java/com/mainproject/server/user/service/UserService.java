@@ -65,7 +65,7 @@ public class UserService {
         user.setPassword(encryptedPassword);
 
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         String formattedDateTime = LocalDateTime.now().format(formatter);
 
         LocalDateTime createdAt = LocalDateTime.parse(formattedDateTime, formatter);
@@ -111,7 +111,7 @@ public class UserService {
 
     public User createUserOAuth2(User user) {
 
-        String newName = verifyExistNickName(user.getNickname());
+        String newName = verifyExistKakaoNickName(user.getNickname());
         user.setNickname(newName);
 
         return userRepository.save(user);
@@ -127,8 +127,10 @@ public class UserService {
         // 검증이 완료되면 업데이트를 처리합니다.
         User findUser = findVerifiedUser(user.getUserId());
 
-        if(user.getNickname()!=findUser.getNickname()){
-            findUser.setNickname(verifyExistNickName(user.getNickname()));
+        // 닉네임 중복 확인
+        if (!user.getNickname().equals(findUser.getNickname())) {
+            verifyExistNickname(user.getNickname());
+            findUser.setNickname(user.getNickname());
         }
 
         if (user.getWeight() != null) {
@@ -138,7 +140,7 @@ public class UserService {
         if (user.getHeight() != null) {
             findUser.setHeight(user.getHeight());
         }
-        
+
         // 이미지 업데이트
         String newImageUrl = updateProfileImage(findUser, profileimg);
         if (newImageUrl != null) {
@@ -264,7 +266,7 @@ public class UserService {
     }
 
     // oauth2로 로그인 했을 때 같은 이름이 있을 때 1~1000까지의 랜덤숫자를 생성
-    private String verifyExistNickName(String nickname){
+    private String verifyExistKakaoNickName(String nickname){
         String newNickName = nickname;
         Optional<User> optionalUser = userRepository.findByNickname(nickname);
         if(optionalUser.isPresent()){
