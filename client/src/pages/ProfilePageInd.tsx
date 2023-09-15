@@ -11,8 +11,6 @@ function ProfilePageInd() {
     return <div>Invalid userId</div>;
   }
 
-  console.log("개인");
-
   return (
     <div>
       <BackButton />

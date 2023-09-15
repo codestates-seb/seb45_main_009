@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import globalAxios from '../../data/data'
-import { FaUser } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import { AiFillHeart } from "react-icons/ai";
 
 interface ProfileIndProps {
@@ -40,9 +40,6 @@ function UserProfile({ userId }: ProfileIndProps){
         }
         fetcFeedData();
         },[userId]);
-
-        console.log("해당 유저 아이디", userId)
-        console.log("해당 유저 정보", responseData)
 
         const [isFollowing, setIsFollowing] = useState(false);
 
@@ -97,7 +94,9 @@ function UserProfile({ userId }: ProfileIndProps){
             {responseData?.feedList.map((feed, feedIndex) => (
                 <div key={feedIndex} className="mb-[10px]">
                 {feed.images.map((image, imageIndex) => (
-                    <img className="mr-[10px] min-w-[229px] w-[13vw] h-[30vh]" key={imageIndex} src={image.imageUrl} alt={`Feed ${feedIndex} Image ${imageIndex}`} />
+                    <Link to={`/feeddetailind/${feed.feedId}`}>
+                        <img className="mr-[10px] min-w-[229px] w-[13vw] h-[30vh]" key={imageIndex} src={image.imageUrl} alt={`Feed ${feedIndex} Image ${imageIndex}`} />
+                    </Link>
                 ))}
                 </div>
             ))}

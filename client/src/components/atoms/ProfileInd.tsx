@@ -91,7 +91,6 @@ function ProfileInd({ feedId }: ProfileIndProps) {
     fetcFeedData();
   }, []);
 
-  console.log("피드 유저 데터",feedUserData?.userId)
 
   const handleDelete = async (feedId:number) => {
     try {

@@ -91,8 +91,6 @@ function ProfileCor({ feedId }: ProfileCorProps) {
     fetcFeedData();
   }, []);
 
-  console.log("피드 유저 데터",feedUserData)
-
   const handleDelete = async (feedId:number) => {
     try {
       const response = await globalAxios.delete(`/feed/detail/${feedId}`);

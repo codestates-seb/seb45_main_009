@@ -1,8 +1,10 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import globalAxios from '../../data/data'
 import { MdOutlineAttachMoney } from "react-icons/md";
 import { AiFillHeart } from "react-icons/ai";
 import { BsBookmarkStarFill } from "react-icons/bs";
+import { Link } from "react-router-dom";
+
 
 interface ProfilePageCor {
     userId: number;
@@ -87,7 +89,9 @@ function UserProfileCor({ userId }: ProfilePageCor){
             {responseData?.feedList.map((feed, feedIndex) => (
                 <div key={feedIndex} className="mb-2.5">
                     {feed.images.map((image, imageIndex) => (
-                        <img className="mr-2.5 min-w-[229px] w-[13vw] h-[30vh]" key={imageIndex} src={image.imageUrl} alt={`Feed ${feedIndex} Image ${imageIndex}`} />
+                        <Link to={`/feeddetailind/${feed.feedId}`}>
+                            <img className="mr-2.5 min-w-[229px] w-[13vw] h-[30vh]" key={imageIndex} src={image.imageUrl} alt={`Feed ${feedIndex} Image ${imageIndex}`} />
+                        </Link>
                     ))}
                 </div>
             ))}

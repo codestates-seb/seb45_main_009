@@ -69,8 +69,6 @@ function DetailFeedInd({ feedId }: DetailFeedProps) {
     fetcFeedData();
   }, []);
 
-  console.log(responseData?.feedId)
-
   // 좋아요
   const [isLiked, setIsLiked] = useState(false);
   const handleLikeClick = () => {
