@@ -4,6 +4,7 @@ const initialState = {
   userInfo: {
     userType: "DEFAULT",
     userNickname: "Guest",
+    userId: null,
   },
 };
 
@@ -20,6 +21,7 @@ const loginSlice = createSlice({
       state.userInfo = {
         userType: "DEFAULT",
         userNickname: "Guest",
+        userId: null,
       };
     },
   },

@@ -1,61 +1,49 @@
 import { useState, useRef, useEffect } from "react";
-import { FaEllipsisH } from 'react-icons/fa';
+import { FaEllipsisH } from "react-icons/fa";
+import globalAxios from "../../data/data";
+import { Link, useNavigate } from "react-router-dom";
 
-let userData = [
-  {
-    username: 'Lee seeun',
-    useremail: 'lse0522@gmail.com',
-    pw: '1234',
-    userheight : 170,
-    userweight : 60,
-    userphoto : '/asset/img.png',
-    userintroduction : '헬스를 좋아합니다~'
-  }
-];
-
-const Modal = ({ onClose } :any) => {
+const Modal = ({ onClose, onDelete, onEdit, feedId }: any) => {
   const modalRef = useRef<HTMLDivElement | null>(null);
-  // const modalRef = useRef(null);
 
   useEffect(() => {
-    // 클릭 이벤트를 처리하는 함수
     const handleClickOutside = (event: MouseEvent) => {
-      // 만약 event.target as Node 가 !modalRef.current의 자손 or 동일한 노드인 경우 true 그렇지 않으면 false 반환한다.
-      // 모달참조의 자신이 아닌 경우 클릭했을때 모달을 닫아야 한다.
-
-      // modalRef.current 타입을 never로 
-        if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-            onClose();
-        }
-    }
-
-    // 이벤트 리스너를 문서에 추가
-    document.addEventListener("mousedown", handleClickOutside);
-    
-    // 컴포넌트가 언마운트될 때 이벤트 리스너 제거
-    return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        onClose();
+      }
     };
-}, [onClose]);
 
-  return(
-    <div ref={modalRef} className='flex flex-col border rounded-[4px] w-[100px] 
-      absolute  md:right-[60px] right-[100px] md:top-[200px] top-[280px] '>
-      <button onClick={onClose} className='border-b'>삭제</button>
-      <button onClick={onClose}>수정</button>
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onClose]);
+
+  return (
+    <div ref={modalRef} className="flex flex-col border rounded-[4px] w-[100px]">
+      <button onClick={onDelete} className="border-b">
+        삭제
+      </button>
+      <Link to={`/feedupdateind/${feedId}`}>
+        <button onClick={onEdit}>수정</button>
+      </Link>
     </div>
-    )
+  );
 };
 
-function ProfileCor() {
+interface ProfileIndProps {
+  feedId: number;
+}
+
+function ProfileInd({ feedId }: ProfileIndProps) {
   // 모달창
   const [isModalOpen, setModalOpen] = useState(false);
 
   const handleOpenModal = () => {
     setModalOpen(true);
-    console.log("모달 열기")
+    console.log("모달 열기");
   };
-  
+
   const handleCloseModal = () => {
     setModalOpen(false);
   };
@@ -65,45 +53,91 @@ function ProfileCor() {
 
   const followClick = () => {
     if (isFollowing) {
-      console.log('팔로우 취소');
+      console.log("팔로우 취소");
     } else {
-      console.log('팔로우하기');
+      console.log("팔로우하기");
     }
     // 팔로우 상태 토글
     setIsFollowing(!isFollowing);
   };
 
+  type ResponseDataType = {
+    feedId: number;
+    userNickname: string;
+    profileImageUrl: string;
+    content: string;
+    relatedTags: string[];
+    images: Array<{
+      imageId: number;
+      imageUrl: string;
+      imageTags: any[];
+    }>;
+  };
+
+  const [feedUserData, setFeedUserData] = useState<ResponseDataType | null>(null);
+
+  useEffect(() => {
+    async function fetcFeedData() {
+      try {
+        const response = await globalAxios.get(`/feed/detail/${feedId}`);
+        if (response.status === 200) {
+          setFeedUserData(response.data);
+        }
+      } catch (error) {
+        console.error("API 요청 실패:", error);
+      }
+    }
+    fetcFeedData();
+  }, []);
+
+  console.log("피드 유저 데터",feedUserData)
+
+  const handleDelete = async (feedId:number) => {
+    try {
+      const response = await globalAxios.delete(`/feed/detail/${feedId}`);
+
+      if (response.status === 200) {
+        console.log("글이 성공적으로 삭제되었습니다.");
+      }
+    } catch (error) {
+      console.error("글 삭제 실패:", error);
+    }
+
+    handleCloseModal();
+  };
+
+  const handleEdit = () => {
+    console.log(feedId);
+    handleCloseModal();
+  };
 
 return(
 <div className='max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8'>
   <div className="grid md:grid-cols-2 gap-4 ">
 
-  <div className="flex items-center ">
-    <img src={userData[0].userphoto} className="w-[80px] h-[80px] rounded-full mr-4 " />
-    
+  <Link to={`/profile/${feedId}`} >
+  <div className="flex items-center">
+    <img src={feedUserData?.profileImageUrl} className=" mr-2 w-10 h-10 rounded-full" />
     <div className="flex flex-col">
-    
-      <div className="font-bold text-xl ">{userData[0].username}</div>
-      <div className="font-bold text-gray-400 text-sm flex">
-        <div className='mr-[4px]'>{userData[0].userheight}cm</div>
-        <div>{userData[0].userweight}kg</div>
-      </div>
-      <div>{userData[0].userintroduction}</div>
-
+      <div className="font-bold text-lg ">{feedUserData?.userNickname}</div>
+      <div>{feedUserData?.content}</div>
     </div>
   </div>
+  </Link>
 
   <div className="flex items-center justify-end md:justify-start">
-    <button className="ml-[200px] mr-4 w-[100px] h-[30px] rounded-[4px] text-[14px] font-medium bg-btn-color text-white" onClick={followClick}>
+    <button className=" mr-4 w-full sm:w-[200px] h-[30px] rounded-[4px] text-[14px] font-medium bg-btn-color text-white" onClick={followClick}>
       {isFollowing ? '팔로잉' : '팔로우'} 
     </button>
-    <button onClick={handleOpenModal}  className='relative'><FaEllipsisH /></button>
-    {isModalOpen && <Modal onClose={handleCloseModal} /> }
+    {
+            isModalOpen ? 
+            <Modal onClose={handleCloseModal} onDelete={handleDelete} onEdit={handleEdit}/> :
+            <button onClick={handleOpenModal}><FaEllipsisH /></button>
+          }
   </div>
 
   </div>
 </div>
 ) 
 }
-
-export default ProfileCor;
+export default ProfileInd;

@@ -31,22 +31,34 @@ const OauthLoadingPage = () => {
       });
       const kakaoemail = kakaoUserInfoResponse.data.kakao_account.email;
       const kakaoimg = kakaoUserInfoResponse.data.properties.profile_image;
+
       if (!kakaoemail) {
+        const kakaoUnlink = await axios.post(
+          "https://kapi.kakao.com/v1/user/unlink",
+          {},
+          {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+              Authorization: `Bearer ${kakaoTokenResponse.data.access_token}`,
+            },
+          }
+        );
+        console.log(kakaoUnlink);
         alert("이메일 제공에 동의를 하시지 않으면 로그인이 불가능합니다.");
         window.location.href = "/login";
       } else {
         //서버로 정보 보내기
-        const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/oauthloading`, {
+        const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/join/kakao`, {
           email: kakaoemail,
           profileimg: kakaoimg,
         });
-
         //서버에서 정보 받아서 저장-자체 로그인과 동일
         const accessToken = response.headers["authorization"];
-        const rolesString = response.headers["roles"];
+        const rolesString = response.headers["userrole"];
         const userType = rolesString.slice(1, -1);
-        const userNickname = response.headers["nickname"];
-        const userInfo: UserInfo = { userType, userNickname };
+        const userNickname = response.headers["usernickname"];
+        const userId = response.headers["userid"];
+        const userInfo: UserInfo = { userType, userNickname, userId };
         sessionStorage.setItem("access_token", accessToken);
         const userInfoString = JSON.stringify(userInfo);
         sessionStorage.setItem("user_info", userInfoString);

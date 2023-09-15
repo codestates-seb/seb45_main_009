@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { FaEllipsisH, FaUserAlt } from 'react-icons/fa';
+import { FaEllipsisH } from 'react-icons/fa';
 import { AiFillHeart } from 'react-icons/ai';
 import { MdOutlineAttachMoney } from 'react-icons/md';
 

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { login } from "../redux/reducers/loginSlice";
 import { Link } from "react-router-dom";
 import kakao from "../assets/images/kakaotalk.png";
@@ -7,6 +6,7 @@ import kakao from "../assets/images/kakaotalk.png";
 import CommonInput from "../components/atoms/CommonInput";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
+import globalAxios from "../data/data";
 
 import { UserInfo } from "../types/types";
 
@@ -45,22 +45,35 @@ function LoginPage() {
   const onSubmitHandler = async () => {
     if (isValidEmail) {
       try {
-        const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/login`, { email, password });
+        const response = await globalAxios.post("/login", { email, password });
         const accessToken = response.headers["authorization"];
         const rolesString = response.headers["roles"];
         const userType = rolesString.slice(1, -1);
         const userNickname = response.headers["nickname"];
-        const userInfo: UserInfo = { userType, userNickname };
+        const userId = response.headers["userid"];
+        const userInfo: UserInfo = { userType, userNickname, userId };
         sessionStorage.setItem("access_token", accessToken);
         const userInfoString = JSON.stringify(userInfo);
         sessionStorage.setItem("user_info", userInfoString);
 
-        dispatch(login({ userInfo }));
+        dispatch(login(userInfo));
 
         navigate("/");
-      } catch (error) {
+      } catch (error: any) {
+        const errorMessage = error.response.data.message;
+        if (errorMessage === "Unauthorized") {
+          alert("등록된 회원이 없습니다");
+        } else if (errorMessage === "Bad credentials (password incorrect)") {
+          alert("비밀번호가 틀렸습니다");
+        }
         console.error("Error during login:", error);
       }
+    }
+  };
+
+  const handleLastInputKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      onSubmitHandler();
     }
   };
 
@@ -90,6 +103,7 @@ function LoginPage() {
           label="비밀번호"
           type="password"
           onChange={handlePasswordChange}
+          onKeyUp={handleLastInputKeyUp}
         />
 
         <button
@@ -98,7 +112,6 @@ function LoginPage() {
         >
           로그인
         </button>
-
         <div className="text-[12px] w-full mt-[10px] flex justify-center  font-medium text-gray-400 mb-[10px]">
           아직 FitFolio의 회원이 아니라면?{" "}
           <Link to="/signup" className="underline ml-1">

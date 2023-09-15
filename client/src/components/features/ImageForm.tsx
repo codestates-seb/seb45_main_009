@@ -149,7 +149,7 @@ function ImageForm({ previewImg, setPreviewImg }: ImageFormProps) {
 
   return (
     <div>
-      <div className="w-full  mb-2 relative">
+      <div className="w-full  mb-1 relative">
         <img
           src={previewImg.length > 0 ? selectedImg : upload}
           alt="selectedImg"

@@ -4,8 +4,7 @@ import Header from "./components/sharedlayout/Header";
 import Footer from "./components/sharedlayout/Footer";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
-import ProfileInd from "./pages/ProfileInd";
-import ProfileCor from "./pages/ProfileCor";
+import ProfilePageInd from "./pages/ProfilePageInd";
 import OauthLoadingPage from "./pages/OauthLoadingPage";
 import Alarm from "./pages/alarmpage";
 
@@ -20,6 +19,8 @@ import MyPage from "./pages/MyPage";
 import ScrollToTop from "./components/features/ScrollToTop";
 import Layout from "./components/atoms/Layout";
 import { useUserSession } from "./hooks/useUserSession";
+import FeedUpdataePageInd from "./pages/FeedUpdatePageInd";
+import FeedUpdataePageCor from "./pages/FeedUpdatePageCor";
 
 function App() {
   useUserSession();
@@ -34,16 +35,21 @@ function App() {
             <Routes>
               <Route path="/" element={<MainPageInd />}></Route>
               <Route path="/store" element={<MainPageCor />}></Route>
-              <Route path="/feeddetailcor" element={<FeedDetailPageCor />} />
-              <Route path="/feeddetailind" element={<FeedDetailPageInd />} />
+              <Route path="/feeddetailcor/:feedId" element={<FeedDetailPageCor />} />
+
+              <Route path="/feeddetailind/:feedId" element={<FeedDetailPageInd />} />
               <Route path="/feedformcor" element={<FeedFormPageCor />} />
               <Route path="/feedformind" element={<FeedFormPageInd />} />
+              <Route path="/feedupdateind/:feedId" element={<FeedUpdataePageInd />} />
+              <Route path="/feedupdatecor/:feedId" element={<FeedUpdataePageCor />} />
               <Route path="/mypage/:page" element={<MyPage />} />
               <Route path="/login" element={<LoginPage />}></Route>
               <Route path="/signup" element={<SignupPage />}></Route>
-              <Route path="/profileind" element={<ProfileInd />}></Route>
-              <Route path="/Profilecor" element={<ProfileCor />}></Route>
-              <Route path="/oauthloading" element={<OauthLoadingPage />}></Route>
+              <Route path="/profile/:feedId" element={<ProfilePageInd />}></Route>
+              <Route
+                path="/oauthloading"
+                element={<OauthLoadingPage />}
+              ></Route>
               <Route path="/alarmpage" element={<Alarm />}></Route>
               <Route path="*" element={<Not404 />} />
             </Routes>

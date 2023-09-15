@@ -4,247 +4,137 @@ import { useInView } from "react-intersection-observer";
 import globalAxios from "../../data/data";
 
 interface UserData {
-  proFileImg: string;
-  userId: string;
-  feedImg: string;
-  userInfo: string;
-  tags: string;
+  bio: string;
+  createdAt: string;
+  email: string;
+  height: number;
   location: string;
+  modifiedAt: string;
+  nickname: string;
+  price: number | string;
+  profileimg: string;
+  roles: string[];
+  sport: string;
+  userId: number;
+  weight: number;
+}
+
+interface FeedData {
+  feedId: number;
+  userNickname: string;
+  profileImageUrl: string;
+  content: string;
+  relatedTags: string[];
+  images: {
+    imageId: number;
+    imageUrl: string;
+    imageTags: string[];
+  }[];
 }
 
 interface FeedProps {
   selectedFilter: string[];
 }
 
-const tempData: UserData[] = [
-  {
-    proFileImg: "/asset/profile.png",
-    userId: "ImHello",
-    feedImg: "/asset/feedpicture.png",
-    userInfo: "오늘은 날씨가 좋네요",
-    tags: "헬스",
-    location: "서울",
-  },
-  {
-    proFileImg: "/asset/github.png",
-    userId: "ImTaeyoung",
-    feedImg: "/asset/feedpicture.png",
-    userInfo: "서울은 비가 올거 같아요",
-    tags: "헬스",
-    location: "서울",
-  },
-  {
-    proFileImg: "/asset/gym.png",
-    userId: "버피짐",
-    feedImg: "/asset/gym.png",
-    userInfo: "오운완!",
-    tags: "헬스",
-    location: "경기",
-  },
-  {
-    proFileImg: "/asset/gym1.png",
-    userId: "ID123",
-    feedImg: "/asset/think.png",
-    userInfo: "뛰나요?",
-    tags: "크로스핏",
-    location: "경기",
-  },
-  {
-    proFileImg: "/asset/profile.png",
-    userId: "ID777",
-    feedImg: "/asset/feedpicture.png",
-    userInfo: "오늘은 날씨가 좋네요",
-    tags: "크로스핏",
-    location: "서울",
-  },
-  {
-    proFileImg: "/asset/smile.png",
-    userId: "IDABC",
-    feedImg: "/asset/feedpicture.png",
-    userInfo: "오늘은 날씨가 좋네요",
-    tags: "크로스핏",
-    location: "인천",
-  },
-  {
-    proFileImg: "/asset/gym1.png",
-    userId: "ID123ABC",
-    feedImg: "/asset/feedpicture.png",
-    userInfo: "오늘은 날씨가 좋네요",
-    tags: "수영",
-    location: "강원",
-  },
-  {
-    proFileImg: "/asset/gym.png",
-    userId: "ID888888",
-    feedImg: "/asset/feedpicture.png",
-    userInfo: "오늘은 날씨가 좋네요",
-    tags: "수영",
-    location: "서울",
-  },
-  {
-    proFileImg: "/asset/cat.png",
-    userId: "헬스냥이",
-    feedImg: "/asset/feedpicture.png",
-    userInfo: "오늘은 날씨가 좋네요",
-    tags: "수영",
-    location: "서울",
-  },
-  {
-    proFileImg: "/asset/think.png",
-    userId: "ID123ABC",
-    feedImg: "/asset/feedpicture.png",
-    userInfo: "오늘은 날씨가 좋네요",
-    tags: "홈트",
-    location: "서울",
-  },
-  {
-    proFileImg: "/asset/profile.png",
-    userId: "ID888888",
-    feedImg: "/asset/test.png",
-    userInfo: "팬티 단돈 99000원",
-    tags: "홈트",
-    location: "인천",
-  },
-  {
-    proFileImg: "/asset/profile.png",
-    userId: "IDABC",
-    feedImg: "/asset/feedpicture.png",
-    userInfo: "오늘은 날씨가 좋네요",
-    tags: "농구",
-    location: "서울",
-  },
-  {
-    proFileImg: "/asset/profile.png",
-    userId: "ID123ABC",
-    feedImg: "/asset/feedpicture.png",
-    userInfo: "오늘은 날씨가 좋네요",
-    tags: "축구",
-    location: "서울",
-  },
-  {
-    proFileImg: "/asset/profile.png",
-    userId: "ID888888",
-    feedImg: "/asset/test.png",
-    userInfo: "팬티 단돈 99000원",
-    tags: "축구",
-    location: "부산",
-  },
-  {
-    proFileImg: "/asset/profile.png",
-    userId: "IDABC",
-    feedImg: "/asset/feedpicture.png",
-    userInfo: "오늘은 날씨가 좋네요",
-    tags: "축구",
-    location: "부산",
-  },
-  {
-    proFileImg: "/asset/profile.png",
-    userId: "ID123ABC",
-    feedImg: "/asset/feedpicture.png",
-    userInfo: "오늘은 날씨가 좋네요",
-    tags: "농구",
-    location: "서울",
-  },
-  {
-    proFileImg: "/asset/profile.png",
-    userId: "ID888888",
-    feedImg: "/asset/test.png",
-    userInfo: "팬티 단돈 99000원",
-    tags: "농구",
-    location: "서울",
-  },
-  {
-    proFileImg: "/asset/profile.png",
-    userId: "IDABC",
-    feedImg: "/asset/feedpicture.png",
-    userInfo: "오늘은 날씨가 좋네요",
-    tags: "농구",
-    location: "서울",
-  },
-  {
-    proFileImg: "/asset/profile.png",
-    userId: "ID888888",
-    feedImg: "/asset/test.png",
-    userInfo: "팬티 단돈 99000원",
-    tags: "농구",
-    location: "서울",
-  },
-  {
-    proFileImg: "/asset/profile.png",
-    userId: "IDABC",
-    feedImg: "/asset/feedpicture.png",
-    userInfo: "오늘은 날씨가 좋네요",
-    tags: "농구",
-    location: "서울",
-  },
-  {
-    proFileImg: "/asset/profile.png",
-    userId: "ID888888",
-    feedImg: "/asset/test.png",
-    userInfo: "팬티 단돈 99000원",
-    tags: "농구",
-    location: "서울",
-  },
-  {
-    proFileImg: "/asset/profile.png",
-    userId: "IDABC",
-    feedImg: "/asset/feedpicture.png",
-    userInfo: "오늘은 날씨가 좋네요",
-    tags: "농구",
-    location: "서울",
-  },
-];
-
-localStorage.setItem("tempData", JSON.stringify(tempData));
-const tempDataString = localStorage.getItem("tempData");
-const tempDatas = tempDataString ? JSON.parse(tempDataString) : [];
-
 const Feed = ({ selectedFilter }: FeedProps) => {
-  const [allData, setAllData] = useState<UserData[]>(tempDatas);
-  const [page, setPage] = useState(2);
+  const [allFeedData, setAllFeedData] = useState<FeedData[]>([]);
+  const [allUserData, setAllUserData] = useState<UserData[]>([]);
+
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
   const [ref, inView] = useInView();
-
-  const [abc, setABC] = useState();
-
-  useEffect(() => {
-    if (inView) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  }, [inView]);
-  const PAGE_SIZE = 4;
-  const startIndex = (page - 1) * PAGE_SIZE;
-  const chunkData = allData.slice(0, startIndex + PAGE_SIZE);
-
-  const filteredData = selectedFilter.includes("전체")
-    ? chunkData
-    : chunkData.filter(
-        (user) =>
-          selectedFilter.includes(user.tags) ||
-          selectedFilter.includes(user.location)
-      );
 
   const location = useLocation();
   const currentFeed =
     location.pathname === "/" ? "/feedformind" : "/feedformcor";
   const currentDetail =
     location.pathname === "/" ? "/feeddetailind" : "/feeddetailcor";
+  const currentPage = location.pathname === "/" ? "/" : "/store";
+
+  const PAGE_SIZE = 4; // 페이지당 데이터 개수
 
   const getMainListData = async () => {
     try {
-      const response = await globalAxios.get("/feed/detail/1");
-      const getData = response.data;
-      //setAllData(getData.data);
-      setABC(getData.data);
-      console.log("response >>", getData);
+      setLoading(true);
+
+      // 서버에서 페이지네이션을 고려하여 데이터를 가져옴
+      const response = await globalAxios.get(currentPage, {
+        params: { page, pageSize: PAGE_SIZE },
+      });
+      const getData = response.data.feedList;
+
+      if (getData.length === 0) {
+        // 더 이상 데이터가 없는 경우
+        setHasMore(false);
+      } else {
+        // 이전 데이터와 새로운 데이터 합치기
+        setAllFeedData((prevData) => [...prevData, ...getData]);
+        setPage((prevPage) => prevPage + 1);
+      }
+
+      setLoading(false);
+    } catch (err) {
+      console.log("Error >>", err);
+      setLoading(false);
+    }
+  };
+
+  const getUserData = async () => {
+    try {
+      const response = await globalAxios.get("/users");
+      const getData = response.data.content;
+      setAllUserData(getData);
     } catch (err) {
       console.log("Error >>", err);
     }
   };
 
   useEffect(() => {
-    getMainListData();
-  }, []);
+    if (inView && !loading && hasMore) {
+      getMainListData();
+      getUserData();
+    }
+    console.log(allUserData);
+    console.log(allFeedData);
+  }, [inView, loading, hasMore]);
+
+  const filteredData = allFeedData.filter((user) => {
+    const hasExerciseTag =
+      selectedFilter.includes("운동전체") ||
+      selectedFilter.some((filter) => user.relatedTags.includes(filter));
+    const hasLocationTag =
+      selectedFilter.includes("지역전체") ||
+      selectedFilter.some((tag) => user.relatedTags.includes(tag));
+
+    if (
+      selectedFilter.includes("운동전체") &&
+      selectedFilter.includes("지역전체")
+    ) {
+      return true; // 운동전체와 지역전체가 선택된 경우 모든 데이터 표시
+    } else if (selectedFilter.includes("운동전체") && hasLocationTag) {
+      return true; // 운동전체만 선택하고 지역 필터에 해당하는 데이터 표시
+    } else if (selectedFilter.includes("지역전체") && hasExerciseTag) {
+      return true; // 지역전체만 선택하고 운동 필터에 해당하는 데이터 표시
+    } else {
+      // 지역태그와 운동태그를 각각 선택한 경우
+      const selectedExerciseTags = selectedFilter.filter(
+        (tag) => tag !== "운동전체"
+      );
+      const selectedLocationTags = selectedFilter.filter(
+        (tag) => tag !== "지역전체"
+      );
+      const exerciseMatch = selectedExerciseTags.every((tag) =>
+        user.relatedTags.includes(tag)
+      );
+      const locationMatch = selectedLocationTags.every((tag) =>
+        user.relatedTags.includes(tag)
+      );
+
+      return exerciseMatch && locationMatch;
+    }
+  });
 
   return (
     <section className="flex justify-center flex-col items-center ">
@@ -259,30 +149,36 @@ const Feed = ({ selectedFilter }: FeedProps) => {
         </div>
 
         <section className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4  mb-24">
-          {filteredData.map((user) => (
-            <article key={user.userId} className="  mb-4 min-w-[250px]">
-              <div className="flex mb-4">
-                <img
-                  src={user.proFileImg}
-                  alt={`ProfileImg of ${user.userId}`}
-                  className="rounded-full border mr-2 w-10 h-10"
-                />
-                <div className="ml-2">
-                  <p>{user.userId}</p>
-                  <p className="text-gray-400">{user.userInfo}</p>
-                </div>
-              </div>
-              <Link to={currentDetail}>
-                <div>
+          {filteredData.map((feed, idx) => {
+            const user = allUserData.find(
+              (userData) => userData.nickname === feed.userNickname
+            );
+
+            return (
+              <article key={idx} className="  mb-4 min-w-[250px]">
+                <div className="flex mb-4">
                   <img
-                    src={user.feedImg}
-                    alt={`FeedImg of ${user.userId}`}
-                    className="w-[13vw] h-[30vh] object-cover min-w-[250px] border"
+                    src={feed.profileImageUrl}
+                    alt={`ProfileImg of ${feed.feedId}`}
+                    className="rounded-full border mr-2 w-10 h-10"
                   />
+                  <div className="ml-2">
+                    <p>{feed.userNickname}</p>
+                    {user && <p className="text-gray-400">{user.bio}</p>}
+                  </div>
                 </div>
-              </Link>
-            </article>
-          ))}
+                <Link to={`${currentDetail}/${feed.feedId}`}>
+                  <div>
+                    <img
+                      src={feed.images[0].imageUrl}
+                      alt={`FeedImg of ${feed.feedId}`}
+                      className="w-[13vw] h-[30vh] object-cover min-w-[250px] border"
+                    />
+                  </div>
+                </Link>
+              </article>
+            );
+          })}
         </section>
       </div>
 
