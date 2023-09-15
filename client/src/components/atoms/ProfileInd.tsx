@@ -87,6 +87,8 @@ function ProfileInd({ feedId }: ProfileIndProps) {
     fetcFeedData();
   }, []);
 
+  console.log("피드 유저 데터",feedUserData)
+
   const handleDelete = async (feedId:number) => {
     try {
         const response = await globalAxios.delete(`/feed/detail/${feedId}`);
@@ -113,7 +115,7 @@ return(
 <div className='max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8'>
   <div className="grid md:grid-cols-2 gap-4 ">
 
-  <Link to="/profile/1">
+  <Link to={`/profile/${feedId}`} >
   <div className="flex items-center">
     <img src={feedUserData?.profileImageUrl} className=" mr-2 w-10 h-10 rounded-full" />
     <div className="flex flex-col">
