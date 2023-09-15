@@ -108,7 +108,7 @@ public class FeedController {
         FeedResponseDto responseDto = feedMapper.feedToFeedResponseDto(feed);
         responseDto.setLikeCount(likeCount);
 
-        return new ResponseEntity<>(feedMapper.feedToFeedResponseDto(feed), HttpStatus.OK);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     // 피드 삭제(이미지도 함께 삭제됨)
