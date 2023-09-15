@@ -6,12 +6,12 @@ import com.mainproject.server.exception.ExceptionCode;
 import com.mainproject.server.follow.entity.Follow;
 import com.mainproject.server.follow.repository.FollowRepository;
 import com.mainproject.server.image.service.ImageService;
+import com.mainproject.server.notification.entity.Notification;
+import com.mainproject.server.notification.service.NotificationService;
 import com.mainproject.server.user.dto.UserDto;
 import com.mainproject.server.user.entity.User;
 import com.mainproject.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +26,7 @@ public class FollowService {
     private final FollowRepository followRepository;
     private final ImageService imageService;
     private final UserService userService;
+    private final NotificationService notificationService;
 
     // 특정 사용자가 다른 사용자를 팔로우 또는 언팔로우하는 기능을 제공
     @Transactional
@@ -58,6 +59,12 @@ public class FollowService {
             loggedInUser.hasFollowing(); // 로그인한 사용자의 팔로잉 카운트 증가
             preyUser.hasFollowed(); // 팔로우 대상 사용자의 팔로워 카운트 증가
         }
+
+        // 팔로우 알림 내용 생성
+        String content = loggedInUser.getNickname() + "님이 팔로우했습니다.";
+
+        // 팔로우 대상 사용자에게 알림 보내기
+        notificationService.send(preyUser, Notification.NotificationType.FOLLOW, content, "/followers/{userId}");
 
         // 새로운 팔로우 상태를 반환 (true: 팔로우한 경우, false: 언팔로우한 경우).
         return !isFollowing;
@@ -138,4 +145,18 @@ public class FollowService {
                 // 필요한 다른 정보도 추가 가능
                 .build();
     }
+
+    // 팔로우 알림
+    @Transactional
+    public void sendFollowNotification(User follower, User follow) {
+        // 팔로워의 닉네임을 가져옴
+        String followerNickname = follower.getNickname();
+
+        // 팔로우 알림 내용을 동적으로 생성
+        String content = followerNickname + "님이 팔로우했습니다.";
+
+        // 팔로우 알림을 보내기 위해 NotificationService의 send 메서드를 호출
+        notificationService.send(follower, Notification.NotificationType.FOLLOW, content, "/followers/{userId}");
+    }
+
 }

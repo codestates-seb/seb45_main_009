@@ -25,8 +25,8 @@ public class Feed {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long feedId;
 
-    @Column
-    private String nickname;
+//    @Column
+//    private String nickname;
 
     @Column
     private String location;
