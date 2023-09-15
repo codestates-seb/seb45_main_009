@@ -1,31 +1,22 @@
-import { useState, useRef, useEffect } from "react";
-import { FaEllipsisH } from "react-icons/fa";
+import { useState, useEffect } from "react";
 import globalAxios from "../../data/data";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ResponseDataType } from "../../types/types";
-import UpdateDeleteModal from "../features/UpdateDeleteModal";
-import ModalBackDrop from "../features/ModalBackDrop";
+import { UserInfo } from "../../types/types";
 
 interface ProfileIndProps {
   feedId: number;
   responseData: ResponseDataType | null;
+  userInfo: UserInfo;
+  isMyFeed: boolean;
 }
 
-function ProfileInd({ feedId, responseData }: ProfileIndProps) {
+function ProfileInd({ feedId, responseData, userInfo, isMyFeed }: ProfileIndProps) {
   const navigate = useNavigate();
 
-  // 모달창
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-    console.log("모달 열기");
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
+  //로딩 상태 - 팔로우 적용 때문에 깜빡거림 방지
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => console.log("로딩상태", isLoading), [isLoading]);
   // 팔로우
   const [isFollowing, setIsFollowing] = useState(false);
 
@@ -40,65 +31,65 @@ function ProfileInd({ feedId, responseData }: ProfileIndProps) {
     }
   };
 
-  const handleDelete = async (feedId: number) => {
+  const handleNavigateProfile = () => {
+    navigate(`/profile/${responseData?.userId}`);
+  };
+
+  const checkFollowState = async () => {
     try {
-      const response = await globalAxios.delete(`/feed/detail/${feedId}`);
-      console.log("글이 성공적으로 삭제되었습니다.", response);
-      alert("피드 삭제 완료");
-      navigate("/");
+      const response = await globalAxios.get(`/follow/following/${userInfo.userId}`);
+      console.log("checkFollow 성공", response.data);
+      if (response.data.some((item: any) => item.userId === responseData?.userId)) {
+        setIsFollowing(true);
+      } else {
+        setIsFollowing(false);
+      }
     } catch (error) {
-      console.error("글 삭제 실패:", error);
+      console.log("checkFollow 실패 error:", error);
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 80);
     }
-
-    handleCloseModal();
   };
 
-  const handleEdit = () => {
-    console.log(feedId);
-    handleCloseModal();
-  };
-
-  const handleBackClick = () => {
-    console.log("모달닫기");
-    setIsModalOpen(!isModalOpen);
-  };
+  useEffect(() => {
+    checkFollowState();
+  }, [userInfo, responseData]);
   return (
     <div className="max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8">
-      <div className="grid md:grid-cols-2 gap-4 ">
-        <Link to={`/profile/${responseData?.userId}`}>
-          <div className="flex items-center">
-            <img src={responseData?.profileImageUrl} className=" mr-2 w-10 h-10 rounded-full" alt="profileImage" />
-            <div className="flex flex-col">
-              <div className="font-bold text-lg ">{responseData?.userNickname}</div>
-              <div>{responseData?.bio}</div>
-            </div>
+      <div className="flex flex-row justify-between">
+        <div className="flex items-center">
+          <img
+            src={responseData?.profileImageUrl}
+            className=" mr-2 w-10 h-10 rounded-full hover:cursor-pointer"
+            alt="profileImage"
+            onClick={handleNavigateProfile}
+          />
+          <div className="flex flex-col">
+            <span className="text-lg hover:cursor-pointer" onClick={handleNavigateProfile}>
+              {responseData?.nickname}
+            </span>
+            <span className="opacity-60 text-[13px] max-mobile:text-[12px]">{responseData?.bio}</span>
           </div>
-        </Link>
-
-        <div className="flex items-center justify-end md:justify-start">
-          <div className="flex flex-row">
+        </div>
+        {isMyFeed ? null : (
+          <div className="flex items-center justify-end">
             <button
-              className=" mr-4 w-full sm:w-[200px] h-[30px] rounded-[4px] text-[14px] font-medium bg-btn-color text-white"
+              className={`whitespace-nowrap ml-2 rounded-[6px] text-[14px] 
+            py-1.5 px-6 hover: font-medium transition  
+            ${
+              isFollowing
+                ? "text-[#000000] bg-[#efefef] hover:bg-[#dbdbdb]"
+                : "bg-[#0095f6] hover:bg-[#1877f2] text-white "
+            }`}
               onClick={handleFollow}
+              style={{ opacity: isLoading ? 0 : 1 }}
             >
               {isFollowing ? "팔로잉" : "팔로우"}
             </button>
-            <div className="relative">
-              {isModalOpen ? (
-                <>
-                  <div
-                    className={`fixed top-0 left-0 w-full h-full z-100 flex justify-center items-center`}
-                    onClick={handleBackClick}
-                  ></div>
-                  <UpdateDeleteModal onDelete={handleDelete} onEdit={handleEdit} feedId={feedId} className="absolute" />
-                </>
-              ) : null}
-              <button onClick={handleOpenModal}>
-                <FaEllipsisH className="relative z-10" />
-              </button>
-            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
