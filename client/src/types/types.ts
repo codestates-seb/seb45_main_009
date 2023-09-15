@@ -3,6 +3,14 @@ export interface UserInfo {
   userNickname: string;
   userId: number;
 }
+
+export interface RootState {
+  login: {
+    isAuthenticated: boolean;
+    userInfo: UserInfo;
+  };
+}
+
 export interface ImageData {
   file: File | null;
   src: string;
@@ -25,4 +33,19 @@ export interface RootState {
     isAuthenticated: boolean;
     userInfo: UserInfo;
   };
+}
+
+export interface ResponseDataType {
+  feedId: number;
+  userId: number;
+  userNickname: string;
+  profileImageUrl: string;
+  content: string;
+  bio: string;
+  relatedTags: string[];
+  images: Array<{
+    imageId: number;
+    imageUrl: string;
+    imageTags: any[];
+  }>;
 }
