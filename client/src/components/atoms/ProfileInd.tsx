@@ -1,12 +1,8 @@
-import { useState, useRef, useEffect } from "react";
-import { FaEllipsisH } from "react-icons/fa";
+import { useState, useEffect } from "react";
 import globalAxios from "../../data/data";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ResponseDataType } from "../../types/types";
-import UpdateDeleteModal from "../features/UpdateDeleteModal";
-import ModalBackDrop from "../features/ModalBackDrop";
 import { UserInfo } from "../../types/types";
-import { type } from "os";
 
 interface ProfileIndProps {
   feedId: number;

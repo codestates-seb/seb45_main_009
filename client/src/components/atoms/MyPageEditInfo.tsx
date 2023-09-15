@@ -3,13 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import TextareaAutosize from "react-textarea-autosize";
 import globalAxios from "../../data/data";
 import { MdDelete } from "react-icons/md";
-import { regionCategory } from "../../data/category";
-import upload from "../../assets/images/upload.jpeg";
 import CommonInput from "./CommonInput";
 import { useDispatch, useSelector } from "react-redux";
 import { UserInfo, RootState } from "../../types/types";
 import profileDefault from "../../assets/images/profileDefault.png";
-import styled from "styled-components";
 import ConfirmButton from "./ConfirmButton";
 interface userData {
   nickname: string;

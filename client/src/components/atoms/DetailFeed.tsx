@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-import { RiAlarmWarningFill } from "react-icons/ri";
 import { AiFillPlusCircle } from "react-icons/ai";
 import globalAxios from "../../data/data";
 import { ResponseDataType, UserInfo, RootState } from "../../types/types";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { LuSiren } from "react-icons/lu";
 //////태그 모달 시작
 function TagModal({
   title,
