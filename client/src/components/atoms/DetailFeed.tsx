@@ -2,18 +2,19 @@ import { useState, useRef, useEffect } from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { RiAlarmWarningFill } from "react-icons/ri";
 import { AiFillPlusCircle } from "react-icons/ai";
-import globalAxios from '../../data/data'
-
-interface DetailFeedProps {
-  feedId: number;
-}
-
+import globalAxios from "../../data/data";
+import { ResponseDataType } from "../../types/types";
+import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { RootState } from "../../types/types";
+//////태그 모달 시작
 function TagModal({
   title,
   size,
   price,
   top,
-  left
+  left,
 }: {
   title: string;
   size: string;
@@ -21,7 +22,6 @@ function TagModal({
   top: string;
   left: string;
 }) {
-  
   // 위아래
   const modalTopPosition = parseInt(top) > 50 ? "-60px" : "25px";
   // 좌우
@@ -38,51 +38,63 @@ function TagModal({
     </div>
   );
 }
+//////태그 모달 끝
 
-function DetailFeedInd({ feedId }: DetailFeedProps) {
-  type ResponseDataType = {
-    feedId: number;
-    content: string;
-    relatedTags: string[];
-    images: Array<{
-      imageId: number;
-      imageUrl: string;
-      imageTags: any[];
-    }>;
+interface DetailFeedProps {
+  feedId: number;
+  responseData: ResponseDataType | null;
+}
+function DetailFeedInd({ feedId, responseData }: DetailFeedProps) {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const userInfo = useSelector((state: RootState) => state.login.userInfo);
+  // 좋아요
+  const [isLiked, setIsLiked] = useState<boolean>(false);
+  //좋아요 리스트
+  const [likeList, setLikeList] = useState<number[]>([]);
+
+  const handleLikeClick = async () => {
+    console.log("게시물 좋아요");
+    try {
+      const response = await globalAxios.post(`/feed/detail/${feedId}/like`);
+      console.log("좋아요 성공:", response);
+      getLikeList();
+    } catch (error) {
+      console.error("좋아요 실패", error);
+    }
   };
 
-  // 피드 가져오기
-
-  const [responseData, setResponseData] = useState<ResponseDataType | null>(null);
-
-  useEffect(() => {
-    async function fetcFeedData() {
-      try {
-        const response = await globalAxios.get(`/feed/detail/${feedId}`);
-        if (response.status === 200) {
-          setResponseData(response.data);
-        }
-      } catch (error) {
-        console.error("API 요청 실패:", error);
+  const getLikeList = async () => {
+    try {
+      const response = await globalAxios.get(`/feed/detail/${feedId}/likeduser`);
+      console.log("좋아요 리스트 get요청 성공", response.data);
+      setLikeList(response.data);
+      if (response.data.includes(userInfo.userId)) {
+        setIsLiked(true);
+      } else {
+        setIsLiked(false);
       }
+    } catch (error) {
+      console.log("좋아요 리스트 get실패", error);
     }
-    fetcFeedData();
+  };
+
+  //좋아요 리스트 get요청
+  useEffect(() => {
+    getLikeList();
   }, []);
 
-  // 좋아요
-  const [isLiked, setIsLiked] = useState(false);
-  const handleLikeClick = () => {
-    console.log("게시물 좋아요");
-    setIsLiked(true);
-  };
-
-  const handleLikeCancelClick = () => {
-    console.log("게시물 좋아요 취소");
-    setIsLiked(false);
-  };
-
-  const inappropriateviewBtn = () => {
-    console.log("게시물 신고");
+  const handleReport = async () => {
+    try {
+      const response = await globalAxios.post(`/feed/detail/${feedId}/report`, {
+        reason: "일단 내용은 하드코딩으로",
+      });
+      console.log("신고 성공", response);
+      alert("신고가 완료되었습니다");
+    } catch (error: any) {
+      console.log("신고 실패", error.response.data);
+      alert(error.response.data.message);
+    }
   };
 
   // 정보 태그 모달창
@@ -91,10 +103,8 @@ function DetailFeedInd({ feedId }: DetailFeedProps) {
     tagIndex: number;
   } | null>(null);
 
-
   return (
     <div className="w-full sm:max-w-screen-sm  mx-auto px-4 sm:px-4 lg:px-8">
-      
       {responseData?.images.map((image, index) => (
         <div key={index} className="mb-8 relative">
           <img src={image.imageUrl} alt={`Image ${index}`} className="w-full h-auto" />
@@ -105,7 +115,7 @@ function DetailFeedInd({ feedId }: DetailFeedProps) {
               <div
                 key={tagIndex}
                 className="w-[20px] h-[20px] rounded-full absolute"
-                style={{ top: `${top}%`,  left: `${left}%` }}
+                style={{ top: `${top}%`, left: `${left}%` }}
                 onMouseEnter={() => setShowTagModal({ photoIndex: index, tagIndex })}
                 onMouseLeave={() => setShowTagModal(null)}
               >
@@ -119,28 +129,26 @@ function DetailFeedInd({ feedId }: DetailFeedProps) {
                     top={`${top}%`}
                     left={`${left}%`}
                   />
-                  )}
+                )}
               </div>
             );
           })}
         </div>
       ))}
 
-      <div className="font-bold text-gray-400 text-sm mt-[10px]">
-        2022
-      </div>
+      <div className="font-bold text-gray-400 text-sm mt-[10px]">2022</div>
       <div className=" mt-[20px]">{responseData?.content}</div>
-      <div className=" mt-[20px]">
+      <div className="flex flex-row items-center mt-[20px]">
         {isLiked === false ? (
-          <AiOutlineHeart onClick={handleLikeClick} />
+          <AiOutlineHeart className="cursor-pointer" onClick={handleLikeClick} />
         ) : (
-          <AiFillHeart onClick={handleLikeCancelClick} />
+          <AiFillHeart className="cursor-pointer" onClick={handleLikeClick} />
         )}
+
+        <div className="ml-2 pb-[2px]">{likeList.length}</div>
       </div>
       <div className=" mt-[40px]">
-        <div className="font-bold text-gray-400 text-sm mb-[10px]">
-          연관태그
-        </div>
+        <div className="font-bold text-gray-400 text-sm mb-[10px]">연관태그</div>
         <div>
           {responseData?.relatedTags.map((tag, index) => (
             <span className=" p-1 bg-blue-100 rounded  mr-2" key={index}>
@@ -150,37 +158,38 @@ function DetailFeedInd({ feedId }: DetailFeedProps) {
         </div>
 
         <div className="mt-[40px] flex flex-wrap">
-          
-          {
-            responseData?.images.map((image, imageIndex) => (
-              image.imageTags.map((tag, tagIndex) => (
-                <div className="border rounded flex-grow mr-4 mb-4 p-2 text-sm" key={`${imageIndex}-${tagIndex}`}>
-                  <div className="flex">
-                    <div className="flex-none" style={{ width: "70px" }}>제품명 : </div>
-                    <div className="flex-grow font-bold">{tag.productName}</div>
+          {responseData?.images.map((image, imageIndex) =>
+            image.imageTags.map((tag, tagIndex) => (
+              <div className="border rounded flex-grow mr-4 mb-4 p-2 text-sm" key={`${imageIndex}-${tagIndex}`}>
+                <div className="flex">
+                  <div className="flex-none" style={{ width: "70px" }}>
+                    제품명 :{" "}
                   </div>
-                  <div className="flex">
-                    <div className="flex-none " style={{ width: "70px" }}>가격 : </div>
-                    <div>₩ {parseInt(tag.productPrice)}</div>
-                  </div>
-                  <div className="flex">
-                    <div className="flex-none" style={{ width: "70px" }}>추가정보 : </div>
-                    <div className="text-btn-color">{tag.productInfo}</div>
-                  </div>
+                  <div className="flex-grow font-bold">{tag.productName}</div>
                 </div>
-              ))
+                <div className="flex">
+                  <div className="flex-none " style={{ width: "70px" }}>
+                    가격 :{" "}
+                  </div>
+                  <div>₩ {parseInt(tag.productPrice)}</div>
+                </div>
+                <div className="flex">
+                  <div className="flex-none" style={{ width: "70px" }}>
+                    추가정보 :{" "}
+                  </div>
+                  <div className="text-btn-color">{tag.productInfo}</div>
+                </div>
+              </div>
             ))
-          }
+          )}
         </div>
-
-    </div>
+      </div>
 
       <div className="flex justify-end mt-4">
-        <button onClick={inappropriateviewBtn} className="focus:outline-none">
+        <button onClick={handleReport} className="focus:outline-none">
           <RiAlarmWarningFill />
         </button>
       </div>
-
     </div>
   );
 }

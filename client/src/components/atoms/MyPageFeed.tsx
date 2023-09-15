@@ -43,7 +43,6 @@ interface RootState {
 
 const MyPageFeed = () => {
   const userInfo = useSelector((state: RootState) => state.login.userInfo);
-  console.log(userInfo);
 
   const [allFeedData, setAllFeedData] = useState<FeedData[]>([]);
   const [allUserData, setAllUserData] = useState<UserData[]>([]);
@@ -128,8 +127,6 @@ const MyPageFeed = () => {
   const userFeed = allFeedData.filter(
     (userData) => userData.userNickname === userInfo.userNickname
   );
-
-  console.log(userFeed);
 
   return (
     <section>
