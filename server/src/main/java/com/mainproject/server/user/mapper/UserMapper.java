@@ -20,7 +20,6 @@ public interface UserMapper {
      User patchToUser(UserDto.PatchDto patchDto);
 
 
-
      @Mapping(source = "profileimg.imageUrl", target = "profileimg")
      UserDto.ResponseDto userToResponse(User user);
 

@@ -5,3 +5,5 @@ r
 java:S1192H"PDefine a constant instead of duplicating this literal "/feed/detail/**" 3 times.(ÎƒÔ¹ûÿÿÿÿ8¡”±£¦1
 i
 java:S1192@"GDefine a constant instead of duplicating this literal "STORE" 12 times.(éÍìûÿÿÿÿ8ÔÆãÂ¨1
+c
+java:S1192B"FDefine a constant instead of duplicating this literal "ADMIN" 4 times.(Ê‘éÑ8Áğæ‘©1
