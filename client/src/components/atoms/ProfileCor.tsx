@@ -1,94 +1,143 @@
 import { useState, useRef, useEffect } from "react";
-import { BsFillBookmarkStarFill } from 'react-icons/bs';
-import { FaEllipsisH } from 'react-icons/fa';
+import { FaEllipsisH } from "react-icons/fa";
+import globalAxios from "../../data/data";
+import { Link, useNavigate } from "react-router-dom";
 
+const Modal = ({ onClose, onDelete, onEdit, feedId }: any) => {
+  const modalRef = useRef<HTMLDivElement | null>(null);
 
-  const userData = [
-    {
-      username: '버퍼짐 휘트니스',
-      useremail: 'gym@gmail.com',
-      pw: '1234',
-      userphoto : '/asset/gym.png',
-      useraddress : '서울특별시 노원역 노원역점',
-      userintroduction : '헬스 크로스핏'
-    }
-  ];
-
-  const Modal = ({ onClose } :any) => {
-    const modalRef = useRef<HTMLDivElement | null>(null);
-    // const modalRef = useRef(null);
-
-    useEffect(() => {
-      // 클릭 이벤트를 처리하는 함수
-      const handleClickOutside = (event: MouseEvent) => {
-          if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-              onClose();
-          }
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        onClose();
       }
+    };
 
-      // 이벤트 리스너를 문서에 추가
-      document.addEventListener("mousedown", handleClickOutside);
-      
-      // 컴포넌트가 언마운트될 때 이벤트 리스너 제거
-      return () => {
-          document.removeEventListener("mousedown", handleClickOutside);
-      };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, [onClose]);
 
-    return(
-      <div ref={modalRef} className='flex flex-col border rounded-[4px] w-[100px] 
-        absolute  md:right-[60px] right-[100px] md:top-[200px] top-[280px] '>
-        <button onClick={onClose} className='border-b'>삭제</button>
-        <button onClick={onClose}>수정</button>
-      </div>
-      )
-  };
-
-function ProfileCor() {
-    // 모달창 열기 닫기
-    const [isModalOpen, setModalOpen] = useState(false);
-
-    const handleOpenModal = () => {
-      setModalOpen(true);
-      console.log("모달 열기")
-    };
-    
-    const handleCloseModal = () => {
-      setModalOpen(false);
-    };
-
-    // 팔로우
-    const followClick =() =>{
-      console.log('팔로우하기')
-    }
-  return(
-  <div className='max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8'>
-    <div className="grid md:grid-cols-2 gap-4 items-center ">
-    <div className="flex items-center">
-      <img src={userData[0].userphoto} className="w-[80px] h-[80px] rounded-full mr-4 " />
-      <div className="flex flex-col">
-        <div className="grid grid-cols-[3fr,1fr] items-center">
-          <div className="font-bold text-xl truncate ">{userData[0].username}</div>
-          <div><BsFillBookmarkStarFill className="text-btn-color ml-[10px]" /></div>
-      </div>
-        <div className="text-gray-400 text-xs ">
-          <div className="mt-[2px]">{userData[0].useraddress}</div>
-          <div>{userData[0].userintroduction}</div>
-        </div>
-      </div>
-    </div>
-    <div className="flex items-center justify-end md:justify-start">
-      <button className="ml-[200px] mr-4 w-[100px] h-[30px] rounded-[4px] text-[14px] font-medium bg-btn-color text-white" onClick={followClick}>팔로우</button>
-      <button onClick={handleOpenModal}  className='relative'>
-      <FaEllipsisH />
+  return (
+    <div ref={modalRef} className="flex flex-col border rounded-[4px] w-[100px]">
+      <button onClick={onDelete} className="border-b">
+        삭제
       </button>
-      {isModalOpen && 
-        <Modal onClose={handleCloseModal} /> 
-      }
+      <Link to={`/feedupdateind/${feedId}`}>
+        <button onClick={onEdit}>수정</button>
+      </Link>
     </div>
-    </div>
-  </div>
-  ) 
+  );
+};
+
+interface ProfileCorProps {
+  feedId: number;
 }
 
+function ProfileCor({ feedId }: ProfileCorProps) {
+  // 모달창
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setModalOpen(true);
+    console.log("모달 열기");
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
+
+  // 팔로우
+  const [isFollowing, setIsFollowing] = useState(false);
+
+  const followClick = () => {
+    if (isFollowing) {
+      console.log("팔로우 취소");
+    } else {
+      console.log("팔로우하기");
+    }
+    // 팔로우 상태 토글
+    setIsFollowing(!isFollowing);
+  };
+
+  type ResponseDataType = {
+    feedId: number;
+    userNickname: string;
+    profileImageUrl: string;
+    content: string;
+    relatedTags: string[];
+    images: Array<{
+      imageId: number;
+      imageUrl: string;
+      imageTags: any[];
+    }>;
+  };
+
+  const [feedUserData, setFeedUserData] = useState<ResponseDataType | null>(null);
+
+  useEffect(() => {
+    async function fetcFeedData() {
+      try {
+        const response = await globalAxios.get(`/feed/detail/${feedId}`);
+        if (response.status === 200) {
+          setFeedUserData(response.data);
+        }
+      } catch (error) {
+        console.error("API 요청 실패:", error);
+      }
+    }
+    fetcFeedData();
+  }, []);
+
+  console.log("피드 유저 데터",feedUserData)
+
+  const handleDelete = async (feedId:number) => {
+    try {
+      const response = await globalAxios.delete(`/feed/detail/${feedId}`);
+
+      if (response.status === 200) {
+        console.log("글이 성공적으로 삭제되었습니다.");
+      }
+    } catch (error) {
+      console.error("글 삭제 실패:", error);
+    }
+
+    handleCloseModal();
+  };
+
+  const handleEdit = () => {
+    console.log(feedId);
+    handleCloseModal();
+  };
+
+return(
+<div className='max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8'>
+  <div className="grid md:grid-cols-2 gap-4 ">
+
+  <Link to={`/profile/${feedId}`} >
+  <div className="flex items-center">
+    <img src={feedUserData?.profileImageUrl} className=" mr-2 w-10 h-10 rounded-full" />
+    <div className="flex flex-col">
+      <div className="font-bold text-lg ">{feedUserData?.userNickname}</div>
+      <div>{feedUserData?.content}</div>
+    </div>
+  </div>
+  </Link>
+
+  <div className="flex items-center justify-end md:justify-start">
+    <button className=" mr-4 w-full sm:w-[200px] h-[30px] rounded-[4px] text-[14px] font-medium bg-btn-color text-white" onClick={followClick}>
+      {isFollowing ? '팔로잉' : '팔로우'} 
+    </button>
+    {
+            isModalOpen ? 
+            <Modal onClose={handleCloseModal} onDelete={handleDelete} onEdit={handleEdit}/> :
+            <button onClick={handleOpenModal}><FaEllipsisH /></button>
+          }
+  </div>
+
+  </div>
+</div>
+) 
+}
 export default ProfileCor;

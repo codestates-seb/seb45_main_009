@@ -8,11 +8,6 @@ interface ProfileIndProps {
   }
 
 function UserProfile({ feedId }: ProfileIndProps){
-    // type FeedType = {
-    //     feedId: number;
-    //     content: string;
-    //     images: string[];
-    // };
 
     type ResponseType = {
         "nickname": string,
