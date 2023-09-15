@@ -15,11 +15,12 @@ public interface FeedMapper {
     @Mapping(source = "feedId", target = "feedId")
     @Mapping(source = "content", target = "content")
     @Mapping(source = "user.nickname", target = "nickname")
+    @Mapping(source = "user.location", target = "location")
+    @Mapping(source = "user.bio", target = "bio")
+    @Mapping(source = "user.userId", target = "userId")
     @Mapping(source = "user.profileimg.imageUrl", target = "profileImageUrl")
     @Mapping(source = "relatedTags", target = "relatedTags")
     @Mapping(source = "images", target = "images")
-    @Mapping(source = "user.bio", target = "bio")
-    @Mapping(source = "user.userId", target = "userId")
     FeedResponseDto feedToFeedResponseDto(Feed feed);
 
     List<FeedResponseDto> feedToFeedResponseDtos(List<Feed> feeds);
