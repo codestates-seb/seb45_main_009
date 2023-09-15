@@ -14,7 +14,7 @@ public interface FeedMapper {
     //    FeedMapper INSTANCE = Mappers.getMapper(FeedMapper.class);
     @Mapping(source = "feedId", target = "feedId")
     @Mapping(source = "content", target = "content")
-    @Mapping(source = "user.nickname", target = "userNickname")
+    @Mapping(source = "user.nickname", target = "nickname")
     @Mapping(source = "user.location", target = "location")
     @Mapping(source = "user.profileimg.imageUrl", target = "profileImageUrl")
     @Mapping(source = "relatedTags", target = "relatedTags")

@@ -81,6 +81,7 @@ public class UserDto {
         private String password;
         private String sport;
 
+
     }
 
     @Getter
@@ -93,6 +94,13 @@ public class UserDto {
         private Long userId;
         private String nickname;
         private String profileimg;
+        private String bio;
+        private String price;
+        private Integer height;
+        private Integer weight;
+        private Long feedCount;
+        private Long followerCount;
+        private Long followCount;
         private List<String> roles;
     }
 
