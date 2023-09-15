@@ -4,6 +4,7 @@ package com.mainproject.server.user.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mainproject.server.image.entity.Image;
 import com.mainproject.server.userprofile.entity.UserProfile;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 

@@ -1,10 +1,6 @@
 
 R
-java:S1066ğ"/Merge this if statement with the enclosing one.(çéËüÿÿÿÿ8Æ™‚“©1
-_
-java:S4973‚"<Strings and Boxed types should be compared using "equals()".(ÖÂØ½şÿÿÿÿ8É™‚“©1
-Š
-java:S1845¡"lRename method "verifyExistNickname" to prevent any misunderstanding/clash with method "verifyExistNickName".(Ò«Œà8Îš‚“©1
+java:S1066ò"/Merge this if statement with the enclosing one.(çéËüÿÿÿÿ8üÄÀ–©1
 ;
-java:S2119"Save and re-use this "Random".(¼İÅf8Şš‚“©1
-^	java:S125Ú"<This block of commented-out lines of code should be removed.(çóşÈÿÿÿÿÿ8áš‚“©1
+java:S2119‘"Save and re-use this "Random".(¼İÅf8’ÅÀ–©1
+^	java:S125Ü"<This block of commented-out lines of code should be removed.(çóşÈÿÿÿÿÿ8•ÅÀ–©1
