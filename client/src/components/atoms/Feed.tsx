@@ -95,7 +95,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
   const getUserData = async () => {
     try {
       const response = await globalAxios.get("/users");
-      const getData = response.data.content;
+      const getData = response.data;
       setAllUserData(getData);
       dispatch(setAllUserDatas(getData));
     } catch (err) {
