@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import globalAxios from '../../data/data'
 import { Link } from "react-router-dom";
 import { AiFillHeart } from "react-icons/ai";
+import { BsFillBookmarkStarFill } from "react-icons/bs";
+import { MdAttachMoney } from "react-icons/md";
+
 
 interface ProfileIndProps {
     userId: number;
@@ -54,6 +57,8 @@ function UserProfile({ userId, isMyFeed , myid }: ProfileIndProps){
             content: string;
             images: { imageUrl: string }[];
         }[];
+        "roles": string[];
+        "price": string;
     }; 
     const [userResponseType, setUserResponseType] = useState<UserResponseType | null>(null);
     useEffect(() => {
@@ -69,6 +74,8 @@ function UserProfile({ userId, isMyFeed , myid }: ProfileIndProps){
         }
         fetcFeedData();
     },[userId]);
+
+    console.log("유저 타입?", userResponseType)
 
     //로딩 상태 - 팔로우 적용 때문에 깜빡거림 방지
     const [isLoading, setIsLoading] = useState(true);
@@ -86,12 +93,15 @@ function UserProfile({ userId, isMyFeed , myid }: ProfileIndProps){
 
     return(
 <div>
-    <div className='max-w-screen-lg mx-auto px-4 sm:px-4 lg:px-8'>
+    <div className='max-w-screen-lg mx-auto px-4 sm:px-4 lg:px-8 border'>
         <div className="grid md:grid-cols-2">
             <div className="flex items-center">
                 <img src={userResponseType?.profileimg} className="mr-2 w-10 h-10 rounded-full" />
                 <div className="flex flex-col">
-                    <div className=" text-lg">{userResponseType?.nickname}</div>
+                    <div className=" text-lg flex">
+                        {userResponseType?.nickname}
+                        {userResponseType?.roles.includes('STORE') && <BsFillBookmarkStarFill className="ml-2 mt-2 text-red-500" />}
+                    </div>
                     {(userResponseType?.height || userResponseType?.weight) && (
                         <div className="flex">
                             {userResponseType?.height && (
@@ -129,10 +139,22 @@ function UserProfile({ userId, isMyFeed , myid }: ProfileIndProps){
             </div>
         </div>
         <div className="mt-[40px] flex items-center">
-            <AiFillHeart className="text-gray-400 mx-[10px] text-2xl"/>
-            <div>{userResponseType?.bio}</div>
+            {userResponseType?.bio && (
+                <>
+                    <AiFillHeart className="text-gray-400 mx-[10px] text-2xl"/>
+                    <div>{userResponseType?.bio}</div>
+                </>
+            )}
         </div>
-        <div className="my-[100px] flex flex-wrap">
+        <div className="mt-2 flex items-center">
+            {userResponseType?.roles.includes('STORE') && (
+                <>
+                    <MdAttachMoney  className="text-gray-400 mx-[10px] text-2xl"/>
+                    <div>{userResponseType?.price}</div>
+                </>
+            )}
+        </div>
+        <div className="my-[40px] flex flex-wrap">
             {userResponseType?.feedList.map((feed, feedIndex) => (
                 <div key={feedIndex} className="mb-[10px]">
                 {feed.images.map((image, imageIndex) => (

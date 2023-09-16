@@ -2,9 +2,8 @@ import BackButton from "../components/atoms/BackButton";
 import { useParams } from 'react-router-dom';
 import UserProfile from '../components/atoms/UserProfile';
 import { useState, useEffect } from "react";
-import globalAxios from "../data/data";
-import { ResponseDataType, RootState } from "../types/types";
-import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../types/types";
+import { useSelector } from "react-redux";
 
 
 
@@ -32,8 +31,6 @@ function ProfilePageInd() {
   }, []);
 
   useEffect(() => console.log(isMyFeed), [isMyFeed]);
-  console.log("내 피드?",isMyFeed)
-
 
   return (
     <div>
