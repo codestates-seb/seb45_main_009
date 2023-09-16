@@ -38,7 +38,10 @@ dependencies {
 	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 	// aws s3
 	implementation "com.amazonaws:aws-java-sdk-s3:1.12.429"
-	implementation 'org.openkoreantext:open-korean-text:2.1.0' // 한글
+
+	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.7.0' // Swagger
+	//implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+
 
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.7.0' // Swagger
 
