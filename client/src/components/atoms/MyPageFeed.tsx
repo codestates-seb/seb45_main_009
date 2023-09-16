@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { UserInfo } from "../../types/types";
 import { useLocation } from "react-router";
 import globalAxios from "../../data/data";
+import { Link } from "react-router-dom";
 
 interface UserData {
   bio: string;
@@ -57,6 +58,11 @@ const MyPageFeed = () => {
 
   const PAGE_SIZE = 4; // 페이지당 데이터 개수
 
+  const location = useLocation();
+
+  const currentDetail =
+    location.pathname === "/" ? "/feeddetailind" : "/feeddetailcor";
+
   const getMainListData = async () => {
     try {
       setLoading(true);
@@ -101,7 +107,7 @@ const MyPageFeed = () => {
   }, [inView, loading, hasMore]);
 
   const IntroductionCss =
-    " border border-gray-400 rounded-xl  p-10 h-full min-h-[200px] m-8 w-[50%] md:w-auto";
+    " border border-gray-400 rounded-xl  p-10 h-full min-h-[200px] m-8 w-[50%] md:w-auto ";
 
   const MainBodyCss = " flex justify-center mt-10 items-center md:items-start";
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -138,7 +144,7 @@ const MyPageFeed = () => {
         <aside
           className={` ${
             windowWidth < 768 ? "" : " sticky top-24"
-          } md:${IntroductionCss}`}
+          }  md:${IntroductionCss}`}
         >
           <div className="flex items-center flex-col mb-10">
             <img
@@ -165,11 +171,13 @@ const MyPageFeed = () => {
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 h-full mb-24">
           {userFeed.map((user, idx) => (
             <article key={idx} className="flex justify-center items-center">
-              <img
-                src={user.images[0].imageUrl}
-                alt={`ProfileImg of ${user.feedId}`}
-                className="w-[80vw] h-[80vw] object-cover md:w-[25vw] md:h-[25vw] lg:w-[15vw] lg:h-[15vw]"
-              ></img>
+              <Link to={`${currentDetail}/${user.feedId}`}>
+                <img
+                  src={user.images[0].imageUrl}
+                  alt={`ProfileImg of ${user.feedId}`}
+                  className="w-[80vw] h-[80vw] object-cover md:w-[25vw] md:h-[25vw] lg:w-[15vw] lg:h-[15vw] border"
+                />
+              </Link>
             </article>
           ))}
         </section>

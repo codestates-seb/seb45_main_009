@@ -10,6 +10,7 @@ import { RootState } from "../../types/types";
 import globalAxios from "../../data/data";
 import { setFilteredData } from "../../redux/reducers/feedSlice";
 import { RootStates } from "../../types/types";
+import { AiOutlineHome } from "react-icons/ai";
 
 function Header() {
   const navigate = useNavigate();
@@ -88,10 +89,10 @@ function Header() {
     }, []);
     setAllNickNames(nickNames);
   }, [allUserDatas]);
-  console.log("alltags", allTags);
-  console.log("allNickNames", allNickNames);
-  console.log("allUserDatas", allUserDatas);
-  console.log("allFeedDatas", allFeedDatas);
+  // console.log("alltags", allTags);
+  // console.log("allNickNames", allNickNames);
+  // console.log("allUserDatas", allUserDatas);
+  // console.log("allFeedDatas", allFeedDatas);
 
   useEffect(() => {
     // allTags와 allNickNames를 합쳐서 auto 상태를 업데이트
@@ -99,7 +100,7 @@ function Header() {
     setAuto(combinedData);
   }, [allTags, allNickNames]);
 
-  console.log(auto);
+  // console.log(auto);
 
   const fetchFilteredData = async () => {
     try {
@@ -195,6 +196,11 @@ function Header() {
           <div className="flex justify-center hover:cursor-pointer">
             <img src="/asset/fitfolio.svg" alt="logo" />
           </div>
+        )}
+        {isMobile && (
+          <Link to={"/"}>
+            <AiOutlineHome size="24" className="mr-4" />
+          </Link>
         )}
       </Link>
       <div className="flex items-center min-w-[190px] h-[3vh] w-[50vw] max-w-[500px] border  p-1 sm:mr-2 sm:h-[4vh] relative">
