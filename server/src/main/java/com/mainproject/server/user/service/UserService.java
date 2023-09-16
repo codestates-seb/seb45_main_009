@@ -207,11 +207,17 @@ public class UserService {
     }
 
 
-    // 유저 전체 조회
-    public Page<User> findUsers(int page, int size) {
-        return userRepository.findAll(PageRequest.of(page, size,
-                Sort.by("userId").descending()));
+    // 유저 전체 조회(페이지 네이션)
+//    public Page<User> findUsers(int page, int size) {
+//        return userRepository.findAll(PageRequest.of(page, size,
+//                Sort.by("userId").descending()));
+//    }
+
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
     }
+
+
 
 
     // 유저 삭제

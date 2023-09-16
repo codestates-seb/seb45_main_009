@@ -141,6 +141,7 @@ public class FollowService {
         return UserDto.ResponseDto.builder()
                 .userId(user.getUserId())
                 .nickname(user.getNickname())
+                .bio(user.getBio())
                 .profileimg(imageService.getProfileImageUrl(user))
                 // 필요한 다른 정보도 추가 가능
                 .build();

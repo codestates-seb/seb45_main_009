@@ -10,7 +10,6 @@ import com.mainproject.server.user.dto.UserDto;
 import com.mainproject.server.user.entity.User;
 import com.mainproject.server.user.mapper.UserMapper;
 import com.mainproject.server.user.service.UserService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,6 +26,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -149,19 +149,37 @@ public class UserController {
                 new DataResponseDto<>(response), HttpStatus.OK);
     }
 
+//    // 유저 전체 조회(페이지 네이션)
+//    @GetMapping("users")
+//    public ResponseEntity<Page<UserDto.ResponseDto>> getUsers(
+//            @RequestParam(name = "page", defaultValue = "0") int page,
+//            @RequestParam(name = "size", defaultValue = "10") int size) {
+//
+//        // UserService를 사용하여 페이지네이션된 유저 목록 조회
+//        Page<User> userPage = userService.findUsers(page, size);
+//        // 조회한 유저 목록을 UserDto.ResponseDto로 매핑하여 반환
+//        Page<UserDto.ResponseDto> responsePage = userPage.map(mapper::userToResponse);
+//
+//        return ResponseEntity.ok(responsePage);
+//    }
+
+
     // 유저 전체 조회
     @GetMapping("users")
-    public ResponseEntity<Page<UserDto.ResponseDto>> getUsers(
-            @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "size", defaultValue = "10") int size) {
+    public ResponseEntity<List<UserDto.ResponseDto>> getUsers() {
+        // UserService를 사용하여 전체 유저 목록 조회
+        List<User> userList = userService.findAllUsers();
 
-        // UserService를 사용하여 페이지네이션된 유저 목록 조회
-        Page<User> userPage = userService.findUsers(page, size);
         // 조회한 유저 목록을 UserDto.ResponseDto로 매핑하여 반환
-        Page<UserDto.ResponseDto> responsePage = userPage.map(mapper::userToResponse);
+        List<UserDto.ResponseDto> responseList = userList.stream()
+                .map(mapper::userToResponse)
+                .collect(Collectors.toList());
 
-        return ResponseEntity.ok(responsePage);
+        return ResponseEntity.ok(responseList);
     }
+
+
+
 
     // 유저 정보 업데이트
     @PreAuthorize("isAuthenticated()")
