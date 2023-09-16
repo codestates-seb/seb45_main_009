@@ -93,12 +93,12 @@ function UserProfile({ userId, isMyFeed , myid }: ProfileIndProps){
 
     return(
 <div>
-    <div className='max-w-screen-lg mx-auto px-4 sm:px-4 lg:px-8'>
+    <div className='max-w-screen-xl md:max-w-screen-lg mx-auto px-4 sm:px-4 lg:px-8'>
         <div className="grid md:grid-cols-2">
-            <div className="flex items-center">
-                <img src={userResponseType?.profileimg} className="mr-2 w-10 h-10 rounded-full" />
+            <div className="flex items-center justify-center sm:justify-start">
+                <img src={userResponseType?.profileimg} className="mr-6 sm:mr-2 w-10 h-10 rounded-full" />
                 <div className="flex flex-col">
-                    <div className=" text-lg flex">
+                    <div className=" text-lg flex ">
                         {userResponseType?.nickname}
                         {userResponseType?.roles.includes('STORE') && <BsFillBookmarkStarFill className="ml-2 mt-2 text-red-500" />}
                     </div>
@@ -110,7 +110,7 @@ function UserProfile({ userId, isMyFeed , myid }: ProfileIndProps){
                                 </div>
                             )}
                             {userResponseType?.weight && (
-                                <div className="font-bold text-gray-400 text-sm">
+                                <div className="font-bold text-gray-400 text-sm ">
                                     {userResponseType?.weight} kg
                                 </div>
                             )}
@@ -118,7 +118,7 @@ function UserProfile({ userId, isMyFeed , myid }: ProfileIndProps){
                     )}
                 </div>
             </div>
-            <div className="flex justify-end">
+            <div className="flex justify-center sm:justify-end mt-6  sm:mr-4">
             {isMyFeed ? null : (
           <div className="flex items-center justify-end">
             <button
@@ -138,7 +138,7 @@ function UserProfile({ userId, isMyFeed , myid }: ProfileIndProps){
         )}
             </div>
         </div>
-        <div className="mt-[40px] flex items-center">
+        <div className="mt-[30px] flex items-center justify-center sm:justify-start ">
             {userResponseType?.bio && (
                 <>
                     <AiFillHeart className="text-gray-400 mx-[10px] text-2xl"/>
@@ -146,7 +146,7 @@ function UserProfile({ userId, isMyFeed , myid }: ProfileIndProps){
                 </>
             )}
         </div>
-        <div className="mt-2 flex items-center">
+        <div className="mt-2 flex items-center justify-center sm:justify-start ">
             {userResponseType?.roles.includes('STORE') && (
                 <>
                     <MdAttachMoney  className="text-gray-400 mx-[10px] text-2xl"/>
@@ -154,7 +154,7 @@ function UserProfile({ userId, isMyFeed , myid }: ProfileIndProps){
                 </>
             )}
         </div>
-        <div className="my-[40px] flex flex-wrap">
+        <div className="my-[40px] flex flex-wrap justify-center sm:justify-start ">
             {userResponseType?.feedList.map((feed, feedIndex) => (
                 <div key={feedIndex} className="mb-[10px]">
                 {feed.images.map((image, imageIndex) => (
