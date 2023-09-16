@@ -5,11 +5,12 @@ import globalAxios from "../data/data";
 import { useDispatch, useSelector } from "react-redux";
 // 컴포넌트 가져오기
 import BackButton from "../components/atoms/BackButton";
-import ProfileInd from "../components/atoms/ProfileInd";
+import ProfileCor from "../components/atoms/ProfileCor";
 import DetailFeed from "../components/atoms/DetailFeed";
 import Comment from "../components/atoms/Comment";
+import { useParams } from "react-router-dom";
 
-function FeedDetailPageCor() {
+function FeedDetailPageInd() {
   const { feedId: feedIdString } = useParams<{ feedId: string }>();
   const feedId = Number(feedIdString) || 0;
 
@@ -56,4 +57,4 @@ function FeedDetailPageCor() {
   );
 }
 
-export default FeedDetailPageCor;
+export default FeedDetailPageInd;
