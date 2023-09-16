@@ -205,7 +205,7 @@ public class FeedService {
     // 유저 페이지 피드 조회
     public Page<Feed> findUserFeeds(int page, int size) {
 
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("feedId").ascending());
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("feedId").descending());
         Page<Feed> feedUserPage = feedRepository.findUserFeeds(pageRequest);
 
         return feedUserPage;
@@ -214,7 +214,7 @@ public class FeedService {
     // 기업 페이지 피드 조회
     public Page<Feed> findStoreFeeds(int page, int size) {
 
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("feedId").ascending());
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("feedId").descending());
         Page<Feed> feedStorePage = feedRepository.findStoreFeeds(pageRequest);
         return feedStorePage;
     }
