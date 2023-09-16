@@ -2,26 +2,29 @@ import React, { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { AiFillStar } from "react-icons/ai";
 import { IoIosCheckmarkCircle } from "react-icons/io";
+import globalAxios from "../../data/data";
+import { useSelector } from "react-redux";
+import { RootState } from "../../types/types";
+import { Link, useLocation } from "react-router-dom";
 
 interface UserData {
-  proFileImg: string;
+  profileimg: string;
   userId: string;
-  feedImg: string;
-  userInfo: string;
-  tags: string;
-  location: string;
+  nickname: string;
+  bio: string;
 }
 
 const MyPageFollow = () => {
-  const tempDataString = localStorage.getItem("tempData");
-  const tempData = tempDataString ? JSON.parse(tempDataString) : [];
-
   const [page, setPage] = useState(8);
-  const [followers, setFollowers] = useState<UserData[]>(tempData);
-  const [following, setFollowing] = useState<UserData[]>(tempData);
+  const [followers, setFollowers] = useState<UserData[]>([]);
+  const [following, setFollowing] = useState<UserData[]>([]);
   const [isFollowingView, setIsFollowingView] = useState(false);
 
   const [ref, inView] = useInView();
+
+  const userInfo = useSelector((state: RootState) => state.login.userInfo);
+
+  console.log(userInfo);
 
   useEffect(() => {
     if (inView) {
@@ -34,18 +37,58 @@ const MyPageFollow = () => {
   const chunkData = isFollowingView
     ? following.slice(0, startIndex + PAGE_SIZE)
     : followers.slice(0, startIndex + PAGE_SIZE);
-
+  console.log(chunkData, "chunkData");
   const deleteUserHandler = (userId: string) => {
     const updatedFollowers = followers.filter((user) => user.userId !== userId);
     const updatedFollowing = following.filter((user) => user.userId !== userId);
     setFollowers(updatedFollowers);
     setFollowing(updatedFollowing);
-
-    localStorage.setItem("tempData", JSON.stringify(updatedFollowers));
   };
 
   const toggleFollowingView = (view: boolean) => {
     setIsFollowingView(view);
+  };
+
+  const isFollow = isFollowingView ? "following" : "followers";
+  console.log(isFollow);
+  const getUserData = async () => {
+    try {
+      const response = await globalAxios.get(
+        `/follow/${isFollow}/${userInfo.userId}`
+      );
+      const getData = response.data;
+      console.log(getData, "여기다");
+      if (isFollowingView) {
+        setFollowing(getData);
+      } else {
+        setFollowers(getData);
+      }
+    } catch (err) {
+      console.log("Error >>", err);
+    }
+  };
+
+  useEffect(() => {
+    getUserData();
+    console.log(chunkData);
+  }, [isFollowingView, userInfo]);
+
+  const unfollowUser = async (userId: string) => {
+    try {
+      // POST 요청을 보내어 해당 사용자를 언팔로우
+      await globalAxios.post(`/follow/${userId}`);
+      // 사용자 목록에서 삭제
+      const updatedFollowers = followers.filter(
+        (user) => user.userId !== userId
+      );
+      const updatedFollowing = following.filter(
+        (user) => user.userId !== userId
+      );
+      setFollowers(updatedFollowers);
+      setFollowing(updatedFollowing);
+    } catch (err) {
+      console.error("Error:", err);
+    }
   };
 
   return (
@@ -77,29 +120,32 @@ const MyPageFollow = () => {
             팔로잉
           </div>
         </div>
-        {chunkData.map((user: UserData, idx: number) => (
+        {chunkData.map((user, idx) => (
           <article key={idx} className="flex items-center">
-            <img src={user.proFileImg} alt="profile" className="w-14 h-14" />
+            <Link to={`/profile/${user.userId}`}>
+              <img
+                src={user.profileimg}
+                alt="profile"
+                className="rounded-full border mr-2 w-20 h-20"
+              />
+            </Link>
             <div className="mx-3">
               <div className="flex items-center">
-                <div className="font-bold mr-2">{user.userId}</div>
-                <div>
-                  {user.location === "서울" && (
-                    <IoIosCheckmarkCircle color="red" />
-                  )}
-                </div>
+                <div className="font-bold mr-2">{user.nickname}</div>
               </div>
-              <div className="flex w-full">
+              <div className="flex">
                 <p className="mr-3">165cm</p>
                 <p>50kg</p>
               </div>
             </div>
-            <button
-              onClick={() => deleteUserHandler(user.userId)}
-              className="flex justify-end text-red-500 w-full"
-            >
-              삭제
-            </button>
+            {isFollowingView && (
+              <button
+                onClick={() => unfollowUser(user.userId)}
+                className="flex justify-end text-red-500 ml-2"
+              >
+                언팔로우
+              </button>
+            )}
           </article>
         ))}
       </section>
