@@ -7,7 +7,6 @@ import SignupPage from "./pages/SignupPage";
 import ProfilePageInd from "./pages/ProfilePageInd";
 import ProfilePageCor from "./pages/ProfilePageCor";
 import OauthLoadingPage from "./pages/OauthLoadingPage";
-import Alarm from "./pages/alarmpage";
 
 import MainPageInd from "./pages/MainPageInd";
 import FeedDetailPageCor from "./pages/FeedDetailPageCor";
@@ -52,7 +51,6 @@ function App() {
                 path="/oauthloading"
                 element={<OauthLoadingPage />}
               ></Route>
-              <Route path="/alarmpage" element={<Alarm />}></Route>
               <Route path="*" element={<Not404 />} />
             </Routes>
           </main>
