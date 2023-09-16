@@ -40,6 +40,8 @@ dependencies {
 	implementation "com.amazonaws:aws-java-sdk-s3:1.12.429"
 	implementation 'org.openkoreantext:open-korean-text:2.1.0' // 한글
 
+	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.7.0' // Swagger
+
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	implementation 'org.mapstruct:mapstruct:1.4.2.Final'

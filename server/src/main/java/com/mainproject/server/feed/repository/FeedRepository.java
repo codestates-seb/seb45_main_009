@@ -20,6 +20,10 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
     @Query("SELECT f FROM Feed f WHERE 'STORE' MEMBER OF f.user.roles")
     Page<Feed> findStoreFeeds(PageRequest pageRequest);
 
+    // 이미지 정보를 함께 조회하는 쿼리 메서드 정의
+    @Query("SELECT f FROM Feed f LEFT JOIN FETCH f.images WHERE f.feedId = :feedId")
+    Feed findFeedWithImages(@Param("feedId") Long feedId);
+
 
     // relatedTags로 피드 검색
     @Query("SELECT DISTINCT f FROM Feed f JOIN f.relatedTags t WHERE t LIKE %:keyword%")

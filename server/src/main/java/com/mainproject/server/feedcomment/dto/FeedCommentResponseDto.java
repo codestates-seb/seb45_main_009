@@ -16,11 +16,9 @@ public class FeedCommentResponseDto {
     private long feedCommentId;
     private long feedId;
     private String content;
-    private String userNickname;
-
-    @Builder.Default
-    private LocalDateTime createdAt = LocalDateTime.now();
-    @Builder.Default
-    private LocalDateTime modifiedAt = LocalDateTime.now();
+    private String nickname;
+    private String profileImageUrl;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
 
 }

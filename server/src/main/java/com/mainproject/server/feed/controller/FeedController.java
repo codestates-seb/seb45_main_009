@@ -57,6 +57,7 @@ public class FeedController {
 
     }
 
+    // 이미지 추가
     @PatchMapping("/feed/detail/{feed-id}/images")
     public ResponseEntity patchFeedImages(@LoginUserId Long userId,
                                           @PathVariable("feed-id") long feedId,
@@ -66,6 +67,7 @@ public class FeedController {
         feedPatchDto.setFeedId(feedId);
 
         Feed updatedFeed = feedService.updateFeedImages(userId, feedMapper.feedPatchDtoToFeed(feedPatchDto), imageFiles);
+
         return new ResponseEntity<>(feedMapper.feedToFeedResponseDto(updatedFeed), HttpStatus.OK);
     }
 
@@ -106,9 +108,9 @@ public class FeedController {
 
         // 피드와 좋아요 누른 사용자 목록의 카운트를 함께 반환
         FeedResponseDto responseDto = feedMapper.feedToFeedResponseDto(feed);
-        responseDto.setLikeCount(likeCount);
+        responseDto.setLikedCount(likeCount);
 
-        return new ResponseEntity<>(feedMapper.feedToFeedResponseDto(feed), HttpStatus.OK);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     // 피드 삭제(이미지도 함께 삭제됨)
