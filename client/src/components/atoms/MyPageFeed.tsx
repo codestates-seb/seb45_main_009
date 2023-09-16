@@ -16,14 +16,14 @@ interface UserData {
   price: number | string;
   profileimg: string;
   roles: string[];
-  sport: string;
   userId: number;
   weight: number;
 }
 
 interface FeedData {
+  bio: string;
   feedId: number;
-  userNickname: string;
+  nickname: string;
   profileImageUrl: string;
   content: string;
   relatedTags: string[];
@@ -125,7 +125,7 @@ const MyPageFeed = () => {
   );
 
   const userFeed = allFeedData.filter(
-    (userData) => userData.userNickname === userInfo.userNickname
+    (userData) => userData.nickname === userInfo.userNickname
   );
 
   return (
