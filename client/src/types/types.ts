@@ -1,7 +1,7 @@
 import { FeedState } from "../redux/reducers/feedSlice";
 
 export interface UserInfo {
-  userType: "USER" | "STORE";
+  userType: "USER" | "STORE" | "DEFAULT";
   userNickname: string;
   userId: number;
 }
