@@ -4,10 +4,11 @@ import Header from "./components/sharedlayout/Header";
 import Footer from "./components/sharedlayout/Footer";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
-import ProfilePageInd from "./pages/ProfilePageInd";
-import ProfilePageCor from "./pages/ProfilePageCor";
+import ProfilePageInd from "./pages/ProfilePage";
+// import ProfilePageCor from "./pages/ProfilePageCor";
 import OauthLoadingPage from "./pages/OauthLoadingPage";
 
+import AlarmPage from "./pages/Alarmpage";
 import MainPageInd from "./pages/MainPageInd";
 import FeedDetailPageCor from "./pages/FeedDetailPageCor";
 import FeedDetailPageInd from "./pages/FeedDetailPageInd";
@@ -18,7 +19,7 @@ import MainPageCor from "./pages/MainPageCor";
 import MyPage from "./pages/MyPage";
 import ScrollToTop from "./components/features/ScrollToTop";
 import Layout from "./components/atoms/Layout";
-import { useUserSession } from "./hooks/useUserSession";
+import useUserSession from "./hooks/useUserSession";
 import FeedUpdataePageInd from "./pages/FeedUpdatePageInd";
 import FeedUpdataePageCor from "./pages/FeedUpdatePageCor";
 
@@ -46,11 +47,9 @@ function App() {
               <Route path="/login" element={<LoginPage />}></Route>
               <Route path="/signup" element={<SignupPage />}></Route>
               <Route path="/profile/:userId" element={<ProfilePageInd />}></Route>
-              <Route path="/profilecor/:userId" element={<ProfilePageCor />}></Route>
-              <Route
-                path="/oauthloading"
-                element={<OauthLoadingPage />}
-              ></Route>
+              {/* <Route path="/profilecor/:userId" element={<ProfilePageCor />}></Route> */}
+              <Route path="/oauthloading" element={<OauthLoadingPage />}></Route>
+              {/*               <Route path="/alarmpage" element={<Alarm />}></Route> */}
               <Route path="*" element={<Not404 />} />
             </Routes>
           </main>

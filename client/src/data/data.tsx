@@ -15,7 +15,7 @@ globalAxios.interceptors.request.use(
     const accessToken = sessionStorage.getItem("access_token");
 
     if (accessToken) {
-      config.headers["Authorization"] = `Bearer ${accessToken}`;
+      config.headers["Authorization"] = `${accessToken}`;
     }
 
     return config;

@@ -1,19 +1,18 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-import { RiAlarmWarningFill } from "react-icons/ri";
 import { AiFillPlusCircle } from "react-icons/ai";
-import globalAxios from '../../data/data'
-
-interface DetailFeedProps {
-  feedId: number;
-}
-
+import globalAxios from "../../data/data";
+import timeFormatter from "../../hooks/timeFormatter";
+import { ResponseDataType, UserInfo, RootState } from "../../types/types";
+import { useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+//////태그 모달 시작
 function TagModal({
   title,
   size,
   price,
   top,
-  left
+  left,
 }: {
   title: string;
   size: string;
@@ -21,7 +20,6 @@ function TagModal({
   top: string;
   left: string;
 }) {
-  
   // 위아래
   const modalTopPosition = parseInt(top) > 50 ? "-60px" : "25px";
   // 좌우
@@ -38,65 +36,90 @@ function TagModal({
     </div>
   );
 }
+//////태그 모달 끝
 
-function DetailFeedInd({ feedId }: DetailFeedProps) {
-  type ResponseDataType = {
-    feedId: number;
-    content: string;
-    relatedTags: string[];
-    images: Array<{
-      imageId: number;
-      imageUrl: string;
-      imageTags: any[];
-    }>;
+interface DetailFeedProps {
+  feedId: number;
+  responseData: ResponseDataType | null;
+  isMyFeed: boolean;
+  userInfo: UserInfo;
+}
+function DetailFeedInd({ feedId, responseData, isMyFeed }: DetailFeedProps) {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const userInfo = useSelector((state: RootState) => state.login.userInfo);
+  // 좋아요
+  const [isLiked, setIsLiked] = useState<boolean>(false);
+  //좋아요 리스트
+  const [likeList, setLikeList] = useState<number[]>([]);
+
+  const handleLikeClick = async () => {
+    console.log("게시물 좋아요");
+    try {
+      const response = await globalAxios.post(`/feed/detail/${feedId}/like`);
+      console.log("좋아요 성공:", response);
+      getLikeList();
+    } catch (error) {
+      console.error("좋아요 실패", error);
+    }
   };
 
-  // 피드 가져오기
-
-  const [responseData, setResponseData] = useState<ResponseDataType | null>(null);
-
-  useEffect(() => {
-    async function fetcFeedData() {
-      try {
-        const response = await globalAxios.get(`/feed/detail/${feedId}`);
-        if (response.status === 200) {
-          setResponseData(response.data);
-        }
-      } catch (error) {
-        console.error("API 요청 실패:", error);
+  const getLikeList = async () => {
+    try {
+      const response = await globalAxios.get(`/feed/detail/${feedId}/likeduser`);
+      console.log("좋아요 리스트 get요청 성공", response.data);
+      setLikeList(response.data);
+      if (response.data.includes(userInfo.userId)) {
+        setIsLiked(true);
+      } else {
+        setIsLiked(false);
       }
+    } catch (error) {
+      console.log("좋아요 리스트 get실패", error);
     }
-    fetcFeedData();
+  };
+
+  //좋아요 리스트 get요청
+  useEffect(() => {
+    getLikeList();
   }, []);
 
-  // 좋아요
-  const [isLiked, setIsLiked] = useState(false);
-  const handleLikeClick = () => {
-    console.log("게시물 좋아요");
-    setIsLiked(true);
+  const handleReport = async () => {
+    try {
+      const response = await globalAxios.post(`/feed/detail/${feedId}/report`, {
+        reason: "일단 내용은 하드코딩으로",
+      });
+      console.log("신고 성공", response);
+      alert("신고가 완료되었습니다");
+    } catch (error: any) {
+      console.log("신고 실패", error.response.data);
+      alert(error.response.data.message);
+    }
   };
 
-  const handleLikeCancelClick = () => {
-    console.log("게시물 좋아요 취소");
-    setIsLiked(false);
+  const handleDelete = async () => {
+    try {
+      const response = await globalAxios.delete(`/feed/detail/${feedId}`);
+      console.log("글이 성공적으로 삭제되었습니다.", response);
+      alert("피드 삭제 완료");
+      navigate("/");
+    } catch (error) {
+      console.error("글 삭제 실패:", error);
+    }
   };
-
-  const inappropriateviewBtn = () => {
-    console.log("게시물 신고");
+  const handleUpdate = () => {
+    navigate(`/feedupdateind/${feedId}`);
   };
-
   // 정보 태그 모달창
   const [showTagModal, setShowTagModal] = useState<{
     photoIndex: number;
     tagIndex: number;
   } | null>(null);
 
-
   return (
     <div className="w-full sm:max-w-screen-sm  mx-auto px-4 sm:px-4 lg:px-8">
-      
       {responseData?.images.map((image, index) => (
-        <div key={index} className="mb-8 relative">
+        <div key={index} className="mb-2 relative">
           <img src={image.imageUrl} alt={`Image ${index}`} className="w-full h-auto" />
           {image.imageTags.map((tag, tagIndex) => {
             const top = Math.round(tag.positionY * 100);
@@ -105,7 +128,7 @@ function DetailFeedInd({ feedId }: DetailFeedProps) {
               <div
                 key={tagIndex}
                 className="w-[20px] h-[20px] rounded-full absolute"
-                style={{ top: `${top}%`,  left: `${left}%` }}
+                style={{ top: `${top}%`, left: `${left}%` }}
                 onMouseEnter={() => setShowTagModal({ photoIndex: index, tagIndex })}
                 onMouseLeave={() => setShowTagModal(null)}
               >
@@ -119,68 +142,81 @@ function DetailFeedInd({ feedId }: DetailFeedProps) {
                     top={`${top}%`}
                     left={`${left}%`}
                   />
-                  )}
+                )}
               </div>
             );
           })}
         </div>
       ))}
-
-      <div className="font-bold text-gray-400 text-sm mt-[10px]">
-        2022
+      <div className="flex text-sm opacity-50 mb-1 max-mobile:text-[12px]">
+        {timeFormatter(responseData?.createdAt)}
       </div>
-      <div className=" mt-[20px]">{responseData?.content}</div>
-      <div className=" mt-[20px]">
+      <span className="max-mobile:text-[14px]">{responseData?.content}</span>
+      <div className="flex flex-row items-center mt-[20px]">
         {isLiked === false ? (
-          <AiOutlineHeart onClick={handleLikeClick} />
+          <AiOutlineHeart className="cursor-pointer text-red-400" onClick={handleLikeClick} size={20} />
         ) : (
-          <AiFillHeart onClick={handleLikeCancelClick} />
+          <AiFillHeart className="cursor-pointer text-red-400" onClick={handleLikeClick} size={20} />
+        )}
+        <div className="ml-2 pb-[2px]">{likeList.length}</div>
+      </div>
+      <div className=" mt-2">
+        <div className="font-bold text-gray-400 text-sm mb-[10px]"></div>
+        <ul>
+          {responseData?.relatedTags.map((tag, index) => (
+            <li
+              className="inline-block px-2 py-1 border-bdc rounded mr-2.5 mb-2.5 transition bg-[#edf7ff] text-[#22a1ff] text-[13px]"
+              key={index}
+            >
+              {`#${tag}`}
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-2 flex flex-wrap">
+          {responseData?.images.map((image, imageIndex) =>
+            image.imageTags.map((tag, tagIndex) => (
+              <div className="border rounded flex-grow mr-4 mb-4 p-2 text-sm" key={`${imageIndex}-${tagIndex}`}>
+                <div className="flex">
+                  <div className="flex-none" style={{ width: "70px" }}>
+                    제품명 :{" "}
+                  </div>
+                  <div className="flex-grow font-bold">{tag.productName}</div>
+                </div>
+                <div className="flex">
+                  <div className="flex-none " style={{ width: "70px" }}>
+                    가격 :{" "}
+                  </div>
+                  <div>₩ {parseInt(tag.productPrice)}</div>
+                </div>
+                <div className="flex">
+                  <div className="flex-none" style={{ width: "70px" }}>
+                    추가정보 :{" "}
+                  </div>
+                  <div className="text-btn-color">{tag.productInfo}</div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
+      <div className="flex justify-end ">
+        {isMyFeed ? (
+          <>
+            <button className="m-2 text-[13px] opacity-75" onClick={handleUpdate}>
+              수정
+            </button>
+            <button className="text-[13px] opacity-75" onClick={handleDelete}>
+              삭제
+            </button>
+          </>
+        ) : (
+          <button className="text-[13px] opacity-75" onClick={handleReport}>
+            신고
+          </button>
         )}
       </div>
-      <div className=" mt-[40px]">
-        <div className="font-bold text-gray-400 text-sm mb-[10px]">
-          연관태그
-        </div>
-        <div>
-          {responseData?.relatedTags.map((tag, index) => (
-            <span className=" p-1 bg-blue-100 rounded  mr-2" key={index}>
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        <div className="mt-[40px] flex flex-wrap">
-          
-          {
-            responseData?.images.map((image, imageIndex) => (
-              image.imageTags.map((tag, tagIndex) => (
-                <div className="border rounded flex-grow mr-4 mb-4 p-2 text-sm" key={`${imageIndex}-${tagIndex}`}>
-                  <div className="flex">
-                    <div className="flex-none" style={{ width: "70px" }}>제품명 : </div>
-                    <div className="flex-grow font-bold">{tag.productName}</div>
-                  </div>
-                  <div className="flex">
-                    <div className="flex-none " style={{ width: "70px" }}>가격 : </div>
-                    <div>₩ {parseInt(tag.productPrice)}</div>
-                  </div>
-                  <div className="flex">
-                    <div className="flex-none" style={{ width: "70px" }}>추가정보 : </div>
-                    <div className="text-btn-color">{tag.productInfo}</div>
-                  </div>
-                </div>
-              ))
-            ))
-          }
-        </div>
-
-    </div>
-
-      <div className="flex justify-end mt-4">
-        <button onClick={inappropriateviewBtn} className="focus:outline-none">
-          <RiAlarmWarningFill />
-        </button>
-      </div>
-
     </div>
   );
 }
