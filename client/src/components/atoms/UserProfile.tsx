@@ -93,7 +93,7 @@ function UserProfile({ userId, isMyFeed , myid }: ProfileIndProps){
 
     return(
 <div>
-    <div className='max-w-screen-lg mx-auto px-4 sm:px-4 lg:px-8 border'>
+    <div className='max-w-screen-lg mx-auto px-4 sm:px-4 lg:px-8'>
         <div className="grid md:grid-cols-2">
             <div className="flex items-center">
                 <img src={userResponseType?.profileimg} className="mr-2 w-10 h-10 rounded-full" />
