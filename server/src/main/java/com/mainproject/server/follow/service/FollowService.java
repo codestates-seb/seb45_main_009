@@ -142,6 +142,7 @@ public class FollowService {
                 .userId(user.getUserId())
                 .nickname(user.getNickname())
                 .bio(user.getBio())
+                .roles(user.getRoles())
                 .profileimg(imageService.getProfileImageUrl(user))
                 // 필요한 다른 정보도 추가 가능
                 .build();
