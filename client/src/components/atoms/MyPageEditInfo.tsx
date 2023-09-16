@@ -3,13 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import TextareaAutosize from "react-textarea-autosize";
 import globalAxios from "../../data/data";
 import { MdDelete } from "react-icons/md";
-import { regionCategory } from "../../data/category";
-import upload from "../../assets/images/upload.jpeg";
 import CommonInput from "./CommonInput";
 import { useDispatch, useSelector } from "react-redux";
 import { UserInfo, RootState } from "../../types/types";
 import profileDefault from "../../assets/images/profileDefault.png";
-import styled from "styled-components";
 import ConfirmButton from "./ConfirmButton";
 interface userData {
   nickname: string;
@@ -51,6 +48,7 @@ function MyPageEditInfo() {
   const [location, setLocation] = useState<string>("");
 
   const [isValidNickname, setIsValidNickname] = useState<boolean | null>(true);
+  const [isValidBio, setIsValidBio] = useState<boolean | null>(null);
 
   const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
@@ -93,6 +91,18 @@ function MyPageEditInfo() {
     setIsValidNickname(null);
   };
 
+  // Bio 유효성 검사
+  const validateBioHandler = () => {
+    if (bio.length <= 30) {
+      setIsValidBio(true);
+    } else {
+      setIsValidBio(false);
+    }
+  };
+
+  const clearBioValidation = () => {
+    setIsValidBio(null);
+  };
   const insertImg = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
@@ -159,6 +169,10 @@ function MyPageEditInfo() {
       alert("올바른 닉네임을 입력해주세요.");
       return;
     }
+    if (!isValidBio) {
+      alert("한 줄 소개는 30자 이내로 입력해주세요.");
+      return;
+    }
     const formData = new FormData();
     const requestBody = {
       nickname: nickname,
@@ -189,11 +203,6 @@ function MyPageEditInfo() {
       console.log("error", error);
     }
   };
-  useEffect(() => console.log(nickname), [nickname]);
-  useEffect(() => console.log(weight), [weight]);
-  useEffect(() => console.log(height), [height]);
-  useEffect(() => console.log(bio), [bio]);
-  useEffect(() => console.log(sport), [sport]);
   return (
     <div className="flex flex-row justify-center items-center w-full mt-20 max-tablet:flex-col max-tablet:mt-10 ">
       <div className="w-[300px] mt-4 flex flex-col items-center mr-20 pb-[100px] max-tablet:mr-0 max-tablet mb-0">
@@ -245,14 +254,28 @@ function MyPageEditInfo() {
               <CommonInput value={weight} type="number" label="몸무게(kg)" onChange={handleWeightChange} />
             </div>
             <CommonInput value={sport} label="주 운동 종목" onChange={handleSportChange} />
-            <CommonInput value={bio} label="자기 소개" onChange={handleBioChange} />
+            <CommonInput
+              value={bio}
+              label="한 줄 소개"
+              onChange={handleBioChange}
+              onBlur={validateBioHandler}
+              onFocus={clearBioValidation}
+            />
+            <p className="text-[12px]">최대 30자 이내로 작성해주세요. </p>
           </div>
         ) : (
           <div className="flex flex-col">
             <CommonInput value={nickname} label="닉네임" onChange={handleNicknameChange} />
             <CommonInput value={location} label="주소" onChange={handleLocationChange} />
             <CommonInput value={sport} label="주 운동 종목" onChange={handleSportChange} />
-            <CommonInput value={bio} label="기업 소개" onChange={handleBioChange} />
+            <CommonInput
+              value={bio}
+              label="한 줄 소개"
+              onChange={handleBioChange}
+              onBlur={validateBioHandler}
+              onFocus={clearBioValidation}
+            />
+            <p className="text-[12px]">최대 30자 이내로 작성해주세요. </p>
             <CommonInput value={priceInfo} label="가격 정보" onChange={handlePriceInfoChange} />
           </div>
         )}
