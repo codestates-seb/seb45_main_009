@@ -4,7 +4,7 @@ import axios from "axios";
 import { login } from "../redux/reducers/loginSlice";
 import { UserInfo } from "../types/types";
 
-export function useUserSession() {
+function useUserSession() {
   console.log("useSession");
   const dispatch = useDispatch();
 
@@ -25,3 +25,4 @@ export function useUserSession() {
     }
   }, [dispatch]);
 }
+export default useUserSession;

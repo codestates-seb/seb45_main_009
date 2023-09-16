@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { AiFillPlusCircle } from "react-icons/ai";
 import globalAxios from "../../data/data";
+import timeFormatter from "../../hooks/timeFormatter";
 import { ResponseDataType, UserInfo, RootState } from "../../types/types";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
@@ -40,7 +41,6 @@ function TagModal({
 interface DetailFeedProps {
   feedId: number;
   responseData: ResponseDataType | null;
-  setIsMyFeed: React.Dispatch<React.SetStateAction<boolean>>;
   isMyFeed: boolean;
   userInfo: UserInfo;
 }
@@ -116,34 +116,6 @@ function DetailFeedInd({ feedId, responseData, isMyFeed }: DetailFeedProps) {
     tagIndex: number;
   } | null>(null);
 
-  function formatRelativeTime(dateString: any): string {
-    const now = new Date(new Date().getTime() - 9 * 60 * 60 * 1000); // 9시간 빼기/utc-한국차이
-    const inputDate = new Date(dateString);
-
-    const seconds = Math.floor((now.getTime() - inputDate.getTime()) / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-    const months = Math.floor(days / 30);
-    const years = Math.floor(days / 365);
-
-    if (years > 1) return `${years} years ago`;
-    if (years === 1) return "1 year ago";
-
-    if (months > 1) return `${months} months ago`;
-    if (months === 1) return "1 month ago";
-
-    if (days > 1) return `${days} days ago`;
-    if (days === 1) return "1 day ago";
-
-    if (hours > 1) return `${hours} hours ago`;
-    if (hours === 1) return "1 hour ago";
-
-    if (minutes > 1) return `${minutes} minutes ago`;
-
-    return "1 minute ago";
-  }
-
   return (
     <div className="w-full sm:max-w-screen-sm  mx-auto px-4 sm:px-4 lg:px-8">
       {responseData?.images.map((image, index) => (
@@ -177,7 +149,7 @@ function DetailFeedInd({ feedId, responseData, isMyFeed }: DetailFeedProps) {
         </div>
       ))}
       <div className="flex text-sm opacity-50 mb-1 max-mobile:text-[12px]">
-        {formatRelativeTime(responseData?.createdAt)}
+        {timeFormatter(responseData?.createdAt)}
       </div>
       <span className="max-mobile:text-[14px]">{responseData?.content}</span>
       <div className="flex flex-row items-center mt-[20px]">

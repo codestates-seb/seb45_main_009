@@ -19,7 +19,7 @@ import MainPageCor from "./pages/MainPageCor";
 import MyPage from "./pages/MyPage";
 import ScrollToTop from "./components/features/ScrollToTop";
 import Layout from "./components/atoms/Layout";
-import { useUserSession } from "./hooks/useUserSession";
+import useUserSession from "./hooks/useUserSession";
 import FeedUpdataePageInd from "./pages/FeedUpdatePageInd";
 import FeedUpdataePageCor from "./pages/FeedUpdatePageCor";
 

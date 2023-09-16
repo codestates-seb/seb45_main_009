@@ -119,3 +119,23 @@ export interface ResponseDataType {
     imageTags: any[];
   }>;
 }
+export interface CommentTypes {
+  feedCommentId: number;
+  feedId: number;
+  content: string;
+  userNickname: string;
+  createdAt: string;
+  modifiedAt: string;
+}
+
+export interface PageInfo {
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+}
+
+export interface CommentDataTypes {
+  feedCommentData: CommentTypes[];
+  pageInfo: PageInfo;
+}
