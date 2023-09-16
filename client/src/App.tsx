@@ -18,7 +18,7 @@ import MainPageCor from "./pages/MainPageCor";
 import MyPage from "./pages/MyPage";
 import ScrollToTop from "./components/features/ScrollToTop";
 import Layout from "./components/atoms/Layout";
-import { useUserSession } from "./hooks/useUserSession";
+import useUserSession from "./hooks/useUserSession";
 import FeedUpdataePageInd from "./pages/FeedUpdatePageInd";
 import FeedUpdataePageCor from "./pages/FeedUpdatePageCor";
 
@@ -46,10 +46,7 @@ function App() {
               <Route path="/login" element={<LoginPage />}></Route>
               <Route path="/signup" element={<SignupPage />}></Route>
               <Route path="/profile/:feedId" element={<ProfilePageInd />}></Route>
-              <Route
-                path="/oauthloading"
-                element={<OauthLoadingPage />}
-              ></Route>
+              <Route path="/oauthloading" element={<OauthLoadingPage />}></Route>
               <Route path="/alarmpage" element={<Alarm />}></Route>
               <Route path="*" element={<Not404 />} />
             </Routes>

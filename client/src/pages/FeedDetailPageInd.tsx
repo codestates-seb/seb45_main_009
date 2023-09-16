@@ -49,14 +49,8 @@ function FeedDetailPageInd() {
       <BackButton />
       <ProfileInd feedId={feedId} responseData={responseData} userInfo={userInfo} isMyFeed={isMyFeed} />
       <div className=" mt-2">
-        <DetailFeed
-          feedId={feedId}
-          responseData={responseData}
-          isMyFeed={isMyFeed}
-          setIsMyFeed={setIsMyFeed}
-          userInfo={userInfo}
-        />
-        <Comment feedId={feedId} />
+        <DetailFeed feedId={feedId} responseData={responseData} userInfo={userInfo} isMyFeed={isMyFeed} />
+        <Comment feedId={feedId} userInfo={userInfo} isMyFeed={isMyFeed} />
       </div>
     </div>
   );

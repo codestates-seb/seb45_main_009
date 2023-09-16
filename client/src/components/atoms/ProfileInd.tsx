@@ -16,7 +16,6 @@ function ProfileInd({ feedId, responseData, userInfo, isMyFeed }: ProfileIndProp
 
   //로딩 상태 - 팔로우 적용 때문에 깜빡거림 방지
   const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => console.log("로딩상태", isLoading), [isLoading]);
   // 팔로우
   const [isFollowing, setIsFollowing] = useState(false);
 
