@@ -7,6 +7,7 @@ import { RootStates } from "../../types/types";
 import {
   setAllFeedDatas,
   setAllUserDatas,
+  setAllFeedDataB,
 } from "../../redux/reducers/feedSlice";
 import noFeed from "../../assets/images/nofeed.png";
 
@@ -32,6 +33,7 @@ interface FeedData {
   nickname: string;
   profileImageUrl: string;
   content: string;
+  userId: number;
   relatedTags: string[];
   images: {
     imageId: number;
@@ -84,7 +86,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
         setAllFeedData(updatedFeedData);
         setPage((prevPage) => prevPage + 1);
 
-        // dispatch(setAllFeedDatas(updatedFeedData));
+        dispatch(setAllFeedDataB(updatedFeedData));
       }
 
       setLoading(false);
@@ -97,7 +99,8 @@ const Feed = ({ selectedFilter }: FeedProps) => {
   const getUserData = async () => {
     try {
       const response = await globalAxios.get("/users");
-      const getData = response.data.content;
+      const getData = response.data;
+      console.log(getData, "getData");
       setAllUserData(getData);
       dispatch(setAllUserDatas(getData));
     } catch (err) {
@@ -128,6 +131,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
 
   const usethis = filteredDatas.length !== 0 ? filteredDatas : allFeedData;
 
+  console.log("allFeedData", filteredDatas);
   const filteredData = usethis.filter((user) => {
     const hasExerciseTag =
       selectedFilter.includes("운동전체") ||
@@ -165,7 +169,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
   });
 
   const hasDataToDisplay = filteredData.length > 0;
-
+  console.log(filteredData, "filteredData");
   return (
     <section className="flex justify-center flex-col items-center ">
       <div>
@@ -188,11 +192,13 @@ const Feed = ({ selectedFilter }: FeedProps) => {
               return (
                 <article key={idx} className="mb-4 min-w-[250px]">
                   <div className="flex mb-4">
-                    <img
-                      src={feed.profileImageUrl}
-                      alt={`ProfileImg of ${feed.feedId}`}
-                      className="rounded-full border mr-2 w-10 h-10"
-                    />
+                    <Link to={`/profile/${user?.userId}`}>
+                      <img
+                        src={feed.profileImageUrl}
+                        alt={`ProfileImg of ${feed.feedId}`}
+                        className="rounded-full border mr-2 w-10 h-10"
+                      />
+                    </Link>
                     <div className="ml-2">
                       <p>{feed.nickname}</p>
                       {user?.bio ? (

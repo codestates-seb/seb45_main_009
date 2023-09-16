@@ -93,7 +93,7 @@ const MyPageFollow = () => {
 
   return (
     <div className="flex justify-center flex-col items-center mt-5">
-      <section className="grid  grid-cols-1 gap-8 h-full mb-24 mx-3 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 md:gap-8 lg:grid-cols-4 ">
+      <section className="grid  grid-cols-1 gap-8 h-full mb-24 mx-3 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 md:gap-8 lg:grid-cols-4 w-[80%]">
         <div className="flex items-center">
           <AiFillStar size="40" color="#FFEA00" />
           <p className="text-2xl font-bold ml-4">
@@ -121,12 +121,12 @@ const MyPageFollow = () => {
           </div>
         </div>
         {chunkData.map((user, idx) => (
-          <article key={idx} className="flex items-center">
+          <article key={idx} className="flex items-center min-w-[253px]">
             <Link to={`/profile/${user.userId}`}>
               <img
                 src={user.profileimg}
                 alt="profile"
-                className="rounded-full border mr-2 w-20 h-20"
+                className="rounded-full border mr-2 w-14 h-14"
               />
             </Link>
             <div className="mx-3">
