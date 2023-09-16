@@ -17,6 +17,9 @@ function Header() {
   const isAuthenticated = useSelector(
     (state: RootState) => state.login.isAuthenticated
   );
+  const { allFeedDatas } = useSelector((state: RootStates) => state.feed);
+  const { allUserDatas } = useSelector((state: RootStates) => state.feed);
+
   const logoutHandler = () => {
     dispatch(logout());
     sessionStorage.removeItem("access_token");
@@ -54,27 +57,65 @@ function Header() {
     }
   };
 
-  // const allData = useSelector((state: RootState) => state.allData);
-  // // console.log(allData);
-  // const users: User[] = allData.users; // users 타입을 User[]로 명시
-  // const feeds: Feed[] = allData.feeds; // feeds 타입을 Feed[]로 명시
-
   const [search, setSearch] = useState("");
   const [showAutoComplete, setShowAutoComplete] = useState(false);
   const [autoCompleteData, setAutoCompleteData] = useState<string[]>([]);
-  const [suggestions, setSuggestions] = useState<string[]>([
-    "헬스",
-    "한강",
-    "헬스장",
-  ]);
+  const [auto, setAuto] = useState<string[]>([]);
+
+  const [allTags, setAllTags] = useState<string[]>([]);
+  const [allNickNames, setAllNickNames] = useState<string[]>([]);
+
+  useEffect(() => {
+    // allFeedDatas가 변경될 때 allTags 업데이트
+    const tags = allFeedDatas.reduce((accumulator: string[], feed) => {
+      feed.relatedTags.forEach((tag) => {
+        if (!accumulator.includes(tag)) {
+          accumulator.push(tag);
+        }
+      });
+      return accumulator;
+    }, []);
+    setAllTags(tags);
+  }, [allFeedDatas]);
+
+  useEffect(() => {
+    // allUserDatas가 변경될 때 allNickNames 업데이트
+    const nickNames = allUserDatas.reduce((accumulator: string[], user) => {
+      if (!accumulator.includes(user.nickname)) {
+        accumulator.push(user.nickname);
+      }
+      return accumulator;
+    }, []);
+    setAllNickNames(nickNames);
+  }, [allUserDatas]);
+  console.log("alltags", allTags);
+  console.log("allNickNames", allNickNames);
+  console.log("allUserDatas", allUserDatas);
+  console.log("allFeedDatas", allFeedDatas);
+
+  useEffect(() => {
+    // allTags와 allNickNames를 합쳐서 auto 상태를 업데이트
+    const combinedData = allTags.concat(allNickNames);
+    setAuto(combinedData);
+  }, [allTags, allNickNames]);
+
+  console.log(auto);
 
   const fetchFilteredData = async () => {
     try {
       const response = await globalAxios.get(`feed/search?keyword=${search}`);
       const data = response.data;
 
-      const filteredUsers = data.users;
+      let filteredUsers: { nickname: string }[] = data.users;
       const filteredFeeds = data.feeds;
+
+      if (filteredUsers.length !== 0) {
+        filteredUsers = allFeedDatas.filter((feed) =>
+          filteredUsers.some(
+            (user: { nickname: string }) => user.nickname === feed.nickname
+          )
+        );
+      }
 
       const mergedData = [...filteredUsers, ...filteredFeeds];
 
@@ -90,9 +131,9 @@ function Header() {
 
     if (inputValue.trim() !== "") {
       // 검색어 추천 목록을 가져오는 코드를 작성
-      const filteredSuggestions: string[] = suggestions.filter((suggestion) =>
-        suggestion.includes(inputValue)
-      );
+      const filteredSuggestions: string[] = auto
+        .filter((suggestion) => suggestion.includes(inputValue))
+        .slice(0, 5);
 
       setAutoCompleteData(filteredSuggestions);
       setShowAutoComplete(true);
@@ -112,7 +153,11 @@ function Header() {
       searchInput.value = suggestion;
     }
 
-    fetchFilteredData();
+    const filteredData = allFeedDatas.filter((feed) => {
+      return feed.relatedTags.some((tag) => tag.includes(suggestion));
+    });
+
+    dispatch(setFilteredData(filteredData));
   };
 
   //엔터시 자동 필터링 공백시 초기화
@@ -152,7 +197,7 @@ function Header() {
           </div>
         )}
       </Link>
-      <div className="flex items-center min-w-[190px] h-[3vh] w-[50vw] max-w-[500px] border  p-1 sm:mr-2 sm:h-[4vh]">
+      <div className="flex items-center min-w-[190px] h-[3vh] w-[50vw] max-w-[500px] border  p-1 sm:mr-2 sm:h-[4vh] relative">
         <BiSearch size="24" />
         <input
           id="search"
@@ -161,22 +206,22 @@ function Header() {
           onChange={handleInputChange}
           onKeyDown={handleEnterKeyPress}
         />
+        {showAutoComplete && autoCompleteData.length > 0 && (
+          <div className="mt-2 w-[50vw] min-w-[190px] max-w-[500px] bg-white border border-gray-300  shadow-lg absolute top-6 left-0 right-0">
+            <ul>
+              {autoCompleteData.map((suggestion, index) => (
+                <li
+                  key={index}
+                  className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                  onClick={() => handleSuggestionClick(suggestion)}
+                >
+                  {suggestion}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
-      {showAutoComplete && autoCompleteData.length > 0 && (
-        <div className="mt-2 w-[50vw] min-w-[190px] max-w-[500px] bg-white border border-gray-300  shadow-lg absolute top-[3.2rem] left-[36.4vw]">
-          <ul>
-            {autoCompleteData.map((suggestion, index) => (
-              <li
-                key={index}
-                className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                onClick={() => handleSuggestionClick(suggestion)}
-              >
-                {suggestion}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
       {isMobile ? (
         <>
           <div className="ml-3" onClick={toggleModal}>

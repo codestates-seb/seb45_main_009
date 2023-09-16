@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
 import globalAxios from "../../data/data";
-import {
-  setAllFeedDatas,
-  setAllFeedDataB,
-} from "../../redux/reducers/feedSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootStates } from "../../types/types";
+import {
+  setAllFeedDatas,
+  setAllUserDatas,
+} from "../../redux/reducers/feedSlice";
+import noFeed from "../../assets/images/nofeed.png";
 
 interface UserData {
   bio: string;
@@ -20,6 +21,7 @@ interface UserData {
   price: number | string;
   profileimg: string;
   roles: string[];
+  sport: string;
   userId: number;
   weight: number;
 }
@@ -43,18 +45,17 @@ interface FeedProps {
 }
 
 const Feed = ({ selectedFilter }: FeedProps) => {
-  const dispatch = useDispatch();
   const { filteredDatas } = useSelector((state: RootStates) => state.feed);
-
   const [allFeedData, setAllFeedData] = useState<FeedData[]>([]);
   const [allUserData, setAllUserData] = useState<UserData[]>([]);
-
+  console.log(filteredDatas);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
   const [ref, inView] = useInView();
 
+  const dispatch = useDispatch();
   const location = useLocation();
   const currentFeed =
     location.pathname === "/" ? "/feedformind" : "/feedformcor";
@@ -79,12 +80,11 @@ const Feed = ({ selectedFilter }: FeedProps) => {
         setHasMore(false);
       } else {
         // 이전 데이터와 새로운 데이터 합치기
-        setAllFeedData((prevData) => [...prevData, ...getData]);
-
-        // currentPage === "/"
-        //   ? dispatch(setAllFeedDatas(getData))
-        //   : dispatch(setAllFeedDataB(getData));
+        const updatedFeedData = [...allFeedData, ...getData];
+        setAllFeedData(updatedFeedData);
         setPage((prevPage) => prevPage + 1);
+
+        // dispatch(setAllFeedDatas(updatedFeedData));
       }
 
       setLoading(false);
@@ -99,10 +99,25 @@ const Feed = ({ selectedFilter }: FeedProps) => {
       const response = await globalAxios.get("/users");
       const getData = response.data.content;
       setAllUserData(getData);
+      dispatch(setAllUserDatas(getData));
     } catch (err) {
       console.log("Error >>", err);
     }
   };
+
+  const getAllDataOnce = async () => {
+    try {
+      const response = await globalAxios.get("/feed/search?keyword=");
+      const getData = response.data.feeds;
+      dispatch(setAllFeedDatas(getData));
+    } catch (err) {
+      console.log("Error >>", err);
+    }
+  };
+
+  useEffect(() => {
+    getAllDataOnce();
+  }, []);
 
   useEffect(() => {
     if (inView && !loading && hasMore) {
@@ -113,17 +128,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
 
   const usethis = filteredDatas.length !== 0 ? filteredDatas : allFeedData;
 
-  const uniqueUsers = new Set();
-
   const filteredData = usethis.filter((user) => {
-    // 유저 정보가 이미 중복된 경우 해당 데이터를 건너뜁니다.
-    if (uniqueUsers.has(user.nickname)) {
-      return false;
-    }
-
-    // 중복된 유저가 아닌 경우 Set에 추가하여 중복을 방지합니다.
-    uniqueUsers.add(user.nickname);
-
     const hasExerciseTag =
       selectedFilter.includes("운동전체") ||
       selectedFilter.some((filter) => user.relatedTags.includes(filter));
@@ -158,9 +163,9 @@ const Feed = ({ selectedFilter }: FeedProps) => {
       return exerciseMatch && locationMatch;
     }
   });
-  {
-    console.log(filteredData);
-  }
+
+  const hasDataToDisplay = filteredData.length > 0;
+
   return (
     <section className="flex justify-center flex-col items-center ">
       <div>
@@ -173,53 +178,50 @@ const Feed = ({ selectedFilter }: FeedProps) => {
           </Link>
         </div>
 
-        <section className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-24">
-          {filteredData.map((user, idx) => {
-            // filteredData에 있는 유저 정보를 순회하면서 해당 유저와 관련된 피드 데이터를 필터링
-            const userFeeds = allFeedData.filter(
-              (feed) => feed.nickname === user.nickname
-            );
+        {hasDataToDisplay ? ( // Check if there is data to display
+          <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-24">
+            {filteredData.map((feed, idx) => {
+              const user = allUserData.find(
+                (userData) => userData.nickname === feed.nickname
+              );
 
-            return (
-              <>
-                {userFeeds.map((feed, feedIdx) => (
-                  <article key={feedIdx} className="mb-4 min-w-[250px]">
-                    {/* 피드 정보를 렌더링 */}
-                    <div className="flex mb-4">
-                      <img
-                        src={feed.profileImageUrl}
-                        alt={`ProfileImg of ${feed.feedId}`}
-                        className="rounded-full border mr-2 w-10 h-10"
-                      />
-                      <div className="ml-2">
-                        <p>{feed.nickname}</p>
-                        {/* 유저 정보를 찾아 렌더링 */}
-                        {user ? (
-                          <p className="text-gray-400">
-                            {user.bio ? user.bio : "xx"}
-                          </p>
-                        ) : (
-                          <p className="text-gray-400">
-                            No user data available
-                          </p>
-                        )}
-                      </div>
+              return (
+                <article key={idx} className="mb-4 min-w-[250px]">
+                  <div className="flex mb-4">
+                    <img
+                      src={feed.profileImageUrl}
+                      alt={`ProfileImg of ${feed.feedId}`}
+                      className="rounded-full border mr-2 w-10 h-10"
+                    />
+                    <div className="ml-2">
+                      <p>{feed.nickname}</p>
+                      {user?.bio ? (
+                        <p className="text-gray-400 max-w-[200px] truncate">
+                          {user.bio}
+                        </p>
+                      ) : (
+                        <p className="text-gray-400 max-w-[200px] truncate">
+                          바이오 없다
+                        </p>
+                      )}
                     </div>
-                    <Link to={`${currentDetail}/${feed.feedId}`}>
-                      <div>
-                        <img
-                          src={feed.images[0].imageUrl}
-                          alt={`FeedImg of ${feed.feedId}`}
-                          className="w-[13vw] h-[30vh] object-cover min-w-[250px] border"
-                        />
-                      </div>
-                    </Link>
-                  </article>
-                ))}
-              </>
-            );
-          })}
-        </section>
+                  </div>
+                  <Link to={`${currentDetail}/${feed.feedId}`}>
+                    <div>
+                      <img
+                        src={feed.images[0].imageUrl}
+                        alt={`FeedImg of ${feed.feedId}`}
+                        className="w-[13vw] h-[30vh] object-cover min-w-[250px] border"
+                      />
+                    </div>
+                  </Link>
+                </article>
+              );
+            })}
+          </section>
+        ) : (
+          <img src={noFeed} alt="nofeedImg" />
+        )}
       </div>
 
       <div ref={ref}></div>
