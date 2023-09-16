@@ -28,7 +28,7 @@ const feedSlice = createSlice({
     },
 
     setAllFeedDataB: (state, action) => {
-      state.allFeedDataB = [...state.allFeedDataB, ...action.payload];
+      state.allFeedDataB = action.payload;
     },
     setAllUserDatas: (state, action) => {
       state.allUserDatas = action.payload;

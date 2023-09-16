@@ -5,6 +5,7 @@ import { UserInfo } from "../../types/types";
 import { useLocation } from "react-router";
 import globalAxios from "../../data/data";
 import { Link } from "react-router-dom";
+import { RootStates } from "../../types/types";
 
 interface UserData {
   bio: string;
@@ -44,9 +45,10 @@ interface RootState {
 
 const MyPageFeed = () => {
   const userInfo = useSelector((state: RootState) => state.login.userInfo);
+  const { allUserDatas } = useSelector((state: RootStates) => state.feed);
 
   const [allFeedData, setAllFeedData] = useState<FeedData[]>([]);
-  const [allUserData, setAllUserData] = useState<UserData[]>([]);
+  // const [allUserData, setAllUserData] = useState<UserData[]>([]);
 
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -89,20 +91,19 @@ const MyPageFeed = () => {
     }
   };
 
-  const getUserData = async () => {
-    try {
-      const response = await globalAxios.get("/users");
-      const getData = response.data.content;
-      setAllUserData(getData);
-    } catch (err) {
-      console.log("Error >>", err);
-    }
-  };
+  // const getUserData = async () => {
+  //   try {
+  //     const response = await globalAxios.get("/users");
+  //     const getData = response.data;
+  //     setAllUserData(getData);
+  //   } catch (err) {
+  //     console.log("Error >>", err);
+  //   }
+  // };
 
   useEffect(() => {
     if (inView && !loading && hasMore) {
       getMainListData();
-      getUserData();
     }
   }, [inView, loading, hasMore]);
 
@@ -126,7 +127,7 @@ const MyPageFeed = () => {
     };
   }, [windowWidth]);
 
-  const user = allUserData.find(
+  const user = allUserDatas.find(
     (userData) => userData.nickname === userInfo.userNickname
   );
 
