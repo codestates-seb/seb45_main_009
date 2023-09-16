@@ -21,6 +21,7 @@ public class UserProfileDto {
     private String price;
     private Integer height;
     private Integer weight;
+    private String sport;
     private Long feedCount;
     private Long followerCount;
     private Long followCount;
