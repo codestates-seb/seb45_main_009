@@ -59,13 +59,13 @@ export interface UserData {
   userId: number;
   weight: number;
 }
-export interface RootState {
-  login: {
-    isAuthenticated: boolean;
-    userInfo: UserInfo;
-  };
-  allData: AllDataState;
-}
+// export interface RootState {
+//   login: {
+//     isAuthenticated: boolean;
+//     userInfo: UserInfo;
+//   };
+//   allData: AllDataState;
+// }
 export interface RootStates {
   feed: FeedState;
 }

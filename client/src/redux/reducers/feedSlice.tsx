@@ -4,7 +4,7 @@ import { FeedData, UserData } from "../../types/types";
 export type FeedState = {
   allFeedDatas: FeedData[];
   allFeedDataB: FeedData[];
-  allUserData: UserData[];
+  allUserDatas: UserData[];
   page: number;
   loading: boolean;
   hasMore: boolean;
@@ -16,7 +16,7 @@ const feedSlice = createSlice({
   initialState: {
     allFeedDatas: [] as FeedData[],
     allFeedDataB: [] as FeedData[],
-    allUserData: [] as UserData[],
+    allUserDatas: [] as UserData[],
     page: 1,
     loading: false,
     hasMore: true,
@@ -24,14 +24,14 @@ const feedSlice = createSlice({
   },
   reducers: {
     setAllFeedDatas: (state, action) => {
-      state.allFeedDatas = [...state.allFeedDatas, ...action.payload];
+      state.allFeedDatas = action.payload;
     },
 
     setAllFeedDataB: (state, action) => {
       state.allFeedDataB = [...state.allFeedDataB, ...action.payload];
     },
-    setAllUserData: (state, action) => {
-      state.allUserData = action.payload;
+    setAllUserDatas: (state, action) => {
+      state.allUserDatas = action.payload;
     },
     setPage: (state, action) => {
       state.page = action.payload;
@@ -51,7 +51,7 @@ const feedSlice = createSlice({
 export const {
   setAllFeedDatas,
   setAllFeedDataB,
-  setAllUserData,
+  setAllUserDatas,
   setPage,
   setLoading,
   setHasMore,
