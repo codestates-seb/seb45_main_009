@@ -183,31 +183,6 @@ function Header() {
     };
   }, []);
 
-  //실시간 알림
-  const connectSSE = () => {
-    const accessToken = sessionStorage.getItem("access_token");
-
-    const sseHeaders = {
-      Authorization: `${accessToken}`,
-    };
-
-    const sse = new EventSourcePolyfill("http://13.125.146.181:8080/subscribe", { headers: sseHeaders });
-
-    sse.onopen = (event) => {
-      console.log("SSE 연결 성공", event);
-    };
-
-    sse.onmessage = (event) => {
-      // 여기서 서버로부터 전송된 메시지를 처리
-      console.log("서버로부터 받은 메시지:", event.data);
-    };
-
-    sse.onerror = (error) => {
-      console.error("SSE 오류 발생", error);
-      sse.close();
-    };
-  };
-  useEffect(() => connectSSE(), [isAuthenticated]);
   return (
     <header className="flex justify-center items-center m-2">
       <Link to="/">
