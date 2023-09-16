@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import globalAxios from "../../data/data";
+import { Link, useNavigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { ResponseDataType } from "../../types/types";
 import { UserInfo } from "../../types/types";
@@ -20,16 +21,30 @@ function ProfileInd({ feedId, responseData, userInfo, isMyFeed }: ProfileIndProp
   // 팔로우
   const [isFollowing, setIsFollowing] = useState(false);
 
-  const handleFollow = async () => {
-    try {
-      const response = await globalAxios.post(`/follow/${responseData?.userId}`);
-      console.log("팔로우 요청 성공", response);
-      setIsFollowing(response.data);
-    } catch (error: any) {
-      console.error("팔로우 요청 실패:", error.response);
-      alert(error.response.data.message);
+  const followClick = () => {
+    if (isFollowing) {
+      console.log("팔로우 취소");
+    } else {
+      console.log("팔로우하기");
     }
+    // 팔로우 상태 토글
+    setIsFollowing(!isFollowing);
   };
+
+  type ResponseDataType = {
+    feedId: number;
+    userId: number;
+    userNickname: string;
+    profileImageUrl: string;
+    content: string;
+    relatedTags: string[];
+    images: Array<{
+      imageId: number;
+      imageUrl: string;
+      imageTags: any[];
+    }>;
+  };
+
 
   const handleNavigateProfile = () => {
     navigate(`/profile/${responseData?.userId}`);
@@ -59,6 +74,7 @@ function ProfileInd({ feedId, responseData, userInfo, isMyFeed }: ProfileIndProp
   return (
     <div className="max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8">
       <div className="flex flex-row justify-between">
+        <Link to={`/profile/${feedUserData?.userId}`}>
         <div className="flex items-center">
           <img
             src={responseData?.profileImageUrl}
@@ -73,6 +89,7 @@ function ProfileInd({ feedId, responseData, userInfo, isMyFeed }: ProfileIndProp
             <span className="opacity-60 text-[13px] max-mobile:text-[12px]">{responseData?.bio}</span>
           </div>
         </div>
+          </ Link>
         {isMyFeed ? null : (
           <div className="flex items-center justify-end">
             <button
@@ -92,6 +109,22 @@ function ProfileInd({ feedId, responseData, userInfo, isMyFeed }: ProfileIndProp
         )}
       </div>
     </div>
-  );
+  </div>
+  </Link>
+
+  <div className="flex items-center justify-end md:justify-start">
+    <button className=" mr-4 w-full sm:w-[200px] h-[30px] rounded-[4px] text-[14px] font-medium bg-btn-color text-white" onClick={followClick}>
+      {isFollowing ? '팔로잉' : '팔로우'} 
+    </button>
+    {
+            isModalOpen ? 
+            <Modal onClose={handleCloseModal} onDelete={handleDelete} onEdit={handleEdit}/> :
+            <button onClick={handleOpenModal}><FaEllipsisH /></button>
+          }
+  </div>
+
+  </div>
+</div>
+) 
 }
 export default ProfileInd;
