@@ -126,6 +126,7 @@ export interface CommentTypes {
   nickname: string;
   createdAt: string;
   modifiedAt: string;
+  profileImageUrl: string;
 }
 
 export interface PageInfo {
