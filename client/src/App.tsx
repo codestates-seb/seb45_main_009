@@ -21,10 +21,18 @@ import Layout from "./components/atoms/Layout";
 import useUserSession from "./hooks/useUserSession";
 import FeedUpdataePageInd from "./pages/FeedUpdatePageInd";
 import FeedUpdataePageCor from "./pages/FeedUpdatePageCor";
+import loadingImage from "./assets/images/loading.gif";
 
 function App() {
-  useUserSession();
-
+  //새로고침시 로그인 상태 유지 - 완벽하게 상태저장 후 페이지 로드를 위해 로딩 추가
+  const isLoading = useUserSession();
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-full">
+        <img src={loadingImage} alt="loadingImage" />
+      </div>
+    );
+  }
   return (
     <BrowserRouter>
       <div className="App">
