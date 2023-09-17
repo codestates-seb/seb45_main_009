@@ -60,11 +60,8 @@ const MyPageFeed = () => {
 
   const PAGE_SIZE = 4; // 페이지당 데이터 개수
 
-  const location = useLocation();
-
   const currentDetail =
-    location.pathname === "/" ? "/feeddetailind" : "/feeddetailcor";
-
+    userInfo.userType === "USER" ? "feeddetailind" : "/feeddetailcor";
   const getMainListData = async () => {
     try {
       setLoading(true);
@@ -107,6 +104,10 @@ const MyPageFeed = () => {
     }
   }, [inView, loading, hasMore]);
 
+  useEffect(() => {
+    getMainListData();
+  }, [userInfo]);
+
   const IntroductionCss =
     " border border-gray-400 rounded-xl  p-10 h-full min-h-[200px] m-8 w-[50%] md:w-auto ";
 
@@ -130,6 +131,8 @@ const MyPageFeed = () => {
   const user = allUserDatas.find(
     (userData) => userData.nickname === userInfo.userNickname
   );
+
+  console.log(allUserDatas, "userinfo");
 
   const userFeed = allFeedData.filter(
     (userData) => userData.nickname === userInfo.userNickname
@@ -172,7 +175,7 @@ const MyPageFeed = () => {
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 h-full mb-24">
           {userFeed.map((user, idx) => (
             <article key={idx} className="flex justify-center items-center">
-              <Link to={`${currentDetail}/${user.feedId}`}>
+              <Link to={`/${currentDetail}/${user.feedId}`}>
                 <img
                   src={user.images[0].imageUrl}
                   alt={`ProfileImg of ${user.feedId}`}
