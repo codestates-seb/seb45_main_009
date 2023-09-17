@@ -145,7 +145,8 @@ function MyPageEditInfo() {
       const data: userData = response.data.data;
       console.log("불러오기 성공, data:", data);
       const preProfileImg = { file: null, src: data.profileimg };
-      if ((preProfileImg.src = "https://fitfolio-photo.s3.ap-northeast-2.amazonaws.com/default+image/default.png")) {
+      console.log(preProfileImg);
+      if (preProfileImg.src === "https://fitfolio-photo.s3.ap-northeast-2.amazonaws.com/default+image/default.png") {
       } else {
         setPreviewImg(preProfileImg);
       }
@@ -163,13 +164,13 @@ function MyPageEditInfo() {
   useEffect(() => {
     getData();
   }, []);
-
+  useEffect(() => console.log("previewImg:", previewImg), [previewImg]);
   const onSubmit = async () => {
     if (!isValidNickname) {
       alert("올바른 닉네임을 입력해주세요.");
       return;
     }
-    if (!isValidBio) {
+    if (isValidBio === false) {
       alert("한 줄 소개는 30자 이내로 입력해주세요.");
       return;
     }
@@ -250,33 +251,79 @@ function MyPageEditInfo() {
               <p className="text-[12px] text-isValid-text-red">유효하지 않은 닉네임 형식입니다.</p>
             )}
             <div className="flex flex-row">
-              <CommonInput value={height} type="number" label="키(cm)" onChange={handleHeightChange} className="mr-2" />
-              <CommonInput value={weight} type="number" label="몸무게(kg)" onChange={handleWeightChange} />
+              <CommonInput
+                value={height}
+                type="number"
+                label="키(cm)"
+                onChange={handleHeightChange}
+                className="mr-2"
+                placeholder="키를 입력해 주세요."
+              />
+              <CommonInput
+                value={weight}
+                type="number"
+                label="몸무게(kg)"
+                onChange={handleWeightChange}
+                placeholder="몸무게를 입력해 주세요."
+              />
             </div>
-            <CommonInput value={sport} label="주 운동 종목" onChange={handleSportChange} />
+            <CommonInput
+              value={sport}
+              label="주운동 종목"
+              onChange={handleSportChange}
+              placeholder="운동 종목을 입력해 주세요."
+            />
             <CommonInput
               value={bio}
               label="한 줄 소개"
               onChange={handleBioChange}
               onBlur={validateBioHandler}
               onFocus={clearBioValidation}
+              placeholder="한 줄 소개를 입력해 주세요."
             />
             <p className="text-[12px]">최대 30자 이내로 작성해주세요. </p>
           </div>
         ) : (
           <div className="flex flex-col">
-            <CommonInput value={nickname} label="닉네임" onChange={handleNicknameChange} />
-            <CommonInput value={location} label="주소" onChange={handleLocationChange} />
-            <CommonInput value={sport} label="주 운동 종목" onChange={handleSportChange} />
+            <CommonInput
+              value={nickname}
+              label="닉네임"
+              onChange={handleNicknameChange}
+              onBlur={validateNicknameHandler}
+              onFocus={clearNicknameValidation}
+              placeholder="닉네임을 입력해 주세요."
+            />
+            <p className="text-[12px]">영문자, 숫자를 혼합하여 6~20자로 입력해주세요. </p>
+            {isValidNickname === false && (
+              <p className="text-[12px] text-isValid-text-red">유효하지 않은 닉네임 형식입니다.</p>
+            )}
+            <CommonInput
+              value={location}
+              label="주소"
+              onChange={handleLocationChange}
+              placeholder=" 주소를 입력해 주세요."
+            />
+            <CommonInput
+              value={sport}
+              label="주 운동 종목"
+              onChange={handleSportChange}
+              placeholder="운동 종목을 입력해 주세요."
+            />
             <CommonInput
               value={bio}
               label="한 줄 소개"
               onChange={handleBioChange}
               onBlur={validateBioHandler}
               onFocus={clearBioValidation}
+              placeholder="한 줄 소개를 입력해 주세요."
             />
             <p className="text-[12px]">최대 30자 이내로 작성해주세요. </p>
-            <CommonInput value={priceInfo} label="가격 정보" onChange={handlePriceInfoChange} />
+            <CommonInput
+              value={priceInfo}
+              label="가격 정보"
+              onChange={handlePriceInfoChange}
+              placeholder="가격 정보를 입력해 주세요."
+            />
           </div>
         )}
 

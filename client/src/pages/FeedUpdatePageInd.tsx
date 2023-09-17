@@ -113,7 +113,8 @@ function FeedUpdataePageInd() {
       console.log("피드 수정 성공", response);
       //말풍선태그 추가api
       const imageIds = response.data.images.slice(-previewImg.length).map((imageData: any) => imageData.imageId);
-      if (imageIds.length !== 0) {
+      console.log("imageIds:", imageIds);
+      if (previewImg.length !== 0) {
         for (let i = 0; i < imageIds.length; i++) {
           const imageId = imageIds[i];
           const imgTagData = previewImg[i].tags;
