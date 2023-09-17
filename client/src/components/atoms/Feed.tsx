@@ -4,8 +4,13 @@ import { useInView } from "react-intersection-observer";
 import globalAxios from "../../data/data";
 import { useDispatch, useSelector } from "react-redux";
 import { RootStates, RootState } from "../../types/types";
-import { setAllFeedDatas, setAllUserDatas, setAllFeedDataB } from "../../redux/reducers/feedSlice";
+import {
+  setAllFeedDatas,
+  setAllUserDatas,
+  setAllFeedDataB,
+} from "../../redux/reducers/feedSlice";
 import noFeed from "../../assets/images/nofeed.png";
+import useFetchUserData from "../../hooks/useFetchUserData";
 
 interface UserData {
   bio: string;
@@ -47,9 +52,9 @@ const Feed = ({ selectedFilter }: FeedProps) => {
   const userInfo = useSelector((state: RootState) => state.login.userInfo);
   useEffect(() => console.log("userInfo:", userInfo), [userInfo]);
   const { filteredDatas } = useSelector((state: RootStates) => state.feed);
+  const { allUserDatas } = useSelector((state: RootStates) => state.feed);
   const [allFeedData, setAllFeedData] = useState<FeedData[]>([]);
-  const [allUserData, setAllUserData] = useState<UserData[]>([]);
-  console.log(filteredDatas);
+
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -59,7 +64,8 @@ const Feed = ({ selectedFilter }: FeedProps) => {
   const dispatch = useDispatch();
   const location = useLocation();
   // const currentFeed = location.pathname === "/" ? "/feedformind" : "/feedformcor";
-  const currentDetail = location.pathname === "/" ? "/feeddetailind" : "/feeddetailcor";
+  const currentDetail =
+    location.pathname === "/" ? "/feeddetailind" : "/feeddetailcor";
   const currentPage = location.pathname === "/" ? "/" : "/store";
 
   const PAGE_SIZE = 4; // 페이지당 데이터 개수
@@ -93,17 +99,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
     }
   };
 
-  const getUserData = async () => {
-    try {
-      const response = await globalAxios.get("/users");
-      const getData = response.data;
-      console.log(getData, "getData");
-      setAllUserData(getData);
-      dispatch(setAllUserDatas(getData));
-    } catch (err) {
-      console.log("Error >>", err);
-    }
-  };
+  useFetchUserData();
 
   const getAllDataOnce = async () => {
     try {
@@ -122,20 +118,23 @@ const Feed = ({ selectedFilter }: FeedProps) => {
   useEffect(() => {
     if (inView && !loading && hasMore) {
       getMainListData();
-      getUserData();
     }
   }, [inView, loading, hasMore]);
 
   const usethis = filteredDatas.length !== 0 ? filteredDatas : allFeedData;
 
-  console.log("allFeedData", filteredDatas);
   const filteredData = usethis.filter((user) => {
     const hasExerciseTag =
-      selectedFilter.includes("운동전체") || selectedFilter.some((filter) => user.relatedTags.includes(filter));
+      selectedFilter.includes("운동전체") ||
+      selectedFilter.some((filter) => user.relatedTags.includes(filter));
     const hasLocationTag =
-      selectedFilter.includes("지역전체") || selectedFilter.some((tag) => user.relatedTags.includes(tag));
+      selectedFilter.includes("지역전체") ||
+      selectedFilter.some((tag) => user.relatedTags.includes(tag));
 
-    if (selectedFilter.includes("운동전체") && selectedFilter.includes("지역전체")) {
+    if (
+      selectedFilter.includes("운동전체") &&
+      selectedFilter.includes("지역전체")
+    ) {
       return true; // 운동전체와 지역전체가 선택된 경우 모든 데이터 표시
     } else if (selectedFilter.includes("운동전체") && hasLocationTag) {
       return true; // 운동전체만 선택하고 지역 필터에 해당하는 데이터 표시
@@ -143,10 +142,18 @@ const Feed = ({ selectedFilter }: FeedProps) => {
       return true; // 지역전체만 선택하고 운동 필터에 해당하는 데이터 표시
     } else {
       // 지역태그와 운동태그를 각각 선택한 경우
-      const selectedExerciseTags = selectedFilter.filter((tag) => tag !== "운동전체");
-      const selectedLocationTags = selectedFilter.filter((tag) => tag !== "지역전체");
-      const exerciseMatch = selectedExerciseTags.every((tag) => user.relatedTags.includes(tag));
-      const locationMatch = selectedLocationTags.every((tag) => user.relatedTags.includes(tag));
+      const selectedExerciseTags = selectedFilter.filter(
+        (tag) => tag !== "운동전체"
+      );
+      const selectedLocationTags = selectedFilter.filter(
+        (tag) => tag !== "지역전체"
+      );
+      const exerciseMatch = selectedExerciseTags.every((tag) =>
+        user.relatedTags.includes(tag)
+      );
+      const locationMatch = selectedLocationTags.every((tag) =>
+        user.relatedTags.includes(tag)
+      );
 
       return exerciseMatch && locationMatch;
     }
@@ -165,7 +172,6 @@ const Feed = ({ selectedFilter }: FeedProps) => {
       navigate("/feedformcor");
     }
   };
-  console.log(filteredData, "filteredData");
   return (
     <section className="flex justify-center flex-col items-center ">
       <div>
@@ -181,7 +187,9 @@ const Feed = ({ selectedFilter }: FeedProps) => {
         {hasDataToDisplay ? ( // Check if there is data to display
           <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-24">
             {filteredData.map((feed, idx) => {
-              const user = allUserData.find((userData) => userData.nickname === feed.nickname);
+              const user = allUserDatas.find(
+                (userData) => userData.nickname === feed.nickname
+              );
 
               return (
                 <article key={idx} className="mb-4 min-w-[250px]">
@@ -196,9 +204,13 @@ const Feed = ({ selectedFilter }: FeedProps) => {
                     <div className="ml-2">
                       <p>{feed.nickname}</p>
                       {user?.bio ? (
-                        <p className="text-gray-400 max-w-[200px] truncate">{user.bio}</p>
+                        <p className="text-gray-400 max-w-[200px] truncate">
+                          {user.bio}
+                        </p>
                       ) : (
-                        <p className="text-gray-400 max-w-[200px] truncate">바이오 없다</p>
+                        <p className="text-gray-400 max-w-[200px] truncate">
+                          바이오 없다
+                        </p>
                       )}
                     </div>
                   </div>

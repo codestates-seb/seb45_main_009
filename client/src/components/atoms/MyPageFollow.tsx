@@ -6,6 +6,8 @@ import globalAxios from "../../data/data";
 import { useSelector } from "react-redux";
 import { RootState } from "../../types/types";
 import { Link, useLocation } from "react-router-dom";
+import { BsFillBookmarkStarFill } from "react-icons/bs";
+import { FaXmark } from "react-icons/fa6";
 
 interface UserData {
   profileimg: string;
@@ -38,12 +40,6 @@ const MyPageFollow = () => {
     ? following.slice(0, startIndex + PAGE_SIZE)
     : followers.slice(0, startIndex + PAGE_SIZE);
   console.log(chunkData, "chunkData");
-  const deleteUserHandler = (userId: string) => {
-    const updatedFollowers = followers.filter((user) => user.userId !== userId);
-    const updatedFollowing = following.filter((user) => user.userId !== userId);
-    setFollowers(updatedFollowers);
-    setFollowing(updatedFollowing);
-  };
 
   const toggleFollowingView = (view: boolean) => {
     setIsFollowingView(view);
@@ -93,15 +89,15 @@ const MyPageFollow = () => {
 
   return (
     <div className="flex justify-center flex-col items-center mt-5">
-      <section className="grid  grid-cols-1 gap-8 h-full mb-24 mx-3 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 md:gap-8 lg:grid-cols-4 w-[80%]">
+      <section className="grid  grid-cols-1 gap-8 h-full mb-24 mx-3 sm:grid-cols-2 sm:gap-6 md:gap-8 lg:grid-cols-3 2xl:grid-cols-4 w-[80%]">
         <div className="flex items-center">
           <AiFillStar size="40" color="#FFEA00" />
           <p className="text-2xl font-bold ml-4">
             {isFollowingView ? "팔로잉 목록" : "팔로워 목록"}
           </p>
         </div>
-        <span className="col-span-1 md:col-span-2 lg:col-span-3"></span>
-        <span className="col-span-1 md:col-span-2 lg:col-span-3"></span>
+        <span className="col-span-1 lg:col-span-2 2xl:col-span-3"></span>
+        <span className="col-span-1 lg:col-span-2 2xl:col-span-3"></span>
         <div className="flex justify-end w-full">
           <div
             className={`mr-10 cursor-pointer ${
@@ -121,30 +117,34 @@ const MyPageFollow = () => {
           </div>
         </div>
         {chunkData.map((user, idx) => (
-          <article key={idx} className="flex items-center min-w-[253px]">
+          <article key={idx} className="flex items-center">
             <Link to={`/profile/${user.userId}`}>
               <img
                 src={user.profileimg}
                 alt="profile"
-                className="rounded-full border mr-2 w-14 h-14"
+                className="rounded-full border mr-2 w-[15vw] h-[15vw]  xl:h-[4vw] max-w-[3.2rem] max-h-[3.2rem]"
               />
             </Link>
-            <div className="mx-3">
-              <div className="flex items-center">
-                <div className="font-bold mr-2">{user.nickname}</div>
-              </div>
-              <div className="flex">
-                <p className="mr-3">165cm</p>
-                <p>50kg</p>
+            <div className="mx-3 ">
+              <div className="flex  flex-col items-start ">
+                <div className="font-bold w-[40vw] sm:w-[18vw] md:w-[21vw] lg:w-[12vw] 2xl:w-[10vw] mr-2 truncate">
+                  {user.nickname}
+                </div>
+                <p className=" w-[40vw] sm:w-[18vw] md:w-[21vw] lg:w-[12vw]  2xl:w-[10vw] truncate ">
+                  {user.bio
+                    ? user.bio
+                    : "좋은 하루ㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎ"}
+                </p>
               </div>
             </div>
+            <div>
+              <BsFillBookmarkStarFill color="red" />
+            </div>
             {isFollowingView && (
-              <button
+              <FaXmark
                 onClick={() => unfollowUser(user.userId)}
-                className="flex justify-end text-red-500 ml-2"
-              >
-                언팔로우
-              </button>
+                className="flex justify-end text-red-500 ml-2 hover:cursor-pointer"
+              />
             )}
           </article>
         ))}
