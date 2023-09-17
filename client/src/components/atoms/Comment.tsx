@@ -7,6 +7,7 @@ import timeFormatter from "../../hooks/timeFormatter";
 import img from "../../assets/images/profileDefault.png";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import { RootStates } from "../../types/types";
 interface CommentProps {
   feedId: number;
   isMyFeed: boolean;
@@ -16,7 +17,22 @@ interface CommentProps {
 function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state: RootState) => state.login.isAuthenticated);
-  useEffect(() => console.log("isAuthenticated:", isAuthenticated), [isAuthenticated]);
+  // 유저 사진 가져오기
+  const { allUserDatas } = useSelector((state: RootStates) => state.feed);
+
+  // 전체 유저에서 내 유저 확인
+  const isNicknameExist = allUserDatas.some((user) => user.nickname === userInfo.userNickname);
+
+  // 사진 가져오기
+  let profileImage = "";
+
+  if (isNicknameExist) {
+    const matchedUser = allUserDatas.find((user) => user.nickname === userInfo.userNickname);
+    if (matchedUser && matchedUser.profileimg) {
+      profileImage = matchedUser.profileimg;
+    }
+  }
+
   const [commentData, setCommentData] = useState<CommentDataTypes | null>(null);
 
   //댓글 데이터 불러오기
@@ -153,7 +169,7 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
     <div className="mb-14  max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8">
       <div className="mt-10">
         <div className="grid grid-cols-[auto,1fr,auto] items-center w-full gap-4">
-          <img src={img} className="w-8 h-8 rounded-full" alt="profileImage" />
+          <img src={profileImage} className="w-8 h-8 rounded-full" alt="profileImage" />
           {isAuthenticated ? (
             <input
               className="border-b focus:outline-none "
