@@ -11,6 +11,7 @@ import {
 } from "../../redux/reducers/feedSlice";
 import noFeed from "../../assets/images/nofeed.png";
 import useFetchUserData from "../../hooks/useFetchUserData";
+import { FcGallery } from "react-icons/fc";
 
 interface UserData {
   bio: string;
@@ -54,6 +55,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
   const { filteredDatas } = useSelector((state: RootStates) => state.feed);
   const { allUserDatas } = useSelector((state: RootStates) => state.feed);
   const [allFeedData, setAllFeedData] = useState<FeedData[]>([]);
+  console.log(allFeedData);
 
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -63,7 +65,6 @@ const Feed = ({ selectedFilter }: FeedProps) => {
 
   const dispatch = useDispatch();
   const location = useLocation();
-  // const currentFeed = location.pathname === "/" ? "/feedformind" : "/feedformcor";
   const currentDetail =
     location.pathname === "/" ? "/feeddetailind" : "/feeddetailcor";
   const currentPage = location.pathname === "/" ? "/" : "/store";
@@ -209,18 +210,21 @@ const Feed = ({ selectedFilter }: FeedProps) => {
                         </p>
                       ) : (
                         <p className="text-gray-400 max-w-[200px] truncate">
-                          바이오 없다
+                          오늘의 주인공
                         </p>
                       )}
                     </div>
                   </div>
                   <Link to={`${currentDetail}/${feed.feedId}`}>
-                    <div>
+                    <div className="relative">
                       <img
                         src={feed.images[0].imageUrl}
                         alt={`FeedImg of ${feed.feedId}`}
                         className="w-[13vw] h-[30vh] object-cover min-w-[250px] border"
                       />
+                      {feed.images.length > 1 && (
+                        <FcGallery className=" absolute top-1 right-1" />
+                      )}
                     </div>
                   </Link>
                 </article>
