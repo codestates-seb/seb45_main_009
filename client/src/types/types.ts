@@ -123,9 +123,10 @@ export interface CommentTypes {
   feedCommentId: number;
   feedId: number;
   content: string;
-  userNickname: string;
+  nickname: string;
   createdAt: string;
   modifiedAt: string;
+  profileImageUrl: string;
 }
 
 export interface PageInfo {

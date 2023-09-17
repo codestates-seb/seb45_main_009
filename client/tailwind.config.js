@@ -51,5 +51,31 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [],
+   plugins: [
+    function ({ addUtilities }) {
+      const newUtilities = {
+        '.border-x::before': {
+          content: '""',
+          position: 'absolute',
+          top: '50%',
+          left: '0',
+          height: '0.5px',
+          width: 'calc(45%)',
+          backgroundColor: 'gray',
+          transform: 'translateY(-50%)',
+        },
+        '.border-x::after': {
+          content: '""',
+          position: 'absolute',
+          top: '50%',
+          right: '0',
+          height: '0.5px',
+          width: 'calc(45%)',
+          backgroundColor: 'gray',
+          transform: 'translateY(-50%)',
+        },
+      };
+      addUtilities(newUtilities, ['responsive', 'hover']);
+    },
+  ],
 };
