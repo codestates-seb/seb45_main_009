@@ -193,7 +193,10 @@ const Feed = ({ selectedFilter }: FeedProps) => {
               );
 
               return (
-                <article key={idx} className="mb-4 min-w-[250px]">
+                <article
+                  key={idx}
+                  className="mb-4 min-w-[250px]  hover:scale-105 transition-all duration-300 ease-in-out hover:shadow-[5px_5px_10px_rgba(0,0,0,0.2)]"
+                >
                   <div className="flex mb-4">
                     <Link to={`/profile/${user?.userId}`}>
                       <img
@@ -220,10 +223,10 @@ const Feed = ({ selectedFilter }: FeedProps) => {
                       <img
                         src={feed.images[0].imageUrl}
                         alt={`FeedImg of ${feed.feedId}`}
-                        className="w-[13vw] h-[30vh] object-cover min-w-[250px] border"
+                        className="w-[13vw] h-[30vh] object-cover min-w-[250px]"
                       />
                       {feed.images.length > 1 && (
-                        <FcGallery className=" absolute top-1 right-1" />
+                        <FcGallery className=" absolute top-1 right-1 " />
                       )}
                     </div>
                   </Link>

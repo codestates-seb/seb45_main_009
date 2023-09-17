@@ -140,11 +140,11 @@ const MyPageFeed = () => {
             windowWidth < 768 ? "" : " sticky top-24"
           }  md:${IntroductionCss}`}
         >
-          <div className="flex items-center flex-col mb-10">
+          <div className="flex items-center flex-col mb-10 ">
             <img
               src={user?.profileimg}
               alt="myimg"
-              className="mb-5 w-[10vw] border rounded-full "
+              className="mb-5 w-[10vw] h-[10vw] border rounded-full "
             />
             <div className="font-bold text-xl">{user?.nickname}</div>
           </div>
@@ -166,7 +166,10 @@ const MyPageFeed = () => {
         </aside>
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 h-full mb-24">
           {userFeed.map((user, idx) => (
-            <article key={idx} className="flex justify-center items-center">
+            <article
+              key={idx}
+              className="flex justify-center items-center  hover:scale-105 transition-all duration-300 ease-in-out hover:shadow-[5px_5px_10px_rgba(0,0,0,0.2)]"
+            >
               <Link to={`/${currentDetail}/${user.feedId}`}>
                 <img
                   src={user.images[0].imageUrl}
