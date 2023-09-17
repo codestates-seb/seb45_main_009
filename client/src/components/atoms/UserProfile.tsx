@@ -5,7 +5,7 @@ import { AiFillHeart } from "react-icons/ai";
 import { BsFillBookmarkStarFill } from "react-icons/bs";
 import { MdAttachMoney } from "react-icons/md";
 import { BiSolidUser } from "react-icons/bi";
-import nofeedimg from '../../assets/images/nofeed.png'
+import nofeedimg from "../../assets/images/nofeed.png";
 
 interface ProfileIndProps {
   userId: number;
@@ -13,10 +13,10 @@ interface ProfileIndProps {
   myid: number;
 }
 
-function UserProfile({ userId, isMyFeed , myid }: ProfileIndProps){
-    const sport = ["헬스, 런닝"];
+function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
+  const sport = ["헬스, 런닝"];
 
-    const [isFollowing, setIsFollowing] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
 
   const checkFollowState = async () => {
     try {
@@ -124,16 +124,11 @@ function UserProfile({ userId, isMyFeed , myid }: ProfileIndProps){
                       {userResponseType?.height} cm
                     </div>
                   )}
-                  {userResponseType?.weight && (
-                    <div className="font-bold text-gray-400 text-sm ">
-                      {userResponseType?.weight} kg
-                    </div>
-                    <div className="opacity-60 text-[13px] max-mobile:text-[12px]">
-                    {userResponseType?.bio ? 
-                        userResponseType?.bio : 
-                        <span className="text-gray-400">__빈값__</span>
-                    }
-                    </div>
+                  {userResponseType?.bio ? (
+                    userResponseType?.bio
+                  ) : (
+                    <span className="text-gray-400">__빈값__</span>
+                  )}
                 </div>
               )}
             </div>
@@ -159,27 +154,34 @@ function UserProfile({ userId, isMyFeed , myid }: ProfileIndProps){
           </div>
         </div>
         <div className="mt-[40px] flex items-center justify-center sm:justify-start ">
-                <>
-                {/* 개인이면 sport, 기업이면 위치 가져오기 */}
-                    <AiFillHeart className="text-gray-400 mx-[10px] text-2xl"/>
-                    <div>{sport}</div>
-                </>
+          <div>
+            {/* 개인이면 sport, 기업이면 위치 가져오기 */}
+            <AiFillHeart className="text-gray-400 mx-[10px] text-2xl" />
+            <div>{sport}</div>
+          </div>
         </div>
         <div className="mt-2 flex items-center justify-center sm:justify-start ">
-            {
-                userResponseType?.roles.includes('USER') && (
-                    <>
-                        <BiSolidUser  className="text-gray-400 mx-[10px] text-2xl"/>
-                        <div>{userResponseType?.height ?
-                                userResponseType?.height :
-                                <span className="text-gray-400">__</span>} cm</div>
-                        <div className="ml-[14px]">
-                            {userResponseType?.weight ?
-                                userResponseType?.weight :
-                                <span className="text-gray-400">_</span>} kg</div>
-                    </>
-                )
-            }
+          {userResponseType?.roles.includes("USER") && (
+            <>
+              <BiSolidUser className="text-gray-400 mx-[10px] text-2xl" />
+              <div>
+                {userResponseType?.height ? (
+                  userResponseType?.height
+                ) : (
+                  <span className="text-gray-400">__</span>
+                )}
+                cm
+              </div>
+              <div className="ml-[14px]">
+                {userResponseType?.weight ? (
+                  userResponseType?.weight
+                ) : (
+                  <span className="text-gray-400">_</span>
+                )}
+                kg
+              </div>
+            </>
+          )}
         </div>
         <div className="mt-2 flex items-center justify-center sm:justify-start ">
           {userResponseType?.roles.includes("STORE") && (
@@ -191,24 +193,32 @@ function UserProfile({ userId, isMyFeed , myid }: ProfileIndProps){
         </div>
 
         {/* 선 추가 */}
-        <div className="my-[60px]  text-gray relative opacity-60 text-[13px] border-x flex justify-center">피드 리스트</div>
+        <div className="my-[60px]  text-gray relative opacity-60 text-[13px] border-x flex justify-center">
+          피드 리스트
+        </div>
 
         <div className="my-[40px] flex flex-wrap justify-center sm:justify-start ">
-        { 
-        userResponseType?.feedList && userResponseType.feedList.length > 0 ? (
+          {userResponseType?.feedList &&
+          userResponseType.feedList.length > 0 ? (
             userResponseType.feedList.map((feed, feedIndex) => (
-            <div key={feedIndex} className="mb-[10px]">
-                {feed.images[0] && (  // 첫 번째 이미지만 보여주도록 수정
-                    <Link key={feed.images[0].imageUrl} to={`/feeddetailind/${feed.feedId}`}>
-                        <img className="mr-[10px] min-w-[229px] w-[13vw] h-[30vh]" src={feed.images[0].imageUrl} alt={`Feed ${feedIndex} Image 0`} />
-                    </Link>
+              <div key={feedIndex} className="mb-[10px]">
+                {feed.images[0] && ( // 첫 번째 이미지만 보여주도록 수정
+                  <Link
+                    key={feed.images[0].imageUrl}
+                    to={`/feeddetailind/${feed.feedId}`}
+                  >
+                    <img
+                      className="mr-[10px] min-w-[229px] w-[13vw] h-[30vh]"
+                      src={feed.images[0].imageUrl}
+                      alt={`Feed ${feedIndex} Image 0`}
+                    />
+                  </Link>
                 )}
-            </div>
+              </div>
             ))
-        ) : (
+          ) : (
             <img src={nofeedimg} alt="No feeds available" />
-        )
-    }
+          )}
         </div>
       </div>
     </div>
