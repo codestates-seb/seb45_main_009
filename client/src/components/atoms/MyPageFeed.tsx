@@ -88,16 +88,6 @@ const MyPageFeed = () => {
     }
   };
 
-  // const getUserData = async () => {
-  //   try {
-  //     const response = await globalAxios.get("/users");
-  //     const getData = response.data;
-  //     setAllUserData(getData);
-  //   } catch (err) {
-  //     console.log("Error >>", err);
-  //   }
-  // };
-
   useEffect(() => {
     if (inView && !loading && hasMore) {
       getMainListData();

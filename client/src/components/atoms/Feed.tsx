@@ -54,8 +54,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
   const { filteredDatas } = useSelector((state: RootStates) => state.feed);
   const { allUserDatas } = useSelector((state: RootStates) => state.feed);
   const [allFeedData, setAllFeedData] = useState<FeedData[]>([]);
-  const [allUserData, setAllUserData] = useState<UserData[]>([]);
-  console.log(filteredDatas);
+
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -124,7 +123,6 @@ const Feed = ({ selectedFilter }: FeedProps) => {
 
   const usethis = filteredDatas.length !== 0 ? filteredDatas : allFeedData;
 
-  console.log("allFeedData", filteredDatas);
   const filteredData = usethis.filter((user) => {
     const hasExerciseTag =
       selectedFilter.includes("운동전체") ||
@@ -174,7 +172,6 @@ const Feed = ({ selectedFilter }: FeedProps) => {
       navigate("/feedformcor");
     }
   };
-  console.log(allUserDatas, "allUserDatas");
   return (
     <section className="flex justify-center flex-col items-center ">
       <div>

@@ -168,16 +168,16 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
         <div className="my-[40px] flex flex-wrap justify-center sm:justify-start ">
           {userResponseType?.feedList.map((feed, feedIndex) => (
             <div key={feedIndex} className="mb-[10px]">
-              {feed.images.map((image, imageIndex) => (
-                <Link key={image.imageUrl} to={`/feeddetailind/${feed.feedId}`}>
-                  <img
-                    className="mr-[10px] min-w-[229px] w-[13vw] h-[30vh]"
-                    key={imageIndex}
-                    src={image.imageUrl}
-                    alt={`Feed ${feedIndex} Image ${imageIndex}`}
-                  />
-                </Link>
-              ))}
+              <Link
+                key={feed.images[0].imageUrl}
+                to={`/feeddetailind/${feed.feedId}`}
+              >
+                <img
+                  className="mr-[10px] min-w-[229px] w-[13vw] h-[30vh]"
+                  src={feed.images[0].imageUrl}
+                  alt={`Feed ${feedIndex}`}
+                />
+              </Link>
             </div>
           ))}
         </div>
