@@ -51,31 +51,56 @@ module.exports = {
   variants: {
     extend: {},
   },
-   plugins: [
+  plugins: [
     function ({ addUtilities }) {
       const newUtilities = {
-        '.border-x::before': {
-          content: '""',
-          position: 'absolute',
-          top: '50%',
-          left: '0',
-          height: '0.5px',
-          width: 'calc(40%)',
-          backgroundColor: 'gray',
-          transform: 'translateY(-50%)',
+        '.border-after': {
+          position: 'relative',
+          '&::after': {
+              content: '""',
+              position: 'absolute',
+              top: '50%',
+              left: '100%', 
+              height: '0.5px',
+              width: 'calc(36vw - 50%)',
+              backgroundColor: 'gray',
+              transform: 'translateY(-50%)',
+          },
+      },
+      '.border-before': {
+        position: 'relative',
+        '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: '50%',
+            left: '0', 
+            transform: 'translateX(-100%) translateY(-50%)',
+            height: '0.5px',
+            width: 'calc(36vw - 50%)',
+            backgroundColor: 'gray',
         },
-        '.border-x::after': {
-          content: '""',
-          position: 'absolute',
-          top: '50%',
-          right: '0',
-          height: '0.5px',
-          width: 'calc(40%)',
-          backgroundColor: 'gray',
-          transform: 'translateY(-50%)',
+    },
+        '.scrollbar-thin': {
+          '&::-webkit-scrollbar': {
+            width: '0px',
+            height: '0px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            background: '#888',
+            borderRadius: '2px',
+          },
+          '&::-webkit-scrollbar-thumb:hover': {
+            background: '#555',
+          },
+          '&::-webkit-scrollbar-track': {
+            background: '#f1f1f1',
+            borderRadius: '2px',
+          },
         },
-      };
-      addUtilities(newUtilities, ['responsive', 'hover']);
+      }
+      
+      addUtilities(newUtilities, [ 'hover']);
     },
   ],
+  
 };

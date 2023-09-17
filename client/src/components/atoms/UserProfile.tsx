@@ -41,7 +41,7 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
 
   const [isFollowing, setIsFollowing] = useState(false);
 
-  const checkFollowState = async () => {
+  const checkFollowState = async () => {  
     try {
       const response = await globalAxios.get(`/follow/following/${myid}`);
       console.log("checkFollow 성공", response.data);
@@ -119,17 +119,19 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
     }
   };
 
+  
+
   return (
-    <div>
-      <div className="max-w-screen-xl md:max-w-screen-lg mx-auto px-4 sm:px-4 lg:px-8">
-        <div className="grid md:grid-cols-2">
+    <div  className="flex  justify-center">
+      <div className="max-w-screen-lg md:max-w-screen-xl mx-auto px-4 sm:px-4 lg:mx-[40px] ">
+        <div className="grid md:grid-cols-2  sm:px-[50px]">
           <div className="flex items-center justify-center sm:justify-start">
             <img
               src={userResponseType?.profileimg}
               className="mr-6 sm:mr-2 w-10 h-10 rounded-full"
               alt="img"
             />
-            <div className="flex flex-col">
+            <div className="flex flex-col ">
               <div className=" text-lg flex ">
                 {userResponseType?.nickname}
                 {userResponseType?.roles.includes("STORE") && (
@@ -145,7 +147,7 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
               </div>
             </div>
           </div>
-          <div className="flex justify-center sm:justify-end mt-6  sm:mr-4">
+          <div className="flex justify-center sm:justify-end mt-6  sm:mr-4  ">
             {isMyFeed ? null : (
               <div className="flex items-center justify-end">
                 <button
@@ -165,7 +167,7 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
             )}
           </div>
         </div>
-        <div className="mt-[40px] flex items-center justify-center sm:justify-start ">
+        <div className="mt-[40px] flex items-center justify-center sm:justify-start px-0px sm:px-[50px]">
           <div className="flex">
             <AiFillHeart className="text-gray-400 mx-[10px] text-2xl" />
             <div>
@@ -177,7 +179,7 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
             </div>
           </div>
         </div>
-        <div className="mt-2 flex items-center justify-center sm:justify-start ">
+        <div className="mt-2 flex items-center justify-center sm:justify-start px-[50px]">
           {userResponseType?.roles.includes("USER") && (
             <>
               <BiSolidUser className="text-gray-400 mx-[10px] text-2xl" />
@@ -218,22 +220,22 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
         </div>
 
         {/* 선 추가 */}
-        <div className="my-[60px]  text-gray relative opacity-60 text-[13px] border-x flex justify-center">
-          피드 리스트
+        <div className="flex justify-center w-full my-[60px]  text-gray-400 text-[12px] w-[60px]  border-before border-after">
+           <span className=" border-before border-after w-[100px] flex justify-center ">피드 리스트</span>
         </div>
 
-        <div className="my-[40px] flex flex-wrap justify-center sm:justify-start ">
+        <div className="my-[40px] flex flex-wrap justify-center sm:justify-start sm:px-[40px]">
           {userResponseType?.feedList &&
           userResponseType.feedList.length > 0 ? (
             userResponseType.feedList.map((feed, feedIndex) => (
-              <div key={feedIndex} className="mb-[10px]">
-                {feed.images[0] && ( // 첫 번째 이미지만 보여주도록 수정
+              <div key={feedIndex} className="mb-[10px] mx-[10px] hover:scale-105 transition-all duration-300 ease-in-out hover:shadow-[5px_5px_10px_rgba(0,0,0,0.2)]">
+                {feed.images[0] && ( 
                   <Link
                     key={feed.images[0].imageUrl}
                     to={`/feeddetailind/${feed.feedId}`}
                   >
                     <img
-                      className="mr-[10px] min-w-[229px] w-[13vw] h-[30vh]"
+                      className=" min-w-[250px] w-[13vw] h-[30vh]"
                       src={feed.images[0].imageUrl}
                       alt={`Feed ${feedIndex} Images`}
                     />
