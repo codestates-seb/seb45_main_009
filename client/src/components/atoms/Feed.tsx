@@ -10,6 +10,7 @@ import {
   setAllFeedDataB,
 } from "../../redux/reducers/feedSlice";
 import noFeed from "../../assets/images/nofeed.png";
+import useFetchUserData from "../../hooks/useFetchUserData";
 
 interface UserData {
   bio: string;
@@ -96,17 +97,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
     }
   };
 
-  const getUserData = async () => {
-    try {
-      const response = await globalAxios.get("/users");
-      const getData = response.data;
-      console.log(getData, "getData");
-      setAllUserData(getData);
-      dispatch(setAllUserDatas(getData));
-    } catch (err) {
-      console.log("Error >>", err);
-    }
-  };
+  useFetchUserData();
 
   const getAllDataOnce = async () => {
     try {
@@ -125,7 +116,6 @@ const Feed = ({ selectedFilter }: FeedProps) => {
   useEffect(() => {
     if (inView && !loading && hasMore) {
       getMainListData();
-      getUserData();
     }
   }, [inView, loading, hasMore]);
 
