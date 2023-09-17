@@ -1,130 +1,224 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { AiFillPlusCircle } from "react-icons/ai";
+import globalAxios from "../../data/data";
+import timeFormatter from "../../hooks/timeFormatter";
+import { ResponseDataType, UserInfo, RootState } from "../../types/types";
+import { useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+//////태그 모달 시작
+function TagModal({
+  title,
+  size,
+  price,
+  top,
+  left,
+}: {
+  title: string;
+  size: string;
+  price: number;
+  top: string;
+  left: string;
+}) {
+  // 위아래
+  const modalTopPosition = parseInt(top) > 50 ? "-60px" : "25px";
+  // 좌우
+  const modalLeftPosition = parseInt(left) > 50 ? "-105px" : "25px";
 
-
-// 아이콘 가져오기
-import {
-    faHeart,
-    faThumbsUp
-  } from '@fortawesome/free-solid-svg-icons';
-
-function DetailFeed() {
-    // 피드 데이터
-    // 피드 고유 아이디
-    // get 요청 했을때
-    // 댓글이랑 좋아요 추가적인 데이터를 한번에 오도록
-
-    // 로그인 시큐얼티..? 승범 동훈,
-    // 피드쪽 소연 은영,
-
-  let feedData : {
-    feedid : number,
-    photo : string[],
-    date :string, 
-    content :string ,
-    tag :string[]
-  } = {
-    feedid : 1,
-    photo : ['/asset/gym1.jpeg','/asset/gym2.jpeg','/asset/gym3.jpeg'],
-    date : '2023.08.11',
-    content : '오늘도 오운완 성공!',
-    tag : ['크로스핏', '헬스']
-  }
-
-  let feedproductData : {
-    product : string[], 
-    price : number[],
-    size : string[]
-    } = {
-    product : ['adidas','나이키'],
-    price : [99000, 13000],
-    size : ['XL사이즈', '260mm']
-  }
-
-  const taglength = feedproductData.product.length;
-  console.log(taglength)
-
-  // 좋아요
-  const [isLiked, setIsLiked] = useState(false);
-  const handleLikeClick = () => {
-    console.log('게시물 좋아요')
-    setIsLiked(true);
-  };
-
-  const handleLikeCancelClick = () => {
-    console.log('게시물 좋아요 취소')
-    setIsLiked(false);
-  };
-
-  const inappropriateviewBtn = () => {
-    console.log('게시물 신고')
-  }
-  return(
-    <div className='w-[600px]'>
-        {
-            feedData.photo.map((index,item) => (
-                <div className='mb-[30px]'>
-                    <img src={index} />
-                </div>
-            ))
-        }
-        <div className="font-bold text-gray-400 text-sm mt-[10px]" >{feedData.date}</div>
-        <div className=" mt-[20px]">{feedData.content}</div>
-        <div className=" mt-[20px]">
-            {
-              isLiked === false ? 
-              <FontAwesomeIcon icon={faHeart}  onClick={ handleLikeClick }/> : 
-              <FontAwesomeIcon icon={faThumbsUp} onClick={ handleLikeCancelClick } />
-            }
-        </div>
-
-        <div className=" mt-[40px]">
-            <div className="font-bold text-gray-400 text-sm mb-[10px]">연관태그</div>
-            <div>
-                {
-                    feedData.tag.map((item,index)=>(
-                        <span  className=" p-1 bg-blue-100 w-auto rounded  mr-2" key={index}>{item}</span>
-                    ))
-                }
-            </div>
-        </div>
-
-        <div className=" mt-[40px]">
-            <div className="font-bold text-gray-400 text-sm mb-[10px]">착용 제품</div>
-            <div className='flex'>
-
-            <div className="border rounded p-4 flex float-left  w-auto mr-[20px]">
-                <div className="float-left mr-[14px]">
-                    <div>제품</div>
-                    <div>가격</div>
-                    <div>사이즈</div>
-                </div>
-                <div>
-                    <div className="font-bold">{feedproductData.product[0]}</div>
-                    <div>₩ {feedproductData.price[0]}</div>
-                    <div className="text-blue-300">{feedproductData.size[0]}</div>
-                </div>
-            </div>
-
-            <div className="border rounded p-4 flex float-left  w-auto">
-                <div className="float-left mr-[14px]">
-                    <div>제품</div>
-                    <div>가격</div>
-                    <div>사이즈</div>
-                </div>
-                <div>
-                    <div className="font-bold">{feedproductData.product[1]}</div>
-                    <div>₩ {feedproductData.price[1]}</div>
-                    <div className="text-blue-300">{feedproductData.size[1]}</div>
-                </div>
-            </div>
-            </div>
-        </div>
-        <div className="float-right mt-[10px]" onClick={inappropriateviewBtn}>🚨</div>
-
+  return (
+    <div
+      style={{ top: modalTopPosition, left: modalLeftPosition }}
+      className="absolute border w-[100px] rounded-[2px] bg-white text-[12px] mt-[2px] pl-[10px]"
+    >
+      <div>{title}</div>
+      <div className="text-gray-400 text-[8px]">{size}</div>
+      <div className="font-bold">₩{price}</div>
     </div>
+  );
+}
+//////태그 모달 끝
 
-  ) 
+interface DetailFeedProps {
+  feedId: number;
+  responseData: ResponseDataType | null;
+  isMyFeed: boolean;
+  userInfo: UserInfo;
+}
+function DetailFeedInd({ feedId, responseData, isMyFeed }: DetailFeedProps) {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const userInfo = useSelector((state: RootState) => state.login.userInfo);
+  // 좋아요
+  const [isLiked, setIsLiked] = useState<boolean>(false);
+  //좋아요 리스트
+  const [likeList, setLikeList] = useState<number[]>([]);
+
+  const handleLikeClick = async () => {
+    console.log("게시물 좋아요");
+    try {
+      const response = await globalAxios.post(`/feed/detail/${feedId}/like`);
+      console.log("좋아요 성공:", response);
+      getLikeList();
+    } catch (error) {
+      console.error("좋아요 실패", error);
+    }
+  };
+
+  const getLikeList = async () => {
+    try {
+      const response = await globalAxios.get(`/feed/detail/${feedId}/likeduser`);
+      console.log("좋아요 리스트 get요청 성공", response.data);
+      setLikeList(response.data);
+      if (response.data.includes(userInfo.userId)) {
+        setIsLiked(true);
+      } else {
+        setIsLiked(false);
+      }
+    } catch (error) {
+      console.log("좋아요 리스트 get실패", error);
+    }
+  };
+
+  //좋아요 리스트 get요청
+  useEffect(() => {
+    getLikeList();
+  }, []);
+
+  const handleReport = async () => {
+    try {
+      const response = await globalAxios.post(`/feed/detail/${feedId}/report`, {
+        reason: "일단 내용은 하드코딩으로",
+      });
+      console.log("신고 성공", response);
+      alert("신고가 완료되었습니다");
+    } catch (error: any) {
+      console.log("신고 실패", error.response.data);
+      alert(error.response.data.message);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      const response = await globalAxios.delete(`/feed/detail/${feedId}`);
+      console.log("글이 성공적으로 삭제되었습니다.", response);
+      alert("피드 삭제 완료");
+      navigate("/");
+    } catch (error) {
+      console.error("글 삭제 실패:", error);
+    }
+  };
+  const handleUpdate = () => {
+    navigate(`/feedupdateind/${feedId}`);
+  };
+  // 정보 태그 모달창
+  const [showTagModal, setShowTagModal] = useState<{
+    photoIndex: number;
+    tagIndex: number;
+  } | null>(null);
+
+  return (
+    <div className="w-full sm:max-w-screen-sm  mx-auto px-4 sm:px-4 lg:px-8">
+      {responseData?.images.map((image, index) => (
+        <div key={index} className="mb-2 relative">
+          <img src={image.imageUrl} alt={`Image ${index}`} className="w-full h-auto" />
+          {image.imageTags.map((tag, tagIndex) => {
+            const top = Math.round(tag.positionY * 100);
+            const left = Math.round(tag.positionX * 100);
+            return (
+              <div
+                key={tagIndex}
+                className="w-[20px] h-[20px] rounded-full absolute"
+                style={{ top: `${top}%`, left: `${left}%` }}
+                onMouseEnter={() => setShowTagModal({ photoIndex: index, tagIndex })}
+                onMouseLeave={() => setShowTagModal(null)}
+              >
+                <AiFillPlusCircle className="w-[20px] h-[20px] text-tag-btn-color" />
+                {/* 만약 div위에 마우스 올린게 이미지index와 태그 index가 맞으면 모달창 보여주기 */}
+                {showTagModal?.photoIndex === index && showTagModal?.tagIndex === tagIndex && (
+                  <TagModal
+                    title={tag.productName}
+                    size={tag.productInfo}
+                    price={parseInt(tag.productPrice)}
+                    top={`${top}%`}
+                    left={`${left}%`}
+                  />
+                )}
+              </div>
+            );
+          })}
+        </div>
+      ))}
+      <div className="flex text-sm opacity-50 mb-1 max-mobile:text-[12px]">
+        {timeFormatter(responseData?.createdAt)}
+      </div>
+      <span className="max-mobile:text-[14px]">{responseData?.content}</span>
+      <div className="flex flex-row items-center mt-[20px]">
+        {isLiked === false ? (
+          <AiOutlineHeart className="cursor-pointer text-red-400" onClick={handleLikeClick} size={20} />
+        ) : (
+          <AiFillHeart className="cursor-pointer text-red-400" onClick={handleLikeClick} size={20} />
+        )}
+        <div className="ml-2 pb-[2px]">{likeList.length}</div>
+      </div>
+      <div className=" mt-2">
+        <div className="font-bold text-gray-400 text-sm mb-[10px]"></div>
+        <ul>
+          {responseData?.relatedTags.map((tag, index) => (
+            <li
+              className="inline-block px-2 py-1 border-bdc rounded mr-2.5 mb-2.5 transition bg-[#edf7ff] text-[#22a1ff] text-[13px]"
+              key={index}
+            >
+              {`#${tag}`}
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-2 flex flex-wrap">
+          {responseData?.images.map((image, imageIndex) =>
+            image.imageTags.map((tag, tagIndex) => (
+              <div className="border rounded flex-grow mr-4 mb-4 p-2 text-sm" key={`${imageIndex}-${tagIndex}`}>
+                <div className="flex">
+                  <div className="flex-none" style={{ width: "70px" }}>
+                    제품명 :{" "}
+                  </div>
+                  <div className="flex-grow font-bold">{tag.productName}</div>
+                </div>
+                <div className="flex">
+                  <div className="flex-none " style={{ width: "70px" }}>
+                    가격 :{" "}
+                  </div>
+                  <div>₩ {parseInt(tag.productPrice)}</div>
+                </div>
+                <div className="flex">
+                  <div className="flex-none" style={{ width: "70px" }}>
+                    추가정보 :{" "}
+                  </div>
+                  <div className="text-btn-color">{tag.productInfo}</div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
+      <div className="flex justify-end ">
+        {isMyFeed ? (
+          <>
+            <button className="m-2 text-[13px] opacity-75" onClick={handleUpdate}>
+              수정
+            </button>
+            <button className="text-[13px] opacity-75" onClick={handleDelete}>
+              삭제
+            </button>
+          </>
+        ) : (
+          <button className="text-[13px] opacity-75" onClick={handleReport}>
+            신고
+          </button>
+        )}
+      </div>
+    </div>
+  );
 }
 
-export default DetailFeed;
+export default DetailFeedInd;

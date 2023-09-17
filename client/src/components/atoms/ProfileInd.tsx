@@ -1,70 +1,96 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import globalAxios from "../../data/data";
+import { useNavigate } from "react-router-dom";
+import { ResponseDataType } from "../../types/types";
+import { UserInfo } from "../../types/types";
 
-// 아이콘 가져오기
-import {
-  faEllipsis,
-} from '@fortawesome/free-solid-svg-icons';
-
-let userData = [
-  {
-    username: 'Lee seeun',
-    useremail: 'lse0522@gmail.com',
-    pw: '1234',
-    userheight : 170,
-    userweight : 60,
-    userphoto : 'img.png',
-    userintroduction : '헬스를 좋아합니다~'
-  }
-];
-
-const Modal = ({ onClose } :any) => (
-  <div className="flex  flex-col border ml-[55px] w-[60px] h-[50px] rounded">
-    <button onClick={onClose} className='border-b'>삭제</button>
-    <button onClick={onClose}>수정</button>
-  </div>
-);
-
-
-function ProfileInd() {
-
-  // 모달창 열기 닫기
-  const [isModalOpen, setModalOpen] = useState(false);
-
-  const handleOpenModal = () => {
-    setModalOpen(true);
-    console.log("모달 열기")
-  };
-  
-  const handleCloseModal = () => {
-    setModalOpen(false);
-  };
-
-  // 팔로우
-  const followClick =() =>{
-    console.log('팔로우하기')
-  }
-
-  return(
-    <div className='ml-[60px]'>
-        <div className="float-right ">
-          <button className="pr-4" onClick={followClick} >팔로우</button>
-          <button className="mr-[60px]" onClick={handleOpenModal}><FontAwesomeIcon icon={faEllipsis} /></button>
-          {isModalOpen && <Modal onClose={handleCloseModal} />}
-        </div>
-      
-        <img src={userData[0].userphoto}  className='w-[80px] h-[80px] rounded-full float-left mr-4' />
-      
-        <div className="font-bold text-xl mt-[4px]">{userData[0].username}</div>
-        <div className="flex space-x-2 font-bold text-gray-400 text-sm ">
-          <div>{userData[0].userheight}cm</div>
-          <div>{userData[0].userweight}kg</div>
-        </div>
-        <div className='text-sm font-bold text-gray-400'>{userData[0].userintroduction}</div>
-
-    </div>
-
-  ) 
+interface ProfileIndProps {
+  feedId: number;
+  responseData: ResponseDataType | null;
+  userInfo: UserInfo;
+  isMyFeed: boolean;
 }
 
+function ProfileInd({ feedId, responseData, userInfo, isMyFeed }: ProfileIndProps) {
+  const navigate = useNavigate();
+
+  //로딩 상태 - 팔로우 적용 때문에 깜빡거림 방지
+  const [isLoading, setIsLoading] = useState(true);
+  // 팔로우
+  const [isFollowing, setIsFollowing] = useState(false);
+
+  const handleFollow = async () => {
+    try {
+      const response = await globalAxios.post(`/follow/${responseData?.userId}`);
+      console.log("팔로우 요청 성공", response);
+      setIsFollowing(response.data);
+    } catch (error: any) {
+      console.error("팔로우 요청 실패:", error.response);
+      alert(error.response.data.message);
+    }
+  };
+
+  const handleNavigateProfile = () => {
+    navigate(`/profile/${responseData?.userId}`);
+  };
+
+  const checkFollowState = async () => {
+    try {
+      const response = await globalAxios.get(`/follow/following/${userInfo.userId}`);
+      console.log("checkFollow 성공", response.data);
+      if (response.data.some((item: any) => item.userId === responseData?.userId)) {
+        setIsFollowing(true);
+      } else {
+        setIsFollowing(false);
+      }
+    } catch (error) {
+      console.log("checkFollow 실패 error:", error);
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 80);
+    }
+  };
+
+  useEffect(() => {
+    checkFollowState();
+  }, [userInfo, responseData]);
+  return (
+    <div className="max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8">
+      <div className="flex flex-row justify-between">
+        <div className="flex items-center">
+          <img
+            src={responseData?.profileImageUrl}
+            className=" mr-2 w-10 h-10 rounded-full hover:cursor-pointer"
+            alt="profileImage"
+            onClick={handleNavigateProfile}
+          />
+          <div className="flex flex-col">
+            <span className="text-lg hover:cursor-pointer" onClick={handleNavigateProfile}>
+              {responseData?.nickname}
+            </span>
+            <span className="opacity-60 text-[13px] max-mobile:text-[12px]">{responseData?.bio}</span>
+          </div>
+        </div>
+        {isMyFeed ? null : (
+          <div className="flex items-center justify-end">
+            <button
+              className={`whitespace-nowrap ml-2 rounded-[6px] text-[14px] 
+            py-1.5 px-6 hover: font-medium transition  
+            ${
+              isFollowing
+                ? "text-[#000000] bg-[#efefef] hover:bg-[#dbdbdb]"
+                : "bg-[#0095f6] hover:bg-[#1877f2] text-white "
+            }`}
+              onClick={handleFollow}
+              style={{ opacity: isLoading ? 0 : 1 }}
+            >
+              {isFollowing ? "팔로잉" : "팔로우"}
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 export default ProfileInd;

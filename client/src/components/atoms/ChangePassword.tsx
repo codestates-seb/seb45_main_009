@@ -1,97 +1,99 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-
-interface ChangePasswordProps {
-  password: string;
-  confirmPassword: string;
-}
+import CommonInput from "./CommonInput";
+import ConfirmButton from "./ConfirmButton";
+import globalAxios from "../../data/data";
 
 const ChangePassword = () => {
-  const [formData, setFormData] = useState<ChangePasswordProps>({
-    password: "",
-    confirmPassword: "",
-  });
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [passwordConfirm, setPasswordConfirm] = useState<string>("");
 
+  const [isValidPassWord, setIsValidPassword] = useState<boolean | null>(null);
+  const [isPasswordsMatch, setIsPasswordsMatch] = useState<boolean | null>(null);
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newPassword = e.target.value;
-    setFormData({ ...formData, password: newPassword });
-
-    if (newPassword.length < 8 || !/[a-zA-Z]/.test(newPassword)) {
-      setErrorMessage(
-        "비밀번호는 8자 이상이며, 영문자를 반드시 1자 이상 포함해야 합니다."
-      );
+    setPassword(e.target.value);
+  };
+  // 비밀번호 유효성 검사
+  const passwordRegEx = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/;
+  const validatePasswordHandler = () => {
+    if (passwordRegEx.test(password)) {
+      setIsValidPassword(true);
     } else {
-      setErrorMessage("");
+      setIsValidPassword(false);
     }
   };
 
-  const handleConfirmPasswordChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const newConfirmPassword = e.target.value;
-    setFormData({ ...formData, confirmPassword: newConfirmPassword });
-
-    if (newConfirmPassword !== formData.password) {
-      setErrorMessage("비밀번호가 일치하지 않습니다.");
-    } else {
-      setErrorMessage("");
-    }
+  const clearPasswordValidation = () => {
+    setIsValidPassword(null);
+  };
+  const handlePasswordConfirmChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPasswordConfirm(e.target.value);
   };
 
-  const handlePasswordSubmit = () => {
-    if (formData.password.length < 8 || !/[a-zA-Z]/.test(formData.password)) {
-      setErrorMessage(
-        "비밀번호는 8자 이상이며, 영문자를 반드시 1자 이상 포함해야 합니다."
-      );
-      return;
+  //비밀번호 재확인 검사
+  const checkPasswordsMatch = () => {
+    setIsPasswordsMatch(password === passwordConfirm);
+  };
+  const clearPasswordsMatchValidation = () => {
+    setIsPasswordsMatch(null);
+  };
+  const handlePasswordSubmit = async () => {
+    console.log("submit button");
+    const formData = new FormData();
+    const requestBody = {
+      password: password,
+    };
+    console.log(requestBody);
+    const blob = new Blob([JSON.stringify(requestBody)], {
+      type: "application/json",
+    });
+    formData.append("requestBody", blob);
+    try {
+      const response = await globalAxios.patch("/mypage/update", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      alert("비밀번호 수정 성공");
+      console.log("patch성공", response);
+      navigate(-1);
+    } catch (error) {
+      console.log("error", error);
     }
-
-    if (formData.password !== formData.confirmPassword) {
-      setErrorMessage("비밀번호가 일치하지 않습니다.");
-      return;
-    }
-
-    setFormData({ password: "", confirmPassword: "" });
-    setErrorMessage("");
-    navigate(-1);
   };
 
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col justify-center items-center mt-10 h-1/2">
-      <div className="flex flex-col">
-        <p className="text-3xl font-bold mb-10">비밀번호 변경</p>
-
-        <p className="text-xl font-bold mb-5">새 비밀번호</p>
-        <input
+    <div className="flex flex-col justify-center items-center mt-20 h-1/2 max-mobile:mt-10">
+      <p className="text-2xl font-bold mb-10">비밀번호 변경</p>
+      <div className="w-[300px]">
+        <CommonInput
+          placeholder="비밀번호를 입력해주세요."
+          label="새 비밀번호"
           type="password"
-          className="border rounded-lg p-3 mb-4 min-w-[460]"
-          placeholder="영문, 숫자를 포함한 8자 이상의 비밀번호를 입력해주세요."
-          value={formData.password}
           onChange={handlePasswordChange}
-        />
-        <p className="text-xl font-bold mb-5">비밀번호 확인</p>
-        <input
+          onBlur={validatePasswordHandler}
+          onFocus={clearPasswordValidation}
+        ></CommonInput>
+        <p className="text-[12px]">영문자, 숫자를 혼합하여 8~20자로 입력해주세요.</p>
+        {isValidPassWord === false && (
+          <p className="text-[12px] text-isValid-text-red">유효하지 않은 비밀번호 형식입니다.</p>
+        )}
+        <CommonInput
+          placeholder="비밀번호를 다시 입력해주세요."
+          label="비밀번호 확인"
           type="password"
-          className="border rounded-lg p-3 mb-4 min-w-[460]"
-          value={formData.confirmPassword}
-          onChange={handleConfirmPasswordChange}
-        />
-        {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-
-        <button
-          className="border rounded-lg p-3 my-5 bg-modify-btn-color hover:text-white  min-w-[460]"
-          onClick={handlePasswordSubmit}
-          disabled={!!errorMessage}
-        >
-          비밀번호 변경
-        </button>
-        <div
-          className="flex justify-end text-red-500 mt-10 hover:cursor-pointer"
-          onClick={() => navigate(-1)}
-        >
+          onChange={handlePasswordConfirmChange}
+          onBlur={checkPasswordsMatch}
+          onFocus={clearPasswordsMatchValidation}
+          className="mb-4"
+        ></CommonInput>
+        {isPasswordsMatch === false && (
+          <p className="text-[12px] text-isValid-text-red">비밀번호가 일치하지 않습니다.</p>
+        )}
+        <ConfirmButton label="비밀번호 변경" onClick={handlePasswordSubmit}></ConfirmButton>
+        <div className="flex justify-end mt-10 hover:cursor-pointer" onClick={() => navigate(-1)}>
           취소
         </div>
       </div>

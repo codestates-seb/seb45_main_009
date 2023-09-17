@@ -1,13 +1,12 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { login } from "../redux/reducers/loginSlice";
 import { Link } from "react-router-dom";
 import kakao from "../assets/images/kakaotalk.png";
-
 //컴포넌트 불러오기
 import CommonInput from "../components/atoms/CommonInput";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
+import globalAxios from "../data/data";
 
 import { UserInfo } from "../types/types";
 
@@ -45,30 +44,48 @@ function LoginPage() {
 
   const onSubmitHandler = async () => {
     if (isValidEmail) {
-      const url = "http://localhost:8080/login";
       try {
-        const response = await axios.post(url, { email, password });
-
-        const accessToken = response.headers["Authorization"];
-        const userType = response.headers["Usertype"];
-        const userNickname = response.headers["Nickname"];
-        const userInfo: UserInfo = { userType, userNickname };
-
+        const response = await globalAxios.post("/login", { email, password });
+        const accessToken = response.headers["authorization"];
+        const rolesString = response.headers["roles"];
+        const userType = rolesString.slice(1, -1);
+        const userNickname = response.headers["nickname"];
+        const userIdString = response.headers["userid"];
+        const userId = parseInt(userIdString);
+        const userInfo: UserInfo = { userType, userNickname, userId };
         sessionStorage.setItem("access_token", accessToken);
         const userInfoString = JSON.stringify(userInfo);
         sessionStorage.setItem("user_info", userInfoString);
 
-        dispatch(login({ userInfo }));
+        dispatch(login(userInfo));
 
         navigate("/");
-      } catch (error) {
+      } catch (error: any) {
+        const errorMessage = error.response.data.message;
+        if (errorMessage === "Unauthorized") {
+          alert("등록된 회원이 없습니다");
+        } else if (errorMessage === "Bad credentials (password incorrect)") {
+          alert("비밀번호가 틀렸습니다");
+        }
         console.error("Error during login:", error);
       }
     }
   };
 
+  const handleLastInputKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      onSubmitHandler();
+    }
+  };
+
+  //카카오톡 로그인
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_REST_API_KEY}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code`;
+  const kakaoLoginHandler = () => {
+    window.location.href = KAKAO_AUTH_URL;
+  };
+
   return (
-    <div className=" flex justify-center h-3/5 items-center  pt-[20px] mb-[40px] mt-[20px] ">
+    <div className=" flex flex-col justify-center h-3/5 items-center  pt-[20px] mb-[40px] mt-[20px] ">
       <div className="w-[300px] ">
         <CommonInput
           placeholder="이메일을 입력해주세요."
@@ -87,6 +104,7 @@ function LoginPage() {
           label="비밀번호"
           type="password"
           onChange={handlePasswordChange}
+          onKeyUp={handleLastInputKeyUp}
         />
 
         <button
@@ -95,7 +113,6 @@ function LoginPage() {
         >
           로그인
         </button>
-
         <div className="text-[12px] w-full mt-[10px] flex justify-center  font-medium text-gray-400 mb-[10px]">
           아직 FitFolio의 회원이 아니라면?{" "}
           <Link to="/signup" className="underline ml-1">
@@ -103,7 +120,10 @@ function LoginPage() {
           </Link>
         </div>
 
-        <button className="flex flex-row justify-center w-[300px] py-2 rounded-[4px] text-[14px] mt-[20px] font-medium bg-[#f9e000] text-black transition hover:opacity-75">
+        <button
+          onClick={kakaoLoginHandler}
+          className="flex flex-row justify-center w-[300px] py-2 rounded-[4px] text-[14px] mt-[20px] font-medium bg-[#f9e000] text-black transition hover:opacity-75"
+        >
           <img src={kakao} alt="kakaotalk" className="w-6 h-6" /> KaKao 로그인/회원가입
         </button>
       </div>

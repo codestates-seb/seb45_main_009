@@ -1,72 +1,193 @@
 import React, { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
+import { useSelector } from "react-redux";
+import { UserInfo } from "../../types/types";
+import { useLocation } from "react-router";
+import globalAxios from "../../data/data";
+import { Link } from "react-router-dom";
+import { RootStates } from "../../types/types";
 
 interface UserData {
-  proFileImg: string;
-  userId: string;
-  feedImg: string;
-  userInfo: string;
-  tags: string;
+  bio: string;
+  createdAt: string;
+  email: string;
+  height: number;
   location: string;
+  modifiedAt: string;
+  nickname: string;
+  price: number | string;
+  profileimg: string;
+  roles: string[];
+  userId: number;
+  weight: number;
+}
+
+interface FeedData {
+  bio: string;
+  feedId: number;
+  nickname: string;
+  profileImageUrl: string;
+  content: string;
+  relatedTags: string[];
+  images: {
+    imageId: number;
+    imageUrl: string;
+    imageTags: string[];
+  }[];
+}
+
+interface RootState {
+  login: {
+    isAuthenticated: boolean;
+    userInfo: UserInfo;
+  };
 }
 
 const MyPageFeed = () => {
-  const tempDataString = localStorage.getItem("tempData");
-  const tempData = tempDataString ? JSON.parse(tempDataString) : [];
+  const userInfo = useSelector((state: RootState) => state.login.userInfo);
+  const { allUserDatas } = useSelector((state: RootStates) => state.feed);
 
-  const [page, setPage] = useState(3);
+  const [allFeedData, setAllFeedData] = useState<FeedData[]>([]);
+  // const [allUserData, setAllUserData] = useState<UserData[]>([]);
+
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
   const [ref, inView] = useInView();
 
-  useEffect(() => {
-    if (inView) {
-      setPage((prevPage) => prevPage + 1);
+  const currentPage = userInfo.userType === "USER" ? "/" : "/store";
+
+  const PAGE_SIZE = 4; // 페이지당 데이터 개수
+
+  const currentDetail =
+    userInfo.userType === "USER" ? "feeddetailind" : "/feeddetailcor";
+  const getMainListData = async () => {
+    try {
+      setLoading(true);
+
+      // 서버에서 페이지네이션을 고려하여 데이터를 가져옴
+      const response = await globalAxios.get(currentPage, {
+        params: { page, pageSize: PAGE_SIZE },
+      });
+      const getData = response.data.feedList;
+
+      if (getData.length === 0) {
+        // 더 이상 데이터가 없는 경우
+        setHasMore(false);
+      } else {
+        // 이전 데이터와 새로운 데이터 합치기
+        setAllFeedData((prevData) => [...prevData, ...getData]);
+        setPage((prevPage) => prevPage + 1);
+      }
+
+      setLoading(false);
+    } catch (err) {
+      console.log("Error >>", err);
+      setLoading(false);
     }
-  }, [inView]);
-  const PAGE_SIZE = 4;
-  const startIndex = (page - 1) * PAGE_SIZE;
-  const chunkData = tempData.slice(0, startIndex + PAGE_SIZE);
+  };
+
+  // const getUserData = async () => {
+  //   try {
+  //     const response = await globalAxios.get("/users");
+  //     const getData = response.data;
+  //     setAllUserData(getData);
+  //   } catch (err) {
+  //     console.log("Error >>", err);
+  //   }
+  // };
+
+  useEffect(() => {
+    if (inView && !loading && hasMore) {
+      getMainListData();
+    }
+  }, [inView, loading, hasMore]);
+
+  useEffect(() => {
+    getMainListData();
+  }, [userInfo]);
+
+  const IntroductionCss =
+    " border border-gray-400 rounded-xl  p-10 h-full min-h-[200px] m-8 w-[50%] md:w-auto ";
+
+  const MainBodyCss = " flex justify-center mt-10 items-center md:items-start";
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    // 이벤트 리스너 등록
+    window.addEventListener("resize", handleResize);
+
+    // 컴포넌트가 언마운트될 때 이벤트 리스너 제거
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [windowWidth]);
+
+  const user = allUserDatas.find(
+    (userData) => userData.nickname === userInfo.userNickname
+  );
+
+  console.log(allUserDatas, "userinfo");
+
+  const userFeed = allFeedData.filter(
+    (userData) => userData.nickname === userInfo.userNickname
+  );
 
   return (
-    <div>
-      <div className="flex justify-center mt-10">
-        <div className=" border border-gray-400 rounded-xl mr-20 p-10 h-full min-h-[200px] sticky top-24">
+    <section>
+      <div
+        className={`flex w-max-xl ${
+          windowWidth < 768 ? "flex-col" : "flex-row"
+        }  ${MainBodyCss} `}
+      >
+        <aside
+          className={` ${
+            windowWidth < 768 ? "" : " sticky top-24"
+          }  md:${IntroductionCss}`}
+        >
           <div className="flex items-center flex-col mb-10">
             <img
-              src={tempData[8].proFileImg}
+              src={user?.profileimg}
               alt="myimg"
-              className="mb-5 w-[150px] border rounded-full "
+              className="mb-5 w-[10vw] border rounded-full "
             />
-            <div className="font-bold text-xl">{tempData[8].userId}</div>
+            <div className="font-bold text-xl">{user?.nickname}</div>
           </div>
           <div className="text-gray-500 flex flex-col">
             <div className="mb-5">
-              키<div>20cm</div>
+              키<div>{user?.height}</div>
             </div>
             <div className="mb-5">
               몸무게
-              <div>3kg</div>
+              <div>{user?.weight}</div>
             </div>
             <div className="mb-5">
               자기소개
-              <div className="max-w-[200]">안녕하세요</div>
+              <div className="max-w-[200]">{user?.bio}</div>
             </div>
           </div>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-2 h-full mb-24">
-          {chunkData.map((user: UserData, idx: number) => (
-            <div key={idx}>
-              <img
-                src={user.feedImg}
-                alt={`ProfileImg of ${user.userId}`}
-                className="w-[200px] h-[200px] object-cover"
-              ></img>
-            </div>
+        </aside>
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 h-full mb-24">
+          {userFeed.map((user, idx) => (
+            <article key={idx} className="flex justify-center items-center">
+              <Link to={`/${currentDetail}/${user.feedId}`}>
+                <img
+                  src={user.images[0].imageUrl}
+                  alt={`ProfileImg of ${user.feedId}`}
+                  className="w-[80vw] h-[80vw] object-cover md:w-[25vw] md:h-[25vw] lg:w-[15vw] lg:h-[15vw] border"
+                />
+              </Link>
+            </article>
           ))}
-        </div>
+        </section>
       </div>
-      <div ref={ref}>gdgdgd</div>
-    </div>
+      <div ref={ref}></div>
+    </section>
   );
 };
 
