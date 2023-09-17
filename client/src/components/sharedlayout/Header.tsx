@@ -15,9 +15,7 @@ import { AiOutlineHome } from "react-icons/ai";
 function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.login.isAuthenticated
-  );
+  const isAuthenticated = useSelector((state: RootState) => state.login.isAuthenticated);
   const { allFeedDatas } = useSelector((state: RootStates) => state.feed);
   const { allUserDatas } = useSelector((state: RootStates) => state.feed);
 
@@ -112,9 +110,7 @@ function Header() {
 
       if (filteredUsers.length !== 0) {
         filteredUsers = allFeedDatas.filter((feed) =>
-          filteredUsers.some(
-            (user: { nickname: string }) => user.nickname === feed.nickname
-          )
+          filteredUsers.some((user: { nickname: string }) => user.nickname === feed.nickname)
         );
       }
 
@@ -132,9 +128,7 @@ function Header() {
 
     if (inputValue.trim() !== "") {
       // 검색어 추천 목록을 가져오는 코드를 작성
-      const filteredSuggestions: string[] = auto
-        .filter((suggestion) => suggestion.includes(inputValue))
-        .slice(0, 5);
+      const filteredSuggestions: string[] = auto.filter((suggestion) => suggestion.includes(inputValue)).slice(0, 5);
 
       setAutoCompleteData(filteredSuggestions);
       setShowAutoComplete(true);
@@ -203,7 +197,7 @@ function Header() {
           </Link>
         )}
       </Link>
-      <div className="flex items-center min-w-[190px] h-[3vh] w-[50vw] max-w-[500px] border  p-1 sm:mr-2 sm:h-[4vh] relative">
+      <div className="flex items-center min-w-[190px] h-[3vh] w-[50vw] max-w-[500px] border rounded-lg p-1 sm:mr-2 sm:h-[4vh] relative">
         <BiSearch size="24" />
         <input
           id="search"
@@ -231,11 +225,7 @@ function Header() {
       {isMobile ? (
         <>
           <div className="ml-3" onClick={toggleModal}>
-            {isModalOpen ? (
-              <RiMenuFoldFill size="24" />
-            ) : (
-              <RiMenuUnfoldFill size="24" />
-            )}
+            {isModalOpen ? <RiMenuFoldFill size="24" /> : <RiMenuUnfoldFill size="24" />}
           </div>
           {isModalOpen && (
             <div className="fixed top-0 right-0 bottom-0 left-0 bg-white z-50 flex flex-col items-center animate-slide-right">
@@ -254,10 +244,7 @@ function Header() {
                     로그아웃
                   </button>
                   <Link to="/mypage/feed">
-                    <button
-                      className="mb-4 hover:text-btn-color"
-                      onClick={handleMenuClick}
-                    >
+                    <button className="mb-4 hover:text-btn-color" onClick={handleMenuClick}>
                       마이페이지
                     </button>
                   </Link>
@@ -265,43 +252,37 @@ function Header() {
               ) : (
                 <>
                   <Link to="/login">
-                    <button
-                      className="my-4 hover:text-btn-color"
-                      onClick={handleMenuClick}
-                    >
+                    <button className="my-4 hover:text-btn-color" onClick={handleMenuClick}>
                       로그인
                     </button>
                   </Link>
                   <Link to="/signup">
-                    <button
-                      className="mb-4 hover:text-btn-color"
-                      onClick={handleMenuClick}
-                    >
+                    <button className="mb-4 hover:text-btn-color" onClick={handleMenuClick}>
                       회원가입
                     </button>
                   </Link>
                 </>
               )}
-              <div className="my-4">
+              {/* <div className="my-4">
                 <IoNotificationsOutline size="22" />
-              </div>
+              </div> */}
               <button onClick={closeModal}>닫기</button>
             </div>
           )}
         </>
       ) : (
         <>
-          {isAuthenticated && (
+          {/* {isAuthenticated && (
             <div className="items-center mx-2 sm:mr-4 hover:cursor-pointer">
               <Link to="/alarmpage">
                 <IoNotificationsOutline size="22" />
               </Link>
             </div>
-          )}
+          )} */}
         </>
       )}
       {!isMobile && isAuthenticated ? (
-        <div className="flex text-[0.8rem] lg:text-base">
+        <div className="flex text-[0.8rem] lg:text-base ml-2">
           <button className="mr-4 hover:text-btn-color" onClick={logoutHandler}>
             로그아웃
           </button>
@@ -313,18 +294,12 @@ function Header() {
         !isMobile && (
           <div className="flex">
             <Link to="/login">
-              <button
-                className="text-xs mr-2 sm:mr-4 sm:text-base hover:text-btn-color"
-                onClick={handleMenuClick}
-              >
+              <button className="text-xs mr-2 sm:mr-4 sm:text-base hover:text-btn-color" onClick={handleMenuClick}>
                 로그인
               </button>
             </Link>
             <Link to="/signup">
-              <button
-                className="text-xs sm:text-base hover:text-btn-color"
-                onClick={handleMenuClick}
-              >
+              <button className="text-xs sm:text-base hover:text-btn-color" onClick={handleMenuClick}>
                 회원가입
               </button>
             </Link>
