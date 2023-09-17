@@ -19,7 +19,10 @@ function useUserSession() {
         dispatch(login(userInfo));
       } catch (error) {
         console.error("Error decoding user info:", error);
+        setIsLoading(false);
       }
+    } else {
+      setIsLoading(false);
     }
   }, [dispatch]);
 
