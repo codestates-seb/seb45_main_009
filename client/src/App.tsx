@@ -73,6 +73,7 @@ function App() {
                 path="/profile/:userId"
                 element={<ProfilePageInd />}
               ></Route>
+              <Route path="/notification" element={<AlarmPage />}></Route>
 
               {/* <Route path="/profilecor/:userId" element={<ProfilePageCor />}></Route> */}
 
