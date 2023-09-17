@@ -57,6 +57,7 @@ public class SearchService {
                 .nickname(user.getNickname())
                 .profileimg(user.getProfileimg() != null ? user.getProfileimg().getImageUrl() : null)
                 .bio(user.getBio())
+                .sport(user.getSport())
                 .feedCount(user.getUserProfile().getFeedCount())
                 .followCount(user.getUserProfile().getFollowCount())
                 .followerCount(user.getUserProfile().getFollowerCount())

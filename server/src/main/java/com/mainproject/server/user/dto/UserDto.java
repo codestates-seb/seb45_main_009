@@ -96,6 +96,7 @@ public class UserDto {
         private String nickname;
         private String profileimg;
         private String bio;
+        private String sport;
         private String price;
         private Integer height;
         private Integer weight;
