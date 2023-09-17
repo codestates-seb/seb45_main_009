@@ -197,7 +197,7 @@ function Header() {
           </Link>
         )}
       </Link>
-      <div className="flex items-center min-w-[190px] h-[3vh] w-[50vw] max-w-[500px] border  p-1 sm:mr-2 sm:h-[4vh] relative">
+      <div className="flex items-center min-w-[190px] h-[3vh] w-[50vw] max-w-[500px] border rounded-lg p-1 sm:mr-2 sm:h-[4vh] relative">
         <BiSearch size="24" />
         <input
           id="search"
@@ -263,26 +263,26 @@ function Header() {
                   </Link>
                 </>
               )}
-              <div className="my-4">
+              {/* <div className="my-4">
                 <IoNotificationsOutline size="22" />
-              </div>
+              </div> */}
               <button onClick={closeModal}>닫기</button>
             </div>
           )}
         </>
       ) : (
         <>
-          {isAuthenticated && (
+          {/* {isAuthenticated && (
             <div className="items-center mx-2 sm:mr-4 hover:cursor-pointer">
               <Link to="/alarmpage">
                 <IoNotificationsOutline size="22" />
               </Link>
             </div>
-          )}
+          )} */}
         </>
       )}
       {!isMobile && isAuthenticated ? (
-        <div className="flex text-[0.8rem] lg:text-base">
+        <div className="flex text-[0.8rem] lg:text-base ml-2">
           <button className="mr-4 hover:text-btn-color" onClick={logoutHandler}>
             로그아웃
           </button>

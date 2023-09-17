@@ -4,13 +4,10 @@ import { useInView } from "react-intersection-observer";
 import globalAxios from "../../data/data";
 import { useDispatch, useSelector } from "react-redux";
 import { RootStates, RootState } from "../../types/types";
-import {
-  setAllFeedDatas,
-  setAllUserDatas,
-  setAllFeedDataB,
-} from "../../redux/reducers/feedSlice";
+import { setAllFeedDatas, setAllUserDatas, setAllFeedDataB } from "../../redux/reducers/feedSlice";
 import noFeed from "../../assets/images/nofeed.png";
 import useFetchUserData from "../../hooks/useFetchUserData";
+import { FcGallery } from "react-icons/fc";
 
 interface UserData {
   bio: string;
@@ -54,6 +51,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
   const { filteredDatas } = useSelector((state: RootStates) => state.feed);
   const { allUserDatas } = useSelector((state: RootStates) => state.feed);
   const [allFeedData, setAllFeedData] = useState<FeedData[]>([]);
+  console.log(allFeedData);
 
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -63,9 +61,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
 
   const dispatch = useDispatch();
   const location = useLocation();
-  // const currentFeed = location.pathname === "/" ? "/feedformind" : "/feedformcor";
-  const currentDetail =
-    location.pathname === "/" ? "/feeddetailind" : "/feeddetailcor";
+  const currentDetail = location.pathname === "/" ? "/feeddetailind" : "/feeddetailcor";
   const currentPage = location.pathname === "/" ? "/" : "/store";
 
   const PAGE_SIZE = 4; // 페이지당 데이터 개수
@@ -125,16 +121,11 @@ const Feed = ({ selectedFilter }: FeedProps) => {
 
   const filteredData = usethis.filter((user) => {
     const hasExerciseTag =
-      selectedFilter.includes("운동전체") ||
-      selectedFilter.some((filter) => user.relatedTags.includes(filter));
+      selectedFilter.includes("운동전체") || selectedFilter.some((filter) => user.relatedTags.includes(filter));
     const hasLocationTag =
-      selectedFilter.includes("지역전체") ||
-      selectedFilter.some((tag) => user.relatedTags.includes(tag));
+      selectedFilter.includes("지역전체") || selectedFilter.some((tag) => user.relatedTags.includes(tag));
 
-    if (
-      selectedFilter.includes("운동전체") &&
-      selectedFilter.includes("지역전체")
-    ) {
+    if (selectedFilter.includes("운동전체") && selectedFilter.includes("지역전체")) {
       return true; // 운동전체와 지역전체가 선택된 경우 모든 데이터 표시
     } else if (selectedFilter.includes("운동전체") && hasLocationTag) {
       return true; // 운동전체만 선택하고 지역 필터에 해당하는 데이터 표시
@@ -142,18 +133,10 @@ const Feed = ({ selectedFilter }: FeedProps) => {
       return true; // 지역전체만 선택하고 운동 필터에 해당하는 데이터 표시
     } else {
       // 지역태그와 운동태그를 각각 선택한 경우
-      const selectedExerciseTags = selectedFilter.filter(
-        (tag) => tag !== "운동전체"
-      );
-      const selectedLocationTags = selectedFilter.filter(
-        (tag) => tag !== "지역전체"
-      );
-      const exerciseMatch = selectedExerciseTags.every((tag) =>
-        user.relatedTags.includes(tag)
-      );
-      const locationMatch = selectedLocationTags.every((tag) =>
-        user.relatedTags.includes(tag)
-      );
+      const selectedExerciseTags = selectedFilter.filter((tag) => tag !== "운동전체");
+      const selectedLocationTags = selectedFilter.filter((tag) => tag !== "지역전체");
+      const exerciseMatch = selectedExerciseTags.every((tag) => user.relatedTags.includes(tag));
+      const locationMatch = selectedLocationTags.every((tag) => user.relatedTags.includes(tag));
 
       return exerciseMatch && locationMatch;
     }
@@ -178,7 +161,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
         <div className="flex justify-center md:justify-end mr-4">
           <button
             onClick={handletoFeedForm}
-            className="fixed bottom-0 md:static px-8 py-2 rounded-xl mb-5 bg-feedbtn-color hover:bg-feedbtnhover-color"
+            className="font-semibold fixed bottom-0 md:static px-8 py-2 rounded-xl mb-5 bg-feedbtn-color hover:bg-feedbtnhover-color"
           >
             피드 올리기
           </button>
@@ -187,12 +170,13 @@ const Feed = ({ selectedFilter }: FeedProps) => {
         {hasDataToDisplay ? ( // Check if there is data to display
           <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-24">
             {filteredData.map((feed, idx) => {
-              const user = allUserDatas.find(
-                (userData) => userData.nickname === feed.nickname
-              );
+              const user = allUserDatas.find((userData) => userData.nickname === feed.nickname);
 
               return (
-                <article key={idx} className="mb-4 min-w-[250px]">
+                <article
+                  key={idx}
+                  className="mb-4 min-w-[250px]  hover:scale-105 transition-all duration-300 ease-in-out hover:shadow-[5px_5px_10px_rgba(0,0,0,0.2)]"
+                >
                   <div className="flex mb-4">
                     <Link to={`/profile/${user?.userId}`}>
                       <img
@@ -204,23 +188,20 @@ const Feed = ({ selectedFilter }: FeedProps) => {
                     <div className="ml-2">
                       <p>{feed.nickname}</p>
                       {user?.bio ? (
-                        <p className="text-gray-400 max-w-[200px] truncate">
-                          {user.bio}
-                        </p>
+                        <p className="text-gray-400 max-w-[200px] truncate">{user.bio}</p>
                       ) : (
-                        <p className="text-gray-400 max-w-[200px] truncate">
-                          바이오 없다
-                        </p>
+                        <p className="text-gray-400 max-w-[200px] truncate">오늘의 주인공</p>
                       )}
                     </div>
                   </div>
                   <Link to={`${currentDetail}/${feed.feedId}`}>
-                    <div>
+                    <div className="relative">
                       <img
                         src={feed.images[0].imageUrl}
                         alt={`FeedImg of ${feed.feedId}`}
-                        className="w-[13vw] h-[30vh] object-cover min-w-[250px] border"
+                        className="w-[15vw] h-[15vw] object-cover min-w-[250px]  min-h-[250px]"
                       />
+                      {feed.images.length > 1 && <FcGallery className=" absolute top-1 right-1 " />}
                     </div>
                   </Link>
                 </article>

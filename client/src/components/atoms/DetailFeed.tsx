@@ -183,7 +183,7 @@ const handleMouseUp = () => {
         {timeFormatter(responseData?.createdAt)}
       </div>
       <span className="max-mobile:text-[14px]">{responseData?.content}</span>
-      <div className="flex flex-row items-center mt-[20px]">
+      <div className="flex flex-row items-center mt-[20px] mb-[10px]">
         {isLiked === false ? (
           <AiOutlineHeart className="cursor-pointer text-red-400" onClick={handleLikeClick} size={20} />
         ) : (
@@ -192,7 +192,6 @@ const handleMouseUp = () => {
         <div className="ml-2 pb-[2px]">{likeList.length}</div>
       </div>
       <div className=" mt-2">
-        <div className="font-bold text-gray-400 text-sm mb-[10px]"></div>
         <ul>
           {responseData?.relatedTags.map((tag, index) => (
             <li

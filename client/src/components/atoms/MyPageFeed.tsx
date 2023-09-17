@@ -46,9 +46,9 @@ interface RootState {
 const MyPageFeed = () => {
   const userInfo = useSelector((state: RootState) => state.login.userInfo);
   const { allUserDatas } = useSelector((state: RootStates) => state.feed);
+  console.log(allUserDatas, "allUserDatas");
 
   const [allFeedData, setAllFeedData] = useState<FeedData[]>([]);
-  // const [allUserData, setAllUserData] = useState<UserData[]>([]);
 
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -140,31 +140,36 @@ const MyPageFeed = () => {
             windowWidth < 768 ? "" : " sticky top-24"
           }  md:${IntroductionCss}`}
         >
-          <div className="flex items-center flex-col mb-10">
+          <div className="flex items-center flex-col mb-10 ">
             <img
               src={user?.profileimg}
               alt="myimg"
-              className="mb-5 w-[10vw] border rounded-full "
+              className="mb-5 w-[10vw] h-[10vw] border rounded-full "
             />
             <div className="font-bold text-xl">{user?.nickname}</div>
           </div>
           <div className="text-gray-500 flex flex-col">
             <div className="mb-5">
-              키<div>{user?.height}</div>
+              키<div>{user?.height ? user?.height : "0 cm"}</div>
             </div>
             <div className="mb-5">
               몸무게
-              <div>{user?.weight}</div>
+              <div>{user?.weight ? user?.weight : "0 kg"}</div>
             </div>
             <div className="mb-5">
               자기소개
-              <div className="max-w-[200]">{user?.bio}</div>
+              <div className="max-w-[200]">
+                {user?.bio ? user?.bio : "오늘의 주인공"}
+              </div>
             </div>
           </div>
         </aside>
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 h-full mb-24">
           {userFeed.map((user, idx) => (
-            <article key={idx} className="flex justify-center items-center">
+            <article
+              key={idx}
+              className="flex justify-center items-center  hover:scale-105 transition-all duration-300 ease-in-out hover:shadow-[5px_5px_10px_rgba(0,0,0,0.2)]"
+            >
               <Link to={`/${currentDetail}/${user.feedId}`}>
                 <img
                   src={user.images[0].imageUrl}

@@ -36,7 +36,9 @@ function FeedFormPageInd() {
     setInputTag(event.target.value);
   };
 
-  const addTags = (e: React.KeyboardEvent<HTMLInputElement>): void => {
+  const addTags = (e?: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLButtonElement>): void => {
+    if (e) e.preventDefault();
+
     if (inputTag !== "" && inputTag.length <= 18 && !addedTags.includes(inputTag) && addedTags.length < 5) {
       setAddedTags([...addedTags, inputTag]);
       setInputTag("");
@@ -155,8 +157,10 @@ function FeedFormPageInd() {
               {healthCategory.map((category, index) => (
                 <li
                   key={index}
-                  className={`text-btc inline-block px-2 py-1 border border-bdc rounded mr-2.5 mb-2.5 transition ${
-                    selectedTags.includes(category) ? "bg-bts text-white" : "text-btc hover:bg-bts hover:text-white"
+                  className={`text-[14px] inline-block px-2 py-1 rounded mr-2.5 mb-2.5 transition ${
+                    selectedTags.includes(category)
+                      ? "border font-medium border-[#edf7ff] bg-[#edf7ff] text-[#22a1ff] "
+                      : "border border-bdc text-[#999999] hover:bg-[#edf7ff] hover:text-[#22a1ff] hover:border-[#edf7ff] hover:cursor-pointer "
                   }`}
                   onClick={() => handleTagSelect(category)}
                 >
@@ -165,40 +169,49 @@ function FeedFormPageInd() {
               ))}
             </ul>
           </div>
-          <div className="border border-bdc rounded px-3 pt-2 mh-[50px] mb-8 text-btc mb-20">
+          <div className="border-b border-bdc rounded pr-3 pt-2 mh-[50px] text-btc">
             <ul>
               {addedTags.map((tag, index) => (
                 <li
                   key={index}
-                  className="relative text-btc inline-block pl-2 pr-4 py-1 border border-bdc rounded mr-2.5 mb-2.5 bg-bts text-white group"
+                  className="relative text-btc inline-block pl-2 pr-4 py-1 border border-[#edf7ff] rounded mr-2.5 mb-2.5 bg-[#edf7ff]  group"
                 >
-                  <span className=" mr-2 inline-block">{`#${tag}`}</span>
+                  <span className="text-sm  font-medium mr-2 inline-block text-[#22a1ff]">{`#${tag}`}</span>
                   <TiDelete
-                    className="opacity-0 group-hover:opacity-100 transition absolute right-1 top-1/2 transform -translate-y-1/2"
+                    className="text-[#22a1ff] opacity-0 group-hover:opacity-100 transition absolute right-1 top-1/2 transform -translate-y-1/2"
                     onClick={() => removeTags(index)}
                   />
                 </li>
               ))}
               {addedTags.length === 5 ? null : (
-                <input
-                  className="outline-none mb-2.5 "
-                  type="text"
-                  onKeyUp={(event) => {
-                    if (event.key === "Enter") {
-                      addTags(event);
-                    }
-                  }}
-                  value={inputTag}
-                  placeholder="연관 태그 추가"
-                  onChange={inputTagHandler}
-                />
+                <>
+                  <input
+                    className="outline-none mb-2.5 mr-2 pl-2 w-8/12 max-mobile:w-7/12 text-sm"
+                    type="text"
+                    onKeyUp={(event) => {
+                      if (event.key === "Enter") {
+                        addTags(event);
+                      }
+                    }}
+                    value={inputTag}
+                    placeholder="연관 태그 추가"
+                    onChange={inputTagHandler}
+                  />
+                  <button className="text-blue-400 text-sm" onClick={addTags}>
+                    입력
+                  </button>
+                </>
               )}
             </ul>
           </div>
+
+          <span className="text-xs ml-2 mb-20">연관태그는 5개까지 추가 가능합니다. (최대 18자)</span>
         </div>
         <button
           onClick={submitForm}
-          className="absolute bottom-[-30px] max-tablet:bottom-[-10px] max-mobile:bottom-[0px]  right-0 text-btc px-6 py-2 border border-bdc rounded text-white transition bg-[#7DD9C4] hover:bg-[#4dab95] max-mobile:mx-1
+          className="absolute bottom-[-30px] max-tablet:bottom-[-10px] max-mobile:bottom-[0px]  
+          right-0 text-btc px-4 py-2 border border-bdc rounded text-white
+           transition bg-[#7DD9C4] hover:bg-[#4dab95] max-mobile:mx-1 text-base
           "
         >
           등록하기
