@@ -3,22 +3,11 @@ import upload from "../../assets/images/upload.jpeg";
 import BallonTag from "../atoms/BalloonTag";
 import { AiFillPlusCircle } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
+import { ImageData } from "../../types/types";
 
 interface ImageFormProps {
   previewImg: ImageData[];
   setPreviewImg: React.Dispatch<React.SetStateAction<ImageData[]>>;
-}
-
-interface TagData {
-  x: number;
-  y: number;
-  data?: { name: string; price: string; info: string };
-}
-
-interface ImageData {
-  file: File | null;
-  src: string;
-  tags: TagData[];
 }
 
 function ImageForm({ previewImg, setPreviewImg }: ImageFormProps) {
@@ -45,6 +34,7 @@ function ImageForm({ previewImg, setPreviewImg }: ImageFormProps) {
       const availableSlots = 5 - previewImg.length;
       if (files.length > availableSlots) {
         files.splice(availableSlots, files.length - availableSlots);
+        alert("사진은 5장까지 등록 가능합니다.");
       }
 
       files.forEach((file) => {

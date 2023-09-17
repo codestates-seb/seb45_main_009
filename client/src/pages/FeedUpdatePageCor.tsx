@@ -79,6 +79,10 @@ function FeedUpdataePageCor() {
       alert("사진을 하나 이상 등록해주세요.");
       return;
     }
+    if (previewImg.length + updatePreviewImg.length >= 6) {
+      alert("사진은 5장까지 등록 가능합니다.");
+      return;
+    }
     // 이미지 삭제 API
     if (imageToDelete.length !== 0) {
       for (let i = 0; i < imageToDelete.length; i++) {
