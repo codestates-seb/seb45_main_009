@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { UserInfo, RootState } from "../../types/types";
 import profileDefault from "../../assets/images/profileDefault.png";
 import ConfirmButton from "./ConfirmButton";
+import useFetchUserData from "../../hooks/useFetchUserData";
 interface userData {
   nickname: string;
   bio: string;
@@ -34,6 +35,7 @@ function MyPageEditInfo() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userInfo = useSelector((state: RootState) => state.login.userInfo);
+  const fetchData = useFetchUserData();
 
   const [previewImg, setPreviewImg] = useState<ImageData | null>(null);
   //개인-기업 공통 추가 입력
@@ -146,7 +148,10 @@ function MyPageEditInfo() {
       console.log("불러오기 성공, data:", data);
       const preProfileImg = { file: null, src: data.profileimg };
       console.log(preProfileImg);
-      if (preProfileImg.src === "https://fitfolio-photo.s3.ap-northeast-2.amazonaws.com/default+image/default.png") {
+      if (
+        preProfileImg.src ===
+        "https://fitfolio-photo.s3.ap-northeast-2.amazonaws.com/default+image/default.png"
+      ) {
       } else {
         setPreviewImg(preProfileImg);
       }
@@ -200,6 +205,7 @@ function MyPageEditInfo() {
       });
       alert("개인정보 수정 성공");
       console.log("patch성공", response);
+      fetchData();
     } catch (error) {
       console.log("error", error);
     }
@@ -221,7 +227,10 @@ function MyPageEditInfo() {
                 className="absolute top-0 left-0 w-[200px] h-[200px] bg-transparent cursor-pointer border-0 rounded-full"
               ></label>
               {previewImg && (
-                <button onClick={deleteImg} className="absolute right-[-30] flex flex-row items-center">
+                <button
+                  onClick={deleteImg}
+                  className="absolute right-[-30] flex flex-row items-center"
+                >
                   <MdDelete className="text-[#adaaaa] text-[20px] hover:text-[#595656] transition" />
                 </button>
               )}
@@ -246,9 +255,13 @@ function MyPageEditInfo() {
               onBlur={validateNicknameHandler}
               onFocus={clearNicknameValidation}
             />
-            <p className="text-[12px]">영문자, 숫자를 혼합하여 6~20자로 입력해주세요. </p>
+            <p className="text-[12px]">
+              영문자, 숫자를 혼합하여 6~20자로 입력해주세요.{" "}
+            </p>
             {isValidNickname === false && (
-              <p className="text-[12px] text-isValid-text-red">유효하지 않은 닉네임 형식입니다.</p>
+              <p className="text-[12px] text-isValid-text-red">
+                유효하지 않은 닉네임 형식입니다.
+              </p>
             )}
             <div className="flex flex-row">
               <CommonInput
@@ -293,9 +306,13 @@ function MyPageEditInfo() {
               onFocus={clearNicknameValidation}
               placeholder="닉네임을 입력해 주세요."
             />
-            <p className="text-[12px]">영문자, 숫자를 혼합하여 6~20자로 입력해주세요. </p>
+            <p className="text-[12px]">
+              영문자, 숫자를 혼합하여 6~20자로 입력해주세요.{" "}
+            </p>
             {isValidNickname === false && (
-              <p className="text-[12px] text-isValid-text-red">유효하지 않은 닉네임 형식입니다.</p>
+              <p className="text-[12px] text-isValid-text-red">
+                유효하지 않은 닉네임 형식입니다.
+              </p>
             )}
             <CommonInput
               value={location}
@@ -328,7 +345,11 @@ function MyPageEditInfo() {
         )}
 
         <div className="flex flex-row items-center justify-center mt-[16px]">
-          <ConfirmButton label="수정하기" onClick={onSubmit} className="mr-2"></ConfirmButton>
+          <ConfirmButton
+            label="수정하기"
+            onClick={onSubmit}
+            className="mr-2"
+          ></ConfirmButton>
           <ConfirmButton label="되돌리기" onClick={getData} />
         </div>
         <Link to={"/mypage/changepassword"}>

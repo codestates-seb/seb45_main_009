@@ -46,9 +46,9 @@ interface RootState {
 const MyPageFeed = () => {
   const userInfo = useSelector((state: RootState) => state.login.userInfo);
   const { allUserDatas } = useSelector((state: RootStates) => state.feed);
+  console.log(allUserDatas, "allUserDatas");
 
   const [allFeedData, setAllFeedData] = useState<FeedData[]>([]);
-  // const [allUserData, setAllUserData] = useState<UserData[]>([]);
 
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -150,15 +150,17 @@ const MyPageFeed = () => {
           </div>
           <div className="text-gray-500 flex flex-col">
             <div className="mb-5">
-              키<div>{user?.height}</div>
+              키<div>{user?.height ? user?.height : "0 cm"}</div>
             </div>
             <div className="mb-5">
               몸무게
-              <div>{user?.weight}</div>
+              <div>{user?.weight ? user?.weight : "0 kg"}</div>
             </div>
             <div className="mb-5">
               자기소개
-              <div className="max-w-[200]">{user?.bio}</div>
+              <div className="max-w-[200]">
+                {user?.bio ? user?.bio : "오늘의 주인공"}
+              </div>
             </div>
           </div>
         </aside>

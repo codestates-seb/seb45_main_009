@@ -209,7 +209,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
                         </p>
                       ) : (
                         <p className="text-gray-400 max-w-[200px] truncate">
-                          바이오 없다
+                          오늘의 주인공
                         </p>
                       )}
                     </div>

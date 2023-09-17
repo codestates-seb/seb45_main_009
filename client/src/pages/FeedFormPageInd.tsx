@@ -224,7 +224,9 @@ function FeedFormPageInd() {
   const navigate = useNavigate();
   const [bodyValue, setBodyValue] = useState<string>("");
 
-  const handleBodyChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
+  const handleBodyChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ): void => {
     setBodyValue(e.target.value);
   };
 
@@ -246,12 +248,19 @@ function FeedFormPageInd() {
     setAddedTags(addedTags.filter((_, index) => index !== indexToRemove));
   };
 
-  const inputTagHandler = (event: React.ChangeEvent<HTMLInputElement>): void => {
+  const inputTagHandler = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
     setInputTag(event.target.value);
   };
 
   const addTags = (e: React.KeyboardEvent<HTMLInputElement>): void => {
-    if (inputTag !== "" && inputTag.length <= 18 && !addedTags.includes(inputTag) && addedTags.length < 5) {
+    if (
+      inputTag !== "" &&
+      inputTag.length <= 18 &&
+      !addedTags.includes(inputTag) &&
+      addedTags.length < 5
+    ) {
       setAddedTags([...addedTags, inputTag]);
       setInputTag("");
     }
@@ -311,7 +320,9 @@ function FeedFormPageInd() {
       });
       console.log(response);
       //말풍선태그 추가api
-      const imageIds = response.data.images.map((imageData: any) => imageData.imageId);
+      const imageIds = response.data.images.map(
+        (imageData: any) => imageData.imageId
+      );
       for (let i = 0; i < imageIds.length; i++) {
         const imageId = imageIds[i];
         const imgTagData = previewImg[i].tags;
@@ -332,11 +343,15 @@ function FeedFormPageInd() {
           formData.append("imageTag", blob);
 
           try {
-            const response = await globalAxios.post(`/image/${imageId}`, formData, {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            });
+            const response = await globalAxios.post(
+              `/image/${imageId}`,
+              formData,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              }
+            );
             console.log(response);
           } catch (error) {
             console.error("error", error);
@@ -354,7 +369,10 @@ function FeedFormPageInd() {
     <div className="flex justify-center items-center flex-col my-20 ">
       <div className="flex flex-row relative max-mobile:flex-col max-mobile:mx-1 max-tablet:flex-col">
         <div className="flex flex-col  min-w-[300px] max-w-[420px] mr-10 max-mobile:mr-1 max-tablet:mr-1">
-          <ImageForm previewImg={previewImg} setPreviewImg={setPreviewImg}></ImageForm>
+          <ImageForm
+            previewImg={previewImg}
+            setPreviewImg={setPreviewImg}
+          ></ImageForm>
         </div>
         <div className="flex flex-col min-w-[300px] max-w-[420px]  max-mobile:mt-4 max-tablet:mt-4">
           <textarea
@@ -364,11 +382,14 @@ function FeedFormPageInd() {
             onChange={handleBodyChange}
           ></textarea>
           <div className=" mb-5">
-            <div className="text-btc py-2 rounded mb-2 font-medium"># 연관 태그 필수 선택</div>
+            <div className="text-btc py-2 rounded mb-2 font-medium">
+              # 연관 태그 필수 선택
+            </div>
             <ul>
               {healthCategory.map((category, index) => (
                 <li
                   key={index}
+
                   className={`text-[14px] inline-block px-2 py-1 rounded mr-2.5 mb-2.5 transition ${
                     selectedTags.includes(category)
                       ? "border font-medium border-[#edf7ff] bg-[#edf7ff] text-[#22a1ff] "
