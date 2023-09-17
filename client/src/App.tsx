@@ -23,11 +23,11 @@ import FeedUpdataePageInd from "./pages/FeedUpdatePageInd";
 import FeedUpdataePageCor from "./pages/FeedUpdatePageCor";
 
 import loadingImage from "./assets/images/loading.gif";
+import useFetchUserData from "./hooks/useFetchUserData";
 
 function App() {
-   useFetchUserData();
+  useFetchUserData();
   //새로고침시 로그인 상태 유지 - 완벽하게 상태저장 후 페이지 로드를 위해 로딩 추가
-   useFetchUserData();
   const isLoading = useUserSession();
   if (isLoading) {
     return (
@@ -73,11 +73,13 @@ function App() {
                 path="/profile/:userId"
                 element={<ProfilePageInd />}
               ></Route>
-              <Route path="/notification" element={<Alarm />}></Route>
 
               {/* <Route path="/profilecor/:userId" element={<ProfilePageCor />}></Route> */}
 
-              <Route path="/oauthloading" element={<OauthLoadingPage />}></Route>
+              <Route
+                path="/oauthloading"
+                element={<OauthLoadingPage />}
+              ></Route>
 
               {/*               <Route path="/alarmpage" element={<Alarm />}></Route> */}
               <Route path="*" element={<Not404 />} />
