@@ -156,13 +156,45 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
       </div>
 
       <div className="mt-10 mb-[100px]">
-        {commentData &&
+      {commentData &&
           commentData.feedCommentData.map((comment) => (
             <div key={comment.feedCommentId} className="mt-10">
-              <div className="grid grid-cols-6 gap-4 items-center mb-2">
-                <img src="/asset/img.png" className="w-8 h-8 rounded-full col-span-1" alt="profileImage" />
-                <div className="font-bold col-span-3">{comment.userNickname}</div>
-                {userInfo.userNickname === comment.userNickname ? ( // 이 부분을 조건부 렌더링으로 추가
+              <div className="flex">
+                <img src="/asset/img.png" className="mr-6 w-8 h-8 rounded-full" alt="profileImage" />
+                <div className="w-full">
+                  <span className="font-bold mr-2">{comment.nickname}</span>
+                  <span>{comment.content}</span>
+                </div>
+              <div className="flex w-[40px] sm:w-[30px] items-center text-[13px] text-gray-400">
+              {userInfo.userNickname === comment.nickname ? (
+                  <div>
+                    {/* <button
+                      className="text-[13px] opacity-75"
+                      onClick={() => setEditingCommentId(comment.feedCommentId)}
+                    >
+                      수정
+                    </button> */}
+                    <button
+                      className="text-[13px] opacity-75"
+                      onClick={() => {
+                        deleteComment(comment.feedCommentId);
+                      }}
+                    >
+                      삭제
+                    </button>
+                  </div>
+                ) : (
+                  <div></div> 
+                )}
+              </div>
+              </div>
+            <div className="flex">
+              <div className=" w-8 h-8 mr-6"></div>
+              <div className="text-[13px] text-gray-400">{timeFormatter(comment.createdAt)}</div>
+            </div>
+                
+                {/* 댓글 수정 주석처리 */}
+                {/* {userInfo.userNickname === comment.nickname ? (
                   <div className="col-span-2 flex justify-end gap-2">
                     <button
                       className="text-[13px] opacity-75"
@@ -180,11 +212,10 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
                     </button>
                   </div>
                 ) : (
-                  <div className="col-span-2"></div> // 같지 않으면 아무 것도 보이지 않게 처리
-                )}
-              </div>
+                  <div className="col-span-2"></div> 
+                )} */}
 
-              {editingCommentId !== comment.feedCommentId ? (
+              {/* {editingCommentId !== comment.feedCommentId ? (
                 <div className="grid grid-cols-6 gap-4 items-center">
                   <div className="w-8 h-8 rounded-full col-span-1 "></div>
                   <div className="col-span-3">{comment.content}</div>
@@ -211,14 +242,7 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
                     </button>
                   </div>
                 </div>
-              )}
-              <div className="grid grid-cols-6 gap-4 items-center">
-                <div className="rounded-full col-span-1"></div>
-                <div className="col-span-3 flex text-sm opacity-50 mb-1 max-mobile:text-[12px]">
-                  {timeFormatter(comment.createdAt)}
-                </div>
-                <div className="col-span-2 flex justify-end gap-2"></div>
-              </div>
+              )} */}
             </div>
           ))}
       </div>

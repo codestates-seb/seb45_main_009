@@ -5,7 +5,7 @@ import { AiFillHeart } from "react-icons/ai";
 import { BsFillBookmarkStarFill } from "react-icons/bs";
 import { MdAttachMoney } from "react-icons/md";
 import { BiSolidUser } from "react-icons/bi";
-
+import nofeedimg from '../../assets/images/nofeed.png'
 
 
 interface ProfileIndProps {
@@ -170,15 +170,21 @@ function UserProfile({ userId, isMyFeed , myid }: ProfileIndProps){
         <div className="my-[60px]  text-gray relative opacity-60 text-[13px] border-x flex justify-center">피드 리스트</div>
 
         <div className="my-[40px] flex flex-wrap justify-center sm:justify-start ">
-            {userResponseType?.feedList.map((feed, feedIndex) => (
-                <div key={feedIndex} className="mb-[10px]">
-                {feed.images.map((image, imageIndex) => (
-                    <Link key={image.imageUrl} to={`/feeddetailind/${feed.feedId}`}>
-                        <img className="mr-[10px] min-w-[229px] w-[13vw] h-[30vh]" key={imageIndex} src={image.imageUrl} alt={`Feed ${feedIndex} Image ${imageIndex}`} />
+        { 
+        userResponseType?.feedList && userResponseType.feedList.length > 0 ? (
+            userResponseType.feedList.map((feed, feedIndex) => (
+            <div key={feedIndex} className="mb-[10px]">
+                {feed.images[0] && (  // 첫 번째 이미지만 보여주도록 수정
+                    <Link key={feed.images[0].imageUrl} to={`/feeddetailind/${feed.feedId}`}>
+                        <img className="mr-[10px] min-w-[229px] w-[13vw] h-[30vh]" src={feed.images[0].imageUrl} alt={`Feed ${feedIndex} Image 0`} />
                     </Link>
-                ))}
-                </div>
-            ))}
+                )}
+            </div>
+            ))
+        ) : (
+            <img src={nofeedimg} alt="No feeds available" />
+        )
+    }
         </div>
     </div>
 </div>
