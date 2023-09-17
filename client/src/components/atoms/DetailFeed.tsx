@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { AiFillPlusCircle } from "react-icons/ai";
 import globalAxios from "../../data/data";
@@ -6,6 +6,7 @@ import timeFormatter from "../../hooks/timeFormatter";
 import { ResponseDataType, UserInfo, RootState } from "../../types/types";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
+
 //////태그 모달 시작
 function TagModal({
   title,
@@ -16,23 +17,29 @@ function TagModal({
 }: {
   title: string;
   size: string;
-  price: number;
+  price: string;
   top: string;
   left: string;
 }) {
   // 위아래
-  const modalTopPosition = parseInt(top) > 50 ? "-60px" : "25px";
+  let modalTopPosition = parseInt(top) > 50 ? "-50px" : "25px";
   // 좌우
   const modalLeftPosition = parseInt(left) > 50 ? "-105px" : "25px";
+
+  if (!title) {
+    modalTopPosition = "-10px";
+  }
 
   return (
     <div
       style={{ top: modalTopPosition, left: modalLeftPosition }}
-      className="absolute border w-[100px] rounded-[2px] bg-white text-[12px] mt-[2px] pl-[10px]"
+      className="absolute w-[100px] rounded-[8px] bg-white text-[12px]  pl-[10px]
+      drop-shadow-md transition"
     >
-      <div>{title}</div>
-      <div className="text-gray-400 text-[8px]">{size}</div>
-      <div className="font-bold">₩{price}</div>
+      {title ? <div className="font-bold text-black my-1">{title}</div> : null}
+      {size ? <div className="text-gray-400 text-[8px] my-1">{size}</div> : null}
+      {price ? <div className="text-[8px] my-1">₩ {price}</div> : null}
+      {!title && !size && !price && <div className="text-gray-400 text-[12px] my-1 text-[8px]">태그정보없음</div>}
     </div>
   );
 }
@@ -116,10 +123,34 @@ function DetailFeedInd({ feedId, responseData, isMyFeed }: DetailFeedProps) {
     tagIndex: number;
   } | null>(null);
 
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+const [startX, setStartX] = useState<number>(0);
+const [scrollLeft, setScrollLeft] = useState<number>(0);
+
+const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+  const slider = e.currentTarget;
+  setIsDragging(true);
+  setStartX(e.pageX - slider.offsetLeft);
+  setScrollLeft(slider.scrollLeft);
+};
+
+const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  if (!isDragging) return;
+  e.preventDefault();
+  const slider = e.currentTarget;
+  const x = e.pageX - slider.offsetLeft;
+  const walk = (x - startX) * 1;
+  slider.scrollLeft = scrollLeft - walk;
+};
+
+const handleMouseUp = () => {
+  setIsDragging(false);
+};
+
   return (
     <div className="w-full sm:max-w-screen-sm  mx-auto px-4 sm:px-4 lg:px-8">
       {responseData?.images.map((image, index) => (
-        <div key={index} className="mb-2 relative">
+        <div key={index} className="mb-8 relative">
           <img src={image.imageUrl} alt={`Image ${index}`} className="w-full h-auto" />
           {image.imageTags.map((tag, tagIndex) => {
             const top = Math.round(tag.positionY * 100);
@@ -127,22 +158,22 @@ function DetailFeedInd({ feedId, responseData, isMyFeed }: DetailFeedProps) {
             return (
               <div
                 key={tagIndex}
-                className="w-[20px] h-[20px] rounded-full absolute"
+                className="w-[20px] h-[20px] rounded-full absolute transition ease-in-out delay-150 text-[#22a1ff]  hover:scale-110 hover:text-[#22a1ff] duration-300 "
                 style={{ top: `${top}%`, left: `${left}%` }}
                 onMouseEnter={() => setShowTagModal({ photoIndex: index, tagIndex })}
                 onMouseLeave={() => setShowTagModal(null)}
               >
-                <AiFillPlusCircle className="w-[20px] h-[20px] text-tag-btn-color" />
-                {/* 만약 div위에 마우스 올린게 이미지index와 태그 index가 맞으면 모달창 보여주기 */}
+                <AiFillPlusCircle className="w-[20px] h-[20px] text-[#22a1ff] transition opacity-50  hover:opacity-100"  />                
                 {showTagModal?.photoIndex === index && showTagModal?.tagIndex === tagIndex && (
                   <TagModal
                     title={tag.productName}
                     size={tag.productInfo}
-                    price={parseInt(tag.productPrice)}
+                    price={tag.productPrice.toString()}
                     top={`${top}%`}
                     left={`${left}%`}
                   />
                 )}
+
               </div>
             );
           })}
@@ -172,34 +203,51 @@ function DetailFeedInd({ feedId, responseData, isMyFeed }: DetailFeedProps) {
             </li>
           ))}
         </ul>
-
-        <div className="mt-2 flex flex-wrap">
-          {responseData?.images.map((image, imageIndex) =>
-            image.imageTags.map((tag, tagIndex) => (
-              <div className="border rounded flex-grow mr-4 mb-4 p-2 text-sm" key={`${imageIndex}-${tagIndex}`}>
-                <div className="flex">
-                  <div className="flex-none" style={{ width: "70px" }}>
-                    제품명 :{" "}
-                  </div>
-                  <div className="flex-grow font-bold">{tag.productName}</div>
-                </div>
-                <div className="flex">
-                  <div className="flex-none " style={{ width: "70px" }}>
-                    가격 :{" "}
-                  </div>
-                  <div>₩ {parseInt(tag.productPrice)}</div>
-                </div>
-                <div className="flex">
-                  <div className="flex-none" style={{ width: "70px" }}>
-                    추가정보 :{" "}
-                  </div>
-                  <div className="text-btn-color">{tag.productInfo}</div>
-                </div>
-              </div>
-            ))
-          )}
+      <div 
+        className="mt-2 flex overflow-x-auto scrollbar-thin"
+        onMouseDown={handleMouseDown}
+     onMouseMove={handleMouseMove}
+     onMouseUp={handleMouseUp}
+     onMouseLeave={handleMouseUp} 
+      >
+  {responseData?.images.map((image, imageIndex) =>
+    image.imageTags.map((tag, tagIndex) => (
+      <div  className="border rounded flex-none mr-4 mb-4 py-2 pl-4 pr-8 text-sm scroll-snap-start scrollbar-hide"
+        style={{ 
+          minWidth: "",
+          overflowY: "auto",
+      }} 
+      key={`${imageIndex}-${tagIndex}`}
+      >
+        <div className="flex">
+          <div className="flex-none" style={{ width: "60px" }}>
+            제품명 :{" "}
+          </div>
+          <div className="flex-grow font-bold">{tag.productName}</div>
+        </div>
+        <div className="flex">
+          <div className="flex-none" style={{ width: "60px" }}>
+            정보 :{" "}
+          </div>
+          <div>{tag.productInfo}</div>
+        </div>
+        <div className="flex">
+          <div className="flex-none " style={{ width: "60px" }}>
+            가격 :{" "}
+          </div>
+          {
+            tag.productPrice 
+              ? <div className="text-[#22a1ff]">₩ {tag.productPrice.toString()}</div> 
+              : null
+          }
         </div>
       </div>
+    ))
+  )}
+</div>
+</div>
+
+      
 
       <div className="flex justify-end ">
         {isMyFeed ? (
