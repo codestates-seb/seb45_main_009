@@ -24,6 +24,7 @@ import FeedUpdataePageCor from "./pages/FeedUpdatePageCor";
 
 import loadingImage from "./assets/images/loading.gif";
 import useFetchUserData from "./hooks/useFetchUserData";
+import Community from "./pages/Community";
 
 function App() {
   const fetchData = useFetchUserData();
@@ -75,6 +76,7 @@ function App() {
                 element={<ProfilePageInd />}
               ></Route>
               <Route path="/notification" element={<AlarmPage />}></Route>
+              <Route path="/community" element={<Community />}></Route>
 
               {/* <Route path="/profilecor/:userId" element={<ProfilePageCor />}></Route> */}
 

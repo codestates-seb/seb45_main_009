@@ -18,16 +18,20 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
   const { allUserDatas } = useSelector((state: RootStates) => state.feed);
 
   // 전체 유저에서 내 유저 확인
-  const isNicknameExist = allUserDatas.some(user => user.nickname === userInfo.userNickname);
+  const isNicknameExist = allUserDatas.some(
+    (user) => user.nickname === userInfo.userNickname
+  );
 
   // 사진 가져오기
-  let profileImage = '';
+  let profileImage = "";
 
   if (isNicknameExist) {
-      const matchedUser = allUserDatas.find(user => user.nickname === userInfo.userNickname);
-      if (matchedUser && matchedUser.profileimg) {
-          profileImage = matchedUser.profileimg;
-      }
+    const matchedUser = allUserDatas.find(
+      (user) => user.nickname === userInfo.userNickname
+    );
+    if (matchedUser && matchedUser.profileimg) {
+      profileImage = matchedUser.profileimg;
+    }
   }
 
   const [commentData, setCommentData] = useState<CommentDataTypes | null>(null);
@@ -80,11 +84,15 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
     formData.append("feedCommentPostDto", blob);
 
     try {
-      const response = await globalAxios.post(`/feed/detail/${feedId}/comment`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await globalAxios.post(
+        `/feed/detail/${feedId}/comment`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       console.log("댓글 등록 성공", response);
       setCommentInputValue("");
       getCommentsData();
@@ -96,7 +104,9 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
   // 댓글 삭제 !!
   const deleteComment = async (feedCommentId: number) => {
     try {
-      const response = await globalAxios.delete(`/feed/detail/comment/${feedCommentId}`);
+      const response = await globalAxios.delete(
+        `/feed/detail/comment/${feedCommentId}`
+      );
       console.log("댓글 삭제 성공", response);
       getCommentsData();
     } catch (error) {
@@ -118,11 +128,15 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
     formData.append("feedCommentPatchDto", blob);
 
     try {
-      const response = await globalAxios.patch(`/feed/detail/comment/${feedCommentId}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await globalAxios.patch(
+        `/feed/detail/comment/${feedCommentId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       console.log("댓글 수정 성공", response);
       setInputUpdateValue("");
@@ -152,7 +166,10 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
   };
 
   //수정에 넣기
-  const handleInputKeyUpUpdate = (e: React.KeyboardEvent<HTMLInputElement>, feedCommentId: number) => {
+  const handleInputKeyUpUpdate = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    feedCommentId: number
+  ) => {
     if (e.key === "Enter") {
       handleUpdateComment(feedCommentId);
     }
@@ -160,64 +177,77 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
   return (
     <div className="mb-14  max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8">
       <div className="mt-10">
-          <div className="grid grid-cols-[auto,1fr,auto] items-center w-full gap-4">
-          <img src={profileImage} className="w-8 h-8 rounded-full" alt="profileImage" />
-          <input
-              className="border-b focus:outline-none"
-              type="text"
-              placeholder="댓글을 남겨보세요."
-              onChange={handleInputChange}
-              onKeyUp={handleInputKeyUpSubmit}
+        <div className="grid grid-cols-[auto,1fr,auto] items-center w-full gap-4">
+          <img
+            src={profileImage}
+            className="w-8 h-8 rounded-full"
+            alt="profileImage"
           />
-          <button className="text-blue-400 text-[14px]" onClick={handleSaveClick}>
-              입력
+          <input
+            className="border-b focus:outline-none"
+            type="text"
+            placeholder="댓글을 남겨보세요."
+            onChange={handleInputChange}
+            onKeyUp={handleInputKeyUpSubmit}
+          />
+          <button
+            className="text-blue-400 text-[14px]"
+            onClick={handleSaveClick}
+          >
+            입력
           </button>
         </div>
       </div>
 
       <div className="mt-10 mb-[100px]">
-      {commentData &&
+        {commentData &&
           commentData.feedCommentData.map((comment) => (
             <div key={comment.feedCommentId} className="mt-10">
               <div className="grid grid-cols-[auto,1fr,auto] gap-4">
-                <img src={comment.profileImageUrl} className="border w-8 h-8 rounded-full items-start" alt="profileImage" />
+                <img
+                  src={comment.profileImageUrl}
+                  className="border w-8 h-8 rounded-full items-start"
+                  alt="profileImage"
+                />
 
                 <div className="items-start">
-                    <span className="font-bold mr-2">{comment.nickname}</span>
-                    <span>{comment.content}</span>
+                  <span className="font-bold mr-2">{comment.nickname}</span>
+                  <span>{comment.content}</span>
                 </div>
 
                 <div className="w-[40px] sm:w-[30px] text-[13px] text-gray-400 flex items-center items-start">
-                    {userInfo.userNickname === comment.nickname ? (
-                        <div>
-                            {/* <button
+                  {userInfo.userNickname === comment.nickname ? (
+                    <div>
+                      {/* <button
                                 className="text-[13px] opacity-75"
                                 onClick={() => setEditingCommentId(comment.feedCommentId)}
                             >
                                 수정
                             </button> */}
-                            <button
-                                className="text-[13px] opacity-75"
-                                onClick={() => {
-                                    deleteComment(comment.feedCommentId);
-                                }}
-                            >
-                                삭제
-                            </button>
-                        </div>
-                    ) : (
-                        <div></div>
-                    )}
+                      <button
+                        className="text-[13px] opacity-75"
+                        onClick={() => {
+                          deleteComment(comment.feedCommentId);
+                        }}
+                      >
+                        삭제
+                      </button>
+                    </div>
+                  ) : (
+                    <div></div>
+                  )}
                 </div>
-            </div>
+              </div>
 
-            <div className="grid grid-cols-[auto,1fr] gap-6 items-center">
+              <div className="grid grid-cols-[auto,1fr] gap-6 items-center">
                 <div className="w-8 h-8"></div>
-                <div className="text-[13px] text-gray-400">{timeFormatter(comment.createdAt)}</div>
-            </div>
-                
-                {/* 댓글 수정 주석처리 */}
-                {/* {userInfo.userNickname === comment.nickname ? (
+                <div className="text-[13px] text-gray-400">
+                  {timeFormatter(comment.createdAt)}
+                </div>
+              </div>
+
+              {/* 댓글 수정 주석처리 */}
+              {/* {userInfo.userNickname === comment.nickname ? (
                   <div className="col-span-2 flex justify-end gap-2">
                     <button
                       className="text-[13px] opacity-75"

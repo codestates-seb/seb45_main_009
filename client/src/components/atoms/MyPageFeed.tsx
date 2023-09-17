@@ -150,15 +150,17 @@ const MyPageFeed = () => {
           </div>
           <div className="text-gray-500 flex flex-col">
             <div className="mb-5">
-              키<div>{user?.height}</div>
+              키<div>{user?.height ? user?.height : "0 cm"}</div>
             </div>
             <div className="mb-5">
               몸무게
-              <div>{user?.weight}</div>
+              <div>{user?.weight ? user?.weight : "0 kg"}</div>
             </div>
             <div className="mb-5">
               자기소개
-              <div className="max-w-[200]">{user?.bio}</div>
+              <div className="max-w-[200]">
+                {user?.bio ? user?.bio : "오늘의 주인공"}
+              </div>
             </div>
           </div>
         </aside>
