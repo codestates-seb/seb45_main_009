@@ -24,12 +24,10 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
 
   const isNicknameExist = allUserDatas.some((user) => user.nickname === userInfo.userNickname);
 
-
   // 사진 가져오기
   let profileImage = "";
 
   if (isNicknameExist) {
-
     const matchedUser = allUserDatas.find((user) => user.nickname === userInfo.userNickname);
 
     if (matchedUser && matchedUser.profileimg) {
@@ -87,15 +85,11 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
     formData.append("feedCommentPostDto", blob);
 
     try {
-      const response = await globalAxios.post(
-        `/feed/detail/${feedId}/comment`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await globalAxios.post(`/feed/detail/${feedId}/comment`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       console.log("댓글 등록 성공", response);
       setCommentInputValue("");
       getCommentsData();
@@ -107,9 +101,7 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
   // 댓글 삭제 !!
   const deleteComment = async (feedCommentId: number) => {
     try {
-      const response = await globalAxios.delete(
-        `/feed/detail/comment/${feedCommentId}`
-      );
+      const response = await globalAxios.delete(`/feed/detail/comment/${feedCommentId}`);
       console.log("댓글 삭제 성공", response);
       getCommentsData();
     } catch (error) {
@@ -131,15 +123,11 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
     formData.append("feedCommentPatchDto", blob);
 
     try {
-      const response = await globalAxios.patch(
-        `/feed/detail/comment/${feedCommentId}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await globalAxios.patch(`/feed/detail/comment/${feedCommentId}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       console.log("댓글 수정 성공", response);
       setInputUpdateValue("");
@@ -169,10 +157,7 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
   };
 
   //수정에 넣기
-  const handleInputKeyUpUpdate = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-    feedCommentId: number
-  ) => {
+  const handleInputKeyUpUpdate = (e: React.KeyboardEvent<HTMLInputElement>, feedCommentId: number) => {
     if (e.key === "Enter") {
       handleUpdateComment(feedCommentId);
     }
@@ -186,7 +171,6 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
     <div className="mb-14  max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8">
       <div className="mt-10">
         <div className="grid grid-cols-[auto,1fr,auto] items-center w-full gap-4">
-
           <img src={profileImage} className="w-8 h-8 rounded-full" alt="profileImage" />
           {isAuthenticated ? (
             <input
@@ -214,12 +198,11 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
               <div className="grid grid-cols-[auto,1fr,auto] gap-4">
                 <img
                   src={comment.profileImageUrl}
-
                   className="border w-8 h-8 rounded-full items-start hover:cursor-pointer"
                   alt="profileImage"
-                  onClick={() => handleNavigateProfile(comment.feedCommentId)}
+                  onClick={() => handleNavigateProfile(1)}
                 />
-
+                {/**댓글 데이터에 userId넣기(지금없음) / handViagete에 userId넣기 */}
                 <div className="items-start">
                   <span className="font-medium mr-2">{comment.nickname}</span>
                   <span className="text-[14px] opacity-90">{comment.content}</span>
@@ -248,7 +231,6 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
                   )}
                 </div>
               </div>
-
 
               <div className="grid grid-cols-[auto,1fr] gap-4 items-center mt-[-2px]">
                 <div className="w-8 h-8"></div>
