@@ -7,8 +7,7 @@ import SignupPage from "./pages/SignupPage";
 import ProfilePageInd from "./pages/ProfilePage";
 // import ProfilePageCor from "./pages/ProfilePageCor";
 import OauthLoadingPage from "./pages/OauthLoadingPage";
-// import Alarm from "./pages/alarmpage";
-
+import AlarmPage from "./pages/Alarmpage";
 import MainPageInd from "./pages/MainPageInd";
 import FeedDetailPageCor from "./pages/FeedDetailPageCor";
 import FeedDetailPageInd from "./pages/FeedDetailPageInd";
@@ -23,8 +22,20 @@ import useUserSession from "./hooks/useUserSession";
 import FeedUpdataePageInd from "./pages/FeedUpdatePageInd";
 import FeedUpdataePageCor from "./pages/FeedUpdatePageCor";
 
+import loadingImage from "./assets/images/loading.gif";
+import useFetchUserData from "./hooks/useFetchUserData";
+
 function App() {
-  useUserSession();
+  useFetchUserData();
+  //새로고침시 로그인 상태 유지 - 완벽하게 상태저장 후 페이지 로드를 위해 로딩 추가
+  const isLoading = useUserSession();
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-full">
+        <img src={loadingImage} alt="loadingImage" />
+      </div>
+    );
+  }
 
   return (
     <BrowserRouter>
@@ -36,23 +47,42 @@ function App() {
             <Routes>
               <Route path="/" element={<MainPageInd />}></Route>
               <Route path="/store" element={<MainPageCor />}></Route>
-              <Route path="/feeddetailcor/:feedId" element={<FeedDetailPageCor />} />
+              <Route
+                path="/feeddetailcor/:feedId"
+                element={<FeedDetailPageCor />}
+              />
 
-              <Route path="/feeddetailind/:feedId" element={<FeedDetailPageInd />} />
+              <Route
+                path="/feeddetailind/:feedId"
+                element={<FeedDetailPageInd />}
+              />
               <Route path="/feedformcor" element={<FeedFormPageCor />} />
               <Route path="/feedformind" element={<FeedFormPageInd />} />
-              <Route path="/feedupdateind/:feedId" element={<FeedUpdataePageInd />} />
-              <Route path="/feedupdatecor/:feedId" element={<FeedUpdataePageCor />} />
+              <Route
+                path="/feedupdateind/:feedId"
+                element={<FeedUpdataePageInd />}
+              />
+              <Route
+                path="/feedupdatecor/:feedId"
+                element={<FeedUpdataePageCor />}
+              />
               <Route path="/mypage/:page" element={<MyPage />} />
               <Route path="/login" element={<LoginPage />}></Route>
               <Route path="/signup" element={<SignupPage />}></Route>
-              <Route path="/profile/:userId" element={<ProfilePageInd />}></Route>
+              <Route
+                path="/profile/:userId"
+                element={<ProfilePageInd />}
+              ></Route>
+              <Route path="/notification" element={<AlarmPage />}></Route>
+
               {/* <Route path="/profilecor/:userId" element={<ProfilePageCor />}></Route> */}
+
               <Route
                 path="/oauthloading"
                 element={<OauthLoadingPage />}
               ></Route>
-{/*               <Route path="/alarmpage" element={<Alarm />}></Route> */}
+
+              {/*               <Route path="/alarmpage" element={<Alarm />}></Route> */}
               <Route path="*" element={<Not404 />} />
             </Routes>
           </main>

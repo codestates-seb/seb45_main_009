@@ -69,6 +69,7 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
         },
       });
       console.log("댓글 등록 성공", response);
+      setCommentInputValue("");
       getCommentsData();
     } catch (error) {
       console.error("Error deleting the comment:", error);
@@ -107,6 +108,7 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
       });
 
       console.log("댓글 수정 성공", response);
+      setInputUpdateValue("");
       setEditingCommentId(null);
       getCommentsData();
     } catch (error) {
@@ -231,8 +233,10 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
                   <input
                     className="border rounded col-span-3"
                     type="text"
+                    value={inputUpdateValue}
                     placeholder={comment.content}
                     onChange={handleCommentChange}
+                    onKeyUp={(e) => handleInputKeyUpUpdate(e, comment.feedCommentId)}
                   />
                   <div className="flex flex-row justify-end">
                     <button

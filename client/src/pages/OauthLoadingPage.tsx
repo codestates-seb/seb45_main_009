@@ -53,17 +53,18 @@ const OauthLoadingPage = () => {
           profileimg: kakaoimg,
         });
         //서버에서 정보 받아서 저장-자체 로그인과 동일
+        console.log("카카오톡 로그인:", response);
         const accessToken = response.headers["authorization"];
-        const rolesString = response.headers["userrole"];
-        const userType = rolesString.slice(1, -1);
+        const userType = response.headers["userrole"];
         const userNickname = response.headers["usernickname"];
-        const userId = response.headers["userid"];
+        const userIdString = response.headers["userid"];
+        const userId = parseInt(userIdString);
         const userInfo: UserInfo = { userType, userNickname, userId };
         sessionStorage.setItem("access_token", accessToken);
         const userInfoString = JSON.stringify(userInfo);
         sessionStorage.setItem("user_info", userInfoString);
 
-        dispatch(login({ userInfo }));
+        dispatch(login(userInfo));
 
         navigate("/");
       }

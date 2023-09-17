@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
 import globalAxios from "../../data/data";
 import { useDispatch, useSelector } from "react-redux";
-import { RootStates } from "../../types/types";
+import { RootStates, RootState } from "../../types/types";
 import {
   setAllFeedDatas,
   setAllUserDatas,
   setAllFeedDataB,
 } from "../../redux/reducers/feedSlice";
 import noFeed from "../../assets/images/nofeed.png";
+import useFetchUserData from "../../hooks/useFetchUserData";
 
 interface UserData {
   bio: string;
@@ -47,10 +48,13 @@ interface FeedProps {
 }
 
 const Feed = ({ selectedFilter }: FeedProps) => {
+  const navigate = useNavigate();
+  const userInfo = useSelector((state: RootState) => state.login.userInfo);
+  useEffect(() => console.log("userInfo:", userInfo), [userInfo]);
   const { filteredDatas } = useSelector((state: RootStates) => state.feed);
+  const { allUserDatas } = useSelector((state: RootStates) => state.feed);
   const [allFeedData, setAllFeedData] = useState<FeedData[]>([]);
-  const [allUserData, setAllUserData] = useState<UserData[]>([]);
-  console.log(filteredDatas);
+
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -59,8 +63,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
 
   const dispatch = useDispatch();
   const location = useLocation();
-  const currentFeed =
-    location.pathname === "/" ? "/feedformind" : "/feedformcor";
+  // const currentFeed = location.pathname === "/" ? "/feedformind" : "/feedformcor";
   const currentDetail =
     location.pathname === "/" ? "/feeddetailind" : "/feeddetailcor";
   const currentPage = location.pathname === "/" ? "/" : "/store";
@@ -96,17 +99,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
     }
   };
 
-  const getUserData = async () => {
-    try {
-      const response = await globalAxios.get("/users");
-      const getData = response.data;
-      console.log(getData, "getData");
-      setAllUserData(getData);
-      dispatch(setAllUserDatas(getData));
-    } catch (err) {
-      console.log("Error >>", err);
-    }
-  };
+  useFetchUserData();
 
   const getAllDataOnce = async () => {
     try {
@@ -125,13 +118,11 @@ const Feed = ({ selectedFilter }: FeedProps) => {
   useEffect(() => {
     if (inView && !loading && hasMore) {
       getMainListData();
-      getUserData();
     }
   }, [inView, loading, hasMore]);
 
   const usethis = filteredDatas.length !== 0 ? filteredDatas : allFeedData;
 
-  console.log("allFeedData", filteredDatas);
   const filteredData = usethis.filter((user) => {
     const hasExerciseTag =
       selectedFilter.includes("운동전체") ||
@@ -169,23 +160,34 @@ const Feed = ({ selectedFilter }: FeedProps) => {
   });
 
   const hasDataToDisplay = filteredData.length > 0;
-  console.log(filteredData, "filteredData");
+
+  //피드 올리기 버튼
+  const handletoFeedForm = () => {
+    if (userInfo.userType === "DEFAULT") {
+      alert("피드를 등록하기 위해서는 로그인이 필요합니다.");
+      navigate("/login");
+    } else if (userInfo.userType === "USER") {
+      navigate("/feedformind");
+    } else if (userInfo.userType === "STORE") {
+      navigate("/feedformcor");
+    }
+  };
   return (
     <section className="flex justify-center flex-col items-center ">
       <div>
         <div className="flex justify-center md:justify-end mr-4">
-          <Link
-            to={currentFeed}
+          <button
+            onClick={handletoFeedForm}
             className="fixed bottom-0 md:static px-8 py-2 rounded-xl mb-5 bg-feedbtn-color hover:bg-feedbtnhover-color"
           >
             피드 올리기
-          </Link>
+          </button>
         </div>
 
         {hasDataToDisplay ? ( // Check if there is data to display
           <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-24">
             {filteredData.map((feed, idx) => {
-              const user = allUserData.find(
+              const user = allUserDatas.find(
                 (userData) => userData.nickname === feed.nickname
               );
 
