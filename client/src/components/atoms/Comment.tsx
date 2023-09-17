@@ -141,7 +141,7 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
   return (
     <div className="mb-14  max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8">
       <div className="mt-10">
-            <div className="grid grid-cols-[auto,1fr,auto] items-center w-full gap-4">
+          <div className="grid grid-cols-[auto,1fr,auto] items-center w-full gap-4">
           <img src={img} className="w-8 h-8 rounded-full" alt="profileImage" />
           <input
               className="border-b focus:outline-none"
@@ -153,7 +153,7 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
           <button className="text-blue-400 text-[14px]" onClick={handleSaveClick}>
               입력
           </button>
-      </div>
+        </div>
       </div>
 
       <div className="mt-10 mb-[100px]">

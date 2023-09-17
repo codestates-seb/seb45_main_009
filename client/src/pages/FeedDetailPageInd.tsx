@@ -44,7 +44,7 @@ function FeedDetailPageInd() {
     return <div>Invalid feedId</div>;
   }
 
-  // console.log("내 유저 닉네임",userInfo)
+  console.log("내 유저 닉네임",userInfo)
 
   return (
     <div>
