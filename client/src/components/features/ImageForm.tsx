@@ -207,7 +207,7 @@ function ImageForm({ previewImg, setPreviewImg }: ImageFormProps) {
       <form encType="multipart/form-data">
         <label
           htmlFor="file"
-          className="text-[#fff] p-2.5 bg-[#75babf] transition cursor-pointer border border-bdc rounded hover:bg-[#438a90]"
+          className="text-[#fff] py-2 px-2.5 bg-[#75babf] transition cursor-pointer border border-bdc rounded hover:bg-[#438a90] text-base"
         >
           사진 올리기
         </label>
