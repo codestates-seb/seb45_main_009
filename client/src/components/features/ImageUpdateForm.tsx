@@ -27,12 +27,13 @@ function ImageUpdateForm({
     <div>
       {" "}
       <div className="flex flex-col w-full mb-2">
-        <span className="text-[12px] text-red">기존에 등록된 이미지는 삭제만 가능합니다</span>
         <div className="flex flex-row">
           {updatePreviewImg.length > 0
             ? updatePreviewImg.map((imgData, index) => (
                 <div
-                  className={`${index === updatePreviewImg.length - 1 ? "mr-0" : "mr-2"} relative group`}
+                  className={`${
+                    index === updatePreviewImg.length - 1 ? "mr-0" : "mr-2"
+                  } relative group bg-[rgba(0,0,0,0.5)]`}
                   key={index}
                 >
                   <img
@@ -40,8 +41,11 @@ function ImageUpdateForm({
                     alt={`uploadedimg-${index}`}
                     className="w-[100px] h-[120px] border border-bd object-cover bg-bdc"
                   />
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[12px] text-white">
+                    기존 이미지는 삭제만 가능합니다
+                  </div>
                   <MdDelete
-                    className="absolute bottom-1 right-1 cursor-pointer w-5 h-5 text-white opacity-0 transition group-hover:opacity-75"
+                    className="absolute bottom-1 right-1 cursor-pointer w-5 h-5 text-white opacity-0 transition group-hover:opacity-100"
                     onClick={() => deleteImg(index, imgData.imageId)}
                   ></MdDelete>
                 </div>
