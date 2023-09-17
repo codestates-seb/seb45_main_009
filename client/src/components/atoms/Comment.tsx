@@ -68,6 +68,7 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
         },
       });
       console.log("댓글 등록 성공", response);
+      setCommentInputValue("");
       getCommentsData();
     } catch (error) {
       console.error("Error deleting the comment:", error);
@@ -106,6 +107,7 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
       });
 
       console.log("댓글 수정 성공", response);
+      setInputUpdateValue("");
       setEditingCommentId(null);
       getCommentsData();
     } catch (error) {
@@ -145,6 +147,7 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
           <input
             className="grow border-b focus:outline-none mr-4"
             type="text"
+            value={commentInputValue}
             placeholder="댓글을 남겨보세요."
             onChange={handleInputChange}
             onKeyUp={handleInputKeyUpSubmit}
@@ -158,7 +161,7 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
       <div className="mt-10 mb-[100px]">
         {commentData &&
           commentData.feedCommentData.map((comment) => (
-            <div key={comment.feedCommentId} className="mt-10">
+            <div key={comment.feedCommentId} className="mt-2">
               <div className="grid grid-cols-6 gap-4 items-center mb-2">
                 <img src="/asset/img.png" className="w-8 h-8 rounded-full col-span-1" alt="profileImage" />
                 <div className="font-bold col-span-3">{comment.userNickname}</div>
@@ -196,8 +199,10 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
                   <input
                     className="border rounded col-span-3"
                     type="text"
+                    value={inputUpdateValue}
                     placeholder={comment.content}
                     onChange={handleCommentChange}
+                    onKeyUp={(e) => handleInputKeyUpUpdate(e, comment.feedCommentId)}
                   />
                   <div className="flex flex-row justify-end">
                     <button
