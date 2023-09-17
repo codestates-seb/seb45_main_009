@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import globalAxios from "../../data/data";
 import { CommentDataTypes } from "../../types/types";
-import { UserInfo } from "../../types/types";
+import { UserInfo, RootState } from "../../types/types";
 import timeFormatter from "../../hooks/timeFormatter";
 import img from "../../assets/images/profileDefault.png";
-
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 interface CommentProps {
   feedId: number;
   isMyFeed: boolean;
@@ -13,6 +14,9 @@ interface CommentProps {
 }
 
 function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
+  const navigate = useNavigate();
+  const isAuthenticated = useSelector((state: RootState) => state.login.isAuthenticated);
+  useEffect(() => console.log("isAuthenticated:", isAuthenticated), [isAuthenticated]);
   const [commentData, setCommentData] = useState<CommentDataTypes | null>(null);
 
   //댓글 데이터 불러오기
@@ -140,19 +144,29 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
       handleUpdateComment(feedCommentId);
     }
   };
+
+  const handleNavigateProfile = (userId: number) => {
+    navigate(`/profile/${userId}`);
+  };
+
   return (
     <div className="mb-14  max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8">
       <div className="mt-10">
         <div className="grid grid-cols-[auto,1fr,auto] items-center w-full gap-4">
           <img src={img} className="w-8 h-8 rounded-full" alt="profileImage" />
-          <input
-            className="border-b focus:outline-none"
-            type="text"
-            placeholder="댓글을 남겨보세요."
-            onChange={handleInputChange}
-            onKeyUp={handleInputKeyUpSubmit}
-            value={commentInputValue}
-          />
+          {isAuthenticated ? (
+            <input
+              className="border-b focus:outline-none "
+              type="text"
+              placeholder="댓글을 남겨보세요."
+              onChange={handleInputChange}
+              onKeyUp={handleInputKeyUpSubmit}
+              value={commentInputValue}
+            />
+          ) : (
+            <input disabled className="border-b focus:outline-none " placeholder="로그인이 필요합니다." />
+          )}
+
           <button className="text-blue-400 text-[14px]" onClick={handleSaveClick}>
             입력
           </button>
@@ -166,13 +180,14 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
               <div className="grid grid-cols-[auto,1fr,auto] gap-4">
                 <img
                   src={comment.profileImageUrl}
-                  className="border w-8 h-8 rounded-full items-start"
+                  className="border w-8 h-8 rounded-full items-start hover:cursor-pointer"
                   alt="profileImage"
+                  onClick={() => handleNavigateProfile(comment.feedCommentId)}
                 />
 
                 <div className="items-start">
-                  <span className="font-bold mr-2">{comment.nickname}</span>
-                  <span>{comment.content}</span>
+                  <span className="font-medium mr-2">{comment.nickname}</span>
+                  <span className="text-[14px] opacity-90">{comment.content}</span>
                 </div>
 
                 <div className="w-[40px] sm:w-[30px] text-[13px] text-gray-400 flex items-center items-start">
@@ -199,9 +214,9 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
                 </div>
               </div>
 
-              <div className="grid grid-cols-[auto,1fr] gap-6 items-center">
+              <div className="grid grid-cols-[auto,1fr] gap-4 items-center mt-[-2px]">
                 <div className="w-8 h-8"></div>
-                <div className="text-[13px] text-gray-400">{timeFormatter(comment.createdAt)}</div>
+                <div className="text-[13px] opacity-50">{timeFormatter(comment.createdAt)}</div>
               </div>
 
               {/* 댓글 수정 주석처리 */}
