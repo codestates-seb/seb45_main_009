@@ -3,9 +3,12 @@ import globalAxios from "../../data/data";
 import { Link } from "react-router-dom";
 import { AiFillHeart } from "react-icons/ai";
 import { BsFillBookmarkStarFill } from "react-icons/bs";
+import { HiLocationMarker } from "react-icons/hi";
 import { MdAttachMoney } from "react-icons/md";
 import { BiSolidUser } from "react-icons/bi";
 import nofeedimg from "../../assets/images/nofeed.png";
+import { RootStates } from "../../types/types";
+import { useSelector } from "react-redux";
 
 interface ProfileIndProps {
   userId: number;
@@ -14,7 +17,27 @@ interface ProfileIndProps {
 }
 
 function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
-  const sport = ["헬스, 런닝"];
+  // 유저 sport 가져오기
+  const { allUserDatas } = useSelector((state: RootStates) => state.feed);
+  console.log(allUserDatas)
+
+  // 전체 유저에서 프로필 유저 확인
+  const isUserId = allUserDatas.some(user => user.userId === userId);
+  console.log(isUserId)
+
+  // 사진 가져오기
+  let userSport = '';
+  let userlocation = '';
+
+  if (isUserId) {
+      const matchedUser = allUserDatas.find(user => user.userId === userId);
+      if (matchedUser && matchedUser.sport) {
+          userSport = matchedUser.sport;
+          userlocation = matchedUser.location;
+      }
+  }
+
+  console.log(userSport);
 
   const [isFollowing, setIsFollowing] = useState(false);
 
@@ -41,9 +64,6 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
   useEffect(() => {
     checkFollowState();
   }, [myid, userId]);
-
-  console.log("팔로잉됨", isFollowing);
-  console.log("팔로잉됨", myid, userId);
 
   type UserResponseType = {
     nickname: string;
@@ -78,7 +98,6 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
     fetcFeedData();
   }, [userId]);
 
-  console.log("유저 타입?", userResponseType);
 
   //로딩 상태 - 팔로우 적용 때문에 깜빡거림 방지
   const [isLoading, setIsLoading] = useState(true);
@@ -117,20 +136,13 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
                   <BsFillBookmarkStarFill className="ml-2 mt-2 text-red-500" />
                 )}
               </div>
-              {(userResponseType?.height || userResponseType?.weight) && (
-                <div className="flex">
-                  {userResponseType?.height && (
-                    <div className="mr-2.5 font-bold text-gray-400 text-sm">
-                      {userResponseType?.height} cm
-                    </div>
-                  )}
-                  {userResponseType?.bio ? (
+              <div className="text-sm text-gray-400">
+                {userResponseType?.bio ? (
                     userResponseType?.bio
                   ) : (
                     <span className="text-gray-400">__빈값__</span>
-                  )}
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
           <div className="flex justify-center sm:justify-end mt-6  sm:mr-4">
@@ -154,10 +166,9 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
           </div>
         </div>
         <div className="mt-[40px] flex items-center justify-center sm:justify-start ">
-          <div>
-            {/* 개인이면 sport, 기업이면 위치 가져오기 */}
+          <div className="flex">
             <AiFillHeart className="text-gray-400 mx-[10px] text-2xl" />
-            <div>{sport}</div>
+            <div >{userSport ? userSport : <span className="text-gray-400">__</span>}</div>
           </div>
         </div>
         <div className="mt-2 flex items-center justify-center sm:justify-start ">
@@ -184,11 +195,19 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
           )}
         </div>
         <div className="mt-2 flex items-center justify-center sm:justify-start ">
-          {userResponseType?.roles.includes("STORE") && (
-            <>
-              <MdAttachMoney className="text-gray-400 mx-[10px] text-2xl" />
-              <div>{userResponseType?.price}</div>
-            </>
+          {userResponseType?.roles.includes("STORE") && ( 
+              <div className="flex">
+                <HiLocationMarker className="text-gray-400 mx-[10px] text-2xl" />
+                <div>{userlocation}</div>
+              </div>
+          )}
+        </div>
+        <div className="mt-2 flex items-center justify-center sm:justify-start ">
+          {userResponseType?.roles.includes("STORE") && ( 
+              <div className="flex">
+                <MdAttachMoney className="text-gray-400 mx-[10px] text-2xl" />
+                <div>{userResponseType?.price}</div>
+              </div>
           )}
         </div>
 
