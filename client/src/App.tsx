@@ -26,7 +26,8 @@ import loadingImage from "./assets/images/loading.gif";
 import useFetchUserData from "./hooks/useFetchUserData";
 
 function App() {
-  useFetchUserData();
+  const fetchData = useFetchUserData();
+  fetchData();
   //새로고침시 로그인 상태 유지 - 완벽하게 상태저장 후 페이지 로드를 위해 로딩 추가
   const isLoading = useUserSession();
   if (isLoading) {

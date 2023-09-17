@@ -46,9 +46,9 @@ interface RootState {
 const MyPageFeed = () => {
   const userInfo = useSelector((state: RootState) => state.login.userInfo);
   const { allUserDatas } = useSelector((state: RootStates) => state.feed);
+  console.log(allUserDatas, "allUserDatas");
 
   const [allFeedData, setAllFeedData] = useState<FeedData[]>([]);
-  // const [allUserData, setAllUserData] = useState<UserData[]>([]);
 
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
