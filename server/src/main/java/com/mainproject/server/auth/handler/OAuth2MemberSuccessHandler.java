@@ -34,24 +34,24 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         // OAuth2 인증이 성공했을 때 호출되는 메서드
+        log.info("################Handler Start!##################");
 
         // OAuth2User 객체를 가져옵니다.
         var oAuth2User = (OAuth2User)authentication.getPrincipal();
 
         // 사용자의 이메일 및 프로필 이미지 URL을 추출합니다.
-        String email = String.valueOf(oAuth2User.getAttributes().get("email"));
-        String profileimg = (String) oAuth2User.getAttributes().get("picture");
-        if (profileimg == null) {
-            profileimg = (String) oAuth2User.getAttributes().get("profile_image");
-        }
+        String email = String.valueOf(oAuth2User.getAttributes().get("account_email"));
+        String image = (String) oAuth2User.getAttributes().get("profile_image");
 
         // 사용자의 권한을 생성하고 사용자 정보를 빌드합니다.
         List<String> authorities = authorityUtils.createRoles(email);
-        User user = buildOAuth2User(email, profileimg);
+
+        User user = buildOAuth2User(email, image);
 
         // 사용자가 데이터베이스에 존재하지 않으면 새로운 사용자를 저장하고 리디렉션합니다.
         if (!userService.existsByEmail(user.getEmail())) {
-            User savedUser = saveUser(user);
+            User savedUser = saveUser(user, image);
+            log.info("################Handler End!##################");
             redirect(request, response, savedUser, authorities);
         } else {
             // 이미 존재하는 사용자인 경우, 기존 사용자 정보를 가져와 리디렉션합니다.
@@ -65,7 +65,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         User user = new User();
         user.setEmail(email);
 
-        // 프로필 이미지 URL을 문자열로 저장
+        // 프로필 이미지 URL에 유저 아이디 추가
         Image profileimg = new Image();
         profileimg.setImageUrl(image);
         profileimg.setUser(user);
@@ -74,9 +74,10 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return user;
     }
 
-    private User saveUser(User user) {
+
+    private User saveUser(User user, String image) {
         // 사용자 정보를 저장하고 반환합니다.
-        return userService.createUserOAuth2(user);
+        return userService.createUserOAuth2(user, image);
     }
 
     private void redirect(HttpServletRequest request, HttpServletResponse response, User user, List<String> authorities) throws IOException {
@@ -103,7 +104,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         // 클레임을 설정합니다.
         Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", user.getUserId());
+        claims.put("userId", user.getUserId()); // userId 추가
         claims.put("roles", authorities);
 
         // 액세스 토큰의 주제와 만료 날짜를 설정합니다.
@@ -116,6 +117,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         return accessToken;
     }
+
 
     private String delegateRefreshToken(User user) {
         // 리프레시 토큰을 생성합니다.

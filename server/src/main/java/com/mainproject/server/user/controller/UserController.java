@@ -3,6 +3,7 @@ package com.mainproject.server.user.controller;
 
 
 import com.mainproject.server.auth.loginResolver.LoginUserId;
+import com.mainproject.server.image.entity.Image;
 import com.mainproject.server.response.DataResponseDto;
 import com.mainproject.server.response.SingleResponseDto;
 import com.mainproject.server.user.dto.AuthLoginDto;
@@ -99,18 +100,21 @@ public class UserController {
 
         // AuthLoginDto에서 User 객체로 매핑
         User user = mapper.AuthLoginDtoUser(requesBody);
+        String image = new String();
 
+//        Image createimg = userService.createimgOAuth2(requesBody.getProfileimg());
 
         // "ROLE_USER" 역할을 설정
         user.getRoles().add("USER");
         // 닉네임을 kakao로 설정
         user.setNickname("kakao");
         user.setEmail(user.getEmail());
+//        user.setProfileimg(createimg);
 
         // 사용자가 이메일로 이미 가입했는지 확인
         if (!userService.existsByEmail(user.getEmail())) {
             // 새로운 사용자로 등록
-            user = userService.createUserOAuth2(user);
+            user = userService.createUserOAuth2(user, image);
         } else {
             // 기존 사용자 정보 가져오기
             user = userService.findVerifiedUser(user.getEmail());
