@@ -10,10 +10,21 @@
 
 
 ## 🌟 Docs
-API명세서
-사용자요구사항정의서
-ERD
-화면정의서
+<details>
+<summary>사용자요구사항정의서</summary>
+<div markdown="1">
+
+<details>
+<summary>API명세서</summary>
+<div markdown="2">
+
+<details>
+<summary>화면정의서</summary>
+<div markdown="3">
+
+<details>
+<summary>화면정의서</summary>
+<div markdown="4">
 
 
 ## 🌟 Stack
