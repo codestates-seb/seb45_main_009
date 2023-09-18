@@ -65,7 +65,6 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                         .antMatchers(HttpMethod.PATCH, "/mypage/**").hasAnyRole("USER", "STORE")
                         .antMatchers(HttpMethod.DELETE, "/mypage/**").hasAnyRole("USER", "STORE", "ADMIN")
 
-
                         // # feed 관련
                         .antMatchers(HttpMethod.GET, "/").permitAll()
                         .antMatchers(HttpMethod.GET, "/store").permitAll()
