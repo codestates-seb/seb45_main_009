@@ -37,6 +37,7 @@
 <details>
 <summary>ERD</summary>
 <div markdown="1">
+<img src = "https://file.notion.so/f/f/82d63a72-8254-4cde-bf1e-b2597b7c099c/44f3e321-5697-4560-9ca6-a771294d259f/ERD.png?id=e986fc51-ac26-42cd-b714-b4c20acba07c&table=block&spaceId=82d63a72-8254-4cde-bf1e-b2597b7c099c&expirationTimestamp=1695168000000&signature=SyRh4UtZkj_CfhzayqVPCW3fT16q8Xftcc2SEBTxlas&downloadName=ERD.png">
 </div>
 </details>
 
