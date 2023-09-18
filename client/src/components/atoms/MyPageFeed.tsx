@@ -24,6 +24,7 @@ interface UserData {
 }
 
 interface FeedData {
+  userId: number;
   bio: string;
   feedId: number;
   nickname: string;
@@ -60,8 +61,7 @@ const MyPageFeed = () => {
 
   const PAGE_SIZE = 4; // 페이지당 데이터 개수
 
-  const currentDetail =
-    userInfo.userType === "USER" ? "feeddetailind" : "/feeddetailcor";
+  const currentDetail = userInfo.userType === "USER" ? "feeddetailind" : "/feeddetailcor";
   const getMainListData = async () => {
     try {
       setLoading(true);
@@ -98,8 +98,7 @@ const MyPageFeed = () => {
     getMainListData();
   }, [userInfo]);
 
-  const IntroductionCss =
-    " border border-bdc rounded-xl  p-10 h-full min-h-[200px] m-8 w-[50%] md:w-auto ";
+  const IntroductionCss = " border border-bdc rounded-xl  p-10 h-full min-h-[200px] m-8 w-[50%] md:w-auto ";
 
   const MainBodyCss = " flex justify-center mt-10 items-center md:items-start";
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -118,20 +117,13 @@ const MyPageFeed = () => {
     };
   }, [windowWidth]);
 
-  const user = allUserDatas.find(
-    (userData) => userData.nickname === userInfo.userNickname
-  );
+  const user = allUserDatas.find((userData) => userData.userId === userInfo.userId);
 
-  const userFeed = allFeedData.filter(
-    (userData) => userData.nickname === userInfo.userNickname
-  );
+  const userFeed = allFeedData.filter((userData) => userData.userId === userInfo.userId);
+  console.log(allFeedData);
   return (
     <section>
-      <div
-        className={`flex w-max-xl ${
-          windowWidth < 768 ? "flex-col" : "flex-row"
-        }  ${MainBodyCss} `}
-      >
+      <div className={`flex w-max-xl ${windowWidth < 768 ? "flex-col" : "flex-row"}  ${MainBodyCss} `}>
         {userInfo.userType === "USER" ? (
           <aside className="flex flex-col px-6 py-10 mr-4 max-768:flex-row">
             <div className="flex items-center flex-col max-768:mr-4 max-768:mt-0 max-768:mr-10">
@@ -143,15 +135,11 @@ const MyPageFeed = () => {
               />
             </div>
             <div className="flex flex-col max-768:justify-center">
-              <div className="flex justify-center font-semibold text-lg mb-4 max-mobile:text-sm">
-                {user?.nickname}
-              </div>
+              <div className="flex justify-center font-semibold text-lg mb-4 max-mobile:text-sm">{user?.nickname}</div>
               <div className="flex mb-2 max-mobile:flex-col max-mobile:mb-0">
                 <div className="max-mobile:text-sm">
                   <span className="font-bold mr-2">키</span>
-                  <span className="mr-4">
-                    {user?.height ? `${user?.height}cm` : "0 cm"}
-                  </span>
+                  <span className="mr-4">{user?.height ? `${user?.height}cm` : "0 cm"}</span>
                 </div>
                 <div className="max-mobile:text-sm">
                   <span className="font-bold mr-2">몸무게</span>
@@ -160,16 +148,13 @@ const MyPageFeed = () => {
               </div>
               <div className="mb-2 max-mobile:text-sm max-mobile:mb-0">
                 <span className="max-w-[200]">
-                  <span className="font-bold mr-2">주 종목</span>{" "}
-                  <span>{user?.sport ? user?.sport : "없음"}</span>
+                  <span className="font-bold mr-2">주 종목</span> <span>{user?.sport ? user?.sport : "없음"}</span>
                 </span>
               </div>
               <div className="mb-2 max-mobile:text-sm">
                 <span className="max-w-[200]">
                   <span className="font-bold mr-2">소개</span>{" "}
-                  <span className="opacity-75">
-                    {user?.bio ? user?.bio : "없음"}
-                  </span>
+                  <span className="opacity-75">{user?.bio ? user?.bio : "없음"}</span>
                 </span>
               </div>
             </div>
@@ -185,31 +170,25 @@ const MyPageFeed = () => {
               />
             </div>
             <div className="flex flex-col max-768:justify-center max-w-[200px]">
-              <div className="flex justify-center font-semibold text-lg mb-4 max-mobile:text-sm">
-                {user?.nickname}
-              </div>
+              <div className="flex justify-center font-semibold text-lg mb-4 max-mobile:text-sm">{user?.nickname}</div>
               <div className="mb-2 max-mobile:text-sm max-mobile:mb-0">
                 <span className="max-w-[200]">
-                  <span className="font-bold mr-2">주소</span>{" "}
-                  <span>{user?.location ? user?.location : "없음"}</span>
+                  <span className="font-bold mr-2">주소</span> <span>{user?.location ? user?.location : "없음"}</span>
                 </span>
               </div>
               <div className="mb-2 max-mobile:text-sm max-mobile:mb-0">
                 <span className="max-w-[200]">
-                  <span className="font-bold mr-2">주 종목</span>{" "}
-                  <span>{user?.sport ? user?.sport : "없음"}</span>
+                  <span className="font-bold mr-2">주 종목</span> <span>{user?.sport ? user?.sport : "없음"}</span>
                 </span>
               </div>
               <div className="mb-2 max-mobile:text-sm">
                 <span className="max-w-[200]">
-                  <span className="font-bold mr-2">소개</span>{" "}
-                  <span>{user?.bio ? user?.bio : "없음"}</span>
+                  <span className="font-bold mr-2">소개</span> <span>{user?.bio ? user?.bio : "없음"}</span>
                 </span>
               </div>
               <div className="mb-2 max-mobile:text-sm">
                 <span className="max-w-[200]">
-                  <span className="font-bold mr-2">가격 정보</span>{" "}
-                  <span>{user?.price ? user?.price : "없음"}</span>
+                  <span className="font-bold mr-2">가격 정보</span> <span>{user?.price ? user?.price : "없음"}</span>
                 </span>
               </div>
             </div>

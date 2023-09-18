@@ -54,14 +54,14 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
       });
       const getData = response.data;
 
-      if (page === getData.pageInfo.totalPages) {
-        return;
-      }
+      // if (page === getData.pageInfo.totalPages) {
+      //   return;
+      // }
 
       // console.log("댓글 데이터 불러오기 성공", response);
       const updatedCommentData = [...commentData, ...getData.feedCommentData];
       setCommentData(updatedCommentData);
-      setPage((prevPage) => prevPage + 1);
+      // setPage((prevPage) => prevPage + 1);
 
       setLoading(false);
     } catch (error) {
@@ -70,29 +70,33 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
     }
   };
 
-  const getCommentsTestData = async () => {
-    try {
-      setLoading(true);
-      const response = await globalAxios.get(`/feed/detail/${feedId}/comments`, {
-        params: { page: 1, pageSize: PAGE_SIZE },
-      });
-      const getData = response.data;
+  // const getCommentsTestData = async () => {
+  //   try {
+  //     setLoading(true);
 
-      if (page === getData.pageInfo.totalPages) {
-        return;
-      }
+  //     const response = await globalAxios.get(
+  //       `/feed/detail/${feedId}/comments`,
+  //       {
+  //         params: { page: 1, pageSize: PAGE_SIZE },
+  //       }
+  //     );
+  //     const getData = response.data;
 
-      // console.log("댓글 데이터 불러오기 성공", response);
-      const updatedCommentData = getData.feedCommentData;
-      setCommentData(updatedCommentData);
-      setPage((prevPage) => prevPage + 1);
+  //     if (page > getData.pageInfo.totalPages) {
+  //       return;
+  //     }
 
-      setLoading(false);
-    } catch (error) {
-      console.error("API 요청 실패:", error);
-      setLoading(false);
-    }
-  };
+  //     // console.log("댓글 데이터 불러오기 성공", response);
+  //     const updatedCommentData = getData.feedCommentData;
+  //     setCommentData(updatedCommentData);
+  //     setPage((prevPage) => prevPage + 1);
+
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.error("API 요청 실패:", error);
+  //     setLoading(false);
+  //   }
+  // };
 
   useEffect(() => {
     getCommentsData();
@@ -100,6 +104,7 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
 
   useEffect(() => {
     if (inView) {
+      setPage((prevPage) => prevPage + 1);
       getCommentsData();
     }
   }, [inView]);
@@ -147,7 +152,9 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
       });
 
       console.log("댓글 등록 성공", response);
-      getCommentsTestData();
+      alert("댓글이 등록되었습니다.");
+      window.location.reload();
+
       setCommentInputValue("");
     } catch (error) {
       console.error("Error deleting the comment:", error);
