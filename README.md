@@ -1,6 +1,6 @@
 # seb45_main_009
 <div align="center">
- <img src="https://fitfolio-photo.s3.ap-northeast-2.amazonaws.com/default+image/fitfolio.jpg">
+ <img src="">
  <br>
 <b>FITFOLIO</b><br>
  프로젝트 기간: 2023.08.24 ~ 2023.09.19
