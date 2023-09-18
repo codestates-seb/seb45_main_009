@@ -10,48 +10,73 @@ const members = [
     name: "손승범",
     github: "https://github.com/Beomda",
     mail: "ssb1pro@gmail.com",
+    serviceKey: "service_ceiut1g",
+    templateKey: "template_wsj98mm",
+    accountKey: "MXbZuVBJ4gLUqtagz",
   },
   {
     name: "민은영",
     github: "https://github.com/minkawoo",
     mail: "minkawoo@gmail.com",
+    serviceKey: "service_t3fii9n",
+    templateKey: "template_ks5pkkq",
+    accountKey: "rdqOzorr2_iMJcrwV",
   },
   {
     name: "김소연",
     github: "https://github.com/bonbon0808",
     mail: "d0624576@gmail.com",
+    serviceKey: "service_r7y48fw",
+    templateKey: "template_olyi2ie",
+    accountKey: "h_Tk6iHQKuCOOKsa3",
   },
   {
     name: "염동훈",
     github: "https://github.com/donghoonyeom",
     mail: "dua541541@gmail.com",
+    serviceKey: "service_eiyks7p",
+    templateKey: "template_ehag25g",
+    accountKey: "6vZzswGtUqZ8A3dMD",
   },
   {
     name: "함재형",
     github: "https://github.com/hamjaehyeong",
     mail: "ham6729@gmail.com",
+    serviceKey: "service_4u1fajv",
+    templateKey: "template_m0zpjin",
+    accountKey: "M2dlsWdp8u6qxOao1",
   },
-  { name: "이세은", github: "https://github.com/lse0522", mail: "이메일주소1" },
+  {
+    name: "이세은",
+    github: "https://github.com/lse0522",
+    mail: "이메일주소1",
+    serviceKey: "service_2c9x7es",
+    templateKey: "template_9w9evad",
+    accountKey: "3VX-2okcwKmicZsAT",
+  },
   {
     name: "박태영",
     github: "https://github.com/TaeYoungPar",
     mail: "dhfak1@gmail.com",
+    serviceKey: "service_qzh1wgs",
+    templateKey: "template_owqw30b",
+    accountKey: "MSALsKX7u1hrB1U5x",
   },
 ];
 
 function Footer() {
   const location = useLocation();
   const [isContactVisible, setContactVisible] = useState(false);
-  const [selectedEmail, setSelectedEmail] = useState<string>("");
+  const [selectedName, setSelectedName] = useState<string>("");
 
   if (location.pathname === "/oauthloading") {
     return null;
   }
 
   // Function to toggle the visibility of the Contact component
-  const toggleContact = (email: string) => {
+  const toggleContact = (name: string) => {
     setContactVisible(!isContactVisible);
-    setSelectedEmail(email);
+    setSelectedName(name);
   };
 
   // Function to close the modal when clicking outside the modal content
@@ -96,7 +121,7 @@ function Footer() {
           onClick={closeOnOutsideClick}
         >
           <div className="modal p-8 rounded-lg shadow-lg bg-white">
-            <Contact selectedEmail={selectedEmail} />
+            <Contact selectedName={selectedName} members={members} />
           </div>
         </div>
       )}

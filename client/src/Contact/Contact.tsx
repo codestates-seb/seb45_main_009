@@ -2,38 +2,48 @@ import React, { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 
 interface ContactProps {
-  selectedEmail: string;
+  selectedName: string;
+  members: {
+    name: string;
+    github: string;
+    mail: string;
+    serviceKey: string;
+    templateKey: string;
+    accountKey: string;
+  }[];
 }
 
-const Contact = ({ selectedEmail }: ContactProps) => {
+const Contact = ({ selectedName, members }: ContactProps) => {
   const form = useRef<HTMLFormElement | null>(null);
-
+  console.log(selectedName, "selectedEmail");
   const [done, setDone] = useState(false);
 
   const sendEmail = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (form.current) {
-      emailjs
-        .sendForm(
-          "service_qzh1wgs",
-          "template_owqw30b",
-          form.current,
-          "MSALsKX7u1hrB1U5x"
-        )
+      const selectedMember = members.find(
+        (member) => member.name === selectedName
+      );
+      if (selectedMember) {
+        const { serviceKey, templateKey, accountKey } = selectedMember;
 
-        .then(
-          (result) => {
-            console.log(result.text);
-            setDone(true);
-            if (form.current) {
-              form.current.reset();
+        emailjs
+          .sendForm(serviceKey, templateKey, form.current, accountKey)
+
+          .then(
+            (result) => {
+              console.log(result.text);
+              setDone(true);
+              if (form.current) {
+                form.current.reset();
+              }
+            },
+            (error) => {
+              console.log(error.text);
             }
-          },
-          (error) => {
-            console.log(error.text);
-          }
-        );
+          );
+      }
     }
     console.log(form.current);
   };

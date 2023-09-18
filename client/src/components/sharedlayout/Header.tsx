@@ -91,7 +91,7 @@ function Header() {
   }, [allUserDatas]);
   // console.log("alltags", allTags);
   // console.log("allNickNames", allNickNames);
-  console.log("autoCompleteData", autoCompleteData);
+  // console.log("autoCompleteData", autoCompleteData);
   // console.log("allFeedDatas", allFeedDatas);
 
   useEffect(() => {
@@ -100,7 +100,7 @@ function Header() {
     setAuto(combinedData);
   }, [allTags, allNickNames]);
 
-  console.log(auto);
+  // console.log(auto);
 
   const fetchFilteredData = async () => {
     try {
@@ -175,8 +175,8 @@ function Header() {
       }
     }
   };
-  console.log("allUserDatas", allUserDatas);
-  console.log("allFeedDatas", allFeedDatas);
+  // console.log("allUserDatas", allUserDatas);
+  // console.log("allFeedDatas", allFeedDatas);
 
   // 다른곳 클릭시 autoComplete 사라짐
   useEffect(() => {
