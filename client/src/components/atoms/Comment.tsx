@@ -225,7 +225,7 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
               type="text"
               placeholder="댓글을 남겨보세요."
               onChange={handleInputChange}
-              onKeyUp={handleInputKeyUpSubmit}
+              onKeyPress={handleInputKeyUpSubmit}
               value={commentInputValue}
             />
           ) : (
