@@ -58,6 +58,8 @@
 <details>
 <summary>사용자요구사항정의서</summary>
 <div markdown="1">
+ <img width="1032" alt="사용자요구사항정의서1" src="https://github.com/codestates-seb/seb45_main_009/assets/130390467/0408739e-96b9-4018-ac4a-92a358aa56af">
+ <img width="1030" alt="사용자요구사항정의서2" src="https://github.com/codestates-seb/seb45_main_009/assets/130390467/00de8ce6-ffb2-4cef-bfb3-d1421abc9d7e">
 </div>
 </details>
 
