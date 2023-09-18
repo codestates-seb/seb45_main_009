@@ -62,8 +62,8 @@ module.exports = {
               top: '50%',
               left: '100%', 
               height: '0.5px',
-              width: 'calc(36vw - 50%)',
-              backgroundColor: 'gray',
+              width: 'calc(100%)',
+              backgroundColor: '#eee',
               transform: 'translateY(-50%)',
           },
       },
@@ -76,10 +76,11 @@ module.exports = {
             left: '0', 
             transform: 'translateX(-100%) translateY(-50%)',
             height: '0.5px',
-            width: 'calc(36vw - 50%)',
-            backgroundColor: 'gray',
+            width: 'calc(100%)',
+            backgroundColor: '#eee',
         },
     },
+    
         '.scrollbar-thin': {
           '&::-webkit-scrollbar': {
             width: '0px',

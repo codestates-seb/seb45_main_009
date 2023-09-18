@@ -37,8 +37,6 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
     }
   }
 
-  console.log(userSport);
-
   const [isFollowing, setIsFollowing] = useState(false);
 
   const checkFollowState = async () => {  
@@ -123,8 +121,8 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
 
   return (
     <div  className="flex  justify-center">
-      <div className="max-w-screen-lg md:max-w-screen-xl mx-auto px-4 sm:px-4 lg:mx-[40px] ">
-        <div className="grid md:grid-cols-2  sm:px-[50px]">
+      <div className="max-w-screen-lg md:max-w-screen-xl mx-auto px-4 sm:px-4 lg:mx-[40px]">
+        <div className="grid md:grid-cols-2  sm:px-[50px] ">
           <div className="flex items-center justify-center sm:justify-start">
             <img
               src={userResponseType?.profileimg}
@@ -142,7 +140,7 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
                 {userResponseType?.bio ? (
                   userResponseType?.bio
                 ) : (
-                  <span className="text-gray-400">__빈값__</span>
+                  <span className="text-[#eee]">빈값입니다</span>
                 )}
               </div>
             </div>
@@ -167,19 +165,19 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
             )}
           </div>
         </div>
-        <div className="mt-[40px] flex items-center justify-center sm:justify-start px-0px sm:px-[50px]">
+        <div className="mt-[60px] flex items-center justify-center sm:justify-start sm:px-[50px]">
           <div className="flex">
             <AiFillHeart className="text-gray-400 mx-[10px] text-2xl" />
             <div>
               {userSport ? (
                 userSport
               ) : (
-                <span className="text-gray-400">__</span>
+                <span className="text-[#eee]">빈값입니다</span>
               )}
             </div>
           </div>
         </div>
-        <div className="mt-2 flex items-center justify-center sm:justify-start px-[50px]">
+        <div className="mt-2 flex items-center justify-center sm:justify-start sm:px-[50px]">
           {userResponseType?.roles.includes("USER") && (
             <>
               <BiSolidUser className="text-gray-400 mx-[10px] text-2xl" />
@@ -187,7 +185,7 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
                 {userResponseType?.height ? (
                   userResponseType?.height
                 ) : (
-                  <span className="text-gray-400">__</span>
+                  <span className="text-[#eee]">빈값</span>
                 )}
                 cm
               </div>
@@ -195,14 +193,14 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
                 {userResponseType?.weight ? (
                   userResponseType?.weight
                 ) : (
-                  <span className="text-gray-400">_</span>
+                  <span className="text-[#eee]">빈값</span>
                 )}
                 kg
               </div>
             </>
           )}
         </div>
-        <div className="mt-2 flex items-center justify-center sm:justify-start ">
+        <div className="mt-2 flex items-center justify-center sm:justify-start sm:px-[50px]">
           {userResponseType?.roles.includes("STORE") && (
             <div className="flex">
               <HiLocationMarker className="text-gray-400 mx-[10px] text-2xl" />
@@ -210,7 +208,7 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
             </div>
           )}
         </div>
-        <div className="mt-2 flex items-center justify-center sm:justify-start ">
+        <div className="mt-2 flex items-center justify-center sm:justify-start sm:px-[50px]">
           {userResponseType?.roles.includes("STORE") && (
             <div className="flex">
               <MdAttachMoney className="text-gray-400 mx-[10px] text-2xl" />
@@ -219,16 +217,15 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
           )}
         </div>
 
-        {/* 선 추가 */}
-        <div className="flex justify-center w-full my-[60px]  text-gray-400 text-[12px] w-[60px]  border-before border-after">
-           <span className=" border-before border-after w-[100px] flex justify-center ">피드 리스트</span>
+        <div className=" h-[20px] mt-[60px] text-[#eee] flex justify-center  sm:px-[40px] mb-1">
+          <div className="border-b text-black w-[90%] "></div>
         </div>
 
-        <div className="my-[40px] flex flex-wrap justify-center sm:justify-start sm:px-[40px]">
+        <div className="mb-[60px] flex flex-wrap justify-center sm:justify-start sm:px-[40px] md:ml-[20px]">
           {userResponseType?.feedList &&
           userResponseType.feedList.length > 0 ? (
             userResponseType.feedList.map((feed, feedIndex) => (
-              <div key={feedIndex} className="mb-[10px] mx-[10px] hover:scale-105 transition-all duration-300 ease-in-out hover:shadow-[5px_5px_10px_rgba(0,0,0,0.2)]">
+              <div key={feedIndex} className=" mb-[40px] mx-[10px] hover:scale-105 transition-all duration-300 ease-in-out hover:shadow-[5px_5px_10px_rgba(0,0,0,0.2)]">
                 {feed.images[0] && ( 
                   <Link
                     key={feed.images[0].imageUrl}
