@@ -105,8 +105,7 @@ public class UserController {
         user.getRoles().add("USER");
         // 닉네임을 kakao로 설정
         user.setNickname("kakao");
-        // 이메일에 "3"을 추가 (이 부분은 필요에 따라 변경 가능)
-        user.setEmail(user.getEmail() + "3");
+        user.setEmail(user.getEmail());
 
         // 사용자가 이메일로 이미 가입했는지 확인
         if (!userService.existsByEmail(user.getEmail())) {
@@ -134,7 +133,8 @@ public class UserController {
                 .header("Refresh", refreshToken)
                 .header("UserId", userId)
                 .header("UserNickname", userNickname)
-                .header("UserRole", userRole).build();
+                .header("UserRole", userRole)
+                .build();
 
     }
 
