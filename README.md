@@ -6,7 +6,7 @@
 | 함재형(FE) | 이세은(FE) | 박태영(FE) | 손승범(BE) | 민은영(BE) | 김소연(BE) | 염동훈(BE) |
 :----: | :----: | :----: | :----: | :----: | :----: | :----: |
 | <img src="" width="50px"> | <img src="" width="50px"> | <img src="" width="50px"/> |  <img src="" width="50px"> | <img src="" width="50px"> | <img src="" width="50px">  | <img src="" width="50px"> | <img src="" width="50px">  
-|[hamjaehyeong](https://github.com/hamjaehyeong) | [lse0522](https://github.com/lse0522) | [TaeYoungPar](https://github.com/TaeYoungPar) | [donghoonyeom](https://github.com/donghoonyeom) | [minkawoo](https://github.com/minkawoo) | [bonbon0808](https://github.com/bonbon0808) | [donghoonyeom](https://github.com/donghoonyeom) |
+|[`hamjaehyeong`](https://github.com/hamjaehyeong) | [lse0522](https://github.com/lse0522) | [TaeYoungPar](https://github.com/TaeYoungPar) | [donghoonyeom](https://github.com/donghoonyeom) | [minkawoo](https://github.com/minkawoo) | [bonbon0808](https://github.com/bonbon0808) | [donghoonyeom](https://github.com/donghoonyeom) |
 
 
 # 🌟 Docs
