@@ -37,7 +37,7 @@
 <details>
 <summary>ERD</summary>
 <div markdown="1">
-<img src = "https://github.com/codestates-seb/seb45_main_009/assets/130390467/6744b933-d504-42a4-8912-e1bee7ec25d2">
+<img width="837" alt="ERD" src="https://github.com/codestates-seb/seb45_main_009/assets/130390467/6744b933-d504-42a4-8912-e1bee7ec25d2">
 </div>
 </details>
 
