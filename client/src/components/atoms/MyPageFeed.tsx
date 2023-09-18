@@ -116,7 +116,7 @@ const MyPageFeed = () => {
     };
   }, [windowWidth]);
 
-  const user = allUserDatas.find((userData) => userData.nickname === userInfo.userNickname);
+  const user = allUserDatas.find((userData) => userData.userId === userInfo.userId);
 
   const userFeed = allFeedData.filter((userData) => userData.nickname === userInfo.userNickname);
   return (
