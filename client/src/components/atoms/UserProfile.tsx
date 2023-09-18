@@ -195,9 +195,11 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
         </div>
 
         {/* 선 추가 */}
-        <div className="flex justify-center w-full my-[10px]  text-gray-400 text-[12px] w-[60px]  border-before border-after">
-          <span className=" border-before border-after w-[100px] flex justify-center ">피드 리스트</span>
+        <div className=" h-[20px] mt-2 text-[#eee] sm:px-[40px] mb-1">
+          <div className="text-gray-400 text-[12px] flex justify-center">피드 리스트</div>
+          <div className="border-b text-black w-[90%] "></div>
         </div>
+
 
         <div className="my-[40px] flex flex-wrap justify-center sm:justify-start sm:px-[40px]">
           {userResponseType?.feedList && userResponseType.feedList.length > 0 ? (
