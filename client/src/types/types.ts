@@ -137,7 +137,7 @@ export interface PageInfo {
   totalPages: number;
 }
 
-export interface CommentDataTypes {
-  feedCommentData: CommentTypes[];
-  pageInfo: PageInfo;
-}
+// export interface CommentDataTypes {
+//   feedCommentData: CommentTypes[];
+//   pageInfo: PageInfo;
+// }
