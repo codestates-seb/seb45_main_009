@@ -1,6 +1,31 @@
 
 R
-java:S1066ò"/Merge this if statement with the enclosing one.(çéËüÿÿÿÿ8üÄÀ–©1
+java:S1066"/Merge this if statement with the enclosing one.(çéËüÿÿÿÿ8¶¬ô¸ª1
+†
+java:S1488Ö"cImmediately return this expression instead of assigning it to the temporary variable "newImageUrl".(…£ÜÀùÿÿÿÿ8¶¬ô¸ª1
+~
+java:S1488—"`Immediately return this expression instead of assigning it to the temporary variable "findUser".(Ó¦Û¿8¶¬ô¸ª1
+~
+java:S1488¡"`Immediately return this expression instead of assigning it to the temporary variable "findUser".(Ó¦Û¿8¶¬ô¸ª1
+†
+java:S1488Ş"cImmediately return this expression instead of assigning it to the temporary variable "accessToken".(Œö¿úÿÿÿÿ8¶¬ô¸ª1
+‡
+java:S1488ë"dImmediately return this expression instead of assigning it to the temporary variable "refreshToken".(´®«£ùÿÿÿÿ8¶¬ô¸ª1
+]
+java:S1854z"@Remove this useless assignment to local variable "profileImage".(ƒœùê8 ­ô¸ª1
+N
+java:S1172u",Remove this unused method parameter "image".(›˜úùÿÿÿÿ8¡­ô¸ª1
+N
+java:S1481z"1Remove this unused "profileImage" local variable.(ƒœùê8¡­ô¸ª1
+^	java:S125è"<This block of commented-out lines of code should be removed.(…“ôÜùÿÿÿÿ8¤­ô¸ª1
 ;
-java:S2119‘"Save and re-use this "Random".(¼İÅf8’ÅÀ–©1
-^	java:S125Ü"<This block of commented-out lines of code should be removed.(çóşÈÿÿÿÿÿ8•ÅÀ–©1
+java:S2119¬"Save and re-use this "Random".(¼İÅf8§­ô¸ª1
+^	java:S125÷"<This block of commented-out lines of code should be removed.(çóşÈÿÿÿÿÿ8±­ô¸ª1
+c
+java:S1128"ARemove this unused import 'org.springframework.data.domain.Page'.(˜âüÿÿÿÿ8‰ë»ºª1
+e
+java:S1128"HRemove this unused import 'org.springframework.data.domain.PageRequest'.(ºêâÚ8Šë»ºª1
+c
+java:S1128"ARemove this unused import 'org.springframework.data.domain.Sort'.(ëÿ€ëøÿÿÿÿ8Œë»ºª1
+y
+java:S1128"WRemove this unused import 'org.springframework.security.core.authority.AuthorityUtils'.(¬«àõÿÿÿÿÿ8ë»ºª1
