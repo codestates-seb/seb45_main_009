@@ -63,7 +63,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     private User buildOAuth2User(String email, String image) {
         // OAuth2User에서 추출한 정보를 사용하여 User 객체를 빌드합니다.
         User user = new User();
-        user.setEmail(email+"1");
+        user.setEmail(email);
 
         // 프로필 이미지 URL을 문자열로 저장
         Image profileimg = new Image();
@@ -143,7 +143,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return UriComponentsBuilder
                 .newInstance()
                 .scheme("http")
-                .host("http://localhost:3000")
+                .host("http://fitfolio1.s3-website.ap-northeast-2.amazonaws.com")
                 .port(80)
                 .path("/oauthloading")
                 .queryParams(queryParams)
