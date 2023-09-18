@@ -1,6 +1,6 @@
 # seb45_main_009
 <div align="center">
- <img src="[https://github.com/codestates-seb/seb43_main_017/assets/119921683/ecbd10f7-adeb-43c0-b928-bdaf212c4bc1](https://fitfolio-photo.s3.ap-northeast-2.amazonaws.com/default+image/fitfolio.jpg)">
+ <img src="https://fitfolio-photo.s3.ap-northeast-2.amazonaws.com/default+image/fitfolio.jpg">
  <br>
 <b>FITFOLIO</b><br>
  프로젝트 기간: 2023.08.24 ~ 2023.09.19
