@@ -54,6 +54,7 @@ interface DetailFeedProps {
 function DetailFeedInd({ feedId, responseData, isMyFeed }: DetailFeedProps) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state: RootState) => state.login.isAuthenticated);
   const userInfo = useSelector((state: RootState) => state.login.userInfo);
   // 좋아요
   const [isLiked, setIsLiked] = useState<boolean>(false);
@@ -61,6 +62,7 @@ function DetailFeedInd({ feedId, responseData, isMyFeed }: DetailFeedProps) {
   const [likeList, setLikeList] = useState<number[]>([]);
 
   const handleLikeClick = async () => {
+    if (isAuthenticated === false) return;
     console.log("게시물 좋아요");
     try {
       const response = await globalAxios.post(`/feed/detail/${feedId}/like`);
@@ -92,6 +94,7 @@ function DetailFeedInd({ feedId, responseData, isMyFeed }: DetailFeedProps) {
   }, []);
 
   const handleReport = async () => {
+    if (isAuthenticated === false) return;
     try {
       const response = await globalAxios.post(`/feed/detail/${feedId}/report`, {
         reason: "일단 내용은 하드코딩으로",
@@ -124,33 +127,33 @@ function DetailFeedInd({ feedId, responseData, isMyFeed }: DetailFeedProps) {
   } | null>(null);
 
   const [isDragging, setIsDragging] = useState<boolean>(false);
-const [startX, setStartX] = useState<number>(0);
-const [scrollLeft, setScrollLeft] = useState<number>(0);
+  const [startX, setStartX] = useState<number>(0);
+  const [scrollLeft, setScrollLeft] = useState<number>(0);
 
-const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-  const slider = e.currentTarget;
-  setIsDragging(true);
-  setStartX(e.pageX - slider.offsetLeft);
-  setScrollLeft(slider.scrollLeft);
-};
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    const slider = e.currentTarget;
+    setIsDragging(true);
+    setStartX(e.pageX - slider.offsetLeft);
+    setScrollLeft(slider.scrollLeft);
+  };
 
-const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-  if (!isDragging) return;
-  e.preventDefault();
-  const slider = e.currentTarget;
-  const x = e.pageX - slider.offsetLeft;
-  const walk = (x - startX) * 1;
-  slider.scrollLeft = scrollLeft - walk;
-};
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const slider = e.currentTarget;
+    const x = e.pageX - slider.offsetLeft;
+    const walk = (x - startX) * 1;
+    slider.scrollLeft = scrollLeft - walk;
+  };
 
-const handleMouseUp = () => {
-  setIsDragging(false);
-};
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
 
   return (
     <div className="w-full sm:max-w-screen-sm  mx-auto px-4 sm:px-4 lg:px-8">
       {responseData?.images.map((image, index) => (
-        <div key={index} className="mb-8 relative">
+        <div key={index} className="mb-1 relative">
           <img src={image.imageUrl} alt={`Image ${index}`} className="w-full h-auto" />
           {image.imageTags.map((tag, tagIndex) => {
             const top = Math.round(tag.positionY * 100);
@@ -163,7 +166,7 @@ const handleMouseUp = () => {
                 onMouseEnter={() => setShowTagModal({ photoIndex: index, tagIndex })}
                 onMouseLeave={() => setShowTagModal(null)}
               >
-                <AiFillPlusCircle className="w-[20px] h-[20px] text-[#22a1ff] transition opacity-50  hover:opacity-100"  />                
+                <AiFillPlusCircle className="w-[20px] h-[20px] text-[#22a1ff] transition opacity-50  hover:opacity-100" />
                 {showTagModal?.photoIndex === index && showTagModal?.tagIndex === tagIndex && (
                   <TagModal
                     title={tag.productName}
@@ -173,7 +176,6 @@ const handleMouseUp = () => {
                     left={`${left}%`}
                   />
                 )}
-
               </div>
             );
           })}
@@ -202,66 +204,61 @@ const handleMouseUp = () => {
             </li>
           ))}
         </ul> */}
-        <div className="mt-[30px] my-2 text-sm text-gray-400">정보 태그</div>
-      <div 
-        className="mt-2 flex overflow-x-auto scrollbar-thin"
-        onMouseDown={handleMouseDown}
-     onMouseMove={handleMouseMove}
-     onMouseUp={handleMouseUp}
-     onMouseLeave={handleMouseUp} 
-      >
-  {responseData?.images.map((image, imageIndex) =>
-    image.imageTags.map((tag, tagIndex) => (
-      <div  className="border rounded flex-none mr-4 mb-4 py-2 pl-4 pr-8 text-sm scroll-snap-start scrollbar-hide"
-        style={{ 
-          minWidth: "",
-          overflowY: "auto",
-      }} 
-      key={`${imageIndex}-${tagIndex}`}
-      >
-        <div className="flex">
-          <div className="flex-none" style={{ width: "60px" }}>
-            제품명 :{" "}
-          </div>
-          <div className="flex-grow font-bold">{tag.productName}</div>
+        {/* <div className="mt-[30px] my-2 text-sm text-gray-400">정보 태그</div> */}
+        <div
+          className="mt-2 flex overflow-x-auto scrollbar-thin"
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+        >
+          {responseData?.images.map((image, imageIndex) =>
+            image.imageTags.map((tag, tagIndex) => (
+              <div
+                className="border rounded flex-none mr-4 mb-4 py-2 pl-4 pr-8 text-sm scroll-snap-start scrollbar-hide"
+                style={{
+                  minWidth: "",
+                  overflowY: "auto",
+                }}
+                key={`${imageIndex}-${tagIndex}`}
+              >
+                <div className="flex">
+                  <div className="flex-none" style={{ width: "60px" }}>
+                    제품명 :{" "}
+                  </div>
+                  <div className="flex-grow font-bold">{tag.productName}</div>
+                </div>
+                <div className="flex">
+                  <div className="flex-none" style={{ width: "60px" }}>
+                    정보 :{" "}
+                  </div>
+                  <div>{tag.productInfo}</div>
+                </div>
+                <div className="flex">
+                  <div className="flex-none " style={{ width: "60px" }}>
+                    가격 :{" "}
+                  </div>
+                  {tag.productPrice ? <div className="text-[#22a1ff]">₩ {tag.productPrice.toString()}</div> : null}
+                </div>
+              </div>
+            ))
+          )}
         </div>
-        <div className="flex">
-          <div className="flex-none" style={{ width: "60px" }}>
-            정보 :{" "}
-          </div>
-          <div>{tag.productInfo}</div>
-        </div>
-        <div className="flex">
-          <div className="flex-none " style={{ width: "60px" }}>
-            가격 :{" "}
-          </div>
-          {
-            tag.productPrice 
-              ? <div className="text-[#22a1ff]">₩ {tag.productPrice.toString()}</div> 
-              : null
-          }
-        </div>
-      </div>
-    ))
-  )}
-</div>
-<div className="mt-[30px]">
-  <div className="my-2 text-sm text-gray-400">연관 태그</div>
+        <div>
+          <div className="my-2 text-sm text-gray-400">연관 태그</div>
 
           <ul>
-          {responseData?.relatedTags.map((tag, index) => (
-            <li
-            className="inline-block px-2 py-1 border-bdc rounded mr-2.5 mb-2.5 transition bg-[#edf7ff] text-[#22a1ff] text-[13px]"
-            key={index}
-            >
-              {`#${tag}`}
-            </li>
-          ))}
-        </ul>
-          </div>
-</div>
-
-      
+            {responseData?.relatedTags.map((tag, index) => (
+              <li
+                className="inline-block px-2 py-1 border-bdc rounded mr-2.5 mb-2.5 transition bg-[#edf7ff] text-[#22a1ff] text-[13px]"
+                key={index}
+              >
+                {`#${tag}`}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
 
       <div className="flex justify-end ">
         {isMyFeed ? (
