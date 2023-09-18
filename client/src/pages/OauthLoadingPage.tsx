@@ -31,7 +31,6 @@ const OauthLoadingPage = () => {
       });
       const kakaoemail = kakaoUserInfoResponse.data.kakao_account.email;
       const kakaoimg = kakaoUserInfoResponse.data.properties.profile_image;
-
       if (!kakaoemail) {
         const kakaoUnlink = await axios.post(
           "https://kapi.kakao.com/v1/user/unlink",
@@ -43,7 +42,6 @@ const OauthLoadingPage = () => {
             },
           }
         );
-        console.log(kakaoUnlink);
         alert("이메일 제공에 동의를 하시지 않으면 로그인이 불가능합니다.");
         window.location.href = "/login";
       } else {
@@ -53,7 +51,6 @@ const OauthLoadingPage = () => {
           profileimg: kakaoimg,
         });
         //서버에서 정보 받아서 저장-자체 로그인과 동일
-        console.log("카카오톡 로그인:", response);
         const accessToken = response.headers["authorization"];
         const userType = response.headers["userrole"];
         const userNickname = response.headers["usernickname"];

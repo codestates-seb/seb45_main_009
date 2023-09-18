@@ -97,7 +97,7 @@ function FeedFormPageInd() {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(response);
+      console.log("본문전송 성공:", response);
       //말풍선태그 추가api
       const imageIds = response.data.images.map((imageData: any) => imageData.imageId);
       for (let i = 0; i < imageIds.length; i++) {
@@ -125,7 +125,7 @@ function FeedFormPageInd() {
                 "Content-Type": "multipart/form-data",
               },
             });
-            console.log(response);
+            console.log("말풍선 전송 성공:", response);
           } catch (error) {
             console.error("error", error);
           }

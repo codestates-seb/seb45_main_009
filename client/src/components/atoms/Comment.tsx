@@ -4,7 +4,7 @@ import globalAxios from "../../data/data";
 import { CommentDataTypes } from "../../types/types";
 import { UserInfo, RootState } from "../../types/types";
 import timeFormatter from "../../hooks/timeFormatter";
-import img from "../../assets/images/profileDefault.png";
+import defaultImg from "../../assets/images/profileDefault.png";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { RootStates } from "../../types/types";
@@ -73,6 +73,9 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
 
   // 댓글 등록 !!
   const handleSaveClick = async () => {
+    if (commentInputValue.trim().length === 0) {
+      return;
+    }
     const formData = new FormData();
 
     const feedCommentPostDto = {
@@ -171,7 +174,7 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
     <div className="mb-14  max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8">
       <div className="mt-10">
         <div className="grid grid-cols-[auto,1fr,auto] items-center w-full gap-4">
-          <img src={profileImage} className="w-8 h-8 rounded-full" alt="profileImage" />
+          <img src={profileImage ? profileImage : defaultImg} className="w-8 h-8 rounded-full" alt="profileImage" />
           {isAuthenticated ? (
             <input
               className="border-b focus:outline-none "
@@ -200,7 +203,7 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
                   src={comment.profileImageUrl}
                   className="border w-8 h-8 rounded-full items-start hover:cursor-pointer"
                   alt="profileImage"
-                  onClick={() => handleNavigateProfile(1)}
+                  onClick={() => handleNavigateProfile(comment.userId)}
                 />
                 {/**댓글 데이터에 userId넣기(지금없음) / handViagete에 userId넣기 */}
                 <div className="items-start">
