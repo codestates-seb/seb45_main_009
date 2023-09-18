@@ -37,7 +37,7 @@
 <details>
 <summary>ERD</summary>
 <div markdown="1">
-<img src = "https://www.notion.so/codestates/ERD-4cf0b4b9cabb42d9867255da69a78356?pvs=4#e986fc51ac2642cdb714b4c20acba07c">
+<img src = "https://github.com/codestates-seb/seb45_main_009/assets/130390467/6744b933-d504-42a4-8912-e1bee7ec25d2">
 </div>
 </details>
 
