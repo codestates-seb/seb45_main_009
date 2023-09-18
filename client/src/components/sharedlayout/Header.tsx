@@ -321,29 +321,26 @@ function Header() {
       )}
       {!isMobile && isAuthenticated ? (
         <div className="flex text-[0.8rem] lg:text-base ml-2">
-          <button className="mr-4 hover:text-btn-color" onClick={logoutHandler}>
+          <button className="ml-2 mr-4 hover:font-medium" onClick={logoutHandler}>
             로그아웃
           </button>
           <Link to="/mypage/feed">
-            <button className="hover:text-btn-color">마이페이지</button>
+            <button className="hover:font-medium">마이페이지</button>
           </Link>
         </div>
       ) : (
         !isMobile && (
           <div className="flex">
             <Link to="/login">
-              <button
-                className="text-xs mr-2 sm:mr-4 sm:text-base hover:text-btn-color"
-                onClick={handleMenuClick}
-              >
+
+              <button className="text-xs ml-2 mr-2 sm:mr-4 sm:text-base hover:font-medium" onClick={handleMenuClick}>
+                
                 로그인
               </button>
             </Link>
             <Link to="/signup">
-              <button
-                className="text-xs sm:text-base hover:text-btn-color"
-                onClick={handleMenuClick}
-              >
+
+              <button className="text-xs sm:text-base hover:font-medium" onClick={handleMenuClick}>
                 회원가입
               </button>
             </Link>

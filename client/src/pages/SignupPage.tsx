@@ -185,84 +185,83 @@ function SignupPage() {
   useEffect(() => console.log(previewImg), [previewImg]);
 
   const onAdditionSubmitHandler = async () => {
-    if (selectedType === "개인회원") {
-      try {
-        const response = await globalAxios.patch("/mypage/update", {
-          location,
-          bio,
-          height,
-          weight,
-        });
-        console.log("response:", response);
-        navigate("/");
-      } catch (error) {
-        //에러 처리 로직..
-        console.error("Error:", error);
-      }
-    }
     //기업회원
-    else {
-      if (
-        location.trim() !== "" &&
-        sport.trim() !== "" &&
-        bio.trim() !== "" &&
-        priceInfo.trim() !== "" &&
-        previewImg !== null
-      ) {
-        try {
-          const formData = new FormData();
-          // requestBody 부분 추가
-          const requestBodyData = {
-            email,
-            password,
-            nickname,
-            sport,
-            location,
-            bio,
-            price: priceInfo,
-          };
+    if (location.trim() === "") {
+      alert("주소를 입력해주세요.");
+      return;
+    }
+    if (location.trim().length >= 35) {
+      alert("주소는 34자까지 입력할 수 있습니다.");
+      return;
+    }
+    if (sport.trim() === "") {
+      alert("운동 종목을 입력해주세요.");
+      return;
+    }
+    if (sport.trim().length >= 21) {
+      alert("운동 종목은 20자까지 입력할 수 있습니다.");
+      return;
+    }
+    if (bio.trim() === "") {
+      alert("기업소개를 작성해주세요.");
+      return;
+    }
+    if (bio.trim().length >= 31) {
+      alert("기업 소개는 30자까지 입력할 수 있습니다.");
+      return;
+    }
+    if (priceInfo.trim() === "") {
+      alert("가격 정보를 입력해 주세요.");
+      return;
+    }
+    if (priceInfo.trim().length >= 31) {
+      alert("가격 정보는 30자까지 입력할 수 있습니다.");
+      return;
+    }
+    if (previewImg === null) {
+      alert("사진을 등록해주세요.");
+      return;
+    }
+    try {
+      const formData = new FormData();
+      // requestBody 부분 추가
+      const requestBodyData = {
+        email,
+        password,
+        nickname,
+        sport,
+        location,
+        bio,
+        price: priceInfo,
+      };
 
-          console.log(requestBodyData);
-          const blob = new Blob([JSON.stringify(requestBodyData)], {
-            type: "application/json",
-          });
-          formData.append("requestBody", blob);
+      console.log(requestBodyData);
+      const blob = new Blob([JSON.stringify(requestBodyData)], {
+        type: "application/json",
+      });
+      formData.append("requestBody", blob);
 
-          if (previewImg && previewImg.file) {
-            formData.append("imageUrl", previewImg.file);
-          }
-          const response = await globalAxios.post("/join/store", formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          });
-          console.log("response:", response);
-          alert("회원가입 완료");
-          navigate("/login");
-        } catch (error: any) {
-          //에러 처리 로직..
-          if (error.response.data.message === "회원이 존재합니다") {
-            alert("중복된 이메일입니다");
-            setIsSubmitted(false);
-          } else if (error.response.data.message === "닉네임이 존재합니다") {
-            alert("중복된 닉네임입니다");
-            setIsSubmitted(false);
-          }
-          console.error("Error:", error);
-        }
-      } else {
-        if (location.trim() === "") {
-          alert("주소를 입력해주세요.");
-        } else if (sport.trim() === "") {
-          alert("스포츠 종목을 입력해주세요.");
-        } else if (bio.trim() === "") {
-          alert("기업소개를 작성해주세요.");
-        } else if (priceInfo.trim() === "") {
-          alert("가격 정보를 입력해주세요.");
-        } else if (previewImg === null) {
-          alert("사진을 등록해주세요.");
-        }
+      if (previewImg && previewImg.file) {
+        formData.append("imageUrl", previewImg.file);
       }
+      const response = await globalAxios.post("/join/store", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log("response:", response);
+      alert("회원가입 완료");
+      navigate("/login");
+    } catch (error: any) {
+      //에러 처리 로직..
+      if (error.response.data.message === "회원이 존재합니다") {
+        alert("중복된 이메일입니다");
+        setIsSubmitted(false);
+      } else if (error.response.data.message === "닉네임이 존재합니다") {
+        alert("중복된 닉네임입니다");
+        setIsSubmitted(false);
+      }
+      console.error("Error:", error);
     }
   };
 
@@ -292,7 +291,7 @@ function SignupPage() {
       <div className="w-[300px]">
         <MembershipButtonGroup selectedType={selectedType} onChange={handleMembershipChange} />
         <CommonInput
-          placeholder="이메일을 입력해주세요."
+          placeholder="이메일을 입력해 주세요."
           label="이메일"
           type="email"
           onChange={handleEmailChange}
@@ -304,7 +303,7 @@ function SignupPage() {
         )}
 
         <CommonInput
-          placeholder="비밀번호를 입력해주세요."
+          placeholder="비밀번호를 입력해 주세요."
           label="비밀번호"
           type="password"
           onChange={handlePasswordChange}
@@ -316,7 +315,7 @@ function SignupPage() {
           <p className="text-[12px] text-isValid-text-red">유효하지 않은 비밀번호 형식입니다.</p>
         )}
         <CommonInput
-          placeholder="비밀번호를 다시 입력해주세요."
+          placeholder="비밀번호를 다시 입력해 주세요."
           label="비밀번호 확인"
           type="password"
           onChange={handlePasswordConfirmChange}
@@ -327,7 +326,7 @@ function SignupPage() {
           <p className="text-[12px] text-isValid-text-red">비밀번호가 일치하지 않습니다.</p>
         )}
         <CommonInput
-          placeholder="닉네임을 입력해주세요."
+          placeholder="닉네임을 입력해 주세요."
           label="닉네임"
           type="text"
           onChange={handleNicknameChange}

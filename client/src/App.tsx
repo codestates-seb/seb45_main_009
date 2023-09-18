@@ -49,41 +49,23 @@ function App() {
             <Routes>
               <Route path="/" element={<MainPageInd />}></Route>
               <Route path="/store" element={<MainPageCor />}></Route>
-              <Route
-                path="/feeddetailcor/:feedId"
-                element={<FeedDetailPageCor />}
-              />
+              <Route path="/feeddetailcor/:feedId" element={<FeedDetailPageCor />} />
 
-              <Route
-                path="/feeddetailind/:feedId"
-                element={<FeedDetailPageInd />}
-              />
+              <Route path="/feeddetailind/:feedId" element={<FeedDetailPageInd />} />
               <Route path="/feedformcor" element={<FeedFormPageCor />} />
               <Route path="/feedformind" element={<FeedFormPageInd />} />
-              <Route
-                path="/feedupdateind/:feedId"
-                element={<FeedUpdataePageInd />}
-              />
-              <Route
-                path="/feedupdatecor/:feedId"
-                element={<FeedUpdataePageCor />}
-              />
+              <Route path="/feedupdateind/:feedId" element={<FeedUpdataePageInd />} />
+              <Route path="/feedupdatecor/:feedId" element={<FeedUpdataePageCor />} />
               <Route path="/mypage/:page" element={<MyPage />} />
               <Route path="/login" element={<LoginPage />}></Route>
               <Route path="/signup" element={<SignupPage />}></Route>
-              <Route
-                path="/profile/:userId"
-                element={<ProfilePageInd />}
-              ></Route>
+              <Route path="/profile/:userId" element={<ProfilePageInd />}></Route>
               <Route path="/notification" element={<AlarmPage />}></Route>
               <Route path="/community" element={<Community />}></Route>
 
               {/* <Route path="/profilecor/:userId" element={<ProfilePageCor />}></Route> */}
 
-              <Route
-                path="/oauthloading"
-                element={<OauthLoadingPage />}
-              ></Route>
+              <Route path="/oauthloading" element={<OauthLoadingPage />}></Route>
 
               {/*               <Route path="/alarmpage" element={<Alarm />}></Route> */}
               <Route path="*" element={<Not404 />} />

@@ -116,11 +116,22 @@ function SignupAddition({
           </>
         ) : (
           <>
-            <CommonInput placeholder="주소" onChange={handleLocationChange} />
-            <CommonInput placeholder="주 운동 종목" type="text" onChange={handleSportChange} />
-            <CommonInput placeholder="기업소개" type="text" onChange={handleBioChange} />
+            <CommonInput label="주소" placeholder="주소를 입력해 주세요." onChange={handleLocationChange} />
             <CommonInput
-              placeholder="가격정보"
+              label="주 운동 종목"
+              placeholder="운동 종목을 입력해 주세요."
+              type="text"
+              onChange={handleSportChange}
+            />
+            <CommonInput
+              label="기업 소개"
+              placeholder="기업 소개를 입력해 주세요"
+              type="text"
+              onChange={handleBioChange}
+            />
+            <CommonInput
+              label="가격 정보"
+              placeholder="가격 정보를 입력해 주세요."
               type="text"
               onChange={handlePriceInfoChange}
               onKeyUp={handleLastInputKeyUp}

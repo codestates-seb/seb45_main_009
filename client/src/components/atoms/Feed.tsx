@@ -166,7 +166,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
   //피드 올리기 버튼
   const handletoFeedForm = () => {
     if (userInfo.userType === "DEFAULT") {
-      alert("피드를 등록하기 위해서는 로그인이 필요합니다.");
+      alert("로그인이 필요합니다.");
       navigate("/login");
     } else if (userInfo.userType === "USER") {
       navigate("/feedformind");

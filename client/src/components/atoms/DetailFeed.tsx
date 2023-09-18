@@ -33,12 +33,12 @@ function TagModal({
   return (
     <div
       style={{ top: modalTopPosition, left: modalLeftPosition }}
-      className="absolute w-[100px] rounded-[8px] bg-white text-[12px]  pl-[10px]
-      drop-shadow-md transition"
+      className="absolute w-[80px] rounded-[6px] bg-white text-[12px]  pl-[8px]
+      drop-shadow-md transition my-1 opacity-90"
     >
-      {title ? <div className="font-bold text-black my-1">{title}</div> : null}
-      {size ? <div className="text-gray-400 text-[8px] my-1">{size}</div> : null}
-      {price ? <div className="text-[8px] my-1">₩ {price}</div> : null}
+      {title ? <div className="font-bold text-black">{title}</div> : null}
+      {size ? <div className="text-gray-400 text-[8px]">{size}</div> : null}
+      {price ? <div className="text-[8px]">₩ {price}</div> : null}
       {!title && !size && !price && <div className="text-gray-400 text-[12px] my-1 text-[8px]">태그정보없음</div>}
     </div>
   );
@@ -192,7 +192,7 @@ const handleMouseUp = () => {
         <div className="ml-2 pb-[2px]">{likeList.length}</div>
       </div>
       <div className=" mt-2">
-        <ul>
+        {/* <ul>
           {responseData?.relatedTags.map((tag, index) => (
             <li
               className="inline-block px-2 py-1 border-bdc rounded mr-2.5 mb-2.5 transition bg-[#edf7ff] text-[#22a1ff] text-[13px]"
@@ -201,7 +201,8 @@ const handleMouseUp = () => {
               {`#${tag}`}
             </li>
           ))}
-        </ul>
+        </ul> */}
+        <div className="mt-[30px] my-2 text-sm text-gray-400">정보 태그</div>
       <div 
         className="mt-2 flex overflow-x-auto scrollbar-thin"
         onMouseDown={handleMouseDown}
@@ -244,6 +245,20 @@ const handleMouseUp = () => {
     ))
   )}
 </div>
+<div className="mt-[30px]">
+  <div className="my-2 text-sm text-gray-400">연관 태그</div>
+
+          <ul>
+          {responseData?.relatedTags.map((tag, index) => (
+            <li
+            className="inline-block px-2 py-1 border-bdc rounded mr-2.5 mb-2.5 transition bg-[#edf7ff] text-[#22a1ff] text-[13px]"
+            key={index}
+            >
+              {`#${tag}`}
+            </li>
+          ))}
+        </ul>
+          </div>
 </div>
 
       

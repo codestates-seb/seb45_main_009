@@ -6,6 +6,7 @@ import { useLocation } from "react-router";
 import globalAxios from "../../data/data";
 import { Link } from "react-router-dom";
 import { RootStates } from "../../types/types";
+import noFeed from "../../assets/images/nofeed.png";
 
 interface UserData {
   bio: string;
@@ -46,7 +47,6 @@ interface RootState {
 const MyPageFeed = () => {
   const userInfo = useSelector((state: RootState) => state.login.userInfo);
   const { allUserDatas } = useSelector((state: RootStates) => state.feed);
-  console.log(allUserDatas, "allUserDatas");
 
   const [allFeedData, setAllFeedData] = useState<FeedData[]>([]);
 
@@ -60,8 +60,7 @@ const MyPageFeed = () => {
 
   const PAGE_SIZE = 4; // 페이지당 데이터 개수
 
-  const currentDetail =
-    userInfo.userType === "USER" ? "feeddetailind" : "/feeddetailcor";
+  const currentDetail = userInfo.userType === "USER" ? "feeddetailind" : "/feeddetailcor";
   const getMainListData = async () => {
     try {
       setLoading(true);
@@ -98,8 +97,7 @@ const MyPageFeed = () => {
     getMainListData();
   }, [userInfo]);
 
-  const IntroductionCss =
-    " border border-gray-400 rounded-xl  p-10 h-full min-h-[200px] m-8 w-[50%] md:w-auto ";
+  const IntroductionCss = " border border-bdc rounded-xl  p-10 h-full min-h-[200px] m-8 w-[50%] md:w-auto ";
 
   const MainBodyCss = " flex justify-center mt-10 items-center md:items-start";
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -118,68 +116,104 @@ const MyPageFeed = () => {
     };
   }, [windowWidth]);
 
-  const user = allUserDatas.find(
-    (userData) => userData.nickname === userInfo.userNickname
-  );
+  const user = allUserDatas.find((userData) => userData.nickname === userInfo.userNickname);
 
-  console.log(allUserDatas, "userinfo");
-
-  const userFeed = allFeedData.filter(
-    (userData) => userData.nickname === userInfo.userNickname
-  );
-
+  const userFeed = allFeedData.filter((userData) => userData.nickname === userInfo.userNickname);
   return (
     <section>
-      <div
-        className={`flex w-max-xl ${
-          windowWidth < 768 ? "flex-col" : "flex-row"
-        }  ${MainBodyCss} `}
-      >
-        <aside
-          className={` ${
-            windowWidth < 768 ? "" : " sticky top-24"
-          }  md:${IntroductionCss}`}
-        >
-          <div className="flex items-center flex-col mb-10 ">
-            <img
-              src={user?.profileimg}
-              alt="myimg"
-              className="mb-5 w-[10vw] h-[10vw] border rounded-full "
-            />
-            <div className="font-bold text-xl">{user?.nickname}</div>
-          </div>
-          <div className="text-gray-500 flex flex-col">
-            <div className="mb-5">
-              키<div>{user?.height ? user?.height : "0 cm"}</div>
+      <div className={`flex w-max-xl ${windowWidth < 768 ? "flex-col" : "flex-row"}  ${MainBodyCss} `}>
+        {userInfo.userType === "USER" ? (
+          <aside className="flex flex-col px-6 py-10 mr-4 max-768:flex-row">
+            <div className="flex items-center flex-col max-768:mr-4 max-768:mt-0 max-768:mr-10">
+              <img
+                src={user?.profileimg}
+                alt="myimg"
+                className="mb-2 w-[200px] h-[200px] min-w-[200px] min-h-[200px] border rounded-full 
+              max-mobile:w-[120px] max-mobile:h-[120px] max-mobile:min-w-[120px] max-mobile:min-h-[120px] "
+              />
             </div>
-            <div className="mb-5">
-              몸무게
-              <div>{user?.weight ? user?.weight : "0 kg"}</div>
-            </div>
-            <div className="mb-5">
-              자기소개
-              <div className="max-w-[200]">
-                {user?.bio ? user?.bio : "오늘의 주인공"}
+            <div className="flex flex-col max-768:justify-center">
+              <div className="flex justify-center font-semibold text-lg mb-4 max-mobile:text-sm">{user?.nickname}</div>
+              <div className="flex mb-2 max-mobile:flex-col max-mobile:mb-0">
+                <div className="max-mobile:text-sm">
+                  <span className="font-bold mr-2">키</span>
+                  <span className="mr-4">{user?.height ? `${user?.height}cm` : "0 cm"}</span>
+                </div>
+                <div className="max-mobile:text-sm">
+                  <span className="font-bold mr-2">몸무게</span>
+                  <span>{user?.weight ? `${user?.weight}kg` : "0 kg"}</span>
+                </div>
+              </div>
+              <div className="mb-2 max-mobile:text-sm max-mobile:mb-0">
+                <span className="max-w-[200]">
+                  <span className="font-bold mr-2">주 종목</span> <span>{user?.sport ? user?.sport : "없음"}</span>
+                </span>
+              </div>
+              <div className="mb-2 max-mobile:text-sm">
+                <span className="max-w-[200]">
+                  <span className="font-bold mr-2">소개</span>{" "}
+                  <span className="opacity-75">{user?.bio ? user?.bio : "없음"}</span>
+                </span>
               </div>
             </div>
+          </aside>
+        ) : (
+          <aside className="flex flex-col px-4 mr-4 max-768:flex-row">
+            <div className="flex items-center flex-col mt-20   max-768:mr-4 max-768:mt-0 max-768:mr-10">
+              <img
+                src={user?.profileimg}
+                alt="myimg"
+                className="mb-2 w-[200px] h-[200px] min-w-[200px] min-h-[200px] border rounded-full 
+              max-mobile:w-[120px] max-mobile:h-[120px] max-mobile:min-w-[120px] max-mobile:min-h-[120px] "
+              />
+            </div>
+            <div className="flex flex-col max-768:justify-center max-w-[200px]">
+              <div className="flex justify-center font-semibold text-lg mb-4 max-mobile:text-sm">{user?.nickname}</div>
+              <div className="mb-2 max-mobile:text-sm max-mobile:mb-0">
+                <span className="max-w-[200]">
+                  <span className="font-bold mr-2">주소</span> <span>{user?.location ? user?.location : "없음"}</span>
+                </span>
+              </div>
+              <div className="mb-2 max-mobile:text-sm max-mobile:mb-0">
+                <span className="max-w-[200]">
+                  <span className="font-bold mr-2">주 종목</span> <span>{user?.sport ? user?.sport : "없음"}</span>
+                </span>
+              </div>
+              <div className="mb-2 max-mobile:text-sm">
+                <span className="max-w-[200]">
+                  <span className="font-bold mr-2">소개</span> <span>{user?.bio ? user?.bio : "없음"}</span>
+                </span>
+              </div>
+              <div className="mb-2 max-mobile:text-sm">
+                <span className="max-w-[200]">
+                  <span className="font-bold mr-2">가격 정보</span> <span>{user?.price ? user?.price : "없음"}</span>
+                </span>
+              </div>
+            </div>
+          </aside>
+        )}
+        {userFeed.length !== 0 ? (
+          <section className="grid max-mobile:grid-cols-1 max-tablet:grid-cols-2 grid-cols-3 gap-2 h-full mb-24">
+            {userFeed.map((user, idx) => (
+              <article
+                key={idx}
+                className="flex justify-center items-center  hover:scale-105 transition-all duration-300 ease-in-out hover:shadow-[5px_5px_10px_rgba(0,0,0,0.2)]"
+              >
+                <Link to={`/${currentDetail}/${user.feedId}`}>
+                  <img
+                    src={user.images[0].imageUrl}
+                    alt={`ProfileImg of ${user.feedId}`}
+                    className="w-[250px] h-[250px] object-cover border"
+                  />
+                </Link>
+              </article>
+            ))}
+          </section>
+        ) : (
+          <div>
+            <img src={noFeed} alt="noFeedImage"></img>
           </div>
-        </aside>
-        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 h-full mb-24">
-          {userFeed.map((user, idx) => (
-            <article
-              key={idx}
-              className="flex justify-center items-center  hover:scale-105 transition-all duration-300 ease-in-out hover:shadow-[5px_5px_10px_rgba(0,0,0,0.2)]"
-            >
-              <Link to={`/${currentDetail}/${user.feedId}`}>
-                <img
-                  src={user.images[0].imageUrl}
-                  alt={`ProfileImg of ${user.feedId}`}
-                  className="w-[80vw] h-[80vw] object-cover md:w-[25vw] md:h-[25vw] lg:w-[15vw] lg:h-[15vw] border"
-                />
-              </Link>
-            </article>
-          ))}
-        </section>
+        )}
       </div>
       <div ref={ref}></div>
     </section>
