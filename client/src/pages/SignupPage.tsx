@@ -99,7 +99,7 @@ function SignupPage() {
     setIsPasswordsMatch(null);
   };
   //닉네임 유효성 검사
-  const nicknameRegEx = /^[A-Za-z0-9]{6,20}$/;
+  const nicknameRegEx = /^[\u3131-\u314e|\u314f-\u3163|\uac00-\ud7a3|a-zA-Z0-9]{2,12}$/;
 
   const validateNicknameHandler = () => {
     if (nicknameRegEx.test(nickname)) {
@@ -334,7 +334,7 @@ function SignupPage() {
           onFocus={clearNicknameValidation}
           onKeyUp={handleLastInputKeyUp}
         />
-        <p className="text-[12px]">영문자, 숫자를 혼합하여 6~20자로 입력해주세요. </p>
+        <p className="text-[12px]">한글, 영문자, 숫자를 조합하여 2~12자로 입력해주세요.</p>
         {isValidNickname === false && (
           <p className="text-[12px] text-isValid-text-red">유효하지 않은 닉네임 형식입니다.</p>
         )}
