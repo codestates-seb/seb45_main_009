@@ -12,6 +12,7 @@ import {
 import noFeed from "../../assets/images/nofeed.png";
 import useFetchUserData from "../../hooks/useFetchUserData";
 import { FcGallery } from "react-icons/fc";
+import loadingimg from "../../assets/images/loading.gif";
 
 interface UserData {
   bio: string;
@@ -185,57 +186,61 @@ const Feed = ({ selectedFilter }: FeedProps) => {
           </button>
         </div>
 
-        {hasDataToDisplay ? ( // Check if there is data to display
-          <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-24">
-            {filteredData.map((feed, idx) => {
-              const user = allUserDatas.find(
-                (userData) => userData.nickname === feed.nickname
-              );
+        {!loading ? (
+          hasDataToDisplay ? ( // Check if there is data to display
+            <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-24">
+              {filteredData.map((feed, idx) => {
+                const user = allUserDatas.find(
+                  (userData) => userData.nickname === feed.nickname
+                );
 
-              return (
-                <article
-                  key={idx}
-                  className="mb-4 min-w-[250px]  hover:scale-105 transition-all duration-300 ease-in-out hover:shadow-[5px_5px_10px_rgba(0,0,0,0.2)]"
-                >
-                  <div className="flex mb-4">
-                    <Link to={`/profile/${user?.userId}`}>
-                      <img
-                        src={feed.profileImageUrl}
-                        alt={`ProfileImg of ${feed.feedId}`}
-                        className="rounded-full border mr-2 w-10 h-10"
-                      />
+                return (
+                  <article
+                    key={idx}
+                    className="mb-4 min-w-[250px]  hover:scale-105 transition-all duration-300 ease-in-out hover:shadow-[5px_5px_10px_rgba(0,0,0,0.2)]"
+                  >
+                    <div className="flex mb-4">
+                      <Link to={`/profile/${user?.userId}`}>
+                        <img
+                          src={feed.profileImageUrl}
+                          alt={`ProfileImg of ${feed.feedId}`}
+                          className="rounded-full border mr-2 w-10 h-10"
+                        />
+                      </Link>
+                      <div className="ml-2">
+                        <p>{feed.nickname}</p>
+                        {user?.bio ? (
+                          <p className="text-gray-400 max-w-[200px] truncate">
+                            {user.bio}
+                          </p>
+                        ) : (
+                          <p className="text-gray-400 max-w-[200px] truncate">
+                            오늘의 주인공
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    <Link to={`${currentDetail}/${feed.feedId}`}>
+                      <div className="relative">
+                        <img
+                          src={feed.images[0].imageUrl}
+                          alt={`FeedImg of ${feed.feedId}`}
+                          className="w-[15vw] h-[15vw] object-cover min-w-[250px]  min-h-[250px]"
+                        />
+                        {feed.images.length > 1 && (
+                          <FcGallery className=" absolute top-1 right-1 " />
+                        )}
+                      </div>
                     </Link>
-                    <div className="ml-2">
-                      <p>{feed.nickname}</p>
-                      {user?.bio ? (
-                        <p className="text-gray-400 max-w-[200px] truncate">
-                          {user.bio}
-                        </p>
-                      ) : (
-                        <p className="text-gray-400 max-w-[200px] truncate">
-                          오늘의 주인공
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  <Link to={`${currentDetail}/${feed.feedId}`}>
-                    <div className="relative">
-                      <img
-                        src={feed.images[0].imageUrl}
-                        alt={`FeedImg of ${feed.feedId}`}
-                        className="w-[15vw] h-[15vw] object-cover min-w-[250px]  min-h-[250px]"
-                      />
-                      {feed.images.length > 1 && (
-                        <FcGallery className=" absolute top-1 right-1 " />
-                      )}
-                    </div>
-                  </Link>
-                </article>
-              );
-            })}
-          </section>
+                  </article>
+                );
+              })}
+            </section>
+          ) : (
+            <img src={noFeed} alt="nofeedImg" />
+          )
         ) : (
-          <img src={noFeed} alt="nofeedImg" />
+          <img src={loadingimg} alt="loading" />
         )}
       </div>
 

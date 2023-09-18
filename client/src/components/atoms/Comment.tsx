@@ -49,11 +49,6 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
 
   const [ref, inView] = useInView();
 
-  useEffect(() => {
-    if (inView) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  }, [inView]);
   const PAGE_SIZE = 4;
 
   //댓글 데이터 불러오기
@@ -68,15 +63,42 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
       );
       const getData = response.data;
 
-      if (getData.feedCommentData.length === 0) {
-        // 더 이상 데이터가 없는 경우
-        setHasMore(false);
-      } else {
-        // console.log("댓글 데이터 불러오기 성공", response);
-        const updatedCommentData = [...commentData, ...getData.feedCommentData];
-        setCommentData(updatedCommentData);
-        setPage((prevPage) => prevPage + 1);
+      if (page === getData.pageInfo.totalPages) {
+        return;
       }
+
+      // console.log("댓글 데이터 불러오기 성공", response);
+      const updatedCommentData = [...commentData, ...getData.feedCommentData];
+      setCommentData(updatedCommentData);
+      setPage((prevPage) => prevPage + 1);
+
+      setLoading(false);
+    } catch (error) {
+      console.error("API 요청 실패:", error);
+      setLoading(false);
+    }
+  };
+
+  const getCommentsTestData = async () => {
+    try {
+      setLoading(true);
+      const response = await globalAxios.get(
+        `/feed/detail/${feedId}/comments`,
+        {
+          params: { page: 1, pageSize: PAGE_SIZE },
+        }
+      );
+      const getData = response.data;
+
+      if (page === getData.pageInfo.totalPages) {
+        return;
+      }
+
+      // console.log("댓글 데이터 불러오기 성공", response);
+      const updatedCommentData = getData.feedCommentData;
+      setCommentData(updatedCommentData);
+      setPage((prevPage) => prevPage + 1);
+
       setLoading(false);
     } catch (error) {
       console.error("API 요청 실패:", error);
@@ -85,18 +107,14 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
   };
 
   useEffect(() => {
-    console.log("commentData updated", commentData);
-  }, [commentData]);
-
-  useEffect(() => {
     getCommentsData();
   }, []);
 
   useEffect(() => {
-    if (inView && !loading && hasMore) {
+    if (inView) {
       getCommentsData();
     }
-  }, [inView, loading, hasMore]);
+  }, [inView]);
 
   // 댓글생성
   const [commentInputValue, setCommentInputValue] = useState<string>("");
@@ -140,8 +158,9 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
           },
         }
       );
+
       console.log("댓글 등록 성공", response);
-      getCommentsData();
+      getCommentsTestData();
       setCommentInputValue("");
     } catch (error) {
       console.error("Error deleting the comment:", error);
@@ -155,7 +174,9 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
         `/feed/detail/comment/${feedCommentId}`
       );
       // console.log("댓글 삭제 성공", response);
-      getCommentsData();
+      // getCommentsTestData();
+      alert("댓글이 삭제되었습니다.");
+      window.location.reload();
     } catch (error) {
       console.error("Error deleting the comment:", error);
     }
@@ -213,11 +234,6 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
   const handleNavigateProfile = (userId: number) => {
     navigate(`/profile/${userId}`);
   };
-
-  useEffect(() => {
-    getCommentsData();
-    console.log("commentData", commentData);
-  }, [commentData]);
 
   return (
     <div className="mb-14  max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8">
