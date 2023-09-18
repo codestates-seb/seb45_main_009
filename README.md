@@ -1,6 +1,7 @@
 # seb45_main_009
 <div align="center">
- <img src="">
+ <br>
+ <img src ="https://github.com/codestates-seb/seb45_main_009/assets/130390467/71e2369b-0418-4122-ab27-9b33e38b6a7c" width="400px">
  <br>
 <b>FITFOLIO</b><br>
  프로젝트 기간: 2023.08.24 ~ 2023.09.19
