@@ -9,10 +9,14 @@
 |[hamjaehyeong](https://github.com/hamjaehyeong) | [lse0522](https://github.com/lse0522) | [TaeYoungPar](https://github.com/TaeYoungPar) | [donghoonyeom](https://github.com/donghoonyeom) | [minkawoo](https://github.com/minkawoo) | [bonbon0808](https://github.com/bonbon0808) | [donghoonyeom](https://github.com/donghoonyeom) |
 
 
+# 🌟 Docs
+
+
+
 # 🌟 Commit convention
 | Message  | 설명                                            |
 | -------- | ----------------------------------------------- |
-| feat	   | 새로운 기능 추가                                |
+| <!--feat>	   | 새로운 기능 추가                                |
 | fix	     | 버그 수정                                |
 | refactor | 코드 리팩토링                                |
 | style	   | 코드 포맷팅, 세미콜론 누락, 코드 스타일 변경 등                                |
