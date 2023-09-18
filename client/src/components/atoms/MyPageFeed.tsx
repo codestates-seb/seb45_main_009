@@ -118,10 +118,8 @@ const MyPageFeed = () => {
     };
   }, [windowWidth]);
 
-  console.log(userInfo);
-
   const user = allUserDatas.find(
-    (userData) => userData.userId === userInfo.userId
+    (userData) => userData.nickname === userInfo.userNickname
   );
 
   const userFeed = allFeedData.filter(

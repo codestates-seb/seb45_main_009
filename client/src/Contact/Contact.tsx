@@ -22,9 +22,7 @@ const Contact = ({ selectedName, members }: ContactProps) => {
     e.preventDefault();
 
     if (form.current) {
-      const selectedMember = members.find(
-        (member) => member.name === selectedName
-      );
+      const selectedMember = members.find((member) => member.name === selectedName);
       if (selectedMember) {
         const { serviceKey, templateKey, accountKey } = selectedMember;
 
@@ -51,16 +49,9 @@ const Contact = ({ selectedName, members }: ContactProps) => {
   return (
     <div className="flex p-6 h-[80vh] mt-16">
       <div className="flex-1 flex justify-center relative">
-        <form
-          ref={form}
-          className="flex flex-col gap-4 items-center"
-          onSubmit={sendEmail}
-        >
+        <form ref={form} className="flex flex-col gap-4 items-center" onSubmit={sendEmail}>
           <div className="flex flex-col gap-1">
-            <label
-              htmlFor="user_name"
-              className="text-lg font-bold text-gray-800"
-            >
+            <label htmlFor="user_name" className="text-lg font-bold text-gray-800">
               이름
             </label>
             <input
@@ -72,10 +63,7 @@ const Contact = ({ selectedName, members }: ContactProps) => {
             />
           </div>
           <div className="flex flex-col gap-1">
-            <label
-              htmlFor="user_email"
-              className="text-lg font-bold text-gray-800"
-            >
+            <label htmlFor="user_email" className="text-lg font-bold text-gray-800">
               이메일
             </label>
             <input
@@ -87,10 +75,7 @@ const Contact = ({ selectedName, members }: ContactProps) => {
             />
           </div>
           <div className="flex flex-col gap-1">
-            <label
-              htmlFor="message"
-              className="text-lg font-bold text-gray-800"
-            >
+            <label htmlFor="message" className="text-lg font-bold text-gray-800">
               메시지
             </label>
             <textarea

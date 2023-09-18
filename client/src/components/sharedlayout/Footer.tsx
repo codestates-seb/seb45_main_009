@@ -4,6 +4,7 @@ import { AiFillGithub } from "react-icons/ai";
 import { LuMail } from "react-icons/lu";
 import { useLocation } from "react-router-dom";
 import Contact from "../../Contact/Contact";
+import fitfolio from "../../assets/images/fitfolio.svg";
 
 const members = [
   {
@@ -91,7 +92,7 @@ function Footer() {
     <footer className="flex justify-center items-center bg-slate-200 min-h-[80px]">
       <Link to={"/"}>
         <div className="hover:cursor-pointer md:mr-4">
-          <img src="/asset/fitfolio.svg" alt="logo" />
+          <img src={fitfolio} alt="logo" />
         </div>
       </Link>
       <div className="flex justify-center text-lg">
@@ -105,11 +106,7 @@ function Footer() {
               <Link to={member.github}>
                 <AiFillGithub size={15} />
               </Link>
-              <LuMail
-                size={15}
-                onClick={() => toggleContact(member.name)}
-                className="hover:cursor-pointer"
-              />
+              <LuMail size={15} onClick={() => toggleContact(member.name)} className="hover:cursor-pointer" />
             </div>
           </div>
         ))}

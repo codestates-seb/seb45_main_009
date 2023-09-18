@@ -7,7 +7,7 @@ import { HiLocationMarker } from "react-icons/hi";
 import { MdAttachMoney } from "react-icons/md";
 import { BiSolidUser } from "react-icons/bi";
 import nofeedimg from "../../assets/images/nofeed.png";
-import { RootStates } from "../../types/types";
+import { RootState, RootStates } from "../../types/types";
 import { useSelector } from "react-redux";
 
 interface ProfileIndProps {
@@ -20,7 +20,7 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
   // 유저 sport 가져오기
   const { allUserDatas } = useSelector((state: RootStates) => state.feed);
   console.log(allUserDatas);
-
+  const isAuthenticated = useSelector((state: RootState) => state.login.isAuthenticated);
   // 전체 유저에서 프로필 유저 확인
   const isUserId = allUserDatas.some((user) => user.userId === userId);
   console.log(isUserId);
@@ -40,6 +40,7 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
   const [isFollowing, setIsFollowing] = useState(false);
 
   const checkFollowState = async () => {
+    if (isAuthenticated === false) return;
     try {
       const response = await globalAxios.get(`/follow/following/${myid}`);
       console.log("checkFollow 성공", response.data);
@@ -99,6 +100,7 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
   const [isLoading, setIsLoading] = useState(true);
 
   const handleFollow = async () => {
+    if (isAuthenticated === false) return;
     try {
       const response = await globalAxios.post(`/follow/${userId}`);
       console.log("팔로우 요청 성공", response);
@@ -130,7 +132,7 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
                 )}
               </div>
               <div className="text-sm text-gray-400">
-                {userResponseType?.bio ? userResponseType?.bio : <span className="text-gray-400">__빈값__</span>}
+                {userResponseType?.bio ? userResponseType?.bio : <span className="text-gray-400">오늘의 주인공</span>}
               </div>
             </div>
           </div>
@@ -157,7 +159,7 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
         <div className="mt-[60px] flex items-center justify-center sm:justify-start sm:px-[50px]">
           <div className="flex">
             <AiFillHeart className="text-gray-400 mx-[10px] text-2xl" />
-            <div>{userSport ? userSport : <span className="text-gray-400">__</span>}</div>
+            <div>{userSport ? userSport : <span className="text-gray-400"> - </span>}</div>
           </div>
         </div>
         <div className="mt-2 flex items-center justify-center sm:justify-start sm:px-[50px]">
@@ -165,11 +167,11 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
             <>
               <BiSolidUser className="text-gray-400 mx-[10px] text-2xl" />
               <div>
-                {userResponseType?.height ? userResponseType?.height : <span className="text-gray-400">__</span>}
+                {userResponseType?.height ? userResponseType?.height : <span className="text-gray-400">- </span>}
                 cm
               </div>
               <div className="ml-[14px]">
-                {userResponseType?.weight ? userResponseType?.weight : <span className="text-gray-400">_</span>}
+                {userResponseType?.weight ? userResponseType?.weight : <span className="text-gray-400">- </span>}
                 kg
               </div>
             </>
