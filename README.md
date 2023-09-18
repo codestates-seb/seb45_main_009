@@ -23,7 +23,7 @@
 </details>
 
 <details>
-<summary>화면정의서</summary>
+<summary>ERD</summary>
 <div markdown="1">
 </div>
 </details>
