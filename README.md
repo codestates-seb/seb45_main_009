@@ -62,7 +62,7 @@
 </details>
 
 <details>
-<summary>API명세서</summary>
+<summary>화면정의서</summary>
 <div markdown="1">
 </div>
 </details>
@@ -74,11 +74,7 @@
 </div>
 </details>
 
-<details>
-<summary>화면정의서</summary>
-<div markdown="1">
-</div>
-</details>
+#### [API 명세서](http://13.125.146.181:8080/swagger-ui/index.html#/)
 
 
 ## Commit convention
