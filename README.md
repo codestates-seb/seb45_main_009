@@ -12,7 +12,7 @@
 
 | 함재형(FE) | 이세은(FE) | 박태영(FE) | 손승범(BE) | 민은영(BE) | 김소연(BE) | 염동훈(BE) |
 :----: | :----: | :----: | :----: | :----: | :----: | :----: |
-| <img src="https://i.ibb.co/sHKBmVc/1.png" width="100%" > | <img src="https://i.ibb.co/smhpm6S/2.png" width="100%"> | <img src="https://i.ibb.co/gSW9RBq/4.png" width="100%" /> |  <img src="https://i.ibb.co/7nk9V7J/3-1.png" width="100%" > |<img src="https://i.ibb.co/gwtZrG9/5.png" width="100%" > | <img src="https://i.ibb.co/ZmvCBvj/6.png" width="100%" >  | <img src="https://i.ibb.co/gTtq1rk/7.png" width="100%"> | 
+| <img src="https://i.ibb.co/sHKBmVc/1.png" width="100px" height="100px"> | <img src="https://i.ibb.co/smhpm6S/2.png" width="100px" height="100px"> | <img src="https://i.ibb.co/gSW9RBq/4.png" width="100px" height="100px"/> | <img src="https://i.ibb.co/7nk9V7J/3-1.png" width="100px" height="100px"> |<img src="https://i.ibb.co/gwtZrG9/5.png" width="100px" height="100px"> | <img src="https://i.ibb.co/ZmvCBvj/6.png" width="100px" height="100px"> | <img src="https://i.ibb.co/gTtq1rk/7.png" width="100px"> |
 |[`hamjaehyeong`](https://github.com/hamjaehyeong) | [`lse0522`](https://github.com/lse0522)      | [`TaeYoungPar`](https://github.com/TaeYoungPar) | [`beomda`](https://github.com/beomda)      | [`minkawoo`](https://github.com/minkawoo)      | [`bonbon0808`](https://github.com/bonbon0808) | [`donghoonyeom`](https://github.com/donghoonyeom) |
 
 
