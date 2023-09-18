@@ -16,8 +16,19 @@
 
 
 ## Stack
+### Front
+![Html5](https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![Tailwindcss](https://img.shields.io/badge/tailwindcss-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![Redux](https://img.shields.io/badge/redux-764ABC?style=for-the-badge&logo=redux&logoColor=white)
+![React](https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=white)
+![Typescript](https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Figma](https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)
+![Amazons3](https://img.shields.io/badge/amazons3-569A31?style=for-the-badge&logo=amazons3&logoColor=white)
+
+
+
 ### Back
-![Java](https://img.shields.io/badge/JAVA-E46F36?style=for-the-badge&logo=java&logoColor=white)
+![Java](https://img.shields.io/badge/JAVA-4285F4?style=for-the-badge&logo=java&logoColor=white)
 ![Spring](https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=Spring&logoColor=white)
 ![SpringBoot](https://img.shields.io/badge/SpringBoot-6DB33F?style=for-the-badge&logo=Spring&logoColor=white)
 ![SpringSecurity](https://img.shields.io/badge/Spring%20Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white)
@@ -25,6 +36,7 @@
 ![JWT](https://img.shields.io/badge/JWT-149545?style=for-the-badge&logo=JWT&logoColor=white)
 ![MySQL](https://shields.io/badge/MySQL-lightgrey?logo=mysql&style=for-the-badge&logoColor=white)
 ![AWS EC2](https://camo.githubusercontent.com/68b2f772975e242a6650f0c57a38782ee26d921ab75a882f6ecf63e149e3f283/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f416d617a6f6e2532304543322d4646393930303f7374796c653d666f722d7468652d6261646765266c6f676f3d616d617a6f6e454332266c6f676f436f6c6f723d7768697465)
+![Amazons3](https://img.shields.io/badge/amazons3-569A31?style=for-the-badge&logo=amazons3&logoColor=white)
 ![AWS RDS](https://camo.githubusercontent.com/b9f446cd9087af30e40a1f79a4a99927480ba70ac0cb3ecbbd180a1ca27f0db8/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f416d617a6f6e2532305244532d3532374646463f7374796c653d666f722d7468652d6261646765266c6f676f3d616d617a6f6e524453266c6f676f436f6c6f723d7768697465)
 ![Swagger](https://img.shields.io/badge/swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=white)
 ![docker](https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
