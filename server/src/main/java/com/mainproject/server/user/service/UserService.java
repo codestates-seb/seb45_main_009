@@ -185,8 +185,6 @@ public class UserService {
                 throw new BusinessLogicException(ExceptionCode.INVALID_PASSWORD);
             }
             findUser.setPassword(user.getPassword());
-        } else if (user.getPassword() == null) {
-            throw new BusinessLogicException(ExceptionCode.KAKAO_NOT_PASSWORD);
         }
 
         if (user.getLocation() != null) {
