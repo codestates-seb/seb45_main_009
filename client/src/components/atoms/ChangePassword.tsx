@@ -38,12 +38,10 @@ const ChangePassword = () => {
     setIsPasswordsMatch(null);
   };
   const handlePasswordSubmit = async () => {
-    console.log("submit button");
     const formData = new FormData();
     const requestBody = {
       password: password,
     };
-    console.log(requestBody);
     const blob = new Blob([JSON.stringify(requestBody)], {
       type: "application/json",
     });
@@ -57,8 +55,9 @@ const ChangePassword = () => {
       alert("비밀번호 수정 성공");
       console.log("patch성공", response);
       navigate(-1);
-    } catch (error) {
-      console.log("error", error);
+    } catch (error: any) {
+      alert(error.response.message);
+      console.log("error", error.response.data);
     }
   };
 

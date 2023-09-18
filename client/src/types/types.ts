@@ -120,6 +120,7 @@ export interface ResponseDataType {
   }>;
 }
 export interface CommentTypes {
+  userId: number;
   feedCommentId: number;
   feedId: number;
   content: string;

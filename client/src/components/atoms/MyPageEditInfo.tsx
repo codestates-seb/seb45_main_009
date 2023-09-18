@@ -145,13 +145,8 @@ function MyPageEditInfo() {
     try {
       const response = await globalAxios.get("/mypage");
       const data: userData = response.data.data;
-      console.log("불러오기 성공, data:", data);
       const preProfileImg = { file: null, src: data.profileimg };
-      console.log(preProfileImg);
-      if (
-        preProfileImg.src ===
-        "https://fitfolio-photo.s3.ap-northeast-2.amazonaws.com/default+image/default.png"
-      ) {
+      if (preProfileImg.src === "https://fitfolio-photo.s3.ap-northeast-2.amazonaws.com/default+image/default.png") {
       } else {
         setPreviewImg(preProfileImg);
       }
@@ -169,7 +164,6 @@ function MyPageEditInfo() {
   useEffect(() => {
     getData();
   }, []);
-  useEffect(() => console.log("previewImg:", previewImg), [previewImg]);
   const onSubmit = async () => {
     if (!isValidNickname) {
       alert("올바른 닉네임을 입력해주세요.");
@@ -177,6 +171,22 @@ function MyPageEditInfo() {
     }
     if (isValidBio === false) {
       alert("한 줄 소개는 30자 이내로 입력해주세요.");
+      return;
+    }
+    if (location && location.trim().length >= 35) {
+      alert("주소는 34자까지 입력할 수 있습니다.");
+      return;
+    }
+    if (sport && sport.trim().length >= 21) {
+      alert("운동 종목은 20자까지 입력할 수 있습니다.");
+      return;
+    }
+    if (bio && bio.trim().length >= 31) {
+      alert("기업 소개는 30자까지 입력할 수 있습니다.");
+      return;
+    }
+    if (priceInfo && priceInfo.trim().length >= 31) {
+      alert("가격 정보는 30자까지 입력할 수 있습니다.");
       return;
     }
     const formData = new FormData();
@@ -189,7 +199,6 @@ function MyPageEditInfo() {
       location: location,
       price: priceInfo,
     };
-    console.log(requestBody);
     const blob = new Blob([JSON.stringify(requestBody)], {
       type: "application/json",
     });
@@ -227,10 +236,7 @@ function MyPageEditInfo() {
                 className="absolute top-0 left-0 w-[200px] h-[200px] bg-transparent cursor-pointer border-0 rounded-full"
               ></label>
               {previewImg && (
-                <button
-                  onClick={deleteImg}
-                  className="absolute right-[-30] flex flex-row items-center"
-                >
+                <button onClick={deleteImg} className="absolute right-[-30] flex flex-row items-center">
                   <MdDelete className="text-[#adaaaa] text-[20px] hover:text-[#595656] transition" />
                 </button>
               )}
@@ -255,13 +261,9 @@ function MyPageEditInfo() {
               onBlur={validateNicknameHandler}
               onFocus={clearNicknameValidation}
             />
-            <p className="text-[12px]">
-              영문자, 숫자를 혼합하여 6~20자로 입력해주세요.{" "}
-            </p>
+            <p className="text-[12px]">영문자, 숫자를 혼합하여 6~20자로 입력해주세요. </p>
             {isValidNickname === false && (
-              <p className="text-[12px] text-isValid-text-red">
-                유효하지 않은 닉네임 형식입니다.
-              </p>
+              <p className="text-[12px] text-isValid-text-red">유효하지 않은 닉네임 형식입니다.</p>
             )}
             <div className="flex flex-row">
               <CommonInput
@@ -306,13 +308,9 @@ function MyPageEditInfo() {
               onFocus={clearNicknameValidation}
               placeholder="닉네임을 입력해 주세요."
             />
-            <p className="text-[12px]">
-              영문자, 숫자를 혼합하여 6~20자로 입력해주세요.{" "}
-            </p>
+            <p className="text-[12px]">영문자, 숫자를 혼합하여 6~20자로 입력해주세요. </p>
             {isValidNickname === false && (
-              <p className="text-[12px] text-isValid-text-red">
-                유효하지 않은 닉네임 형식입니다.
-              </p>
+              <p className="text-[12px] text-isValid-text-red">유효하지 않은 닉네임 형식입니다.</p>
             )}
             <CommonInput
               value={location}
@@ -345,11 +343,7 @@ function MyPageEditInfo() {
         )}
 
         <div className="flex flex-row items-center justify-center mt-[16px]">
-          <ConfirmButton
-            label="수정하기"
-            onClick={onSubmit}
-            className="mr-2"
-          ></ConfirmButton>
+          <ConfirmButton label="수정하기" onClick={onSubmit} className="mr-2"></ConfirmButton>
           <ConfirmButton label="되돌리기" onClick={getData} />
         </div>
         <Link to={"/mypage/changepassword"}>
