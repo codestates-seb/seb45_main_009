@@ -8,11 +8,11 @@ const Top = () => {
     return null;
   }
   return (
-    <nav className="flex justify-center text-xl p-2 sm:text-2xl sm:p-3 border-t-2 border-b-2 w-full">
+    <nav className="flex justify-center text-xl p-2 sm:text-2xl sm:p-3 border-t-2 border-b-2 w-full font-semibold">
       <Link
         to={"/"}
         className={`mr-6 sm:mr-8 md:mr-16 ${
-          location.pathname === "/" ? "text-btn-color" : "hover:text-btn-color"
+          location.pathname === "/" ? "opacity-100" : "opacity-40 hover:opacity-100"
         }`}
       >
         개인
@@ -20,20 +20,14 @@ const Top = () => {
       <Link
         to={"/store"}
         className={`mr-6 sm:mr-8 md:mr-16 ${
-          location.pathname === "/store"
-            ? "text-btn-color"
-            : "hover:text-btn-color"
+          location.pathname === "/store" ? "opacity-100" : "opacity-40 hover:opacity-100"
         }`}
       >
         기업
       </Link>
       <Link
         to={"/community"}
-        className={` ${
-          location.pathname === "/community"
-            ? "text-btn-color"
-            : "hover:text-btn-color"
-        }`}
+        className={` ${location.pathname === "/community" ? "opacity-100" : "opacity-40 hover:opacity-100"}`}
       >
         커뮤니티
       </Link>

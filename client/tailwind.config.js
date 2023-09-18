@@ -21,6 +21,7 @@ module.exports = {
       screens: {
         "max-tablet": { max: "1024px" },
         "max-mobile": { max: "425px" },
+        "max-768": { max: "768px" },
       },
       animation: {
         "slide-down": "slide-down 0.5s",
@@ -54,53 +55,52 @@ module.exports = {
   plugins: [
     function ({ addUtilities }) {
       const newUtilities = {
-        '.border-after': {
-          position: 'relative',
-          '&::after': {
-              content: '""',
-              position: 'absolute',
-              top: '50%',
-              left: '100%', 
-              height: '0.5px',
-              width: 'calc(36vw - 50%)',
-              backgroundColor: 'gray',
-              transform: 'translateY(-50%)',
-          },
-      },
-      '.border-before': {
-        position: 'relative',
-        '&::before': {
+        ".border-after": {
+          position: "relative",
+          "&::after": {
             content: '""',
-            position: 'absolute',
-            top: '50%',
-            left: '0', 
-            transform: 'translateX(-100%) translateY(-50%)',
-            height: '0.5px',
-            width: 'calc(36vw - 50%)',
-            backgroundColor: 'gray',
-        },
-    },
-        '.scrollbar-thin': {
-          '&::-webkit-scrollbar': {
-            width: '0px',
-            height: '0px',
-          },
-          '&::-webkit-scrollbar-thumb': {
-            background: '#888',
-            borderRadius: '2px',
-          },
-          '&::-webkit-scrollbar-thumb:hover': {
-            background: '#555',
-          },
-          '&::-webkit-scrollbar-track': {
-            background: '#f1f1f1',
-            borderRadius: '2px',
+            position: "absolute",
+            top: "50%",
+            left: "100%",
+            height: "0.5px",
+            width: "calc(36vw - 50%)",
+            backgroundColor: "gray",
+            transform: "translateY(-50%)",
           },
         },
-      }
-      
-      addUtilities(newUtilities, [ 'hover']);
+        ".border-before": {
+          position: "relative",
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            top: "50%",
+            left: "0",
+            transform: "translateX(-100%) translateY(-50%)",
+            height: "0.5px",
+            width: "calc(36vw - 50%)",
+            backgroundColor: "gray",
+          },
+        },
+        ".scrollbar-thin": {
+          "&::-webkit-scrollbar": {
+            width: "0px",
+            height: "0px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: "#888",
+            borderRadius: "2px",
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            background: "#555",
+          },
+          "&::-webkit-scrollbar-track": {
+            background: "#f1f1f1",
+            borderRadius: "2px",
+          },
+        },
+      };
+
+      addUtilities(newUtilities, ["hover"]);
     },
   ],
-  
 };

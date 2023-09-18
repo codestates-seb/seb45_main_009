@@ -41,7 +41,7 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
 
   const [isFollowing, setIsFollowing] = useState(false);
 
-  const checkFollowState = async () => {  
+  const checkFollowState = async () => {
     try {
       const response = await globalAxios.get(`/follow/following/${myid}`);
       console.log("checkFollow 성공", response.data);
@@ -82,8 +82,7 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
     roles: string[];
     price: string;
   };
-  const [userResponseType, setUserResponseType] =
-    useState<UserResponseType | null>(null);
+  const [userResponseType, setUserResponseType] = useState<UserResponseType | null>(null);
   useEffect(() => {
     async function fetcFeedData() {
       try {
@@ -119,18 +118,12 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
     }
   };
 
-  
-
   return (
-    <div  className="flex  justify-center">
+    <div className="flex  justify-center">
       <div className="max-w-screen-lg md:max-w-screen-xl mx-auto px-4 sm:px-4 lg:mx-[40px] ">
         <div className="grid md:grid-cols-2  sm:px-[50px]">
           <div className="flex items-center justify-center sm:justify-start">
-            <img
-              src={userResponseType?.profileimg}
-              className="mr-6 sm:mr-2 w-10 h-10 rounded-full"
-              alt="img"
-            />
+            <img src={userResponseType?.profileimg} className="mr-6 sm:mr-2 w-10 h-10 rounded-full" alt="img" />
             <div className="flex flex-col ">
               <div className=" text-lg flex ">
                 {userResponseType?.nickname}
@@ -139,11 +132,7 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
                 )}
               </div>
               <div className="text-sm text-gray-400">
-                {userResponseType?.bio ? (
-                  userResponseType?.bio
-                ) : (
-                  <span className="text-gray-400">__빈값__</span>
-                )}
+                {userResponseType?.bio ? userResponseType?.bio : <span className="text-gray-400">__빈값__</span>}
               </div>
             </div>
           </div>
@@ -170,13 +159,7 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
         <div className="mt-[40px] flex items-center justify-center sm:justify-start px-0px sm:px-[50px]">
           <div className="flex">
             <AiFillHeart className="text-gray-400 mx-[10px] text-2xl" />
-            <div>
-              {userSport ? (
-                userSport
-              ) : (
-                <span className="text-gray-400">__</span>
-              )}
-            </div>
+            <div>{userSport ? userSport : <span className="text-gray-400">__</span>}</div>
           </div>
         </div>
         <div className="mt-2 flex items-center justify-center sm:justify-start px-[50px]">
@@ -184,19 +167,11 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
             <>
               <BiSolidUser className="text-gray-400 mx-[10px] text-2xl" />
               <div>
-                {userResponseType?.height ? (
-                  userResponseType?.height
-                ) : (
-                  <span className="text-gray-400">__</span>
-                )}
+                {userResponseType?.height ? userResponseType?.height : <span className="text-gray-400">__</span>}
                 cm
               </div>
               <div className="ml-[14px]">
-                {userResponseType?.weight ? (
-                  userResponseType?.weight
-                ) : (
-                  <span className="text-gray-400">_</span>
-                )}
+                {userResponseType?.weight ? userResponseType?.weight : <span className="text-gray-400">_</span>}
                 kg
               </div>
             </>
@@ -220,22 +195,21 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
         </div>
 
         {/* 선 추가 */}
-        <div className="flex justify-center w-full my-[60px]  text-gray-400 text-[12px] w-[60px]  border-before border-after">
-           <span className=" border-before border-after w-[100px] flex justify-center ">피드 리스트</span>
+        <div className="flex justify-center w-full my-[10px]  text-gray-400 text-[12px] w-[60px]  border-before border-after">
+          <span className=" border-before border-after w-[100px] flex justify-center ">피드 리스트</span>
         </div>
 
         <div className="my-[40px] flex flex-wrap justify-center sm:justify-start sm:px-[40px]">
-          {userResponseType?.feedList &&
-          userResponseType.feedList.length > 0 ? (
+          {userResponseType?.feedList && userResponseType.feedList.length > 0 ? (
             userResponseType.feedList.map((feed, feedIndex) => (
-              <div key={feedIndex} className="mb-[10px] mx-[10px] hover:scale-105 transition-all duration-300 ease-in-out hover:shadow-[5px_5px_10px_rgba(0,0,0,0.2)]">
-                {feed.images[0] && ( 
-                  <Link
-                    key={feed.images[0].imageUrl}
-                    to={`/feeddetailind/${feed.feedId}`}
-                  >
+              <div
+                key={feedIndex}
+                className="mb-[10px] mx-[10px] hover:scale-105 transition-all duration-300 ease-in-out hover:shadow-[5px_5px_10px_rgba(0,0,0,0.2)]"
+              >
+                {feed.images[0] && (
+                  <Link key={feed.images[0].imageUrl} to={`/feeddetailind/${feed.feedId}`}>
                     <img
-                      className=" min-w-[250px] w-[13vw] h-[30vh]"
+                      className=" min-w-[250px] min-h-[250px] w-[15vw] h-[15vw]"
                       src={feed.images[0].imageUrl}
                       alt={`Feed ${feedIndex} Images`}
                     />
