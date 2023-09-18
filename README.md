@@ -1,7 +1,7 @@
-# 🌟 seb45_main_009
+# seb45_main_009
 
 
-## 🌟 Team
+## Team
 
 | 함재형(FE) | 이세은(FE) | 박태영(FE) | 손승범(BE) | 민은영(BE) | 김소연(BE) | 염동훈(BE) |
 :----: | :----: | :----: | :----: | :----: | :----: | :----: |
@@ -9,7 +9,7 @@
 |[`hamjaehyeong`](https://github.com/hamjaehyeong) | [`lse0522`](https://github.com/lse0522) | [`TaeYoungPar`](https://github.com/TaeYoungPar) | [`beomda`](https://github.com/beomda) | [`minkawoo`](https://github.com/minkawoo) | [`bonbon0808`](https://github.com/bonbon0808) | [`donghoonyeom`](https://github.com/donghoonyeom) |
 
 
-## 🌟 Docs
+## Docs
 <details>
 <summary>사용자요구사항정의서</summary>
 <div markdown="1">
@@ -27,10 +27,10 @@
 <div markdown="4">
 
 
-## 🌟 Stack
+## Stack
 
 
-## 🌟 Commit convention
+## Commit convention
 | Message  | 설명                                            |
 | -------- | ----------------------------------------------- |
 | `feat`	   | 새로운 기능 추가                                |
