@@ -62,17 +62,13 @@
 </details>
 
 <details>
-<summary>화면정의서</summary>
-<div markdown="1">
-</div>
-</details>
-
-<details>
 <summary>ERD</summary>
 <div markdown="1">
 <img width="837" alt="ERD" src="https://github.com/codestates-seb/seb45_main_009/assets/130390467/6744b933-d504-42a4-8912-e1bee7ec25d2">
 </div>
 </details>
+
+#### [화면 정의서](https://www.figma.com/file/Lo7MxFsoCS16Pt5WxdCfU6/Wireframe-(Community)?type=whiteboard&node-id=0-1)
 
 #### [API 명세서](http://13.125.146.181:8080/swagger-ui/index.html#/)
 
