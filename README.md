@@ -18,19 +18,19 @@
 
 <details>
 <summary>API명세서</summary>
-<div markdown="2">
+<div markdown="1">
 </div>
 </details>
 
 <details>
 <summary>화면정의서</summary>
-<div markdown="3">
+<div markdown="1">
 </div>
 </details>
 
 <details>
 <summary>화면정의서</summary>
-<div markdown="4">
+<div markdown="1">
 </div>
 </details>
 
