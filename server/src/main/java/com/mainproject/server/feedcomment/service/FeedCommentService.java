@@ -93,8 +93,8 @@ public class FeedCommentService {
 
         Feed feed = feedService.findFeed(feedId);
 
-        // page, size를 기반으로 PageRequest 객체를 내림차순으로 생성해서 페이지네이션 적용
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("feedCommentId").ascending());
+        // page, size를 기반으로 PageRequest 객체를 오름차순으로 생성해서 페이지네이션 적용
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("feedCommentId").descending());
 
         // pageRequest를 이용해 등록된 답변 조회
         Page<FeedComment> feedCommentPage = feedCommentRepository.findByFeed(feed, pageRequest);

@@ -69,7 +69,7 @@ public class FeedCommentController {
     @GetMapping("/{feed-id}/comments")
     public ResponseEntity getComments(@PathVariable("feed-id") long feedId,
                                       @RequestParam(defaultValue = "1") int page,
-                                      @RequestParam(defaultValue = "10") int size){
+                                      @RequestParam(defaultValue = "4") int size){
         // feedId를 통해 질문 번호를 조회
         // 페이지는 1부터 시작인데 데이터 액세스 계층에서 접근은 0부터라 page에서 -1
         Page<FeedComment> feedCommentPage = feedCommentService.findFeedComments(page - 1, size, feedId);

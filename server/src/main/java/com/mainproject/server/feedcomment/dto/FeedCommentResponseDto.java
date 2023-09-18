@@ -16,6 +16,7 @@ public class FeedCommentResponseDto {
     private long feedCommentId;
     private long feedId;
     private String content;
+    private long userId;
     private String nickname;
     private String profileImageUrl;
     private LocalDateTime createdAt;

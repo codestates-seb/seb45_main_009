@@ -18,6 +18,7 @@ public interface FeedCommentMapper {
                 .feedCommentId(feedComment.getFeedCommentId())
                 .feedId(feedComment.getFeed().getFeedId())
                 .content(feedComment.getContent())
+                .userId(feedComment.getUser().getUserId())
                 .nickname(feedComment.getUser().getNickname())
                 .profileImageUrl(feedComment.getUser().getProfileimg().getImageUrl())
                 .createdAt(feedComment.getCreatedAt())
