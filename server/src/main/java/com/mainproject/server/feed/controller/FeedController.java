@@ -74,7 +74,7 @@ public class FeedController {
     // 유저 페이지 피드 조회(리스트) - 메인페이지
     @GetMapping("/")
     public ResponseEntity findUserFeeds(@RequestParam(defaultValue = "1") int page,
-                                        @RequestParam(defaultValue = "4") int size) {
+                                        @RequestParam(defaultValue = "8") int size) {
 
         Page<Feed> userFeeds = feedService.findUserFeeds(page -1, size);
         FeedPageInfo userPageInfo = new FeedPageInfo(page, size, (int) userFeeds.getTotalElements(), userFeeds.getTotalPages());
@@ -87,7 +87,7 @@ public class FeedController {
     // 기업 페이지 피드 조회(리스트)
     @GetMapping("/store")
     public ResponseEntity findStoreFeed(@RequestParam(defaultValue = "1") int page,
-                                        @RequestParam(defaultValue = "4") int size) {
+                                        @RequestParam(defaultValue = "8") int size) {
 
         Page<Feed> storeFeeds = feedService.findStoreFeeds(page -1, size);
         FeedPageInfo storePageInfo = new FeedPageInfo(page, size, (int) storeFeeds.getTotalElements(), storeFeeds.getTotalPages());
