@@ -8,14 +8,14 @@ const Top = () => {
     return null;
   }
   return (
-    <nav className="flex justify-center text-xl p-2 sm:text-2xl sm:p-3 border-t-2 border-b-2 w-full font-semibold">
+    <nav className="flex justify-center text-xl p-2 sm:text-2xl sm:p-3 border-t-2 border-b-2 w-full font-semibold z-0">
       <Link
         to={"/"}
         className={`mr-6 sm:mr-8 md:mr-16 ${
           location.pathname === "/" ? "opacity-100" : "opacity-40 hover:opacity-100"
         }`}
       >
-        개인
+        <span>개인</span>
       </Link>
       <Link
         to={"/store"}

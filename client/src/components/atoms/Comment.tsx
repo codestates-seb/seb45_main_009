@@ -22,13 +22,13 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
 
   // 전체 유저에서 내 유저 확인
 
-  const isNicknameExist = allUserDatas.some((user) => user.nickname === userInfo.userNickname);
+  const isNicknameExist = allUserDatas.some((user) => user.userId === userInfo.userId);
 
   // 사진 가져오기
   let profileImage = "";
 
   if (isNicknameExist) {
-    const matchedUser = allUserDatas.find((user) => user.nickname === userInfo.userNickname);
+    const matchedUser = allUserDatas.find((user) => user.userId === userInfo.userId);
 
     if (matchedUser && matchedUser.profileimg) {
       profileImage = matchedUser.profileimg;
@@ -58,7 +58,7 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
       //   return;
       // }
 
-      // console.log("댓글 데이터 불러오기 성공", response);
+      console.log("댓글 데이터 불러오기 성공", response);
       const updatedCommentData = [...commentData, ...getData.feedCommentData];
       setCommentData(updatedCommentData);
       // setPage((prevPage) => prevPage + 1);
@@ -263,7 +263,7 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
                 </div>
 
                 <div className="w-[40px] sm:w-[30px] text-[13px] text-gray-400 flex items-center items-start">
-                  {userInfo.userNickname === comment.nickname ? (
+                  {userInfo.userId === comment.userId ? (
                     <div>
                       {/* <button
                                 className="text-[13px] opacity-75"

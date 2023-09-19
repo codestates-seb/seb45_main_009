@@ -211,7 +211,7 @@ function Header() {
         />
 
         {showAutoComplete && autoCompleteData.length > 0 && (
-          <div className="mt-2 w-[50vw] min-w-[190px] max-w-[500px] bg-white border border-gray-300  shadow-lg absolute top-6 left-0 right-0">
+          <div className="sm:top-6 z-50 mt-2 w-[50vw] min-w-[190px] max-w-[500px] bg-white border border-gray-300  shadow-lg absolute top-[1.05rem] left-[-1px] right-0">
             <ul>
               {autoCompleteData.map((suggestion, index) => (
                 <div className="flex  items-center">
