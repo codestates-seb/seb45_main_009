@@ -15,7 +15,9 @@ import fitfolio from "../../assets/images/fitfolio.svg";
 function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector((state: RootState) => state.login.isAuthenticated);
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.login.isAuthenticated
+  );
   const { allFeedDatas } = useSelector((state: RootStates) => state.feed);
   const { allUserDatas } = useSelector((state: RootStates) => state.feed);
 
@@ -110,7 +112,9 @@ function Header() {
 
       if (filteredUsers.length !== 0) {
         filteredUsers = allFeedDatas.filter((feed) =>
-          filteredUsers.some((user: { nickname: string }) => user.nickname === feed.nickname)
+          filteredUsers.some(
+            (user: { nickname: string }) => user.nickname === feed.nickname
+          )
         );
       }
 
@@ -128,7 +132,9 @@ function Header() {
 
     if (inputValue.trim() !== "") {
       // 검색어 추천 목록을 가져오는 코드를 작성
-      const filteredSuggestions: string[] = auto.filter((suggestion) => suggestion.includes(inputValue)).slice(0, 5);
+      const filteredSuggestions: string[] = auto
+        .filter((suggestion) => suggestion.includes(inputValue))
+        .slice(0, 5);
 
       setAutoCompleteData(filteredSuggestions);
       setShowAutoComplete(true);
@@ -211,13 +217,19 @@ function Header() {
         />
 
         {showAutoComplete && autoCompleteData.length > 0 && (
-          <div className="mt-2 w-[50vw] min-w-[190px] max-w-[500px] bg-white border border-gray-300  shadow-lg absolute top-6 left-0 right-0">
+          <div className="mt-2 w-[50vw] min-w-[190px] max-w-[500px] bg-white border border-gray-300  shadow-lg absolute top-5 left- right-0 z-50">
             <ul>
               {autoCompleteData.map((suggestion, index) => (
                 <div className="flex  items-center">
                   {allUserDatas.map((el) => {
                     if (el.nickname === suggestion) {
-                      return <img src={el.profileimg} alt="" className="w-[30px] h-[30px] rounded-full" />;
+                      return (
+                        <img
+                          src={el.profileimg}
+                          alt=""
+                          className="w-[30px] h-[30px] rounded-full"
+                        />
+                      );
                     }
                     return null; // 또는 다른 조건에 맞지 않는 경우에는 아무것도 반환하지 않음
                   })}
@@ -238,7 +250,11 @@ function Header() {
       {isMobile ? (
         <>
           <div className="ml-3" onClick={toggleModal}>
-            {isModalOpen ? <RiMenuFoldFill size="24" /> : <RiMenuUnfoldFill size="24" />}
+            {isModalOpen ? (
+              <RiMenuFoldFill size="24" />
+            ) : (
+              <RiMenuUnfoldFill size="24" />
+            )}
           </div>
           {isModalOpen && (
             <div className="fixed top-0 right-0 bottom-0 left-0 bg-white z-50 flex flex-col items-center animate-slide-right">
@@ -257,7 +273,10 @@ function Header() {
                     로그아웃
                   </button>
                   <Link to="/mypage/feed">
-                    <button className="mb-4 hover:text-btn-color" onClick={handleMenuClick}>
+                    <button
+                      className="mb-4 hover:text-btn-color"
+                      onClick={handleMenuClick}
+                    >
                       마이페이지
                     </button>
                   </Link>
@@ -265,12 +284,18 @@ function Header() {
               ) : (
                 <>
                   <Link to="/login">
-                    <button className="my-4 hover:text-btn-color" onClick={handleMenuClick}>
+                    <button
+                      className="my-4 hover:text-btn-color"
+                      onClick={handleMenuClick}
+                    >
                       로그인
                     </button>
                   </Link>
                   <Link to="/signup">
-                    <button className="mb-4 hover:text-btn-color" onClick={handleMenuClick}>
+                    <button
+                      className="mb-4 hover:text-btn-color"
+                      onClick={handleMenuClick}
+                    >
                       회원가입
                     </button>
                   </Link>
@@ -296,7 +321,10 @@ function Header() {
       )}
       {!isMobile && isAuthenticated ? (
         <div className="flex text-[0.8rem] lg:text-base ml-2">
-          <button className="ml-2 mr-4 hover:font-medium" onClick={logoutHandler}>
+          <button
+            className="ml-2 mr-4 hover:font-medium"
+            onClick={logoutHandler}
+          >
             로그아웃
           </button>
           <Link to="/mypage/feed">
@@ -307,12 +335,18 @@ function Header() {
         !isMobile && (
           <div className="flex">
             <Link to="/login">
-              <button className="text-xs ml-2 mr-2 sm:mr-4 sm:text-base hover:font-medium" onClick={handleMenuClick}>
+              <button
+                className="text-xs ml-2 mr-2 sm:mr-4 sm:text-base hover:font-medium"
+                onClick={handleMenuClick}
+              >
                 로그인
               </button>
             </Link>
             <Link to="/signup">
-              <button className="text-xs sm:text-base hover:font-medium" onClick={handleMenuClick}>
+              <button
+                className="text-xs sm:text-base hover:font-medium"
+                onClick={handleMenuClick}
+              >
                 회원가입
               </button>
             </Link>
