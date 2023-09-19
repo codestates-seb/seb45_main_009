@@ -10,10 +10,17 @@
 
 ## Team
 
-| 함재형(FE) | 이세은(FE) | 박태영(FE) | 손승범(BE) | 민은영(BE) | 김소연(BE) | 염동훈(BE) |
-| :----: | :----: | :----: | :----: | :----: | :----: | :----: |
-| <img src="https://github.com/codestates-seb/seb45_main_009/assets/130059353/77b97bdc-9834-4b06-8518-3ee9f302cdb9" width="100px" height="100px"> | <img src="https://github.com/codestates-seb/seb45_main_009/assets/130059353/c22f0954-170b-410d-8e7a-8141ccc65c15" width="100px" height="100px"> | <img src="https://github.com/codestates-seb/seb45_main_009/assets/130059353/b6357ad7-9e03-43e2-a851-5e8861606a03" width="100px" height="100px"/> | <img src="https://github.com/codestates-seb/seb45_main_009/assets/130059353/05682554-aba3-48e8-8cd7-a32c20978c1d" width="100px" height="100px"> | <img src="https://github.com/codestates-seb/seb45_main_009/assets/130059353/8e686e76-57b8-41ae-a495-6238e8519478" width="100px" height="100px"> | <img src="https://github.com/codestates-seb/seb45_main_009/assets/130059353/b984372f-0f03-4ca9-bce1-9113add7ef95" width="100px" height="100px"> | <img src="https://github.com/codestates-seb/seb45_main_009/assets/130059353/6e59fb99-7445-44c4-8a38-854490b1b5ba" width="100px" height="100px"> |
-|[`hamjaehyeong`](https://github.com/hamjaehyeong) | [`lse0522`](https://github.com/lse0522)      | [`TaeYoungPar`](https://github.com/TaeYoungPar) | [`beomda`](https://github.com/beomda)      | [`minkawoo`](https://github.com/minkawoo)      | [`bonbon0808`](https://github.com/bonbon0808) | [`donghoonyeom`](https://github.com/donghoonyeom) |
+### Front
+| 함재형(FE) | 이세은(FE) | 박태영(FE) | 
+| :----: | :----: | :----: | 
+| <img src="https://github.com/codestates-seb/seb45_main_009/assets/130059353/77b97bdc-9834-4b06-8518-3ee9f302cdb9" width="100px" height="100px"> | <img src="https://github.com/codestates-seb/seb45_main_009/assets/130059353/c22f0954-170b-410d-8e7a-8141ccc65c15" width="100px" height="100px"> | <img src="https://github.com/codestates-seb/seb45_main_009/assets/130059353/b6357ad7-9e03-43e2-a851-5e8861606a03" width="100px" height="100px"/> | 
+|[`hamjaehyeong`](https://github.com/hamjaehyeong) | [`lse0522`](https://github.com/lse0522)      | [`TaeYoungPar`](https://github.com/TaeYoungPar) | 
+
+### Back
+| 손승범(BE) | 민은영(BE) | 김소연(BE) | 염동훈(BE) |
+| :----: | :----: | :----: | :----: |
+<img src="https://github.com/codestates-seb/seb45_main_009/assets/130059353/05682554-aba3-48e8-8cd7-a32c20978c1d" width="100px" height="100px"> | <img src="https://github.com/codestates-seb/seb45_main_009/assets/130059353/8e686e76-57b8-41ae-a495-6238e8519478" width="100px" height="100px"> | <img src="https://github.com/codestates-seb/seb45_main_009/assets/130059353/b984372f-0f03-4ca9-bce1-9113add7ef95" width="100px" height="100px"> | <img src="https://github.com/codestates-seb/seb45_main_009/assets/130059353/6e59fb99-7445-44c4-8a38-854490b1b5ba" width="100px" height="100px"> |
+| [`beomda`](https://github.com/beomda)      | [`minkawoo`](https://github.com/minkawoo)      | [`bonbon0808`](https://github.com/bonbon0808) | [`donghoonyeom`](https://github.com/donghoonyeom) |
 
 
 ## Stack
