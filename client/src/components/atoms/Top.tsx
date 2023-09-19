@@ -17,7 +17,7 @@ const Top = () => {
             : "opacity-40 hover:opacity-100"
         }`}
       >
-        개인
+        <span>개인</span>
       </Link>
       <Link
         to={"/store"}
