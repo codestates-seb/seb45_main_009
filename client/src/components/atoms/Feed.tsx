@@ -43,7 +43,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
   const [hasMore, setHasMore] = useState(true);
 
   const [ref, inView] = useInView();
-
+  useEffect(() => console.log("inview:", inView), [inView]);
   const dispatch = useDispatch();
   const location = useLocation();
   const currentDetail = location.pathname === "/" ? "/feeddetailind" : "/feeddetailcor";
