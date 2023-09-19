@@ -205,7 +205,7 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
 
   const handleInputKeyUpSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      handleSaveClick();
+      if (e.nativeEvent.isComposing === false) handleSaveClick();
     }
   };
 
