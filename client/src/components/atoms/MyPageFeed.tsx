@@ -120,7 +120,6 @@ const MyPageFeed = () => {
   const user = allUserDatas.find((userData) => userData.userId === userInfo.userId);
 
   const userFeed = allFeedData.filter((userData) => userData.userId === userInfo.userId);
-  console.log(allFeedData);
   return (
     <section>
       <div className={`flex w-max-xl ${windowWidth < 768 ? "flex-col" : "flex-row"}  ${MainBodyCss} `}>
