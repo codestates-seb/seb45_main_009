@@ -21,7 +21,8 @@ public enum ExceptionCode {
     NO_PERMISSION_EDITING_COMMENT(403, "코멘트를 편집할 권한이 없습니다."),
     ACCESS_DENIED(401, "권한이 없습니다."),
     MESSAGE_NOT_FOUND(404, "메시지를 찾을 수 없습니다."),
-    JWT_TOKEN_EXPIRED(404, "토큰이 만료되었습니다");
+    JWT_TOKEN_EXPIRED(404, "토큰이 만료되었습니다"),
+    KAKAO_NOT_PASSWORD(404, "카카오 로그인은 비밀번호를 변경할 수 없습니다.");
 
     @Getter
     private int status;

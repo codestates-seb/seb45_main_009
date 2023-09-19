@@ -21,13 +21,12 @@ public class SearchService {
 
     private final FeedRepository feedRepository;
     private final UserRepository userRepository;
-    private final FeedInfoConverter feedInfoConverter; // FeedInfoConverter 주입
 
-    @Autowired
-    public SearchService(UserRepository userRepository, FeedRepository feedRepository, FeedInfoConverter feedInfoConverter) {
+
+
+    public SearchService(UserRepository userRepository, FeedRepository feedRepository ) {
         this.userRepository = userRepository;
         this.feedRepository = feedRepository;
-        this.feedInfoConverter = feedInfoConverter; // 주입된 FeedInfoConverter를 필드에 저장
     }
 
     public SearchDto searchByKeyword(String keyword) {
@@ -69,6 +68,6 @@ public class SearchService {
     }
 
     private FeedResponseDto convertToFeedInfo(Feed feed) {
-        return feedInfoConverter.convertToFeedInfo(feed);
+        return FeedInfoConverter.convertToFeedInfo(feed);
     }
 }

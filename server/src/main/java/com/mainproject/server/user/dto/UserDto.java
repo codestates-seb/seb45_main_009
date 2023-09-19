@@ -65,7 +65,6 @@ public class UserDto {
 
 
 
-
     @Getter
     @Setter
     @NoArgsConstructor

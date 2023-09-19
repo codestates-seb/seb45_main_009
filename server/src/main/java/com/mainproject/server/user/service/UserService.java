@@ -2,10 +2,12 @@ package com.mainproject.server.user.service;
 
 
 import com.mainproject.server.auth.jwt.JwtTokenizer;
+import com.mainproject.server.auth.utils.CustomAuthorityUtils;
 import com.mainproject.server.exception.BusinessLogicException;
 import com.mainproject.server.exception.ExceptionCode;
 
 import com.mainproject.server.image.entity.Image;
+import com.mainproject.server.image.repository.ImageRepository;
 import com.mainproject.server.image.service.ImageService;
 
 import com.mainproject.server.user.entity.User;
@@ -20,6 +22,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,10 +44,12 @@ public class UserService {
     private final UserRepository userRepository;
     private final ImageService imageService;
     private final UserProfileRepository userProfileRepository;
+    private final ImageRepository imageRepository;
 
     @Autowired
     private final JwtTokenizer jwtTokenizer;
     private final PasswordEncoder passwordEncoder;
+    private final CustomAuthorityUtils authorityUtils;
 
 
 
@@ -109,10 +114,24 @@ public class UserService {
     }
 
 
-    public User createUserOAuth2(User user) {
+    public User createUserOAuth2(User user, String image) {
 
         String newName = verifyExistKakaoNickName(user.getNickname());
         user.setNickname(newName);
+
+        Image profileImage = new Image();
+        user.getProfileimg().setUser(user);
+
+        // UserProfile 생성 및 설정
+        UserProfile userProfile = new UserProfile();
+        userProfile.setUser(user);
+        // 여기서 다른 UserProfile 필드 값들도 설정할 수 있음
+        userProfile.setFeedCount(0L);
+        userProfile.setFollowerCount(0L);
+        userProfile.setFollowCount(0L);
+        user.setUserProfile(userProfile);
+
+
 
         return userRepository.save(user);
     }
@@ -126,6 +145,8 @@ public class UserService {
 
         // 검증이 완료되면 업데이트를 처리합니다.
         User findUser = findVerifiedUser(user.getUserId());
+
+
 
         // 닉네임 중복 확인
         if (!user.getNickname().equals(findUser.getNickname())) {

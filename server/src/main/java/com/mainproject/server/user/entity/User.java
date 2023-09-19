@@ -3,7 +3,6 @@ package com.mainproject.server.user.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mainproject.server.feed.enitiy.Feed;
 import com.mainproject.server.follow.entity.Follow;
@@ -33,7 +32,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @Column
     private String password;
 
     @Column(nullable = false, unique = true)
