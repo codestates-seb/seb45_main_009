@@ -70,34 +70,6 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
     }
   };
 
-  // const getCommentsTestData = async () => {
-  //   try {
-  //     setLoading(true);
-
-  //     const response = await globalAxios.get(
-  //       `/feed/detail/${feedId}/comments`,
-  //       {
-  //         params: { page: 1, pageSize: PAGE_SIZE },
-  //       }
-  //     );
-  //     const getData = response.data;
-
-  //     if (page > getData.pageInfo.totalPages) {
-  //       return;
-  //     }
-
-  //     // console.log("댓글 데이터 불러오기 성공", response);
-  //     const updatedCommentData = getData.feedCommentData;
-  //     setCommentData(updatedCommentData);
-  //     setPage((prevPage) => prevPage + 1);
-
-  //     setLoading(false);
-  //   } catch (error) {
-  //     console.error("API 요청 실패:", error);
-  //     setLoading(false);
-  //   }
-  // };
-
   useEffect(() => {
     getCommentsData();
   }, []);
