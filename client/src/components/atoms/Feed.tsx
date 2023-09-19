@@ -9,6 +9,7 @@ import noFeed from "../../assets/images/nofeed.png";
 import useFetchUserData from "../../hooks/useFetchUserData";
 import { FcGallery } from "react-icons/fc";
 import loadingimg from "../../assets/images/loading.gif";
+import { BsFillBookmarkStarFill } from "react-icons/bs";
 
 interface UserData {
   bio: string;
@@ -188,7 +189,14 @@ const Feed = ({ selectedFilter }: FeedProps) => {
                         />
                       </Link>
                       <div className="ml-2">
-                        <p>{feed.nickname}</p>
+                        <div className="flex">
+                          <p className="mr-2">{feed.nickname}</p>
+                          {user?.roles[0] === "STORE" && (
+                            <div>
+                              <BsFillBookmarkStarFill color="red" />
+                            </div>
+                          )}
+                        </div>
                         {user?.bio ? (
                           <p className="text-gray-400 max-w-[200px] truncate">{user.bio}</p>
                         ) : (
