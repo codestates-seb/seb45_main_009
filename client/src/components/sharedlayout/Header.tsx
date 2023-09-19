@@ -214,7 +214,7 @@ function Header() {
           <div className="sm:top-6 z-50 mt-2 w-[50vw] min-w-[190px] max-w-[500px] bg-white border border-gray-300  shadow-lg absolute top-[1.05rem] left-[-1px] right-0">
             <ul>
               {autoCompleteData.map((suggestion, index) => (
-                <div className="flex  items-center">
+                <div className="flex  items-center ">
                   {allUserDatas.map((el) => {
                     if (el.nickname === suggestion) {
                       return <img src={el.profileimg} alt="" className="w-[30px] h-[30px] rounded-full" />;
@@ -224,7 +224,7 @@ function Header() {
 
                   <li
                     key={index}
-                    className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                    className="px-4 py-2 cursor-pointer hover:bg-gray-100 w-full"
                     onClick={() => handleSuggestionClick(suggestion)}
                   >
                     {suggestion}
