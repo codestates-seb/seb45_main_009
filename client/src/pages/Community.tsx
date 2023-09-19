@@ -4,7 +4,7 @@ import under from "../assets/images/under.png";
 const Community = () => {
   return (
     <div className="flex justify-center items-center flex-col    ">
-      <img src={under} alt="under construction" className="w-1/4" />
+      <img src={under} alt="under construction" className="w-1/4 min-w-[200px] mt-10" />
       <div className="mt-10 flex items-center justify-center gap-x-6">
         <a
           href="/"

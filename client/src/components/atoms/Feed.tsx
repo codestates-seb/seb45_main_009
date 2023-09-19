@@ -11,22 +11,6 @@ import { FcGallery } from "react-icons/fc";
 import loadingimg from "../../assets/images/loading.gif";
 import { BsFillBookmarkStarFill } from "react-icons/bs";
 
-interface UserData {
-  bio: string;
-  createdAt: string;
-  email: string;
-  height: number;
-  location: string;
-  modifiedAt: string;
-  nickname: string;
-  price: number | string;
-  profileimg: string;
-  roles: string[];
-  sport: string;
-  userId: number;
-  weight: number;
-}
-
 interface FeedData {
   bio: string;
   feedId: number;
@@ -76,18 +60,11 @@ const Feed = ({ selectedFilter }: FeedProps) => {
         params: { page, pageSize: PAGE_SIZE },
       });
       const getData = response.data.feedList;
+      // 이전 데이터와 새로운 데이터 합치기
+      const updatedFeedData = [...allFeedData, ...getData];
+      setAllFeedData(updatedFeedData);
 
-      if (getData.length === 0) {
-        // 더 이상 데이터가 없는 경우
-        setHasMore(false);
-      } else {
-        // 이전 데이터와 새로운 데이터 합치기
-        const updatedFeedData = [...allFeedData, ...getData];
-        setAllFeedData(updatedFeedData);
-        setPage((prevPage) => prevPage + 1);
-
-        dispatch(setAllFeedDataB(updatedFeedData));
-      }
+      dispatch(setAllFeedDataB(updatedFeedData));
 
       setLoading(false);
     } catch (err) {
@@ -96,7 +73,8 @@ const Feed = ({ selectedFilter }: FeedProps) => {
     }
   };
 
-  useFetchUserData();
+  useEffect(() => console.log("allfeed:", allFeedData), [allFeedData]);
+  useEffect(() => console.log("page:", page), [page]);
 
   const getAllDataOnce = async () => {
     try {
@@ -114,10 +92,11 @@ const Feed = ({ selectedFilter }: FeedProps) => {
   }, []);
 
   useEffect(() => {
-    if (inView && !loading && hasMore) {
+    if (inView) {
+      setPage((prevPage) => prevPage + 1);
       getMainListData();
     }
-  }, [inView, loading, hasMore]);
+  }, [inView]);
 
   const usethis = filteredDatas.length !== 0 ? filteredDatas : allFeedData;
 
@@ -226,7 +205,9 @@ const Feed = ({ selectedFilter }: FeedProps) => {
         )}
       </div>
 
-      <div ref={ref}></div>
+      <div className="w-1 h-1" ref={ref}>
+        글
+      </div>
     </section>
   );
 };
