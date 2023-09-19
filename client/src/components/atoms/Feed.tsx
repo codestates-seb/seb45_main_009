@@ -205,9 +205,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
         )}
       </div>
 
-      <div className="w-1 h-1" ref={ref}>
-        글
-      </div>
+      <div className="w-1 h-1" ref={ref}></div>
     </section>
   );
 };
