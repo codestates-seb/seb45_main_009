@@ -77,8 +77,6 @@ const Feed = ({ selectedFilter }: FeedProps) => {
       setPage((prevPage) => prevPage + 1);
       dispatch(setAllFeedDataB(updatedFeedData));
 
-      setLoading(false);
-
       const currentPages = getPage.pageInfo.page;
       const totalPages = getPage.pageInfo.totalPages;
 
@@ -92,9 +90,6 @@ const Feed = ({ selectedFilter }: FeedProps) => {
       setLoading(false);
     }
   };
-
-  useEffect(() => console.log("allfeed:", allFeedData), [allFeedData]);
-  useEffect(() => console.log("page:", page), [page]);
 
   const getAllDataOnce = async () => {
     try {
