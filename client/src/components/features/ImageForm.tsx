@@ -56,7 +56,6 @@ function ImageForm({ previewImg, setPreviewImg }: ImageFormProps) {
 
         reader.onerror = () => {
           alert("사진 업로드 실패, 잠시 후 다시 시도해 주세요");
-          console.error("An error occurred while reading the file.");
         };
       });
     }

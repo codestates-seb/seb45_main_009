@@ -68,7 +68,6 @@ const MyPageFeed = () => {
 
       setLoading(false);
     } catch (err) {
-      console.log("Error >>", err);
       setLoading(false);
     }
   };

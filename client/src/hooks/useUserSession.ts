@@ -18,7 +18,6 @@ function useUserSession() {
         const userInfo: UserInfo = JSON.parse(userInfoString);
         dispatch(login(userInfo));
       } catch (error) {
-        console.error("Error decoding user info:", error);
         setIsLoading(false);
       }
     } else {

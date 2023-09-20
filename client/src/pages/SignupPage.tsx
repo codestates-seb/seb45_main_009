@@ -137,7 +137,6 @@ function SignupPage() {
               "Content-Type": "multipart/form-data",
             },
           });
-          console.log("response:", response);
           alert("회원가입 완료");
           navigate("/login");
           // setIsSubmitted(true); 개인회원은 loginaddition 없앰
@@ -148,7 +147,6 @@ function SignupPage() {
           } else if (error.response.data.message === "닉네임이 존재합니다") {
             alert("중복된 닉네임입니다");
           }
-          console.error("Error:", error);
         }
       } else {
         if (!isValidEmail) {
@@ -182,7 +180,6 @@ function SignupPage() {
 
   //imgProps
   const [previewImg, setPreviewImg] = useState<ImageData | null>(null);
-  useEffect(() => console.log(previewImg), [previewImg]);
 
   const onAdditionSubmitHandler = async () => {
     //기업회원
@@ -235,7 +232,6 @@ function SignupPage() {
         price: priceInfo,
       };
 
-      console.log(requestBodyData);
       const blob = new Blob([JSON.stringify(requestBodyData)], {
         type: "application/json",
       });
@@ -249,7 +245,6 @@ function SignupPage() {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log("response:", response);
       alert("회원가입 완료");
       navigate("/login");
     } catch (error: any) {
@@ -261,7 +256,6 @@ function SignupPage() {
         alert("중복된 닉네임입니다");
         setIsSubmitted(false);
       }
-      console.error("Error:", error);
     }
   };
 

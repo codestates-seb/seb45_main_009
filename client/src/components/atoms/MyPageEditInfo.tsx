@@ -132,7 +132,6 @@ function MyPageEditInfo() {
 
       reader.onerror = () => {
         alert("사진 업로드 실패, 잠시 후 다시 시도해 주세요");
-        console.error("An error occurred while reading the file.");
       };
     }
   };
@@ -157,9 +156,7 @@ function MyPageEditInfo() {
       setPriceInfo(data.price);
       setWeight(data.weight.toString());
       setHeight(data.height.toString());
-    } catch (error: any) {
-      console.log(error);
-    }
+    } catch (error: any) {}
   };
   useEffect(() => {
     getData();
@@ -213,11 +210,9 @@ function MyPageEditInfo() {
         },
       });
       alert("개인정보 수정 성공");
-      console.log("patch성공", response);
       fetchData();
     } catch (error: any) {
       alert(error.response.data.message);
-      console.log("error", error);
     }
   };
   return (

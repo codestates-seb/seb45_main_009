@@ -97,7 +97,6 @@ function FeedFormPageCor() {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(response);
       const imageIds = response.data.images.map((imageData: any) => imageData.imageId);
       for (let i = 0; i < imageIds.length; i++) {
         const imageId = imageIds[i];
@@ -111,7 +110,6 @@ function FeedFormPageCor() {
             positionX: tagData.x,
             positionY: tagData.y,
           };
-          console.log(tagPostData);
           const formData = new FormData();
           const blob = new Blob([JSON.stringify(tagPostData)], {
             type: "application/json",
@@ -124,17 +122,12 @@ function FeedFormPageCor() {
                 "Content-Type": "multipart/form-data",
               },
             });
-            console.log(response);
-          } catch (error) {
-            console.error("error", error);
-          }
+          } catch (error) {}
         }
       }
       alert("포스팅 성공");
       navigate("/");
-    } catch (error: any) {
-      console.error("erro:", error);
-    }
+    } catch (error: any) {}
   };
   return (
     <div className="flex justify-center items-center flex-col my-20 ">

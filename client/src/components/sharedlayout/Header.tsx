@@ -87,18 +87,11 @@ function Header() {
     }, []);
     setAllNickNames(nickNames);
   }, [allUserDatas]);
-  // console.log("alltags", allTags);
-  // console.log("allNickNames", allNickNames);
-  // console.log("autoCompleteData", autoCompleteData);
-  // console.log("allFeedDatas", allFeedDatas);
-
   useEffect(() => {
     // allTags와 allNickNames를 합쳐서 auto 상태를 업데이트
     const combinedData = allTags.concat(allNickNames);
     setAuto(combinedData);
   }, [allTags, allNickNames]);
-
-  // console.log(auto);
 
   const fetchFilteredData = async () => {
     try {
@@ -117,9 +110,7 @@ function Header() {
       const mergedData = [...filteredUsers, ...filteredFeeds];
 
       dispatch(setFilteredData(mergedData));
-    } catch (error) {
-      console.error("API 호출 중 오류 발생:", error);
-    }
+    } catch (error) {}
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -169,9 +160,6 @@ function Header() {
       }
     }
   };
-  // console.log("allUserDatas", allUserDatas);
-  // console.log("allFeedDatas", allFeedDatas);
-
   // 다른곳 클릭시 autoComplete 사라짐
   useEffect(() => {
     const closeAutoComplete = () => {

@@ -24,10 +24,7 @@ function FeedDetailPageInd() {
       try {
         const response = await globalAxios.get(`/feed/detail/${feedId}`);
         setResponseData(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error("피드 디테일 get 요청 실패:", error);
-      }
+      } catch (error) {}
     }
     fetcFeedData();
   }, []);
@@ -39,12 +36,9 @@ function FeedDetailPageInd() {
       setIsMyFeed(false);
     }
   }, [responseData]);
-  useEffect(() => console.log(isMyFeed), [isMyFeed]);
   if (!feedId) {
     return <div>Invalid feedId</div>;
   }
-
-  console.log("내 유저 닉네임",userInfo)
 
   return (
     <div>

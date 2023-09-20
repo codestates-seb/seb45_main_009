@@ -97,7 +97,6 @@ function FeedFormPageInd() {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log("본문전송 성공:", response);
       //말풍선태그 추가api
       const imageIds = response.data.images.map((imageData: any) => imageData.imageId);
       for (let i = 0; i < imageIds.length; i++) {
@@ -112,7 +111,6 @@ function FeedFormPageInd() {
             positionX: tagData.x,
             positionY: tagData.y,
           };
-          console.log(tagPostData);
           const formData = new FormData();
           const blob = new Blob([JSON.stringify(tagPostData)], {
             type: "application/json",
@@ -125,19 +123,13 @@ function FeedFormPageInd() {
                 "Content-Type": "multipart/form-data",
               },
             });
-            console.log("말풍선 전송 성공:", response);
-          } catch (error) {
-            console.error("error", error);
-          }
+          } catch (error) {}
         }
       }
       alert("포스팅 성공");
       navigate("/");
-    } catch (error: any) {
-      console.error("erro:", error);
-    }
+    } catch (error: any) {}
   };
-  useEffect(() => console.log(previewImg), [previewImg]);
   return (
     <div className="flex justify-center items-center flex-col my-20 ">
       <div className="flex flex-row relative max-mobile:flex-col max-mobile:mx-1 max-tablet:flex-col">

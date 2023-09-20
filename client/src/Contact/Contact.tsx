@@ -16,7 +16,6 @@ interface ContactProps {
 
 const Contact = ({ selectedName, members, handleModalClose }: ContactProps) => {
   const form = useRef<HTMLFormElement | null>(null);
-  console.log(selectedName, "selectedEmail");
   const [done, setDone] = useState(false);
 
   const sendEmail = (e: React.FormEvent<HTMLFormElement>) => {
@@ -32,19 +31,15 @@ const Contact = ({ selectedName, members, handleModalClose }: ContactProps) => {
 
           .then(
             (result) => {
-              console.log(result.text);
               setDone(true);
               if (form.current) {
                 form.current.reset();
               }
             },
-            (error) => {
-              console.log(error.text);
-            }
+            (error) => {}
           );
       }
     }
-    console.log(form.current);
   };
 
   return (

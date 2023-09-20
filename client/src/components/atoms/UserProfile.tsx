@@ -19,12 +19,9 @@ interface ProfileIndProps {
 function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
   // 유저 sport 가져오기
   const { allUserDatas } = useSelector((state: RootStates) => state.feed);
-  console.log(allUserDatas);
   const isAuthenticated = useSelector((state: RootState) => state.login.isAuthenticated);
   // 전체 유저에서 프로필 유저 확인
   const isUserId = allUserDatas.some((user) => user.userId === userId);
-  console.log(isUserId);
-
   // 사진 가져오기
   let userSport = "";
   let userlocation = "";
@@ -43,16 +40,12 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
     if (isAuthenticated === false) return;
     try {
       const response = await globalAxios.get(`/follow/following/${myid}`);
-      console.log("checkFollow 성공", response.data);
       if (response.data.some((item: any) => item.userId === userId)) {
         setIsFollowing(true);
-        console.log("isFollowing 일치", isFollowing);
       } else {
         setIsFollowing(false);
-        console.log("isFollowing 불일치", isFollowing);
       }
     } catch (error) {
-      console.log("checkFollow 실패 error:", error);
     } finally {
       setTimeout(() => {
         setIsLoading(false);
@@ -89,9 +82,7 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
         if (response.status === 200) {
           setUserResponseType(response.data);
         }
-      } catch (error) {
-        console.error("API 요청 실패:", error);
-      }
+      } catch (error) {}
     }
     fetcFeedData();
   }, [userId]);
@@ -103,7 +94,6 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
     if (isAuthenticated === false) return;
     try {
       const response = await globalAxios.post(`/follow/${userId}`);
-      console.log("팔로우 요청 성공", response);
       setIsFollowing(response.data);
 
       if (!isFollowing) {
@@ -113,7 +103,6 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
         });
       }
     } catch (error: any) {
-      console.error("팔로우 요청 실패:", error.response);
       alert(error.response.data.message);
     }
   };
@@ -199,7 +188,6 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
           <div className="text-gray-400 text-[12px] flex justify-center">피드 리스트</div>
           <div className="border-b text-black w-[90%] "></div>
         </div>
-
 
         <div className="my-[40px] flex flex-wrap justify-center sm:justify-start sm:px-[40px]">
           {userResponseType?.feedList && userResponseType.feedList.length > 0 ? (
