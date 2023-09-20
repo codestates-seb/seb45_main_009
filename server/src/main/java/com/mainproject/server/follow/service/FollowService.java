@@ -12,6 +12,9 @@ import com.mainproject.server.user.dto.UserDto;
 import com.mainproject.server.user.entity.User;
 import com.mainproject.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -96,7 +99,7 @@ public class FollowService {
 
     // 특정 사용자를 팔로우하는 사용자 목록을 조회
     @Transactional
-    public List<UserDto.ResponseDto> getFollowers(Long userId) {
+    public List<UserDto.ResponseDto> getFollowersList(Long userId) {
         // 지정된 사용자의 정보를 가져온다
         User user = userService.findVerifiedUser(userId);
         // 해당 사용자를 팔로우하는 사용자 목록을 가져온다
@@ -105,22 +108,43 @@ public class FollowService {
         return mapUsersToResponseDto(followerList);
     }
 
-    // 특정 사용자가 팔로우하는 사용자 목록을 조회
+
+
+
+
     @Transactional
-    public List<UserDto.ResponseDto> getFollowing(Long userId) {
+    public Page<UserDto.ResponseDto> getFollowers(Long userId, Pageable pageable) {
         // 지정된 사용자의 정보를 가져온다
         User user = userService.findVerifiedUser(userId);
+
+        // 해당 사용자를 팔로우하는 사용자 목록을 가져온다
+        Page<Follow> followerPage = followRepository.findByFollow(user, pageable);
+
+        // 팔로워 목록을 UserDto.ResponseDto로 매핑하여 반환
+        List<UserDto.ResponseDto> followers = mapUsersToResponseDto(followerPage.getContent());
+
+        return new PageImpl<>(followers, pageable, followerPage.getTotalElements());
+    }
+
+    @Transactional
+    public Page<UserDto.ResponseDto> getFollowing(Long userId, Pageable pageable) {
+        // 지정된 사용자의 정보를 가져온다
+        User user = userService.findVerifiedUser(userId);
+
         // 해당 사용자가 팔로우하는 사용자 목록을 가져온다
-        List<Follow> followList = user.getFollowList();
+        Page<Follow> followPage = followRepository.findByFollower(user, pageable);
 
         // Follow 엔티티를 User 엔티티로 변환한 다음 UserDto.ResponseDto로 매핑
-        List<User> followingUsers = followList.stream()
+        List<User> followingUsers = followPage.getContent().stream()
                 .map(Follow::getFollow)
                 .collect(Collectors.toList());
 
         // 팔로잉 목록을 UserDto.ResponseDto로 매핑하여 반환
-        return mapUserToResponseDto(followingUsers);
+        List<UserDto.ResponseDto> following = mapUserToResponseDto(followingUsers);
+
+        return new PageImpl<>(following, pageable, followPage.getTotalElements());
     }
+
 
     // Follow 엔티티 목록을 UserDto.ResponseDto 목록으로 변환
     private List<UserDto.ResponseDto> mapUsersToResponseDto(List<Follow> follows) {

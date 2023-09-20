@@ -7,15 +7,20 @@ import com.mainproject.server.feed.dto.FeedRolesPageDto;
 import com.mainproject.server.feed.dto.FeedPageInfo;
 import com.mainproject.server.feed.enitiy.Feed;
 import com.mainproject.server.feed.mapper.FeedMapper;
+import com.mainproject.server.feed.repository.FeedRepository;
 import com.mainproject.server.feed.service.FeedService;
 import com.mainproject.server.liked.service.LikedService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/")
@@ -24,10 +29,13 @@ public class FeedController {
     private final FeedMapper feedMapper;
     private final LikedService likedService;
 
+
+
     public FeedController(FeedService feedService, FeedMapper feedMapper, LikedService likedService) {
         this.feedService = feedService;
         this.feedMapper = feedMapper;
         this.likedService = likedService;
+
     }
 
     // 피드 등록
@@ -76,7 +84,7 @@ public class FeedController {
     public ResponseEntity findUserFeeds(@RequestParam(defaultValue = "1") int page,
                                         @RequestParam(defaultValue = "4") int size) {
 
-        Page<Feed> userFeeds = feedService.findUserFeeds(page -1, size);
+        Page<Feed> userFeeds = feedService.findUserFeeds(page - 1, size);
         FeedPageInfo userPageInfo = new FeedPageInfo(page, size, (int) userFeeds.getTotalElements(), userFeeds.getTotalPages());
         List<Feed> userFeedList = userFeeds.getContent();
 //        List<FeedResponseDto> userFeedResponse = feedMapper.feedToFeedResponseDtos(userFeedList);
@@ -89,7 +97,7 @@ public class FeedController {
     public ResponseEntity findStoreFeed(@RequestParam(defaultValue = "1") int page,
                                         @RequestParam(defaultValue = "4") int size) {
 
-        Page<Feed> storeFeeds = feedService.findStoreFeeds(page -1, size);
+        Page<Feed> storeFeeds = feedService.findStoreFeeds(page - 1, size);
         FeedPageInfo storePageInfo = new FeedPageInfo(page, size, (int) storeFeeds.getTotalElements(), storeFeeds.getTotalPages());
         List<Feed> storeFeedList = storeFeeds.getContent();
 
@@ -133,7 +141,7 @@ public class FeedController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-   // @GetMapping("/filter")
+//    @GetMapping("/filter")
 //    public Page<Feed> filterFeeds(@RequestParam(required = false) List<String> relatedTags,
 //                                  @RequestParam(required = false) List<String> location, Pageable pageable) {
 //        List<Feed> userFeeds = feedRepository.findUserFeeds();
@@ -163,7 +171,7 @@ public class FeedController {
 //                    .collect(Collectors.toList());
 //            return new PageImpl<>(filteredFeeds, pageable, filteredFeeds.size());
 //        }
-
-
+//
+//
+//    }
 }
-

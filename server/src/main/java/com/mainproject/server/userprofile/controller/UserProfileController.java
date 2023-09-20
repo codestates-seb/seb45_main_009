@@ -7,10 +7,7 @@
     import lombok.extern.slf4j.Slf4j;
     import org.springframework.http.ResponseEntity;
     import org.springframework.validation.annotation.Validated;
-    import org.springframework.web.bind.annotation.GetMapping;
-    import org.springframework.web.bind.annotation.PathVariable;
-    import org.springframework.web.bind.annotation.RequestMapping;
-    import org.springframework.web.bind.annotation.RestController;
+    import org.springframework.web.bind.annotation.*;
 
     @RestController
     @RequestMapping("/profile")
@@ -21,12 +18,16 @@
      
         private final UserProfileService userProfileService;
 
+
         @GetMapping("/{userId}")
-        public ResponseEntity<UserProfileDto> getUserProfileInfo(@PathVariable("userId") long userId) {
-            // userId를 사용하여 사용자 프로필 가져온다.
+        public ResponseEntity<UserProfileDto> getUserProfileInfo(
+                @PathVariable("userId") long userId,
+                @RequestParam(name = "page", defaultValue = "1") int page,
+                @RequestParam(name = "pageSize", defaultValue = "8") int pageSize) {
+
             log.info("###############start");
-            UserProfileDto userProfileDto = userProfileService.getUserProfileInfo(userId);
-             log.info("###############end");
+            UserProfileDto userProfileDto = userProfileService.getUserProfileInfo(userId, page, pageSize);
+            log.info("###############end");
             return ResponseEntity.ok(userProfileDto);
         }
 

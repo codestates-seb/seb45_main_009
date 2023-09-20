@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -28,26 +29,28 @@ public class UserProfileService {
     private final UserProfileRepository userProfileRepository;
 
 
-    // 사용자의 프로필 정보를 가져오는 메서드
-    public UserProfileDto getUserProfileInfo(long userId) {
-        // 사용자 검색
+
+    public UserProfileDto getUserProfileInfo(long userId, int page, int pageSize) {
         User user = userService.findUser(userId);
 
-        // 사용자가 존재하지 않으면 예외 발생
         if (user == null) {
             throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
         }
 
-        // 사용자의 프로필 이미지 URL 검색
         String profileImageUrl = getProfileImageUrl(user);
 
-        // 사용자의 프로필 정보 검색
         UserProfile userProfile = userProfileRepository.findByUser(user);
 
-        // 사용자의 피드 목록을 가져와 FeedResponseDto로 변환
-        List<FeedResponseDto> feedList = FeedInfoConverter.convertToFeedInfoList(user.getFeedList()); // FeedInfoConverter를 사용하여 변환
+        // 페이지와 pageSize를 기반으로 시작 인덱스와 끝 인덱스 계산
+        int startIndex = (page - 1) * pageSize;
+        int endIndex = Math.min(startIndex + pageSize, user.getFeedList().size());
 
-        // 사용자 프로필 정보를 UserProfileDto로 생성
+        // 페이지네이션된 사용자의 피드 목록을 가져옴
+        List<FeedResponseDto> pagedFeedList = user.getFeedList().subList(startIndex, endIndex)
+                .stream()
+                .map(FeedInfoConverter::convertToFeedInfo)
+                .collect(Collectors.toList());
+
         UserProfileDto userProfileDto = UserProfileDto.builder()
                 .nickname(user.getNickname())
                 .profileimg(profileImageUrl)
@@ -60,15 +63,12 @@ public class UserProfileService {
                 .height(user.getHeight())
                 .weight(user.getWeight())
                 .roles(user.getRoles())
-                .feedList(feedList)
+                .feedList(pagedFeedList)
                 .build();
 
         return userProfileDto;
     }
 
-
-
-    // 사용자의 프로필 이미지 URL 검색
     private String getProfileImageUrl(User user) {
         String profileImageUrl = null;
         if (user != null && user.getProfileimg() != null) {
@@ -76,11 +76,9 @@ public class UserProfileService {
             Image image = imageService.findImageByImageUrl(imageUrl);
 
             if (image != null) {
-                // 중복된 이미지 주소인 경우 중복된 이미지 중 하나만 사용하도록 수정
                 profileImageUrl = image.getImageUrl();
             }
         }
         return profileImageUrl;
     }
-
 }

@@ -10,6 +10,9 @@ import com.mainproject.server.user.entity.User;
 import com.mainproject.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -42,21 +45,24 @@ public class FollowController {
     }
 
 
-    // 팔로워 목록 조회
+
+
+
     @GetMapping("/followers/{userId}")
-    public ResponseEntity<List<UserDto.ResponseDto>> getFollowers(@PathVariable Long userId) {
-        List<UserDto.ResponseDto> followers = followService.getFollowers(userId);
-        return ResponseEntity.ok(followers);
+    public Page<UserDto.ResponseDto> getFollowers(@PathVariable Long userId,
+                                                  @RequestParam(name = "page", defaultValue = "0") int page,
+                                                  @RequestParam(name = "size", defaultValue = "8") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return followService.getFollowers(userId, pageable);
     }
 
-    // 팔로잉 목록 조회
     @GetMapping("/following/{userId}")
-    public ResponseEntity<List<UserDto.ResponseDto>> getFollowing(@PathVariable Long userId) {
-        List<UserDto.ResponseDto> following = followService.getFollowing(userId);
-        return ResponseEntity.ok(following);
+    public Page<UserDto.ResponseDto> getFollowing(@PathVariable Long userId,
+                                                  @RequestParam(name = "page", defaultValue = "0") int page,
+                                                  @RequestParam(name = "size", defaultValue = "8") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return followService.getFollowing(userId, pageable);
     }
-
-
 
 
 

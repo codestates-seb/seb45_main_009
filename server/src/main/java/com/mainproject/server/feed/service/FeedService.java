@@ -82,7 +82,7 @@ public class FeedService {
         findCreateUser.hasWroteFeed(); // 피드 카운트 증가
 
         // 팔로워에게 알림 전송
-        List<UserDto.ResponseDto> followers = followService.getFollowers(userId);
+        List<UserDto.ResponseDto> followers = followService.getFollowersList(userId);
         for (UserDto.ResponseDto follower : followers) {
             // 팔로워와 현재 사용자 사이의 팔로우 관계 조회
             Follow followRelationship = followRepository.findByFollowerAndFollow(
