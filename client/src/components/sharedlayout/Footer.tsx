@@ -88,10 +88,14 @@ function Footer() {
     }
   };
 
+  const handleModalClose = () => {
+    setContactVisible(false);
+  };
+
   return (
-    <footer className="flex justify-center items-center bg-slate-200 min-h-[80px]">
+    <footer className="flex justify-center items-center bg-slate-200 min-h-[80px] py-6">
       <Link to={"/"}>
-        <div className="hover:cursor-pointer md:mr-4">
+        <div className="hover:cursor-pointer md:mr-4 hidden md:inline-flex">
           <img src={fitfolio} alt="logo" />
         </div>
       </Link>
@@ -99,7 +103,7 @@ function Footer() {
         {members.map((member, index) => (
           <div
             key={index}
-            className="text-[0.5rem] mr-1 font-bold sm:mr-2 sm:text-sm md:mr-4 md:text-base lg:mr-8 lg:text-lg"
+            className="text-[0.8rem] mr-1 font-bold sm:mr-2 sm:text-sm md:mr-4 md:text-base lg:mr-8 lg:text-lg"
           >
             <p className="">{member.name}</p>
             <div className="flex justify-between">
@@ -117,8 +121,8 @@ function Footer() {
           className="modal-overlay fixed inset-0 flex items-center justify-center z-50 opacity-95 "
           onClick={closeOnOutsideClick}
         >
-          <div className="modal p-8 rounded-lg shadow-lg bg-white">
-            <Contact selectedName={selectedName} members={members} />
+          <div className="modal rounded-lg shadow-lg bg-white">
+            <Contact selectedName={selectedName} members={members} handleModalClose={handleModalClose} />
           </div>
         </div>
       )}

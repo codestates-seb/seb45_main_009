@@ -215,13 +215,14 @@ function MyPageEditInfo() {
       alert("개인정보 수정 성공");
       console.log("patch성공", response);
       fetchData();
-    } catch (error) {
+    } catch (error: any) {
+      alert(error.response.data.message);
       console.log("error", error);
     }
   };
   return (
     <div className="flex flex-row justify-center items-center w-full mt-20 max-tablet:flex-col max-tablet:mt-10 ">
-      <div className="w-[300px] mt-4 flex flex-col items-center mr-20 pb-[100px] max-tablet:mr-0 max-tablet mb-0">
+      <div className="w-[300px] mt-4 flex flex-col items-center mr-20 pb-[100px] max-tablet:mr-0 max-tablet:pb-[30px]">
         <span className="font-bold">프로필 사진</span>
         <div className="flex justify-center">
           <form encType="multipart/form-data">
@@ -251,7 +252,7 @@ function MyPageEditInfo() {
           </form>
         </div>
       </div>
-      <div className="w-[300px]  max-tablet:mt-4">
+      <div className="w-[300px]">
         {userInfo.userType === "USER" ? (
           <div className="flex flex-col">
             <CommonInput

@@ -228,7 +228,6 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
                   alt="profileImage"
                   onClick={() => handleNavigateProfile(comment.userId)}
                 />
-                {/**댓글 데이터에 userId넣기(지금없음) / handViagete에 userId넣기 */}
                 <div className="items-start">
                   <span className="font-medium mr-2">{comment.nickname}</span>
                   <span className="text-[14px] opacity-90">{comment.content}</span>

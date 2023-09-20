@@ -31,15 +31,10 @@ const Up = () => {
     return null;
   }
   return showUpButton ? (
-    <div className="fixed bottom-10 right-10 mb-10 hover:cursor-pointer z-50">
-      <FiArrowUpCircle
-        size={30}
-        onClick={scrollUp}
-        className="sm:w-[7vw] sm:h-[7vh]"
-      />
+    <div className="fixed opacity-80 bottom-10 right-10 mb-10 hover:cursor-pointer z-50 max-mobile:bottom-5 max-mobile:right-5">
+      <FiArrowUpCircle size={30} onClick={scrollUp} className="sm:w-[7vw] sm:h-[7vh]" />
     </div>
   ) : null;
 };
 
 export default Up;
- 

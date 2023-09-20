@@ -189,7 +189,7 @@ function Header() {
     <header className="flex justify-center items-center m-2">
       <Link to="/">
         {!isMobile && (
-          <div className="flex justify-center hover:cursor-pointer">
+          <div className="flex justify-center hover:cursor-pointer mr-4">
             <img src={fitfolio} alt="logo" />
           </div>
         )}
@@ -215,20 +215,18 @@ function Header() {
             <ul>
               {autoCompleteData.map((suggestion, index) => (
                 <div className="flex  items-center ">
-                  {allUserDatas.map((el) => {
-                    if (el.nickname === suggestion) {
-                      return <img src={el.profileimg} alt="" className="w-[30px] h-[30px] rounded-full" />;
-                    }
-                    return null; // 또는 다른 조건에 맞지 않는 경우에는 아무것도 반환하지 않음
-                  })}
+                  <ul className="flex flex-row cursor-pointer hover:bg-gray-100 w-full px-1 py-2">
+                    {allUserDatas.map((el) => {
+                      if (el.nickname === suggestion) {
+                        return <img src={el.profileimg} alt="" className="w-[30px] h-[30px] rounded-full mr-1" />;
+                      }
+                      return null; // 또는 다른 조건에 맞지 않는 경우에는 아무것도 반환하지 않음
+                    })}
 
-                  <li
-                    key={index}
-                    className="px-4 py-2 cursor-pointer hover:bg-gray-100 w-full"
-                    onClick={() => handleSuggestionClick(suggestion)}
-                  >
-                    {suggestion}
-                  </li>
+                    <li key={index} className=" " onClick={() => handleSuggestionClick(suggestion)}>
+                      {suggestion}
+                    </li>
+                  </ul>
                 </div>
               ))}
             </ul>
