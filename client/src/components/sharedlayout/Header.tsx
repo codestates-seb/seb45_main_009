@@ -236,7 +236,7 @@ function Header() {
 
                   <li
                     key={index}
-                    className="px-4 py-2 cursor-pointer hover:bg-gray-100 "
+                    className="px-4 py-2 cursor-pointer hover:bg-gray-100"
                     onClick={() => handleSuggestionClick(suggestion)}
                   >
                     {suggestion}
