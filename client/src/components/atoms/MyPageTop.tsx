@@ -9,15 +9,20 @@ const MyPageTop = () => {
       <Link
         to={"/mypage/feed"}
         className={`mr-6 sm:mr-8 md:mr-16  ${
-          location.pathname === "/mypage/feed" ? "opacity-100" : "opacity-40 hover:opacity-100"
+          location.pathname === "/mypage/feed"
+            ? "opacity-100"
+            : "opacity-40 hover:opacity-100"
         }`}
       >
         피드
       </Link>
       <Link
-        to={"/mypage/follow"}
+        to={"mypage/follow/following"}
         className={`mr-6 sm:mr-8 md:mr-14 ${
-          location.pathname === "/mypage/follow" ? "opacity-100" : "opacity-40 hover:opacity-100"
+          location.pathname === "mypage/follow/following" ||
+          "mypage/follow/follower"
+            ? "opacity-100"
+            : "opacity-40 hover:opacity-100"
         }`}
       >
         팔로우
@@ -25,7 +30,8 @@ const MyPageTop = () => {
       <Link
         to={"/mypage/edit"}
         className={`${
-          location.pathname === "/mypage/edit" || location.pathname === "/mypage/changepassword"
+          location.pathname === "/mypage/edit" ||
+          location.pathname === "/mypage/changepassword"
             ? "opacity-100"
             : "opacity-40 hover:opacity-100"
         }`}

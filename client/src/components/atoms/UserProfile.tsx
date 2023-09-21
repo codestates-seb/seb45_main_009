@@ -227,7 +227,7 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
           <div className="border-b text-black w-[90%] "></div>
         </div>
 
-        <div className="my-[40px] flex flex-wrap justify-center sm:justify-start sm:px-[40px]">
+        <div className="my-[40px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {userResponseType?.feedList &&
           userResponseType.feedList.length > 0 ? (
             userResponseType.feedList.map((feed, feedIndex) => (

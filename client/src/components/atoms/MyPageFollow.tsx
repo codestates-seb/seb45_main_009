@@ -18,20 +18,24 @@ interface UserData {
 }
 
 const MyPageFollow = () => {
-  const [page, setPage] = useState(1);
+  const [pageFollowing, setPageFollowing] = useState(0);
+  const [pageFollower, setPageFollower] = useState(0);
   const [followers, setFollowers] = useState<UserData[]>([]);
   const [following, setFollowing] = useState<UserData[]>([]);
   const [isFollowingView, setIsFollowingView] = useState(false);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [hasMorea, setHasMorea] = useState(true);
+  const [savePage, setSavePage] = useState(
+    isFollowingView ? pageFollowing : pageFollower
+  );
 
   const [ref, inView] = useInView();
 
   const userInfo = useSelector((state: RootState) => state.login.userInfo);
 
-  const PAGE_SIZE = 4;
-
-  const chunkData = isFollowingView ? following : followers;
+  const chunkData = isFollowingView ? pageFollowing : pageFollower;
+  const hasmo = isFollowingView ? hasMore : hasMorea;
 
   const toggleFollowingView = (view: boolean) => {
     setIsFollowingView(view);
@@ -39,32 +43,39 @@ const MyPageFollow = () => {
 
   const isFollow = isFollowingView ? "following" : "followers";
   const getUserData = async () => {
-    if (loading || !hasMore) {
+    if (loading || !hasmo) {
       return; // 이미 로딩 중이거나 추가 데이터를 더 이상 불러올 필요가 없는 경우 무시
     }
     try {
       setLoading(true);
       const response = await globalAxios.get(
         `/follow/${isFollow}/${userInfo.userId}`,
-        { params: { page, pageSize: PAGE_SIZE } }
+
+        { params: { savePage } }
       );
       const getData = response.data;
-      setPage((prevPage) => prevPage + 1);
+      console.log(getData);
+      const updatedFollowing = [...following, ...getData.content];
+      const updatedFollowers = [...followers, ...getData.content];
+
       if (isFollowingView) {
-        setFollowing(getData);
-        console.log(getData);
+        setFollowing(updatedFollowing);
+        setPageFollowing((prev) => prev + 1);
+        console.log(chunkData);
       } else {
-        setFollowers(getData);
+        setFollowers(updatedFollowers);
+        setPageFollower((prev) => prev + 1);
       }
 
-      // const currentPages = getData.pageInfo.page;
-      // const totalPages = getData.pageInfo.totalPages;
+      const currentPages = getData.pageable.pageNumber;
+      const totalPages = getData.totalPages;
 
       setLoading(false);
-      // if (currentPages >= totalPages) {
-      //   // 현재 페이지가 총 페이지 수보다 크거나 같으면 무한 스크롤 중단
-      //   setHasMore(false);
-      // }
+      if (currentPages >= totalPages) {
+        // 현재 페이지가 총 페이지 수보다 크거나 같으면 무한 스크롤 중단
+        isFollowingView ? setHasMore(false) : setHasMorea(false);
+        // setHasMore(false);
+      }
     } catch (err) {
       console.log("Error >>", err);
     }
