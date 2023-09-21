@@ -58,34 +58,19 @@ function App() {
               <Route path="/feeddetailind/:feedId" element={<FeedDetailPageInd />} />
               <Route path="/feedformcor" element={<FeedFormPageCor />} />
               <Route path="/feedformind" element={<FeedFormPageInd />} />
-              <Route
-                path="/feedupdateind/:feedId"
-                element={<FeedUpdataePageInd />}
-              />
-              <Route
-                path="/feedupdatecor/:feedId"
-                element={<FeedUpdataePageCor />}
-              />
+              <Route path="/feedupdateind/:feedId" element={<FeedUpdataePageInd />} />
+              <Route path="/feedupdatecor/:feedId" element={<FeedUpdataePageCor />} />
               <Route path="/mypage/:page" element={<MyPage />} />
               <Route path="/login" element={<LoginPage />}></Route>
               <Route path="/signup" element={<SignupPage />}></Route>
-              <Route
-                path="/profile/:userId"
-                element={<ProfilePageInd />}
-              ></Route>
+              <Route path="/profile/:userId" element={<ProfilePageInd />}></Route>
               <Route path="/notification" element={<AlarmPage />}></Route>
               <Route path="/community" element={<Community />}></Route>
-              <Route path="/directmessage" element={<DmPage />} />
+              {/* <Route path="/directmessage" element={<DmPage />} /> */}
               {/* <Route path="/profilecor/:userId" element={<ProfilePageCor />}></Route> */}
 
-              <Route
-                path="/oauthloading"
-                element={<OauthLoadingPage />}
-              ></Route>
-              <Route
-                path="/mypage/follow/:page"
-                element={<MypageFollow inView={inView} />}
-              ></Route>
+              <Route path="/oauthloading" element={<OauthLoadingPage />}></Route>
+              <Route path="/mypage/follow/:page" element={<MypageFollow inView={inView} />}></Route>
 
               {/*               <Route path="/alarmpage" element={<Alarm />}></Route> */}
               <Route path="*" element={<Not404 />} />
