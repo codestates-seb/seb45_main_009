@@ -16,19 +16,25 @@ interface CommentProps {
 
 function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
   const navigate = useNavigate();
-  const isAuthenticated = useSelector((state: RootState) => state.login.isAuthenticated);
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.login.isAuthenticated
+  );
   // 유저 사진 가져오기
   const { allUserDatas } = useSelector((state: RootStates) => state.feed);
 
   // 전체 유저에서 내 유저 확인
 
-  const isNicknameExist = allUserDatas.some((user) => user.userId === userInfo.userId);
+  const isNicknameExist = allUserDatas.some(
+    (user) => user.userId === userInfo.userId
+  );
 
   // 사진 가져오기
   let profileImage = "";
 
   if (isNicknameExist) {
-    const matchedUser = allUserDatas.find((user) => user.userId === userInfo.userId);
+    const matchedUser = allUserDatas.find(
+      (user) => user.userId === userInfo.userId
+    );
 
     if (matchedUser && matchedUser.profileimg) {
       profileImage = matchedUser.profileimg;
@@ -40,6 +46,7 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [getPage, setGetPage] = useState(1);
 
   const [ref, inView] = useInView();
 
@@ -47,11 +54,17 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
 
   //댓글 데이터 불러오기
   const getCommentsData = async () => {
+    if (loading || !hasMore) {
+      return; // 이미 로딩 중이거나 추가 데이터를 더 이상 불러올 필요가 없는 경우 무시
+    }
     try {
       setLoading(true);
-      const response = await globalAxios.get(`/feed/detail/${feedId}/comments`, {
-        params: { page, pageSize: PAGE_SIZE },
-      });
+      const response = await globalAxios.get(
+        `/feed/detail/${feedId}/comments`,
+        {
+          params: { page, pageSize: PAGE_SIZE },
+        }
+      );
       const getData = response.data;
 
       // if (page === getData.pageInfo.totalPages) {
@@ -60,9 +73,16 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
 
       const updatedCommentData = [...commentData, ...getData.feedCommentData];
       setCommentData(updatedCommentData);
-      // setPage((prevPage) => prevPage + 1);
+      setPage((prevPage) => prevPage + 1);
+
+      const currentPage = getData.pageInfo.page;
+      const totalPages = getData.pageInfo.totalPages;
 
       setLoading(false);
+      if (currentPage >= totalPages) {
+        // 현재 페이지가 총 페이지 수보다 크거나 같으면 무한 스크롤 중단
+        setHasMore(false);
+      }
     } catch (error) {
       setLoading(false);
     }
@@ -74,7 +94,6 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
 
   useEffect(() => {
     if (inView) {
-      setPage((prevPage) => prevPage + 1);
       getCommentsData();
     }
   }, [inView]);
@@ -115,11 +134,15 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
     formData.append("feedCommentPostDto", blob);
 
     try {
-      const response = await globalAxios.post(`/feed/detail/${feedId}/comment`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await globalAxios.post(
+        `/feed/detail/${feedId}/comment`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       alert("댓글이 등록되었습니다.");
       window.location.reload();
@@ -131,7 +154,9 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
   // 댓글 삭제 !!
   const deleteComment = async (feedCommentId: number) => {
     try {
-      const response = await globalAxios.delete(`/feed/detail/comment/${feedCommentId}`);
+      const response = await globalAxios.delete(
+        `/feed/detail/comment/${feedCommentId}`
+      );
       alert("댓글이 삭제되었습니다.");
       window.location.reload();
     } catch (error) {}
@@ -151,11 +176,15 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
     formData.append("feedCommentPatchDto", blob);
 
     try {
-      const response = await globalAxios.patch(`/feed/detail/comment/${feedCommentId}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await globalAxios.patch(
+        `/feed/detail/comment/${feedCommentId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       setInputUpdateValue("");
       setEditingCommentId(null);
@@ -170,7 +199,10 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
   };
 
   //수정에 넣기
-  const handleInputKeyUpUpdate = (e: React.KeyboardEvent<HTMLInputElement>, feedCommentId: number) => {
+  const handleInputKeyUpUpdate = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    feedCommentId: number
+  ) => {
     if (e.key === "Enter") {
       handleUpdateComment(feedCommentId);
     }
@@ -184,7 +216,11 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
     <div className="mb-14  max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8">
       <div className="mt-10">
         <div className="grid grid-cols-[auto,1fr,auto] items-center w-full gap-4">
-          <img src={profileImage ? profileImage : defaultImg} className="w-8 h-8 rounded-full" alt="profileImage" />
+          <img
+            src={profileImage ? profileImage : defaultImg}
+            className="w-8 h-8 rounded-full"
+            alt="profileImage"
+          />
 
           {isAuthenticated ? (
             <input
@@ -196,10 +232,17 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
               value={commentInputValue}
             />
           ) : (
-            <input disabled className="border-b focus:outline-none " placeholder="로그인이 필요합니다." />
+            <input
+              disabled
+              className="border-b focus:outline-none "
+              placeholder="로그인이 필요합니다."
+            />
           )}
 
-          <button className="text-blue-400 text-[14px]" onClick={handleSaveClick}>
+          <button
+            className="text-blue-400 text-[14px]"
+            onClick={handleSaveClick}
+          >
             입력
           </button>
         </div>
@@ -218,7 +261,9 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
                 />
                 <div className="items-start">
                   <span className="font-medium mr-2">{comment.nickname}</span>
-                  <span className="text-[14px] opacity-90">{comment.content}</span>
+                  <span className="text-[14px] opacity-90">
+                    {comment.content}
+                  </span>
                 </div>
 
                 <div className="w-[40px] sm:w-[30px] text-[13px] text-gray-400 flex items-center items-start">
@@ -247,7 +292,9 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
 
               <div className="grid grid-cols-[auto,1fr] gap-4 items-center mt-[-2px]">
                 <div className="w-8 h-8"></div>
-                <div className="text-[13px] opacity-50">{timeFormatter(comment.createdAt)}</div>
+                <div className="text-[13px] opacity-50">
+                  {timeFormatter(comment.createdAt)}
+                </div>
               </div>
 
               {/* 댓글 수정 주석처리 */}
