@@ -20,7 +20,7 @@ import Layout from "./components/atoms/Layout";
 import useUserSession from "./hooks/useUserSession";
 import FeedUpdataePageInd from "./pages/FeedUpdatePageInd";
 import FeedUpdataePageCor from "./pages/FeedUpdatePageCor";
-import DmPage from "./pages/DmPage";
+// import DmPage from "./pages/DmPage";
 
 import loadingImage from "./assets/images/loading.gif";
 import useFetchUserData from "./hooks/useFetchUserData";
