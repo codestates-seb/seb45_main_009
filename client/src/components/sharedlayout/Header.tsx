@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/reducers/loginSlice";
 import { Feed, User } from "../../types/types";
@@ -15,6 +15,7 @@ import fitfolio from "../../assets/images/fitfolio.svg";
 function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
   const isAuthenticated = useSelector(
     (state: RootState) => state.login.isAuthenticated
   );
@@ -180,7 +181,9 @@ function Header() {
   }, []);
 
   const onRefresh = () => {
-    window.location.reload();
+    if (location.pathname === "/" || location.pathname === "/store") {
+      window.location.reload();
+    }
   };
 
   return (

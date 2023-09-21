@@ -63,7 +63,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
 
       // 서버에서 페이지네이션을 고려하여 데이터를 가져옴
       const response = await globalAxios.get(currentPage, {
-        params: { page, pageSize: PAGE_SIZE },
+        params: { page },
       });
       const getData = response.data.feedList;
       const getPage = response.data;
@@ -226,7 +226,7 @@ const Feed = ({ selectedFilter }: FeedProps) => {
             })}
           </section>
         ) : (
-          <img src={noFeed} alt="nofeedImg" />
+          !loading && <img src={noFeed} alt="nofeedImg" />
         )}
       </div>
 
