@@ -210,7 +210,8 @@ function MyPageEditInfo() {
         },
       });
       alert("개인정보 수정 성공");
-      fetchData();
+      navigate("/mypage/feed");
+      // fetchData();
     } catch (error: any) {
       alert(error.response.data.message);
     }

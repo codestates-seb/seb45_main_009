@@ -5,7 +5,6 @@ import Footer from "./components/sharedlayout/Footer";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import ProfilePageInd from "./pages/ProfilePage";
-// import ProfilePageCor from "./pages/ProfilePageCor";
 import OauthLoadingPage from "./pages/OauthLoadingPage";
 import AlarmPage from "./pages/Alarmpage";
 import MainPageInd from "./pages/MainPageInd";
@@ -55,15 +54,8 @@ function App() {
             <Routes>
               <Route path="/" element={<MainPageInd />}></Route>
               <Route path="/store" element={<MainPageCor />}></Route>
-              <Route
-                path="/feeddetailcor/:feedId"
-                element={<FeedDetailPageCor />}
-              />
-
-              <Route
-                path="/feeddetailind/:feedId"
-                element={<FeedDetailPageInd />}
-              />
+              <Route path="/feeddetailcor/:feedId" element={<FeedDetailPageCor />} />
+              <Route path="/feeddetailind/:feedId" element={<FeedDetailPageInd />} />
               <Route path="/feedformcor" element={<FeedFormPageCor />} />
               <Route path="/feedformind" element={<FeedFormPageInd />} />
               <Route
