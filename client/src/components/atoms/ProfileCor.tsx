@@ -41,7 +41,6 @@ function ProfileCor({ feedId }: ProfileCorProps) {
 
   const handleOpenModal = () => {
     setModalOpen(true);
-    console.log("모달 열기");
   };
 
   const handleCloseModal = () => {
@@ -53,9 +52,7 @@ function ProfileCor({ feedId }: ProfileCorProps) {
 
   const followClick = () => {
     if (isFollowing) {
-      console.log("팔로우 취소");
     } else {
-      console.log("팔로우하기");
     }
     // 팔로우 상태 토글
     setIsFollowing(!isFollowing);
@@ -84,59 +81,56 @@ function ProfileCor({ feedId }: ProfileCorProps) {
         if (response.status === 200) {
           setFeedUserData(response.data);
         }
-      } catch (error) {
-        console.error("API 요청 실패:", error);
-      }
+      } catch (error) {}
     }
     fetcFeedData();
   }, []);
 
-  const handleDelete = async (feedId:number) => {
+  const handleDelete = async (feedId: number) => {
     try {
       const response = await globalAxios.delete(`/feed/detail/${feedId}`);
 
       if (response.status === 200) {
-        console.log("글이 성공적으로 삭제되었습니다.");
       }
-    } catch (error) {
-      console.error("글 삭제 실패:", error);
-    }
+    } catch (error) {}
 
     handleCloseModal();
   };
 
   const handleEdit = () => {
-    console.log(feedId);
     handleCloseModal();
   };
 
-return(
-<div className='max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8'>
-  <div className="grid md:grid-cols-2 gap-4 ">
+  return (
+    <div className="max-w-screen-sm mx-auto px-4 sm:px-4 lg:px-8">
+      <div className="grid md:grid-cols-2 gap-4 ">
+        <Link to={`/profilecor/${feedUserData?.userId}`}>
+          <div className="flex items-center">
+            <img src={feedUserData?.profileImageUrl} className=" mr-2 w-10 h-10 rounded-full" />
+            <div className="flex flex-col">
+              <div className="font-bold text-lg ">{feedUserData?.userNickname}</div>
+              <div>{feedUserData?.content}</div>
+            </div>
+          </div>
+        </Link>
 
-  <Link to={`/profilecor/${feedUserData?.userId}`}>
-  <div className="flex items-center">
-    <img src={feedUserData?.profileImageUrl} className=" mr-2 w-10 h-10 rounded-full" />
-    <div className="flex flex-col">
-      <div className="font-bold text-lg ">{feedUserData?.userNickname}</div>
-      <div>{feedUserData?.content}</div>
+        <div className="flex items-center justify-end md:justify-start">
+          <button
+            className=" mr-4 w-full sm:w-[200px] h-[30px] rounded-[4px] text-[14px] font-medium bg-btn-color text-white"
+            onClick={followClick}
+          >
+            {isFollowing ? "팔로잉" : "팔로우"}
+          </button>
+          {isModalOpen ? (
+            <Modal onClose={handleCloseModal} onDelete={handleDelete} onEdit={handleEdit} />
+          ) : (
+            <button onClick={handleOpenModal}>
+              <FaEllipsisH />
+            </button>
+          )}
+        </div>
+      </div>
     </div>
-  </div>
-  </Link>
-
-  <div className="flex items-center justify-end md:justify-start">
-    <button className=" mr-4 w-full sm:w-[200px] h-[30px] rounded-[4px] text-[14px] font-medium bg-btn-color text-white" onClick={followClick}>
-      {isFollowing ? '팔로잉' : '팔로우'} 
-    </button>
-    {
-            isModalOpen ? 
-            <Modal onClose={handleCloseModal} onDelete={handleDelete} onEdit={handleEdit}/> :
-            <button onClick={handleOpenModal}><FaEllipsisH /></button>
-          }
-  </div>
-
-  </div>
-</div>
-) 
+  );
 }
 export default ProfileCor;

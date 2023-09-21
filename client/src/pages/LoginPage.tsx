@@ -67,7 +67,6 @@ function LoginPage() {
         } else if (errorMessage === "Bad credentials (password incorrect)") {
           alert("비밀번호가 틀렸습니다");
         }
-        console.error("Error during login:", error);
       }
     }
   };

@@ -8,21 +8,6 @@ import { Link } from "react-router-dom";
 import { RootStates } from "../../types/types";
 import noFeed from "../../assets/images/nofeed.png";
 
-interface UserData {
-  bio: string;
-  createdAt: string;
-  email: string;
-  height: number;
-  location: string;
-  modifiedAt: string;
-  nickname: string;
-  price: number | string;
-  profileimg: string;
-  roles: string[];
-  userId: number;
-  weight: number;
-}
-
 interface FeedData {
   userId: number;
   bio: string;
@@ -83,7 +68,6 @@ const MyPageFeed = () => {
 
       setLoading(false);
     } catch (err) {
-      console.log("Error >>", err);
       setLoading(false);
     }
   };

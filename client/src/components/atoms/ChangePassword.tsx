@@ -53,11 +53,9 @@ const ChangePassword = () => {
         },
       });
       alert("비밀번호 수정 성공");
-      console.log("patch성공", response);
       navigate(-1);
     } catch (error: any) {
       alert(error.response.message);
-      console.log("error", error.response.data);
     }
   };
 

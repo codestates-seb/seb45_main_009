@@ -29,10 +29,8 @@ function ProfileInd({ feedId, responseData, userInfo, isMyFeed }: ProfileIndProp
     if (isAuthenticated === false) return;
     try {
       const response = await globalAxios.post(`/follow/${responseData?.userId}`);
-      console.log("팔로우 요청 성공", response);
       setIsFollowing(response.data);
     } catch (error: any) {
-      console.error("팔로우 요청 실패:", error.response);
       alert(error.response.data.message);
     }
   };
@@ -45,14 +43,12 @@ function ProfileInd({ feedId, responseData, userInfo, isMyFeed }: ProfileIndProp
     if (isAuthenticated === false) return;
     try {
       const response = await globalAxios.get(`/follow/following/${userInfo.userId}`);
-      console.log("checkFollow 성공", response.data);
       if (response.data.some((item: any) => item.userId === responseData?.userId)) {
         setIsFollowing(true);
       } else {
         setIsFollowing(false);
       }
     } catch (error) {
-      console.log("checkFollow 실패 error:", error);
     } finally {
       setTimeout(() => {
         setIsLoading(false);

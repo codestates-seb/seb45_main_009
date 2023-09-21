@@ -39,14 +39,10 @@ interface FilterProps {
 }
 
 const Filter = ({ setSelectedFilter }: FilterProps) => {
-  const [showFilters, setShowFilters] = useState(false);
+  const [showFilters, setShowFilters] = useState(true);
   const [showLocationFilters, setShowLocationFilters] = useState(false);
-  const [selectedExerciseFilters, setSelectedExerciseFilters] = useState<
-    string[]
-  >(["운동전체"]);
-  const [selectedLocationFilters, setSelectedLocationFilters] = useState<
-    string[]
-  >(["지역전체"]);
+  const [selectedExerciseFilters, setSelectedExerciseFilters] = useState<string[]>(["운동전체"]);
+  const [selectedLocationFilters, setSelectedLocationFilters] = useState<string[]>(["지역전체"]);
 
   useEffect(() => {
     const currentPath = window.location.pathname;
@@ -64,18 +60,14 @@ const Filter = ({ setSelectedFilter }: FilterProps) => {
     let updatedExerciseFilters = [];
 
     if (filter === "운동전체") {
-      updatedExerciseFilters = selectedExerciseFilters.includes("운동전체")
-        ? []
-        : [filter];
+      updatedExerciseFilters = selectedExerciseFilters.includes("운동전체") ? [] : [filter];
     } else {
       updatedExerciseFilters = selectedExerciseFilters.includes("운동전체")
         ? selectedExerciseFilters.filter((f) => f !== "운동전체")
         : selectedExerciseFilters;
 
       if (updatedExerciseFilters.includes(filter)) {
-        updatedExerciseFilters = updatedExerciseFilters.filter(
-          (f) => f !== filter
-        );
+        updatedExerciseFilters = updatedExerciseFilters.filter((f) => f !== filter);
       } else {
         updatedExerciseFilters = [...updatedExerciseFilters, filter];
       }
@@ -88,18 +80,14 @@ const Filter = ({ setSelectedFilter }: FilterProps) => {
     let updatedLocationFilters = [];
 
     if (filter === "지역전체") {
-      updatedLocationFilters = selectedLocationFilters.includes("지역전체")
-        ? []
-        : [filter];
+      updatedLocationFilters = selectedLocationFilters.includes("지역전체") ? [] : [filter];
     } else {
       updatedLocationFilters = selectedLocationFilters.includes("지역전체")
         ? selectedLocationFilters.filter((f) => f !== "지역전체")
         : selectedLocationFilters;
 
       if (updatedLocationFilters.includes(filter)) {
-        updatedLocationFilters = updatedLocationFilters.filter(
-          (f) => f !== filter
-        );
+        updatedLocationFilters = updatedLocationFilters.filter((f) => f !== filter);
       } else {
         updatedLocationFilters = [...updatedLocationFilters, filter];
       }
@@ -166,11 +154,10 @@ const Filter = ({ setSelectedFilter }: FilterProps) => {
   }, [selectedExerciseFilters, selectedLocationFilters]);
 
   return (
-    <section className="max-w-6xl my-7 w-full flex items-center">
+    <section className="max-w-6xl my-5 w-full flex px-[3vw]">
       <BsFilter
-        size="40"
         onClick={filterClickHandler}
-        className="hover:cursor-pointer mr-5 "
+        className="text-[28px] mr-5 opacity-50 transition hover:cursor-pointer hover:opacity-80 "
       />
 
       {showFilters && (

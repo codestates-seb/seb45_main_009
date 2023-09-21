@@ -31,6 +31,7 @@ export interface FetcedImageData {
 }
 
 export interface FeedData {
+  userId: number;
   bio: string;
   feedId: number;
   nickname: string;

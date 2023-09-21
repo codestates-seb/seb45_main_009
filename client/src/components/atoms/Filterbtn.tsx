@@ -7,8 +7,10 @@ interface FilterbtnProps {
 const Filterbtn = ({ name, isSelected, onClick }: FilterbtnProps) => {
   return (
     <button
-      className={`mr-1 mb-1 p-1 border rounded-lg sm:mr-3 sm:mb-2 sm:px-3 sm:py-1  ${
-        isSelected ? "bg-btn-color text-white" : ""
+      className={`text-[14px] inline-block px-2 py-1 rounded mr-2.5 mb-2.5 transition  ${
+        isSelected
+          ? "border font-medium border-[#edf7ff] bg-[#edf7ff] text-[#22a1ff] "
+          : "border border-bdc text-[#999999] hover:bg-[#edf7ff] hover:text-[#22a1ff] hover:border-[#edf7ff] hover:cursor-pointer "
       }`}
       onClick={onClick}
     >
