@@ -51,7 +51,7 @@ public class FollowController {
     @GetMapping("/followers/{userId}")
     public Page<UserDto.ResponseDto> getFollowers(@PathVariable Long userId,
                                                   @RequestParam(name = "page", defaultValue = "0") int page,
-                                                  @RequestParam(name = "size", defaultValue = "8") int size) {
+                                                  @RequestParam(name = "size", defaultValue = "48") int size) {
         Pageable pageable = PageRequest.of(page, size);
         return followService.getFollowers(userId, pageable);
     }
@@ -59,7 +59,7 @@ public class FollowController {
     @GetMapping("/following/{userId}")
     public Page<UserDto.ResponseDto> getFollowing(@PathVariable Long userId,
                                                   @RequestParam(name = "page", defaultValue = "0") int page,
-                                                  @RequestParam(name = "size", defaultValue = "8") int size) {
+                                                  @RequestParam(name = "size", defaultValue = "48") int size) {
         Pageable pageable = PageRequest.of(page, size);
         return followService.getFollowing(userId, pageable);
     }
