@@ -13,18 +13,21 @@ function FeedDetailPageInd() {
   const { feedId: feedIdString } = useParams<{ feedId: string }>();
   const feedId = Number(feedIdString) || 0;
 
-  const dispatch = useDispatch();
   const userInfo = useSelector((state: RootState) => state.login.userInfo);
 
   const [isMyFeed, setIsMyFeed] = useState<boolean>(false);
-  const [responseData, setResponseData] = useState<ResponseDataType | null>(null);
+  const [responseData, setResponseData] = useState<ResponseDataType | null>(
+    null
+  );
   // 피드데이터 가져오기
   useEffect(() => {
     async function fetcFeedData() {
       try {
         const response = await globalAxios.get(`/feed/detail/${feedId}`);
         setResponseData(response.data);
-      } catch (error) {}
+      } catch (error) {
+        console.error("피드 디테일 get 요청 실패:", error);
+      }
     }
     fetcFeedData();
   }, []);
@@ -36,16 +39,29 @@ function FeedDetailPageInd() {
       setIsMyFeed(false);
     }
   }, [responseData]);
+
   if (!feedId) {
     return <div>Invalid feedId</div>;
   }
 
+  console.log("내 유저 닉네임", userInfo);
+
   return (
     <div>
       <BackButton />
-      <ProfileInd feedId={feedId} responseData={responseData} userInfo={userInfo} isMyFeed={isMyFeed} />
+      <ProfileInd
+        feedId={feedId}
+        responseData={responseData}
+        userInfo={userInfo}
+        isMyFeed={isMyFeed}
+      />
       <div className=" mt-2">
-        <DetailFeed feedId={feedId} responseData={responseData} userInfo={userInfo} isMyFeed={isMyFeed} />
+        <DetailFeed
+          feedId={feedId}
+          responseData={responseData}
+          userInfo={userInfo}
+          isMyFeed={isMyFeed}
+        />
         <Comment feedId={feedId} userInfo={userInfo} isMyFeed={isMyFeed} />
       </div>
     </div>

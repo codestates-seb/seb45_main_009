@@ -25,9 +25,15 @@ import DmPage from "./pages/DmPage";
 import loadingImage from "./assets/images/loading.gif";
 import useFetchUserData from "./hooks/useFetchUserData";
 import Community from "./pages/Community";
+import MyPageFollowing from "./components/atoms/MyPageFollowing";
+import MyPageFollower from "./components/atoms/MyPageFollower";
+import MyPageFollow from "./components/atoms/MyPageFollow";
+import MypageFollow from "./pages/MypageFollow";
+import { useInView } from "react-intersection-observer";
 
 function App() {
   const fetchData = useFetchUserData();
+  const [ref, inView] = useInView();
   fetchData();
   //새로고침시 로그인 상태 유지 - 완벽하게 상태저장 후 페이지 로드를 위해 로딩 추가
   const isLoading = useUserSession();
@@ -38,7 +44,6 @@ function App() {
       </div>
     );
   }
-
   return (
     <BrowserRouter>
       <div className="App">
@@ -53,20 +58,41 @@ function App() {
               <Route path="/feeddetailind/:feedId" element={<FeedDetailPageInd />} />
               <Route path="/feedformcor" element={<FeedFormPageCor />} />
               <Route path="/feedformind" element={<FeedFormPageInd />} />
-              <Route path="/feedupdateind/:feedId" element={<FeedUpdataePageInd />} />
-              <Route path="/feedupdatecor/:feedId" element={<FeedUpdataePageCor />} />
+              <Route
+                path="/feedupdateind/:feedId"
+                element={<FeedUpdataePageInd />}
+              />
+              <Route
+                path="/feedupdatecor/:feedId"
+                element={<FeedUpdataePageCor />}
+              />
               <Route path="/mypage/:page" element={<MyPage />} />
               <Route path="/login" element={<LoginPage />}></Route>
               <Route path="/signup" element={<SignupPage />}></Route>
-              <Route path="/profile/:userId" element={<ProfilePageInd />}></Route>
+              <Route
+                path="/profile/:userId"
+                element={<ProfilePageInd />}
+              ></Route>
               <Route path="/notification" element={<AlarmPage />}></Route>
               <Route path="/community" element={<Community />}></Route>
               <Route path="/directmessage" element={<DmPage />} />
-              <Route path="/oauthloading" element={<OauthLoadingPage />}></Route>
+              {/* <Route path="/profilecor/:userId" element={<ProfilePageCor />}></Route> */}
+
+              <Route
+                path="/oauthloading"
+                element={<OauthLoadingPage />}
+              ></Route>
+              <Route
+                path="/mypage/follow/:page"
+                element={<MypageFollow inView={inView} />}
+              ></Route>
+
+              {/*               <Route path="/alarmpage" element={<Alarm />}></Route> */}
               <Route path="*" element={<Not404 />} />
             </Routes>
           </main>
         </Layout>
+        <div ref={ref}>xxxxx</div>
         <Footer />
       </div>
     </BrowserRouter>
