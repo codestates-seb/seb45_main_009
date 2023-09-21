@@ -40,6 +40,10 @@ function FeedDetailPageInd() {
     }
   }, [responseData]);
 
+  if (!feedId) {
+    return <div>Invalid feedId</div>;
+  }
+
   console.log("내 유저 닉네임", userInfo);
 
   return (

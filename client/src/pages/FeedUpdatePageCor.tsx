@@ -91,10 +91,7 @@ function FeedUpdataePageCor() {
         try {
           const imageUrl = `/feed/detail/${feedId}/image/${imageToDelete[i]}`;
           const response = await globalAxios.delete(imageUrl);
-          console.log("이미지 삭제 성공", response);
-        } catch (error) {
-          console.error("이미지 삭제 중 오류 발생:", error);
-        }
+        } catch (error) {}
       }
     }
     // 이미지 추가/정보 수정 API
@@ -122,7 +119,6 @@ function FeedUpdataePageCor() {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log("피드 수정 성공", response);
       //말풍선태그 추가api
       const imageIds = response.data.images.slice(-previewImg.length).map((imageData: any) => imageData.imageId);
       if (imageIds.length !== 0) {
@@ -150,18 +146,13 @@ function FeedUpdataePageCor() {
                   "Content-Type": "multipart/form-data",
                 },
               });
-              console.log("말풍선 태그 등록 성공", response);
-            } catch (error) {
-              console.error("말풍선 태그 등록중 오류 발생:", error);
-            }
+            } catch (error) {}
           }
         }
       }
       alert("피드 수정 성공");
       navigate("/");
-    } catch (error: any) {
-      console.error("피드 수정 중 오류 발생(전쳬):", error);
-    }
+    } catch (error: any) {}
   };
 
   //////////////getData
@@ -169,7 +160,6 @@ function FeedUpdataePageCor() {
     try {
       const response = await globalAxios.get(`/feed/detail/${feedId}`);
       const feedData = response.data;
-      console.log(feedData);
       // 본문 넣기
       setBodyValue(feedData.content);
 
@@ -199,9 +189,7 @@ function FeedUpdataePageCor() {
 
       // 로딩 상태 종료
       setIsLoading(false);
-    } catch (error: any) {
-      console.error("error", error);
-    }
+    } catch (error: any) {}
   };
   useEffect(() => {
     getFeedData();

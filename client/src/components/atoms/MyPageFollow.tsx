@@ -99,76 +99,74 @@ const MyPageFollow = () => {
   };
 
   return (
-    <div className="h-full">
-      <div className="flex justify-center flex-col items-center mt-5">
-        <section className="grid  grid-cols-1 gap-8 h-full mb-24 mx-3 sm:grid-cols-2 sm:gap-6 md:gap-8 lg:grid-cols-3 2xl:grid-cols-4 w-[80%]">
-          <div className="flex items-center">
-            <BsPeople className="h-10 w-10" />
-            <p className="text-2xl font-bold ml-4">
-              {isFollowingView ? "팔로잉 목록" : "팔로워 목록"}
-            </p>
+    <div className="flex justify-center flex-col items-center mt-5">
+      <section className="grid  grid-cols-1 gap-8 h-full mb-24 mx-3 sm:grid-cols-2 sm:gap-6 md:gap-8 lg:grid-cols-3 2xl:grid-cols-4 w-[80%]">
+        <div className="flex items-center">
+          <BsPeople className="h-10 w-10" />
+          <p className="text-2xl font-bold ml-4">
+            {isFollowingView ? "팔로잉 목록" : "팔로워 목록"}
+          </p>
+        </div>
+        <span className="col-span-1 lg:col-span-2 2xl:col-span-3"></span>
+        <span className="col-span-1 lg:col-span-2 2xl:col-span-3"></span>
+        <div className="flex justify-end w-full">
+          <div
+            className={`mr-10 cursor-pointer ${
+              isFollowingView ? "" : "text-blue-500"
+            }`}
+            onClick={() => toggleFollowingView(false)}
+          >
+            팔로워
           </div>
-          <span className="col-span-1 lg:col-span-2 2xl:col-span-3"></span>
-          <span className="col-span-1 lg:col-span-2 2xl:col-span-3"></span>
-          <div className="flex justify-end w-full">
-            <div
-              className={`mr-10 cursor-pointer ${
-                isFollowingView ? "" : "text-blue-500"
-              }`}
-              onClick={() => toggleFollowingView(false)}
-            >
-              팔로워
-            </div>
-            <div
-              className={`mr-10 cursor-pointer ${
-                isFollowingView ? "text-blue-500" : ""
-              }`}
-              onClick={() => toggleFollowingView(true)}
-            >
-              팔로잉
-            </div>
+          <div
+            className={`mr-10 cursor-pointer ${
+              isFollowingView ? "text-blue-500" : ""
+            }`}
+            onClick={() => toggleFollowingView(true)}
+          >
+            팔로잉
           </div>
+        </div>
 
-          {!loading ? (
-            (isFollowingView ? following : followers).map((user, idx) => (
-              <article key={idx} className="flex items-center">
-                <Link to={`/profile/${user.userId}`}>
-                  <img
-                    src={user.profileimg}
-                    alt="profile"
-                    className="rounded-full border mr-2 w-[15vw] h-[15vw]  xl:h-[4vw] max-w-[3.2rem] max-h-[3.2rem]"
-                  />
-                </Link>
-                <div className="mx-3 ">
-                  <div className="flex  flex-col items-start ">
-                    <div className="font-bold w-[40vw] sm:w-[18vw] md:w-[21vw] lg:w-[12vw] 2xl:w-[10vw] mr-2 truncate">
-                      {user.nickname}
-                    </div>
-                    <p className=" w-[40vw] sm:w-[18vw] md:w-[21vw] lg:w-[12vw]  2xl:w-[10vw] truncate ">
-                      {user.bio ? user.bio : "오늘의 주인공"}
-                    </p>
+        {!loading ? (
+          (isFollowingView ? following : followers).map((user, idx) => (
+            <article key={idx} className="flex items-center">
+              <Link to={`/profile/${user.userId}`}>
+                <img
+                  src={user.profileimg}
+                  alt="profile"
+                  className="rounded-full border mr-2 w-[15vw] h-[15vw]  xl:h-[4vw] max-w-[3.2rem] max-h-[3.2rem]"
+                />
+              </Link>
+              <div className="mx-3 ">
+                <div className="flex  flex-col items-start ">
+                  <div className="font-bold w-[40vw] sm:w-[18vw] md:w-[21vw] lg:w-[12vw] 2xl:w-[10vw] mr-2 truncate">
+                    {user.nickname}
                   </div>
+                  <p className=" w-[40vw] sm:w-[18vw] md:w-[21vw] lg:w-[12vw]  2xl:w-[10vw] truncate ">
+                    {user.bio ? user.bio : "오늘의 주인공"}
+                  </p>
                 </div>
+              </div>
 
-                {user.roles[0] === "STORE" && (
-                  <div>
-                    <BsFillBookmarkStarFill color="red" />
-                  </div>
-                )}
+              {user.roles[0] === "STORE" && (
+                <div>
+                  <BsFillBookmarkStarFill color="red" />
+                </div>
+              )}
 
-                {isFollowingView && (
-                  <FaXmark
-                    onClick={() => unfollowUser(user.userId)}
-                    className="flex justify-end text-red-500 ml-2 hover:cursor-pointer"
-                  />
-                )}
-              </article>
-            ))
-          ) : (
-            <img src={loadingimg} alt="loading" />
-          )}
-        </section>
-      </div>
+              {isFollowingView && (
+                <FaXmark
+                  onClick={() => unfollowUser(user.userId)}
+                  className="flex justify-end text-red-500 ml-2 hover:cursor-pointer"
+                />
+              )}
+            </article>
+          ))
+        ) : (
+          <img src={loadingimg} alt="loading" />
+        )}
+      </section>
       <div ref={ref} className="w-1 h-1"></div>
     </div>
   );

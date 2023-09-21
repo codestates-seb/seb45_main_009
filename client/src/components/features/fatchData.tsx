@@ -15,9 +15,7 @@ const FetchData = () => {
         const data = response.data;
 
         dispatch(setData(data)); // 데이터를 한 번에 설정하도록 수정
-      } catch (err) {
-        console.log("에러 >>", err);
-      }
+      } catch (err) {}
     };
 
     fetchData();

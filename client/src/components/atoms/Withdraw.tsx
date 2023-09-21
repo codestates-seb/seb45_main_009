@@ -17,12 +17,9 @@ const Withdraw = () => {
   const handleWithdraw = async () => {
     try {
       const response = await globalAxios.delete("/mypage/delete");
-      console.log(response);
       alert("회원탈퇴 완료");
       logoutHandler();
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   return (
     <div className="flex flex-col justify-center items-center mt-20 max-mobile:mt-10 h-1/2">

@@ -71,7 +71,6 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
       //   return;
       // }
 
-      console.log("댓글 데이터 불러오기 성공", response);
       const updatedCommentData = [...commentData, ...getData.feedCommentData];
       setCommentData(updatedCommentData);
       setPage((prevPage) => prevPage + 1);
@@ -85,7 +84,6 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
         setHasMore(false);
       }
     } catch (error) {
-      console.error("API 요청 실패:", error);
       setLoading(false);
     }
   };
@@ -146,14 +144,11 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
         }
       );
 
-      console.log("댓글 등록 성공", response);
       alert("댓글이 등록되었습니다.");
       window.location.reload();
 
       setCommentInputValue("");
-    } catch (error) {
-      console.error("Error deleting the comment:", error);
-    }
+    } catch (error) {}
   };
 
   // 댓글 삭제 !!
@@ -162,13 +157,9 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
       const response = await globalAxios.delete(
         `/feed/detail/comment/${feedCommentId}`
       );
-      // console.log("댓글 삭제 성공", response);
-      // getCommentsTestData();
       alert("댓글이 삭제되었습니다.");
       window.location.reload();
-    } catch (error) {
-      console.error("Error deleting the comment:", error);
-    }
+    } catch (error) {}
   };
 
   //댓글 수정
@@ -195,13 +186,10 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
         }
       );
 
-      // console.log("댓글 수정 성공", response);
       setInputUpdateValue("");
       setEditingCommentId(null);
       getCommentsData();
-    } catch (error) {
-      console.error("Error updating the comment:", error);
-    }
+    } catch (error) {}
   };
 
   const handleInputKeyUpSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -271,7 +259,6 @@ function Comment({ feedId, isMyFeed, userInfo }: CommentProps) {
                   alt="profileImage"
                   onClick={() => handleNavigateProfile(comment.userId)}
                 />
-                {/**댓글 데이터에 userId넣기(지금없음) / handViagete에 userId넣기 */}
                 <div className="items-start">
                   <span className="font-medium mr-2">{comment.nickname}</span>
                   <span className="text-[14px] opacity-90">

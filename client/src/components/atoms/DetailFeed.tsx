@@ -63,29 +63,22 @@ function DetailFeedInd({ feedId, responseData, isMyFeed }: DetailFeedProps) {
 
   const handleLikeClick = async () => {
     if (isAuthenticated === false) return;
-    console.log("게시물 좋아요");
     try {
       const response = await globalAxios.post(`/feed/detail/${feedId}/like`);
-      console.log("좋아요 성공:", response);
       getLikeList();
-    } catch (error) {
-      console.error("좋아요 실패", error);
-    }
+    } catch (error) {}
   };
 
   const getLikeList = async () => {
     try {
       const response = await globalAxios.get(`/feed/detail/${feedId}/likeduser`);
-      console.log("좋아요 리스트 get요청 성공", response.data);
       setLikeList(response.data);
       if (response.data.includes(userInfo.userId)) {
         setIsLiked(true);
       } else {
         setIsLiked(false);
       }
-    } catch (error) {
-      console.log("좋아요 리스트 get실패", error);
-    }
+    } catch (error) {}
   };
 
   //좋아요 리스트 get요청
@@ -99,10 +92,8 @@ function DetailFeedInd({ feedId, responseData, isMyFeed }: DetailFeedProps) {
       const response = await globalAxios.post(`/feed/detail/${feedId}/report`, {
         reason: "일단 내용은 하드코딩으로",
       });
-      console.log("신고 성공", response);
       alert("신고가 완료되었습니다");
     } catch (error: any) {
-      console.log("신고 실패", error.response.data);
       alert(error.response.data.message);
     }
   };
@@ -110,12 +101,9 @@ function DetailFeedInd({ feedId, responseData, isMyFeed }: DetailFeedProps) {
   const handleDelete = async () => {
     try {
       const response = await globalAxios.delete(`/feed/detail/${feedId}`);
-      console.log("글이 성공적으로 삭제되었습니다.", response);
       alert("피드 삭제 완료");
       navigate("/");
-    } catch (error) {
-      console.error("글 삭제 실패:", error);
-    }
+    } catch (error) {}
   };
   const handleUpdate = () => {
     navigate(`/feedupdateind/${feedId}`);

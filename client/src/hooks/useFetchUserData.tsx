@@ -12,9 +12,7 @@ const useFetchUserData = () => {
       const response = await globalAxios.get("/users");
       const data = response.data;
       dispatch(setAllUserDatas(data));
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
+    } catch (error) {}
   };
 
   return fetchData;

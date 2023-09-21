@@ -2,26 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { useSelector } from "react-redux";
 import { UserInfo } from "../../types/types";
-import { useLocation } from "react-router";
 import globalAxios from "../../data/data";
 import { Link } from "react-router-dom";
 import { RootStates } from "../../types/types";
 import noFeed from "../../assets/images/nofeed.png";
 import loadingimg from "../../assets/images/loading.gif";
-interface UserData {
-  bio: string;
-  createdAt: string;
-  email: string;
-  height: number;
-  location: string;
-  modifiedAt: string;
-  nickname: string;
-  price: number | string;
-  profileimg: string;
-  roles: string[];
-  userId: number;
-  weight: number;
-}
 
 interface FeedData {
   userId: number;
