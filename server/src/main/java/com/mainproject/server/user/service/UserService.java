@@ -147,11 +147,13 @@ public class UserService {
         User findUser = findVerifiedUser(user.getUserId());
 
 
-
-        // 닉네임 중복 확인
-        if (!user.getNickname().equals(findUser.getNickname())) {
-            verifyExistNickname(user.getNickname());
-            findUser.setNickname(user.getNickname());
+        if (user.getNickname() != null) {
+            // 사용자가 새로운 닉네임을 제공한 경우에만 업데이트
+            if (!user.getNickname().equals(findUser.getNickname())) {
+                verifyExistNickname(user.getNickname());
+                findUser.setNickname(user.getNickname());
+            }
+            // 사용자가 null을 제공한 경우에는 업데이트하지 않음
         }
 
         if (user.getWeight() != null) {
