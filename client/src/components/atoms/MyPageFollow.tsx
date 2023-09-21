@@ -101,7 +101,7 @@ const MyPageFollow = () => {
   return (
     <div className="h-full">
       <div className="flex justify-center flex-col items-center mt-5">
-        <section className="grid  grid-cols-1 gap-8 h-full mb-24 mx-3 sm:grid-cols-2 sm:gap-6 md:gap-8 lg:grid-cols-3 2xl:grid-cols-4 w-[80%] relative">
+        <section className="grid  grid-cols-1 gap-8 h-full mb-24 mx-3 sm:grid-cols-2 sm:gap-6 md:gap-8 lg:grid-cols-3 2xl:grid-cols-4 w-[80%]">
           <div className="flex items-center">
             <BsPeople className="h-10 w-10" />
             <p className="text-2xl font-bold ml-4">
@@ -165,13 +165,7 @@ const MyPageFollow = () => {
               </article>
             ))
           ) : (
-            <>
-              <img
-                src={loadingimg}
-                alt="loading"
-                className=" absolute top-1/2 left-1/2 transform -translate-x-1/2 translate-y-[100%]"
-              />
-            </>
+            <img src={loadingimg} alt="loading" />
           )}
         </section>
       </div>
