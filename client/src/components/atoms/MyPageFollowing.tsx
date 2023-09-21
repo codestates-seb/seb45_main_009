@@ -40,7 +40,6 @@ const MyPageFollowing: React.FC<MyPageFollowerProps> = ({ inView }) => {
         { params: { page } }
       );
       const getData = response.data;
-      console.log(getData);
       const updatedFollowing = [...following, ...getData.content];
 
       setFollowing(updatedFollowing);
@@ -55,9 +54,7 @@ const MyPageFollowing: React.FC<MyPageFollowerProps> = ({ inView }) => {
         setHasMore(false);
         // setHasMore(false);
       }
-    } catch (err) {
-      console.log("Error >>", err);
-    }
+    } catch (err) {}
   };
 
   useEffect(() => {
@@ -75,9 +72,7 @@ const MyPageFollowing: React.FC<MyPageFollowerProps> = ({ inView }) => {
       // POST 요청을 보내어 해당 사용자를 언팔로우
       await globalAxios.post(`/follow/${userId}`);
       // 사용자 목록에서 삭제
-      const updatedFollowing = following.filter(
-        (user) => user.userId !== userId
-      );
+      const updatedFollowing = following.filter((user) => user.userId !== userId);
       setFollowing(updatedFollowing);
     } catch (err) {}
   };
@@ -95,9 +90,7 @@ const MyPageFollowing: React.FC<MyPageFollowerProps> = ({ inView }) => {
           <Link to={"/mypage/follow/follower"}>
             <div className={`mr-10 cursor-pointer`}>팔로워</div>
           </Link>
-          <div className={`mr-10 cursor-pointer ${"text-blue-500"}`}>
-            팔로잉
-          </div>
+          <div className={`mr-10 cursor-pointer ${"text-blue-500"}`}>팔로잉</div>
         </div>
         {following.map((user, idx) => (
           <article key={idx} className="flex items-center">

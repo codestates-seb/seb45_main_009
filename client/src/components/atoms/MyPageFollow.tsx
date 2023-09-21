@@ -26,9 +26,7 @@ const MyPageFollow = () => {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [hasMorea, setHasMorea] = useState(true);
-  const [savePage, setSavePage] = useState(
-    isFollowingView ? pageFollowing : pageFollower
-  );
+  const [savePage, setSavePage] = useState(isFollowingView ? pageFollowing : pageFollower);
 
   const [ref, inView] = useInView();
 
@@ -54,14 +52,12 @@ const MyPageFollow = () => {
         { params: { savePage } }
       );
       const getData = response.data;
-      console.log(getData);
       const updatedFollowing = [...following, ...getData.content];
       const updatedFollowers = [...followers, ...getData.content];
 
       if (isFollowingView) {
         setFollowing(updatedFollowing);
         setPageFollowing((prev) => prev + 1);
-        console.log(chunkData);
       } else {
         setFollowers(updatedFollowers);
         setPageFollower((prev) => prev + 1);
@@ -76,9 +72,7 @@ const MyPageFollow = () => {
         isFollowingView ? setHasMore(false) : setHasMorea(false);
         // setHasMore(false);
       }
-    } catch (err) {
-      console.log("Error >>", err);
-    }
+    } catch (err) {}
   };
 
   useEffect(() => {
@@ -96,17 +90,11 @@ const MyPageFollow = () => {
       // POST 요청을 보내어 해당 사용자를 언팔로우
       await globalAxios.post(`/follow/${userId}`);
       // 사용자 목록에서 삭제
-      const updatedFollowers = followers.filter(
-        (user) => user.userId !== userId
-      );
-      const updatedFollowing = following.filter(
-        (user) => user.userId !== userId
-      );
+      const updatedFollowers = followers.filter((user) => user.userId !== userId);
+      const updatedFollowing = following.filter((user) => user.userId !== userId);
       setFollowers(updatedFollowers);
       setFollowing(updatedFollowing);
-    } catch (err) {
-      console.error("Error:", err);
-    }
+    } catch (err) {}
   };
 
   return (
@@ -114,25 +102,19 @@ const MyPageFollow = () => {
       <section className="grid  grid-cols-1 gap-8 h-full mb-24 mx-3 sm:grid-cols-2 sm:gap-6 md:gap-8 lg:grid-cols-3 2xl:grid-cols-4 w-[80%]">
         <div className="flex items-center">
           <BsPeople className="h-10 w-10" />
-          <p className="text-2xl font-bold ml-4">
-            {isFollowingView ? "팔로잉 목록" : "팔로워 목록"}
-          </p>
+          <p className="text-2xl font-bold ml-4">{isFollowingView ? "팔로잉 목록" : "팔로워 목록"}</p>
         </div>
         <span className="col-span-1 lg:col-span-2 2xl:col-span-3"></span>
         <span className="col-span-1 lg:col-span-2 2xl:col-span-3"></span>
         <div className="flex justify-end w-full">
           <div
-            className={`mr-10 cursor-pointer ${
-              isFollowingView ? "" : "text-blue-500"
-            }`}
+            className={`mr-10 cursor-pointer ${isFollowingView ? "" : "text-blue-500"}`}
             onClick={() => toggleFollowingView(false)}
           >
             팔로워
           </div>
           <div
-            className={`mr-10 cursor-pointer ${
-              isFollowingView ? "text-blue-500" : ""
-            }`}
+            className={`mr-10 cursor-pointer ${isFollowingView ? "text-blue-500" : ""}`}
             onClick={() => toggleFollowingView(true)}
           >
             팔로잉

@@ -16,11 +16,9 @@ function ImageUpdateForm({
   setImageToDelete,
 }: ImageUpdateFormProps) {
   const deleteImg = (index: number, imageId: number) => {
-    console.log(imageToDelete);
     const updatedPreview = updatePreviewImg.filter((_, idx) => idx !== index);
     setUpdatePreviewImg(updatedPreview);
     setImageToDelete([...imageToDelete, imageId]);
-    console.log(imageToDelete);
   };
 
   return (
