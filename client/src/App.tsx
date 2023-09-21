@@ -21,6 +21,7 @@ import Layout from "./components/atoms/Layout";
 import useUserSession from "./hooks/useUserSession";
 import FeedUpdataePageInd from "./pages/FeedUpdatePageInd";
 import FeedUpdataePageCor from "./pages/FeedUpdatePageCor";
+import DmPage from "./pages/DmPage";
 
 import loadingImage from "./assets/images/loading.gif";
 import useFetchUserData from "./hooks/useFetchUserData";
@@ -62,7 +63,7 @@ function App() {
               <Route path="/profile/:userId" element={<ProfilePageInd />}></Route>
               <Route path="/notification" element={<AlarmPage />}></Route>
               <Route path="/community" element={<Community />}></Route>
-
+              <Route path="/directmessage" element={<DmPage />} />
               {/* <Route path="/profilecor/:userId" element={<ProfilePageCor />}></Route> */}
 
               <Route path="/oauthloading" element={<OauthLoadingPage />}></Route>

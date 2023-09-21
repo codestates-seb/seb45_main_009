@@ -96,12 +96,12 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
       const response = await globalAxios.post(`/follow/${userId}`);
       setIsFollowing(response.data);
 
-      if (!isFollowing) {
-        const notificationResponse = await globalAxios.post(`/notifications`, {
-          recipientUserId: userId,
-          message: `팔로우 알림: ${myid}님이 팔로우하셨습니다.`,
-        });
-      }
+      // if (!isFollowing) {
+      //   const notificationResponse = await globalAxios.post(`/notifications`, {
+      //     recipientUserId: userId,
+      //     message: `팔로우 알림: ${myid}님이 팔로우하셨습니다.`,
+      //   });
+      // }
     } catch (error: any) {
       alert(error.response.data.message);
     }
