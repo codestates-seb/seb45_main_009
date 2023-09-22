@@ -10,10 +10,13 @@ import com.mainproject.server.feed.mapper.FeedMapper;
 import com.mainproject.server.feed.repository.FeedRepository;
 import com.mainproject.server.feed.service.FeedService;
 import com.mainproject.server.liked.service.LikedService;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +34,10 @@ public class FeedController {
 
 
 
-    public FeedController(FeedService feedService, FeedMapper feedMapper, LikedService likedService) {
+
+    @Autowired
+    public FeedController(FeedService feedService, FeedMapper feedMapper,
+                          LikedService likedService) {
         this.feedService = feedService;
         this.feedMapper = feedMapper;
         this.likedService = likedService;
@@ -141,37 +147,30 @@ public class FeedController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-//    @GetMapping("/filter")
-//    public Page<Feed> filterFeeds(@RequestParam(required = false) List<String> relatedTags,
-//                                  @RequestParam(required = false) List<String> location, Pageable pageable) {
-//        List<Feed> userFeeds = feedRepository.findUserFeeds();
-//
-//        // 필터링을 위한 조건을 검사합니다.
-//        if (relatedTags.isEmpty() && location.isEmpty()) {
-//            // 관련 태그와 위치가 모두 제공되지 않은 경우 처리합니다.
-//            // 모든 피드를 반환하거나 요구 사항에 따라 처리할 수 있습니다.
-//            return new PageImpl<>(userFeeds, pageable, userFeeds.size());
-//        } else if (relatedTags.isEmpty()) {
-//            // 관련 태그만 제공된 경우 처리합니다.
-//            List<Feed> filteredFeeds = userFeeds.stream()
-//                    .filter(feed -> location.contains(feed.getLocation()))
-//                    .collect(Collectors.toList());
-//            return new PageImpl<>(filteredFeeds, pageable, filteredFeeds.size());
-//        } else if (location.isEmpty()) {
-//            // 위치만 제공된 경우 처리합니다.
-//            List<Feed> filteredFeeds = userFeeds.stream()
-//                    .filter(feed -> feed.getRelatedTags().stream().anyMatch(relatedTags::contains))
-//                    .collect(Collectors.toList());
-//            return new PageImpl<>(filteredFeeds, pageable, filteredFeeds.size());
-//        } else {
-//            // 관련 태그와 위치가 모두 제공된 경우 처리합니다.
-//            List<Feed> filteredFeeds = userFeeds.stream()
-//                    .filter(feed -> location.contains(feed.getLocation())
-//                            && feed.getRelatedTags().stream().anyMatch(relatedTags::contains))
-//                    .collect(Collectors.toList());
-//            return new PageImpl<>(filteredFeeds, pageable, filteredFeeds.size());
-//        }
-//
-//
-//    }
+
+    //유저 필터
+    @GetMapping("/filter")
+    public ResponseEntity<FeedRolesPageDto> filterUserFeeds(
+            @RequestParam(required = false) List<String> relatedTags,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "8") int size) {
+        FeedRolesPageDto response = feedService.filterUserFeeds(relatedTags, page, size);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    //스토어 필터
+    @GetMapping("/storefilter")
+    public ResponseEntity<FeedRolesPageDto> filterStoreFeeds(
+            @RequestParam(required = false) List<String> relatedTags,
+            @RequestParam(required = false) String location,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "8") int size) {
+        FeedRolesPageDto response = feedService.filterStoreFeeds(relatedTags, location, page, size);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
+
+
+
 }

@@ -25,9 +25,7 @@
                 @RequestParam(name = "page", defaultValue = "1") int page,
                 @RequestParam(name = "pageSize", defaultValue = "8") int pageSize) {
 
-            log.info("###############start");
             UserProfileDto userProfileDto = userProfileService.getUserProfileInfo(userId, page, pageSize);
-            log.info("###############end");
             return ResponseEntity.ok(userProfileDto);
         }
 

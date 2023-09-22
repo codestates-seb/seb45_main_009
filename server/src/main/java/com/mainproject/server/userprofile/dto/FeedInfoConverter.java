@@ -25,6 +25,8 @@ public class FeedInfoConverter {
                 .nickname(feed.getUser().getNickname())
                 .location(feed.getUser().getLocation()) // 사용자의 위치 정보 추가
                 .profileImageUrl(feed.getUser().getProfileimg().getImageUrl())
+                .createdAt(feed.getCreatedAt())
+                .modifiedAt(feed.getModifiedAt())
                 .images(feed.getImages().stream()
                         .map(image -> FeedResponseDto.FeedImageDto.builder()
                                 .imageId(image.getImageId())

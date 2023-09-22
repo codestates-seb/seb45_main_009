@@ -46,8 +46,10 @@ public class UserProfileService {
         int endIndex = Math.min(startIndex + pageSize, user.getFeedList().size());
 
         // 페이지네이션된 사용자의 피드 목록을 가져옴
-        List<FeedResponseDto> pagedFeedList = user.getFeedList().subList(startIndex, endIndex)
-                .stream()
+        List<FeedResponseDto> pagedFeedList = user.getFeedList().stream()
+                .sorted((feed1, feed2) -> feed2.getCreatedAt().compareTo(feed1.getCreatedAt()))
+                .skip(startIndex)
+                .limit(pageSize)
                 .map(FeedInfoConverter::convertToFeedInfo)
                 .collect(Collectors.toList());
 
