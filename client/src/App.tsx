@@ -77,7 +77,7 @@ function App() {
             </Routes>
           </main>
         </Layout>
-        <div ref={ref}>xxxxx</div>
+        <div className="w-1 h-1" ref={ref}></div>
         <Footer />
       </div>
     </BrowserRouter>
