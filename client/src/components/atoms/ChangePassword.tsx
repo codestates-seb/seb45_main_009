@@ -40,6 +40,7 @@ const ChangePassword = () => {
   const handlePasswordSubmit = async () => {
     const formData = new FormData();
     const requestBody = {
+      // nickname:
       password: password,
     };
     const blob = new Blob([JSON.stringify(requestBody)], {
