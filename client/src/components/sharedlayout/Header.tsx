@@ -232,7 +232,7 @@ function Header() {
 
                     <li
                       key={index}
-                      className=" "
+                      className="w-full"
                       onClick={() => handleSuggestionClick(suggestion)}
                     >
                       {suggestion}
