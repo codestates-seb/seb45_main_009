@@ -50,7 +50,7 @@ const members = [
   {
     name: "이세은",
     github: "https://github.com/lse0522",
-    mail: "이메일주소1",
+    mail: "lselse0522@gmail.com",
     serviceKey: "service_2c9x7es",
     templateKey: "template_9w9evad",
     accountKey: "3VX-2okcwKmicZsAT",
@@ -110,7 +110,11 @@ function Footer() {
               <Link to={member.github}>
                 <AiFillGithub size={15} />
               </Link>
-              <LuMail size={15} onClick={() => toggleContact(member.name)} className="hover:cursor-pointer" />
+              <LuMail
+                size={15}
+                onClick={() => toggleContact(member.name)}
+                className="hover:cursor-pointer"
+              />
             </div>
           </div>
         ))}
@@ -122,7 +126,11 @@ function Footer() {
           onClick={closeOnOutsideClick}
         >
           <div className="modal rounded-lg shadow-lg bg-white">
-            <Contact selectedName={selectedName} members={members} handleModalClose={handleModalClose} />
+            <Contact
+              selectedName={selectedName}
+              members={members}
+              handleModalClose={handleModalClose}
+            />
           </div>
         </div>
       )}
