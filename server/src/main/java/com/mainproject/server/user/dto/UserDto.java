@@ -1,0 +1,138 @@
+package com.mainproject.server.user.dto;
+
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.mainproject.server.image.entity.Image;
+import com.mainproject.server.userprofile.entity.UserProfile;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
+
+
+
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class UserDto {
+
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Setter
+    public static class PostDto{
+
+
+        @Valid
+        @NotBlank(message = "닉네임을 입력하세요.")
+        @Size(max = 10)
+        private String nickname;
+
+        @Valid
+        @NotBlank(message = "이메일을 입력하세요.")
+        @Email
+        private String email;
+
+        @Valid
+        @NotBlank(message = "비밀번호를 입력하세요.")
+        @Size(min = 6, message = "비밀번호는 최소 6자 이상이어야 합니다.")
+        private String password;
+
+        private String location;
+
+        private Image profileimg;
+
+        @Size(max = 200)
+        private String price;
+
+        @Size(max = 200)
+        private String bio;
+
+        @Max(value = 300, message = "키는 300보다 작거나 같아야 합니다.")
+        private Integer height;
+
+        @Max(value = 300, message = "몸무게는 300보다 작거나 같아야 합니다.")
+        private Integer weight;
+
+        private String sport;
+
+
+    }
+
+
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PatchDto{
+        private Long userId;
+        private String nickname;
+        private Image profileimg;
+        private String price;
+        private String bio;
+        private Integer height;
+        private Integer weight;
+        private String location;
+        private String password;
+        private String sport;
+
+
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public static class UserInfo {
+        private Long userId;
+        private String nickname;
+        private String profileimg;
+        private String bio;
+        private String sport;
+        private String price;
+        private Integer height;
+        private Integer weight;
+        private Long feedCount;
+        private Long followerCount;
+        private Long followCount;
+        private List<String> roles;
+    }
+
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public static class ResponseDto {
+        private Long userId;
+        private String nickname;
+        private String email;
+        private String createdAt;
+        private LocalDateTime modifiedAt;
+        private String bio;
+        private String profileimg;
+        private String price;
+        private Integer height;
+        private Integer weight;
+        private String location;
+        private String sport;
+        private List<String> roles = new ArrayList<>();
+
+
+//        private List<Long> followerList; // 팔로워 리스트
+//        private List<Long> followList;   // 팔로우 리스트
+
+    }
+
+
+
+}
