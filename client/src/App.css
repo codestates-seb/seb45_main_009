@@ -1,0 +1,9 @@
+.App {
+  width: 100vw;
+  min-width: 320px;
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
