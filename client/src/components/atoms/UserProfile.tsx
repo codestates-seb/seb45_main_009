@@ -19,13 +19,9 @@ interface ProfileIndProps {
 function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
   // 유저 sport 가져오기
   const { allUserDatas } = useSelector((state: RootStates) => state.feed);
-  console.log(allUserDatas);
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.login.isAuthenticated
-  );
+  const isAuthenticated = useSelector((state: RootState) => state.login.isAuthenticated);
   // 전체 유저에서 프로필 유저 확인
   const isUserId = allUserDatas.some((user) => user.userId === userId);
-  console.log(isUserId);
 
   // 사진 가져오기
   let userSport = "";
@@ -45,16 +41,12 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
     if (isAuthenticated === false) return;
     try {
       const response = await globalAxios.get(`/follow/following/${myid}`);
-      console.log("checkFollow 성공", response.data);
       if (response.data.some((item: any) => item.userId === userId)) {
         setIsFollowing(true);
-        console.log("isFollowing 일치", isFollowing);
       } else {
         setIsFollowing(false);
-        console.log("isFollowing 불일치", isFollowing);
       }
     } catch (error) {
-      console.log("checkFollow 실패 error:", error);
     } finally {
       setTimeout(() => {
         setIsLoading(false);
@@ -83,8 +75,7 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
     roles: string[];
     price: string;
   };
-  const [userResponseType, setUserResponseType] =
-    useState<UserResponseType | null>(null);
+  const [userResponseType, setUserResponseType] = useState<UserResponseType | null>(null);
   useEffect(() => {
     async function fetcFeedData() {
       try {
@@ -106,7 +97,6 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
     if (isAuthenticated === false) return;
     try {
       const response = await globalAxios.post(`/follow/${userId}`);
-      console.log("팔로우 요청 성공", response);
       setIsFollowing(response.data);
 
       // if (!isFollowing) {
@@ -126,11 +116,7 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
       <div className="max-w-screen-lg md:max-w-screen-xl mx-auto px-4 sm:px-4 lg:mx-[40px] ">
         <div className="grid md:grid-cols-2  sm:px-[50px]">
           <div className="flex items-center justify-center sm:justify-start">
-            <img
-              src={userResponseType?.profileimg}
-              className="mr-6 sm:mr-2 w-10 h-10 rounded-full"
-              alt="img"
-            />
+            <img src={userResponseType?.profileimg} className="mr-6 sm:mr-2 w-10 h-10 rounded-full" alt="img" />
             <div className="flex flex-col ">
               <div className=" text-lg flex ">
                 {userResponseType?.nickname}
@@ -139,11 +125,7 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
                 )}
               </div>
               <div className="text-sm text-gray-400">
-                {userResponseType?.bio ? (
-                  userResponseType?.bio
-                ) : (
-                  <span className="text-gray-400">오늘의 주인공</span>
-                )}
+                {userResponseType?.bio ? userResponseType?.bio : <span className="text-gray-400">오늘의 주인공</span>}
               </div>
             </div>
           </div>
@@ -170,13 +152,7 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
         <div className="mt-[60px] flex items-center justify-center sm:justify-start sm:px-[50px]">
           <div className="flex">
             <AiFillHeart className="text-gray-400 mx-[10px] text-2xl" />
-            <div>
-              {userSport ? (
-                userSport
-              ) : (
-                <span className="text-gray-400"> - </span>
-              )}
-            </div>
+            <div>{userSport ? userSport : <span className="text-gray-400"> - </span>}</div>
           </div>
         </div>
         <div className="mt-2 flex items-center justify-center sm:justify-start sm:px-[50px]">
@@ -184,19 +160,11 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
             <>
               <BiSolidUser className="text-gray-400 mx-[10px] text-2xl" />
               <div>
-                {userResponseType?.height ? (
-                  userResponseType?.height
-                ) : (
-                  <span className="text-gray-400">- </span>
-                )}
+                {userResponseType?.height ? userResponseType?.height : <span className="text-gray-400">- </span>}
                 cm
               </div>
               <div className="ml-[14px]">
-                {userResponseType?.weight ? (
-                  userResponseType?.weight
-                ) : (
-                  <span className="text-gray-400">- </span>
-                )}
+                {userResponseType?.weight ? userResponseType?.weight : <span className="text-gray-400">- </span>}
                 kg
               </div>
             </>
@@ -221,25 +189,19 @@ function UserProfile({ userId, isMyFeed, myid }: ProfileIndProps) {
 
         {/* 선 추가 */}
         <div className=" h-[20px] mt-2 text-[#eee] sm:px-[40px] mb-1">
-          <div className="text-gray-400 text-[12px] flex justify-center">
-            피드 리스트
-          </div>
+          <div className="text-gray-400 text-[12px] flex justify-center">피드 리스트</div>
           <div className="border-b text-black w-[90%] "></div>
         </div>
 
         <div className="my-[40px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {userResponseType?.feedList &&
-          userResponseType.feedList.length > 0 ? (
+          {userResponseType?.feedList && userResponseType.feedList.length > 0 ? (
             userResponseType.feedList.map((feed, feedIndex) => (
               <div
                 key={feedIndex}
                 className="mb-[10px] mx-[10px] hover:scale-105 transition-all duration-300 ease-in-out hover:shadow-[5px_5px_10px_rgba(0,0,0,0.2)]"
               >
                 {feed.images[0] && (
-                  <Link
-                    key={feed.images[0].imageUrl}
-                    to={`/feeddetailind/${feed.feedId}`}
-                  >
+                  <Link key={feed.images[0].imageUrl} to={`/feeddetailind/${feed.feedId}`}>
                     <img
                       className=" min-w-[250px] min-h-[250px] w-[15vw] h-[15vw]"
                       src={feed.images[0].imageUrl}

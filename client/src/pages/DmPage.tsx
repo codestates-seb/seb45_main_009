@@ -4,7 +4,6 @@ import profileImg from "../assets/images/profileDefault.png";
 function DmPage() {
   const [dmData, setDmData] = useState<DmData[]>([]);
   useEffect(() => setDmData(mock), []);
-  useEffect(() => console.log(dmData), [dmData]);
 
   return (
     <div className="flex  justify-center items-center w-screen mt-10">
