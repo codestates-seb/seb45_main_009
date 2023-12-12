@@ -1,4 +1,4 @@
-package com.mainproject.server.feed.enitiy;
+package com.mainproject.server.feed.entity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
