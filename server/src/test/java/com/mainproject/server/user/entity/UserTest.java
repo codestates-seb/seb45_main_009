@@ -1,3 +1,5 @@
+package com.mainproject.server.user.entity;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.mainproject.server.user.entity.User;
