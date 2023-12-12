@@ -2,36 +2,26 @@ package com.mainproject.server.user.service;
 
 
 import com.mainproject.server.auth.jwt.JwtTokenizer;
-import com.mainproject.server.auth.utils.CustomAuthorityUtils;
 import com.mainproject.server.exception.BusinessLogicException;
 import com.mainproject.server.exception.ExceptionCode;
-
 import com.mainproject.server.image.entity.Image;
-import com.mainproject.server.image.repository.ImageRepository;
 import com.mainproject.server.image.service.ImageService;
-
 import com.mainproject.server.user.entity.User;
 import com.mainproject.server.user.repository.UserRepository;
 import com.mainproject.server.userprofile.entity.UserProfile;
-import com.mainproject.server.userprofile.repository.UserProfileRepository;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
 
 
 @Service
@@ -39,26 +29,20 @@ import java.util.*;
 @RequiredArgsConstructor
 public class UserService {
 
-
+    private static final String DEFAULT_PROFILE_IMAGE_URL = "https://fitfolio-photo.s3.ap-northeast-2.amazonaws.com/57bdff09ea7ef8c5.png";
+    private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm";
 
     private final UserRepository userRepository;
     private final ImageService imageService;
-    private final UserProfileRepository userProfileRepository;
-    private final ImageRepository imageRepository;
 
     @Autowired
     private final JwtTokenizer jwtTokenizer;
     private final PasswordEncoder passwordEncoder;
-    private final CustomAuthorityUtils authorityUtils;
-
-
-
 
     // 유저 생성
     public User createUser(User user, MultipartFile profileimg) {
         verifyExistEmail(user.getEmail());
         verifyExistNickname(user.getNickname());
-
 
         // 비밀번호 유효성 검사 추가
         if (!isValidPassword(user.getPassword())) {
@@ -69,14 +53,12 @@ public class UserService {
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encryptedPassword);
 
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
         String formattedDateTime = LocalDateTime.now().format(formatter);
 
         LocalDateTime createdAt = LocalDateTime.parse(formattedDateTime, formatter);
 
         user.setCreatedAt(createdAt);
-
 
         // 프로필 사진 업로드 및 이미지 엔티티와 관계 설정
         if (profileimg != null && !profileimg.isEmpty()) {
@@ -87,10 +69,11 @@ public class UserService {
             user.setProfileimg(profileImage);
         } else {
             // 이미지가 없는 경우, 이미지 URL이 있는지 확인
-            if (user.getProfileimg() == null || user.getProfileimg().getImageUrl() == null) {
+            if (user.getProfileimg() == null || user.getProfileimg().getImageUrl() == null || profileimg == null) {
                 // 이미지 URL도 없는 경우 기본 이미지 URL을 설정
                 Image defaultProfileImage = new Image();
-                defaultProfileImage.setImageUrl("https://fitfolio-photo.s3.ap-northeast-2.amazonaws.com/default+image/default.png");
+                defaultProfileImage.setImageUrl(
+                        DEFAULT_PROFILE_IMAGE_URL);
                 defaultProfileImage.setUser(user);
                 user.setProfileimg(defaultProfileImage);
             }
@@ -99,20 +82,16 @@ public class UserService {
         // UserProfile 생성 및 설정
         UserProfile userProfile = new UserProfile();
         userProfile.setUser(user);
-        // 여기서 다른 UserProfile 필드 값들도 설정할 수 있음
         userProfile.setFeedCount(0L);
         userProfile.setFollowerCount(0L);
         userProfile.setFollowCount(0L);
         user.setUserProfile(userProfile);
 
-
         Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-
         return userRepository.save(user);
     }
-
 
     public User createUserOAuth2(User user, String image) {
 
@@ -122,20 +101,15 @@ public class UserService {
         Image profileImage = new Image();
         user.getProfileimg().setUser(user);
 
-        // UserProfile 생성 및 설정
         UserProfile userProfile = new UserProfile();
         userProfile.setUser(user);
-        // 여기서 다른 UserProfile 필드 값들도 설정할 수 있음
         userProfile.setFeedCount(0L);
         userProfile.setFollowerCount(0L);
         userProfile.setFollowCount(0L);
         user.setUserProfile(userProfile);
 
-
-
         return userRepository.save(user);
     }
-
 
     // 유저 정보 변경
     public User updateUser(Long loginId, User user, MultipartFile profileimg) {
@@ -146,14 +120,12 @@ public class UserService {
         // 검증이 완료되면 업데이트를 처리합니다.
         User findUser = findVerifiedUser(user.getUserId());
 
-
         if (user.getNickname() != null) {
             // 사용자가 새로운 닉네임을 제공한 경우에만 업데이트
             if (!user.getNickname().equals(findUser.getNickname())) {
                 verifyExistNickname(user.getNickname());
                 findUser.setNickname(user.getNickname());
             }
-            // 사용자가 null을 제공한 경우에는 업데이트하지 않음
         }
 
         if (user.getWeight() != null) {
@@ -169,7 +141,6 @@ public class UserService {
         if (newImageUrl != null) {
             findUser.getProfileimg().setImageUrl(newImageUrl);
         }
-
 
         if (user.getSport() != null) {
             findUser.setSport(user.getSport());
@@ -196,12 +167,11 @@ public class UserService {
         }
 
         // 업데이트 시간 포맷팅
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
         String formattedDateTime = LocalDateTime.now().format(formatter);
 
         // String을 LocalDateTime으로 변환
         LocalDateTime modifiedAt = LocalDateTime.parse(formattedDateTime, formatter);
-
         findUser.setModifiedAt(modifiedAt);
 
         return userRepository.save(findUser);
@@ -213,35 +183,22 @@ public class UserService {
             Long imageId = profileImage.getImageId();
             // 새로운 이미지 업로드 및 URL 저장
             if (profileimg != null && !profileimg.isEmpty()) {
-                String newImageUrl = imageService.updateImage(imageId, profileimg);
-                return newImageUrl;
+                return imageService.updateImage(imageId, profileimg);
             }
         }
         return null; // 프로필 이미지가 업데이트되지 않은 경우
     }
 
-
-
     // 유저 조회
     public User findUser(long userId) {
-        User user =  findVerifiedUser(userId);
+        User user = findVerifiedUser(userId);
         Hibernate.initialize(user.getRoles());
         return user;
     }
 
-
-    // 유저 전체 조회(페이지 네이션)
-//    public Page<User> findUsers(int page, int size) {
-//        return userRepository.findAll(PageRequest.of(page, size,
-//                Sort.by("userId").descending()));
-//    }
-
     public List<User> findAllUsers() {
         return userRepository.findAll();
     }
-
-
-
 
     // 유저 삭제
     public void deleteUser(Long userId) {
@@ -259,11 +216,8 @@ public class UserService {
                 }
             }
         }
-
         userRepository.delete(existingUser);
-
     }
-
 
     public void verifyPermission(Long loginId, long userId) {
         User findUser = findVerifiedUser(loginId);
@@ -274,31 +228,28 @@ public class UserService {
         }
     }
 
-
     // userId를 사용하여 유저를 조회
     public User findVerifiedUser(long userId) {
-        Optional<User> optionalUser =  userRepository.findById(userId);
+        Optional<User> optionalUser = userRepository.findById(userId);
         User findUser = optionalUser.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
 
         return findUser;
     }
 
-
-     // 이메일 사용하여 유저를 조회
+    // 이메일 사용하여 유저를 조회
     public User findVerifiedUser(String email) {
-        Optional<User> optionalUser =  userRepository.findByEmail(email);
-        User findUser = optionalUser.orElseThrow(() ->
-                new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+        Optional<User> optionalUser = userRepository.findByEmail(email);
 
-        return findUser;
+        return optionalUser.orElseThrow(() ->
+                new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
     }
 
     // oauth2로 로그인 했을 때 같은 이름이 있을 때 1~1000까지의 랜덤숫자를 생성
-    private String verifyExistKakaoNickName(String nickname){
+    private String verifyExistKakaoNickName(String nickname) {
         String newNickName = nickname;
         Optional<User> optionalUser = userRepository.findByNickname(nickname);
-        if(optionalUser.isPresent()){
+        if (optionalUser.isPresent()) {
             Random random = new Random();
             int randomNumber = random.nextInt(10000) + 1;
             newNickName = nickname + randomNumber;
@@ -307,20 +258,20 @@ public class UserService {
         return newNickName;
     }
 
-
     // 이메일 중복이 있는지 조회
     private void verifyExistEmail(String email) {
         Optional<User> user = userRepository.findByEmail(email);
-        if (user.isPresent())
+        if (user.isPresent()) {
             throw new BusinessLogicException(ExceptionCode.USER_EXISTS);
+        }
     }
-
 
     // 닉네임 중복이 있는지 조회
     private void verifyExistNickname(String nickname) {
         Optional<User> user = userRepository.findByNickname(nickname);
-        if (user.isPresent())
+        if (user.isPresent()) {
             throw new BusinessLogicException(ExceptionCode.NICKNAME_EXISTS);
+        }
     }
 
 
@@ -332,8 +283,6 @@ public class UserService {
                 password.matches(".*\\d.*");
     }
 
-
-
     public Boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
@@ -342,7 +291,6 @@ public class UserService {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", user.getUserId());
         claims.put("roles", user.getRoles());
-
 
         String subject = user.getEmail();
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
@@ -354,43 +302,18 @@ public class UserService {
         return accessToken;
     }
 
-
     public String delegateRefreshToken(User user) {
-
 
         String subject = user.getEmail();
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
 
-        String refreshToken = jwtTokenizer.generateRefreshToken(subject, expiration, base64EncodedSecretKey);
-
-        return refreshToken;
+        return jwtTokenizer.generateRefreshToken(subject, expiration, base64EncodedSecretKey);
     }
 
     // 사용자 저장 또는 업데이트
     public User saveUser(User user) {
         return userRepository.save(user);
     }
-
-
-//    // 이미지 ID를 가져오는 메서드
-//    private Long getImageIdFromUser(User user) {
-//        if (user != null && user.getProfileimg() != null) {
-//            // user.getProfileimg()는 이미지 URL이라고 가정
-//            String imageUrl = user.getProfileimg().getImageUrl();
-//
-//            // 이미지 서비스를 호출하여 해당 URL에 해당하는 이미지 정보를 조회
-//            Image image = imageService.findImageByImageUrl(imageUrl);
-//
-//            // 조회한 이미지에서 이미지 ID를 반환
-//            if (image != null) {
-//                return image.getImageId();
-//            }
-//        }
-//        return null;
-//    }
-
-
-
 
 }
