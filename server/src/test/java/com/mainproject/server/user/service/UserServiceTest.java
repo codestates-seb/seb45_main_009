@@ -1,11 +1,10 @@
+package com.mainproject.server.user.service;
+
 import com.mainproject.server.auth.jwt.JwtTokenizer;
 import com.mainproject.server.image.entity.Image;
 import com.mainproject.server.image.service.ImageService;
 import com.mainproject.server.user.entity.User;
 import com.mainproject.server.user.repository.UserRepository;
-import com.mainproject.server.user.service.UserService;
-import com.mainproject.server.userprofile.repository.UserProfileRepository;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -50,50 +49,48 @@ class UserServiceTest {
     @Test
     @DisplayName("유저 생성 - 성공")
     void createUser_Success() {
-
+        // Given
         UserService userService = new UserService(userRepository, imageService, jwtTokenizer, passwordEncoder);
-
         User user = new User();
         user.setEmail("test@example.com");
         user.setPassword("password12");
 
-        // Create a MockMultipartFile for testing
+        // 테스트용 MockMultipartFile 생성
         byte[] fileContent = "Mock file content".getBytes();
-        MockMultipartFile profileImg = new MockMultipartFile("profileImg", "test.jpg", "image/jpeg", fileContent);
+        MockMultipartFile profileImg = new MockMultipartFile("profileImg", "test.jpeg", "image/jpeg", fileContent);
 
-        // Mock S3UploadService
+        // S3UploadService를 모의화
         when(imageService.createImage(any(MultipartFile.class))).thenReturn("mock-image-url");
 
-        // Mock repository methods
+        // UserRepository 메서드를 모의화
         when(userRepository.save(any(User.class))).thenAnswer(invocation -> {
             User savedUser = invocation.getArgument(0);
-            savedUser.setUserId(1L);  // Set a sample user ID
+            savedUser.setUserId(1L);  // 샘플 사용자 ID 설정
             return savedUser;
         });
 
-        // Act
+        // When
         User resultUser = userService.createUser(user, profileImg);
 
-        // Assert
+        // Then
         assertNotNull(resultUser);
         assertEquals("test@example.com", resultUser.getEmail());
 
-        // Verify that the S3UploadService.createImage method was called with the correct arguments
+        // S3UploadService.createImage 메서드가 올바른 인수로 호출되었는지 확인
         verify(imageService).createImage(profileImg);
 
-        // Verify that the profile image URL in the user object is set correctly
+        // 사용자 객체의 프로필 이미지 URL이 올바르게 설정되었는지 확인
         assertNotNull(resultUser.getProfileimg());
         assertEquals("mock-image-url", resultUser.getProfileimg().getImageUrl());
 
-        // Verify that userRepository.save was called with the correct user object
+        // userRepository.save가 올바른 사용자 객체로 호출되었는지 확인
         verify(userRepository).save(any(User.class));
     }
 
     @Test
     @DisplayName("유저 생성 - 성공 (프로필 이미지 없음)")
     void createUser_Success_NoProfileImage() {
-        // Arrange
-
+        // Given
         UserService userService = new UserService(userRepository, imageService, jwtTokenizer, passwordEncoder);
         User user = new User();
         user.setEmail("test@example.com");
@@ -101,46 +98,46 @@ class UserServiceTest {
 
         MultipartFile profileImg = null;
 
-        // Mocking userRepository.save() method
+        // userRepository.save() 메서드를 모의화
         when(userRepository.save(any(User.class))).thenReturn(user);
 
-        // Act
+        // When
         User resultUser = userService.createUser(user, profileImg);
 
-        // Assert
+        // Then
         assertNotNull(resultUser);
         assertEquals("test@example.com", resultUser.getEmail());
 
-        // Verify that createImage method is never called
+        // createImage 메서드가 호출되지 않았는지 확인
         verify(imageService, never()).createImage(any(MultipartFile.class));
 
-        // Verify that userRepository.save is called with the correct user
+        // userRepository.save가 올바른 사용자로 호출되었는지 확인
         verify(userRepository).save(any(User.class));
     }
 
     @Test
     @DisplayName("유저 OAuth2 생성 - 성공")
     void createUserOAuth2_Success() {
+        // Given
         User user = new User();
         user.setProfileimg(new Image());
         user.setNickname("testNickname");
 
-        // Mock repository methods if necessary
+        // 필요한 경우 userRepository 메서드를 모의화
         when(userRepository.save(any(User.class))).thenReturn(user);
 
-        // Act
+        // When
         User resultUser = userService.createUserOAuth2(user, "image");
 
-        // Assert
+        // Then
         assertNotNull(resultUser);
         assertEquals("testNickname", resultUser.getNickname());
-        // Add more assertions based on your specific use case
     }
 
     @Test
     @DisplayName("유저 정보 변경 - (프로필 이미지 없음)")
     void updateUser_Success() {
-        // Arrange
+        // Given
         User existingUser = new User();
         existingUser.setUserId(1L);
 
@@ -150,14 +147,14 @@ class UserServiceTest {
 
         MultipartFile profileImg = null;
 
-        // Mock repository methods if necessary
+        // userRepository 메서드를 모의화합
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(existingUser));
         when(userRepository.save(any(User.class))).thenReturn(updatedUser);
 
-        // Act
+        // When
         User resultUser = userService.updateUser(1L, updatedUser, profileImg);
 
-        // Assert
+        // Then
         assertNotNull(resultUser);
         assertEquals("newNickname", resultUser.getNickname());
     }
@@ -165,54 +162,53 @@ class UserServiceTest {
     @Test
     @DisplayName("유저 조회 - 성공")
     void findUser_Success() {
-        // Arrange
+        // Given
         User user = new User();
         user.setUserId(1L);
 
-        // Mock repository methods if necessary
+        // userRepository 메서드를 모의화
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
 
-        // Act
+        // When
         User resultUser = userService.findUser(1L);
 
-        // Assert
+        // Then
         assertNotNull(resultUser);
         assertEquals(1L, resultUser.getUserId());
-        // Add more assertions based on your specific use case
     }
 
     @Test
     @DisplayName("유저 전체 조회 - 성공")
     void findAllUsers_Success() {
-        // Arrange
+        // Given
         List<User> userList = List.of(new User(), new User());
 
-        // Mock repository methods if necessary
+        // userRepository 메서드를 모의화
         when(userRepository.findAll()).thenReturn(userList);
 
-        // Act
+        // When
         List<User> resultUsers = userService.findAllUsers();
 
-        // Assert
+        // Then
         assertNotNull(resultUsers);
         assertEquals(2, resultUsers.size());
-        // Add more assertions based on your specific use case
     }
 
     @Test
     @DisplayName("유저 삭제 - 성공")
     void deleteUser_Success() {
-        // Arrange
+        // Given
         User existingUser = new User();
         existingUser.setUserId(1L);
 
-        // Mock repository methods if necessary
+        // userRepository 메서드를 모의화
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(existingUser));
 
-        // Act
+        // When
         userService.deleteUser(1L);
 
-        // Verify repository method calls if necessary
+        // Then
+        // userRepository 메서드 호출을 검증
         verify(userRepository, times(1)).delete(existingUser);
     }
 }
