@@ -3,7 +3,7 @@ package com.mainproject.server.report.controller;
 import com.mainproject.server.auth.loginResolver.LoginUserId;
 import com.mainproject.server.exception.BusinessLogicException;
 import com.mainproject.server.exception.ExceptionCode;
-import com.mainproject.server.feed.enitiy.Feed;
+import com.mainproject.server.feed.entity.Feed;
 import com.mainproject.server.feed.service.FeedService;
 import com.mainproject.server.report.entity.Report;
 import com.mainproject.server.report.reportDto.ReportResponse;

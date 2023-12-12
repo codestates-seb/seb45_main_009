@@ -2,7 +2,7 @@ package com.mainproject.server.report.service;
 
 import com.mainproject.server.exception.BusinessLogicException;
 import com.mainproject.server.exception.ExceptionCode;
-import com.mainproject.server.feed.enitiy.Feed;
+import com.mainproject.server.feed.entity.Feed;
 import com.mainproject.server.feed.repository.FeedRepository;
 import com.mainproject.server.report.entity.Report;
 import com.mainproject.server.report.repository.ReportRepository;

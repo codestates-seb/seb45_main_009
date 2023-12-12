@@ -2,7 +2,7 @@ package com.mainproject.server.feedcomment.service;
 
 import com.mainproject.server.exception.BusinessLogicException;
 import com.mainproject.server.exception.ExceptionCode;
-import com.mainproject.server.feed.enitiy.Feed;
+import com.mainproject.server.feed.entity.Feed;
 import com.mainproject.server.feed.service.FeedService;
 import com.mainproject.server.feedcomment.entity.FeedComment;
 import com.mainproject.server.feedcomment.repository.FeedCommentRepository;

@@ -1,6 +1,6 @@
 package com.mainproject.server.feedcomment.repository;
 
-import com.mainproject.server.feed.enitiy.Feed;
+import com.mainproject.server.feed.entity.Feed;
 import com.mainproject.server.feedcomment.entity.FeedComment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

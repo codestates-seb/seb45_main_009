@@ -2,7 +2,7 @@ package com.mainproject.server.liked.service;
 
 import com.mainproject.server.exception.BusinessLogicException;
 import com.mainproject.server.exception.ExceptionCode;
-import com.mainproject.server.feed.enitiy.Feed;
+import com.mainproject.server.feed.entity.Feed;
 import com.mainproject.server.feed.repository.FeedRepository;
 import com.mainproject.server.liked.entity.Liked;
 import com.mainproject.server.liked.repository.LikedRepository;

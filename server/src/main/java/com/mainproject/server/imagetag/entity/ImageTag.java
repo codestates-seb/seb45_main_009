@@ -1,6 +1,5 @@
 package com.mainproject.server.imagetag.entity;
 
-import com.mainproject.server.feed.enitiy.Feed;
 import com.mainproject.server.image.entity.Image;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

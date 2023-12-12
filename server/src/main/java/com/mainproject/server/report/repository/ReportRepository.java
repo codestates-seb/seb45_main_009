@@ -1,6 +1,6 @@
 package com.mainproject.server.report.repository;
 
-import com.mainproject.server.feed.enitiy.Feed;
+import com.mainproject.server.feed.entity.Feed;
 import com.mainproject.server.report.entity.Report;
 import com.mainproject.server.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;

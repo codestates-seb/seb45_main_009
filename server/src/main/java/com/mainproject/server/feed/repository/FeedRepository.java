@@ -1,7 +1,6 @@
 package com.mainproject.server.feed.repository;
 
-import com.mainproject.server.feed.dto.FeedResponseDto;
-import com.mainproject.server.feed.enitiy.Feed;
+import com.mainproject.server.feed.entity.Feed;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

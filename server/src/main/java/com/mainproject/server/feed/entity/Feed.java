@@ -1,8 +1,6 @@
-package com.mainproject.server.feed.enitiy;
+package com.mainproject.server.feed.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mainproject.server.feedcomment.entity.FeedComment;
 import com.mainproject.server.image.entity.Image;
 import com.mainproject.server.liked.entity.Liked;

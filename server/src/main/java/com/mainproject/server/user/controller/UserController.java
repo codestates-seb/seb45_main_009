@@ -65,7 +65,7 @@ public class UserController {
         // 생성된 유저 정보를 반환하고 HTTP 상태 코드 201(CREATED)를 반환
 
 
-        return ResponseEntity.created(URI.create("/user/" + createdUser.getUserId())).body(createdUser);
+        return ResponseEntity.created(URI.create("/user/" + createdUser.getUserId())).build();
     }
 
     // 기업 등록
@@ -83,7 +83,7 @@ public class UserController {
 
         log.info("### store login end! ###");
         // 생성된 기업 정보를 반환하고 HTTP 상태 코드 201(CREATED)를 반환
-        return ResponseEntity.created(URI.create("/user/" + createdUser.getUserId())).body(createdUser);
+        return ResponseEntity.created(URI.create("/user/" + createdUser.getUserId())).build();
     }
 
 
