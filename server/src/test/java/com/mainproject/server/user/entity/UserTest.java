@@ -25,10 +25,8 @@ class UserTest {
         user.setLocation("Gyeonggi");
         user.setHeight(180);
         user.setWeight(75);
-        // 필요한 경우 다른 필드를 초기화합니다.
     }
 
-    // getter 메서드에 대한 테스트를 추가합니다.
     @Test
     @DisplayName("Get UserId")
     void getUserId() {
