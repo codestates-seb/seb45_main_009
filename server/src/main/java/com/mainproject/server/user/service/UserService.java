@@ -29,7 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class UserService {
 
-    private static final String DEFAULT_PROFILE_IMAGE_URL = "https://fitfolio-photo.s3.ap-northeast-2.amazonaws.com/57bdff09ea7ef8c5.png";
+    private static final String DEFAULT_PROFILE_IMAGE_URL = "https://fitfolio-photo.s3.ap-northeast-2.amazonaws.com/Defaultimage/defaultImage.png";
     private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm";
 
     private final UserRepository userRepository;
