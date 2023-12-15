@@ -44,32 +44,20 @@ public class UserService {
         verifyExistEmail(user.getEmail());
         verifyExistNickname(user.getNickname());
 
-        // 비밀번호 유효성 검사 추가
+        // 비밀번호 유효성 검사, 암호화
         validatePassword(user.getPassword());
-
-        // 비밀번호 암호화
         encryptPassword(user);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
-        String formattedDateTime = LocalDateTime.now().format(formatter);
-
-        LocalDateTime createdAt = LocalDateTime.parse(formattedDateTime, formatter);
-
+        LocalDateTime createdAt = generateCurrentDateTime();
         user.setCreatedAt(createdAt);
 
         // 프로필 사진 업로드 및 이미지 엔티티와 관계 설정
         handleProfileImage(user, profileimg);
 
         // UserProfile 생성 및 설정
-        UserProfile userProfile = new UserProfile();
-        userProfile.setUser(user);
-        userProfile.setFeedCount(0L);
-        userProfile.setFollowerCount(0L);
-        userProfile.setFollowCount(0L);
-        user.setUserProfile(userProfile);
+        createUserProfile(user);
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        setAuthentication(user);
 
         return userRepository.save(user);
     }
@@ -124,13 +112,20 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    // 현재 시간을 생성하는 메서드
+    private LocalDateTime generateCurrentDateTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
+        String formattedDateTime = LocalDateTime.now().format(formatter);
+        return LocalDateTime.parse(formattedDateTime, formatter);
+    }
+
     // 유저 정보 변경
     public User updateUser(Long loginId, User user, MultipartFile profileimg) {
 
-        // 여기에서 loginId와 user를 사용한 검증 로직을 수행합니다.
+        // loginId와 user를 사용한 검증 로직을 수행
         verifyPermission(loginId, user.getUserId());
 
-        // 검증이 완료되면 업데이트를 처리합니다.
+        // 검증이 완료되면 업데이트를 처리
         User findUser = findVerifiedUser(user.getUserId());
 
         if (user.getNickname() != null) {
@@ -167,7 +162,7 @@ public class UserService {
         }
 
         if (user.getPassword() != null) {
-            // 비밀번호 유효성 검사를 추가
+            // 비밀번호 유효성 검사
             validatePassword(user.getPassword());
             encryptPassword(user);
         }
@@ -176,12 +171,7 @@ public class UserService {
             findUser.setLocation(user.getLocation());
         }
 
-        // 업데이트 시간 포맷팅
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
-        String formattedDateTime = LocalDateTime.now().format(formatter);
-
-        // String을 LocalDateTime으로 변환
-        LocalDateTime modifiedAt = LocalDateTime.parse(formattedDateTime, formatter);
+        LocalDateTime modifiedAt = generateCurrentDateTime();
         findUser.setModifiedAt(modifiedAt);
 
         return userRepository.save(findUser);
@@ -197,6 +187,22 @@ public class UserService {
             }
         }
         return null; // 프로필 이미지가 업데이트되지 않은 경우
+    }
+
+    // Authentication 설정을 처리하는 메서드
+    private void setAuthentication(User user) {
+        Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+    // UserProfile 생성 및 설정을 처리하는 메서드
+    private void createUserProfile(User user) {
+        UserProfile userProfile = new UserProfile();
+        userProfile.setUser(user);
+        userProfile.setFeedCount(0L);
+        userProfile.setFollowerCount(0L);
+        userProfile.setFollowCount(0L);
+        user.setUserProfile(userProfile);
     }
 
     // 유저 조회
@@ -218,13 +224,8 @@ public class UserService {
         Image profileImage = existingUser.getProfileimg();
         if (profileImage != null) {
             String profileImageUrl = profileImage.getImageUrl();
-            if (profileImageUrl != null) {
-                // 이미지 서비스를 호출하여 해당 URL에 해당하는 이미지 정보를 조회
-                Image image = imageService.findImageByImageUrl(profileImageUrl);
-                if (image != null) {
-                    imageService.deleteImage(image.getImageId());
-                }
-            }
+            Image image = imageService.findImageByImageUrl(profileImageUrl);
+            imageService.deleteImage(image.getImageId());
         }
         userRepository.delete(existingUser);
     }
@@ -243,7 +244,6 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findById(userId);
         User findUser = optionalUser.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
-
         return findUser;
     }
 
@@ -264,7 +264,6 @@ public class UserService {
             int randomNumber = random.nextInt(10000) + 1;
             newNickName = nickname + randomNumber;
         }
-
         return newNickName;
     }
 
@@ -313,7 +312,6 @@ public class UserService {
     }
 
     public String delegateRefreshToken(User user) {
-
         String subject = user.getEmail();
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
