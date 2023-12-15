@@ -102,12 +102,7 @@ public class UserService {
         Image profileImage = new Image();
         user.getProfileimg().setUser(user);
 
-        UserProfile userProfile = new UserProfile();
-        userProfile.setUser(user);
-        userProfile.setFeedCount(0L);
-        userProfile.setFollowerCount(0L);
-        userProfile.setFollowCount(0L);
-        user.setUserProfile(userProfile);
+        createUserProfile(user);
 
         return userRepository.save(user);
     }
