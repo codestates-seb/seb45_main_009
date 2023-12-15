@@ -34,8 +34,6 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final ImageService imageService;
-
-    @Autowired
     private final JwtTokenizer jwtTokenizer;
     private final PasswordEncoder passwordEncoder;
 
@@ -59,7 +57,7 @@ public class UserService {
 
         setAuthentication(user);
 
-        return userRepository.save(user);
+        return saveUser(user);
     }
 
     private void handleProfileImage(User user, MultipartFile profileimg) {
@@ -104,7 +102,7 @@ public class UserService {
 
         createUserProfile(user);
 
-        return userRepository.save(user);
+        return saveUser(user);
     }
 
     // 현재 시간을 생성하는 메서드
@@ -116,72 +114,88 @@ public class UserService {
 
     // 유저 정보 변경
     public User updateUser(Long loginId, User user, MultipartFile profileimg) {
-
-        // loginId와 user를 사용한 검증 로직을 수행
         verifyPermission(loginId, user.getUserId());
-
-        // 검증이 완료되면 업데이트를 처리
         User findUser = findVerifiedUser(user.getUserId());
 
-        if (user.getNickname() != null) {
-            if (!user.getNickname().equals(findUser.getNickname())) {
-                verifyExistNickname(user.getNickname());
-                findUser.setNickname(user.getNickname());
-            }
-        }
+        updateNickname(findUser, user.getNickname());
+        updateWeight(findUser, user.getWeight());
+        updateHeight(findUser, user.getHeight());
+        updateProfileImage(findUser, profileimg);
+        updateSport(findUser, user.getSport());
+        updateBio(findUser, user.getBio());
+        updatePrice(findUser, user.getPrice());
+        updatePassword(findUser, user.getPassword());
+        updateLocation(findUser, user.getLocation());
+        updateModifiedAt(findUser);
 
-        if (user.getWeight() != null) {
-            findUser.setWeight(user.getWeight());
-        }
-
-        if (user.getHeight() != null) {
-            findUser.setHeight(user.getHeight());
-        }
-
-        // 이미지 업데이트
-        String newImageUrl = updateProfileImage(findUser, profileimg);
-        if (newImageUrl != null) {
-            findUser.getProfileimg().setImageUrl(newImageUrl);
-        }
-
-        if (user.getSport() != null) {
-            findUser.setSport(user.getSport());
-        }
-
-        if (user.getBio() != null) {
-            findUser.setBio(user.getBio());
-        }
-
-        if (user.getPrice() != null) {
-            findUser.setPrice(user.getPrice());
-        }
-
-        if (user.getPassword() != null) {
-            // 비밀번호 유효성 검사
-            validatePassword(user.getPassword());
-            encryptPassword(user);
-        }
-
-        if (user.getLocation() != null) {
-            findUser.setLocation(user.getLocation());
-        }
-
-        LocalDateTime modifiedAt = generateCurrentDateTime();
-        findUser.setModifiedAt(modifiedAt);
-
-        return userRepository.save(findUser);
+        return saveUser(findUser);
     }
 
-    private String updateProfileImage(User user, MultipartFile profileimg) {
+    private void updateNickname(User user, String newNickname) {
+        if (newNickname != null && !newNickname.equals(user.getNickname())) {
+            verifyExistNickname(newNickname);
+            user.setNickname(newNickname);
+        }
+    }
+
+    private void updateWeight(User user, Integer newWeight) {
+        if (newWeight != null) {
+            user.setWeight(newWeight);
+        }
+    }
+
+    private void updateHeight(User user, Integer newHeight) {
+        if (newHeight != null) {
+            user.setHeight(newHeight);
+        }
+    }
+
+    private void updateSport(User user, String newSport) {
+        if (newSport != null) {
+            user.setSport(newSport);
+        }
+    }
+
+    private void updateBio(User user, String newBio) {
+        if (newBio != null) {
+            user.setBio(newBio);
+        }
+    }
+
+    private void updatePrice(User user, String newPrice) {
+        if (newPrice != null) {
+            user.setPrice(newPrice);
+        }
+    }
+
+    private void updatePassword(User user, String newPassword) {
+        if (newPassword != null) {
+            validatePassword(newPassword);
+            encryptPassword(user);
+            user.setPassword(newPassword);
+        }
+    }
+
+    private void updateLocation(User user, String newLocation) {
+        if (newLocation != null) {
+            user.setLocation(newLocation);
+        }
+    }
+
+    private void updateModifiedAt(User user) {
+        user.setModifiedAt(generateCurrentDateTime());
+    }
+
+
+    private void updateProfileImage(User user, MultipartFile profileimg) {
         Image profileImage = user.getProfileimg();
         if (profileImage != null) {
             Long imageId = profileImage.getImageId();
             // 새로운 이미지 업로드 및 URL 저장
             if (profileimg != null && !profileimg.isEmpty()) {
-                return imageService.updateImage(imageId, profileimg);
+                imageService.updateImage(imageId, profileimg);
             }
         }
-        return null; // 프로필 이미지가 업데이트되지 않은 경우
     }
 
     // Authentication 설정을 처리하는 메서드
@@ -277,7 +291,6 @@ public class UserService {
             throw new BusinessLogicException(ExceptionCode.NICKNAME_EXISTS);
         }
     }
-
 
     // 비밀번호 유효성 검증
     private boolean isValidPassword(String password) {
