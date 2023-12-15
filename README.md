@@ -80,7 +80,7 @@
 
 #### [화면 정의서](https://www.figma.com/file/Lo7MxFsoCS16Pt5WxdCfU6/Wireframe-(Community)?type=whiteboard&node-id=0-1)
 
-#### [API 명세서](http://13.125.146.181:8080/swagger-ui/index.html#/)
+#### [API 명세서](http://13.125.169.12:8080/swagger-ui/index.html#/)
 
 
 ## Commit convention
