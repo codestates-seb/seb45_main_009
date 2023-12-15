@@ -61,23 +61,7 @@ public class UserService {
         user.setCreatedAt(createdAt);
 
         // 프로필 사진 업로드 및 이미지 엔티티와 관계 설정
-        if (profileimg != null && !profileimg.isEmpty()) {
-            Image profileImage = new Image();
-            String imageUrl = imageService.createImage(profileimg);
-            profileImage.setImageUrl(imageUrl);
-            profileImage.setUser(user);
-            user.setProfileimg(profileImage);
-        } else {
-            // 이미지가 없는 경우, 이미지 URL이 있는지 확인
-            if (user.getProfileimg() == null || user.getProfileimg().getImageUrl() == null || profileimg == null) {
-                // 이미지 URL도 없는 경우 기본 이미지 URL을 설정
-                Image defaultProfileImage = new Image();
-                defaultProfileImage.setImageUrl(
-                        DEFAULT_PROFILE_IMAGE_URL);
-                defaultProfileImage.setUser(user);
-                user.setProfileimg(defaultProfileImage);
-            }
-        }
+        handleProfileImage(user, profileimg);
 
         // UserProfile 생성 및 설정
         UserProfile userProfile = new UserProfile();
@@ -91,6 +75,26 @@ public class UserService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return userRepository.save(user);
+    }
+
+    private void handleProfileImage(User user, MultipartFile profileimg) {
+        if (profileimg != null && !profileimg.isEmpty()) {
+            Image profileImage = new Image();
+            String imageUrl = imageService.createImage(profileimg);
+
+            profileImage.setImageUrl(imageUrl);
+            profileImage.setUser(user);
+            user.setProfileimg(profileImage);
+        }
+
+        // 이미지가 없는 경우, 이미지 URL이 있는지 확인
+        if (user.getProfileimg() == null || user.getProfileimg().getImageUrl() == null) {
+            Image defaultProfileImage = new Image();
+            defaultProfileImage.setImageUrl(DEFAULT_PROFILE_IMAGE_URL);
+
+            defaultProfileImage.setUser(user);
+            user.setProfileimg(defaultProfileImage);
+        }
     }
 
     public User createUserOAuth2(User user, String image) {
