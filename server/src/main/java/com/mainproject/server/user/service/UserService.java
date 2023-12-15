@@ -45,13 +45,10 @@ public class UserService {
         verifyExistNickname(user.getNickname());
 
         // 비밀번호 유효성 검사 추가
-        if (!isValidPassword(user.getPassword())) {
-            throw new BusinessLogicException(ExceptionCode.INVALID_PASSWORD);
-        }
+        validatePassword(user.getPassword());
 
         // 비밀번호 암호화
-        String encryptedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encryptedPassword);
+        encryptPassword(user);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
         String formattedDateTime = LocalDateTime.now().format(formatter);
@@ -97,6 +94,18 @@ public class UserService {
         }
     }
 
+    private void validatePassword(String password) {
+        if (!isValidPassword(password)) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_PASSWORD);
+        }
+    }
+
+    // 비밀번호 암호화를 처리하는 메서드
+    private void encryptPassword(User user) {
+        String encryptedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encryptedPassword);
+    }
+
     public User createUserOAuth2(User user, String image) {
 
         String newName = verifyExistKakaoNickName(user.getNickname());
@@ -125,7 +134,6 @@ public class UserService {
         User findUser = findVerifiedUser(user.getUserId());
 
         if (user.getNickname() != null) {
-            // 사용자가 새로운 닉네임을 제공한 경우에만 업데이트
             if (!user.getNickname().equals(findUser.getNickname())) {
                 verifyExistNickname(user.getNickname());
                 findUser.setNickname(user.getNickname());
@@ -160,10 +168,8 @@ public class UserService {
 
         if (user.getPassword() != null) {
             // 비밀번호 유효성 검사를 추가
-            if (!isValidPassword(user.getPassword())) {
-                throw new BusinessLogicException(ExceptionCode.INVALID_PASSWORD);
-            }
-            findUser.setPassword(user.getPassword());
+            validatePassword(user.getPassword());
+            encryptPassword(user);
         }
 
         if (user.getLocation() != null) {
