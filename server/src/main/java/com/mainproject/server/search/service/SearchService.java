@@ -44,7 +44,6 @@ public class SearchService {
                 .collect(Collectors.toList());
         searchDto.setFeeds(feedInfos);
 
-
         return searchDto;
     }
 

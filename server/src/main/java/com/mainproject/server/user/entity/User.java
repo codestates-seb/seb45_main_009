@@ -113,6 +113,4 @@ public class User {
     @JoinColumn(name = "user_profile_id")
     private UserProfile userProfile;
 
-    // 마이 페이지
-
 }
