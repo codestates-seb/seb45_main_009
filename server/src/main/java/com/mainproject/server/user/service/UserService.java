@@ -318,6 +318,17 @@ public class UserService {
         return jwtTokenizer.generateRefreshToken(subject, expiration, base64EncodedSecretKey);
     }
 
+    public void setUserRole(User user) {
+        if ("admin@gmail.com".equals(user.getEmail())) {
+            user.getRoles().add("ADMIN");
+        }
+        user.getRoles().add("USER");
+    }
+
+    public void setStoreUserRole(User user) {
+        user.getRoles().add("STORE");
+    }
+
     // 사용자 저장 또는 업데이트
     public User saveUser(User user) {
         return userRepository.save(user);

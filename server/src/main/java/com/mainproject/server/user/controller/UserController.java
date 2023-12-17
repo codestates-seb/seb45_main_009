@@ -1,9 +1,7 @@
 package com.mainproject.server.user.controller;
 
 
-
 import com.mainproject.server.auth.loginResolver.LoginUserId;
-import com.mainproject.server.image.entity.Image;
 import com.mainproject.server.response.DataResponseDto;
 import com.mainproject.server.response.SingleResponseDto;
 import com.mainproject.server.user.dto.AuthLoginDto;
@@ -14,17 +12,13 @@ import com.mainproject.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-
-import org.springframework.data.domain.Page;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-
 import javax.validation.Valid;
-import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,10 +31,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserController {
 
-
     private final UserService userService;
     private final UserMapper mapper;
-
 
     // 유저 등록
     @PostMapping("join/user")
@@ -50,21 +42,11 @@ public class UserController {
         log.info("### user login start! ###");
         User user = mapper.postToUser(requestBody);
 
-        //"ROLE_ADMIN" 생성
-        if("admin@gmail.com".equals(user.getEmail())){
-            user.getRoles().add("ADMIN");
-        }else {
-            // "ROLE_USER" 역할을 설정
-            user.getRoles().add("USER");
-        }
-
-        // UserService를 사용하여 유저 생성
         User createdUser = userService.createUser(user, imageFiles);
+        userService.setUserRole(createdUser);
 
         log.info("### user login end! ###");
         // 생성된 유저 정보를 반환하고 HTTP 상태 코드 201(CREATED)를 반환
-
-
         return ResponseEntity.created(URI.create("/user/" + createdUser.getUserId())).build();
     }
 
@@ -75,11 +57,8 @@ public class UserController {
         log.info("### store login start! ###");
         User user = mapper.postToUser(requestBody);
 
-        // "ROLE_STORE" 역할을 설정
-        user.getRoles().add("STORE");
-
-        // UserService를 사용하여 유저 생성
         User createdUser = userService.createUser(user, imageFiles);
+        userService.setStoreUserRole(createdUser);
 
         log.info("### store login end! ###");
         // 생성된 기업 정보를 반환하고 HTTP 상태 코드 201(CREATED)를 반환
@@ -167,7 +146,6 @@ public class UserController {
 //        return ResponseEntity.ok(responsePage);
 //    }
 
-
     // 유저 전체 조회
     @GetMapping("users")
     public ResponseEntity<List<UserDto.ResponseDto>> getUsers() {
@@ -181,9 +159,6 @@ public class UserController {
 
         return ResponseEntity.ok(responseList);
     }
-
-
-
 
     // 유저 정보 업데이트
     @PreAuthorize("isAuthenticated()")
@@ -200,7 +175,6 @@ public class UserController {
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
     }
 
-
     // 유저 삭제
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("mypage/delete")
@@ -210,8 +184,6 @@ public class UserController {
         // HTTP 상태 코드 204(NO CONTENT)를 반환
         return ResponseEntity.noContent().build();
     }
-
-
 
 //    @GetMapping("oauth/kakao/callback")
 //    public @ResponseBody String kakaocallback(String code) {
@@ -244,7 +216,4 @@ public class UserController {
 //        );
 //        return "카카오 토큰 요청 완료 : 토큰 요청에 대한 응답 : "+response;
 //    }
-
-
-
 }
