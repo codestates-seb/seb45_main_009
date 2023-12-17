@@ -14,7 +14,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,43 +40,43 @@ public class UserService {
     public User createUser(User user, MultipartFile profileimg) {
         verifyExistEmail(user.getEmail());
         verifyExistNickname(user.getNickname());
-
-        // 비밀번호 유효성 검사, 암호화
         validatePassword(user.getPassword());
         encryptPassword(user);
 
-        LocalDateTime createdAt = generateCurrentDateTime();
-        user.setCreatedAt(createdAt);
-
-        // 프로필 사진 업로드 및 이미지 엔티티와 관계 설정
+        user.setCreatedAt(generateCurrentDateTime());
         handleProfileImage(user, profileimg);
-
-        // UserProfile 생성 및 설정
         createUserProfile(user);
-
         setAuthentication(user);
 
         return saveUser(user);
     }
 
     private void handleProfileImage(User user, MultipartFile profileimg) {
-        if (profileimg != null && !profileimg.isEmpty()) {
-            Image profileImage = new Image();
-            String imageUrl = imageService.createImage(profileimg);
-
-            profileImage.setImageUrl(imageUrl);
-            profileImage.setUser(user);
-            user.setProfileimg(profileImage);
-        }
+        handleOrUpdateProfileImage(user, profileimg);
 
         // 이미지가 없는 경우, 이미지 URL이 있는지 확인
         if (user.getProfileimg() == null || user.getProfileimg().getImageUrl() == null) {
             Image defaultProfileImage = new Image();
             defaultProfileImage.setImageUrl(DEFAULT_PROFILE_IMAGE_URL);
-
             defaultProfileImage.setUser(user);
             user.setProfileimg(defaultProfileImage);
         }
+    }
+
+    private void handleOrUpdateProfileImage(User user, MultipartFile profileimg) {
+        Image profileImage = user.getProfileimg();
+
+        if (profileImage == null) {
+            profileImage = new Image();
+        }
+
+        if (profileimg != null && !profileimg.isEmpty()) {
+            String imageUrl = imageService.updateImage(profileImage.getImageId(), profileimg);
+            profileImage.setImageUrl(imageUrl);
+        }
+
+        profileImage.setUser(user);
+        user.setProfileimg(profileImage);
     }
 
     private void validatePassword(String password) {
@@ -188,14 +187,7 @@ public class UserService {
 
 
     private void updateProfileImage(User user, MultipartFile profileimg) {
-        Image profileImage = user.getProfileimg();
-        if (profileImage != null) {
-            Long imageId = profileImage.getImageId();
-            // 새로운 이미지 업로드 및 URL 저장
-            if (profileimg != null && !profileimg.isEmpty()) {
-                imageService.updateImage(imageId, profileimg);
-            }
-        }
+        handleOrUpdateProfileImage(user, profileimg);
     }
 
     // Authentication 설정을 처리하는 메서드
@@ -251,9 +243,8 @@ public class UserService {
     // userId를 사용하여 유저를 조회
     public User findVerifiedUser(long userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
-        User findUser = optionalUser.orElseThrow(() ->
+        return optionalUser.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
-        return findUser;
     }
 
     // 이메일 사용하여 유저를 조회
