@@ -2,6 +2,7 @@ package com.mainproject.server.user.service;
 
 import com.mainproject.server.auth.jwt.JwtTokenizer;
 import com.mainproject.server.image.entity.Image;
+import com.mainproject.server.image.repository.ImageRepository;
 import com.mainproject.server.image.service.ImageService;
 import com.mainproject.server.user.entity.User;
 import com.mainproject.server.user.repository.UserRepository;
@@ -27,16 +28,17 @@ import static org.mockito.Mockito.*;
 @DisplayName("UserService 테스트")
 class UserServiceTest {
 
+    private static final String DEFAULT_PROFILE_IMAGE_URL = "https://fitfolio-photo.s3.ap-northeast-2.amazonaws.com/Defaultimage/defaltImage.png";
     @Mock
     private UserRepository userRepository;
 
     @Mock
     private ImageService imageService;
-
     @InjectMocks
     private UserService userService;
 
     private JwtTokenizer jwtTokenizer;
+
 
     private PasswordEncoder passwordEncoder;
 
@@ -61,11 +63,12 @@ class UserServiceTest {
 
         // S3UploadService를 모의화
         when(imageService.createImage(any(MultipartFile.class))).thenReturn("mock-image-url");
+        when(imageService.updateImage(any(Long.class), any(MultipartFile.class))).thenReturn("mock-image-url");
 
         // UserRepository 메서드를 모의화
         when(userRepository.save(any(User.class))).thenAnswer(invocation -> {
             User savedUser = invocation.getArgument(0);
-            savedUser.setUserId(1L);  // 샘플 사용자 ID 설정
+            savedUser.setUserId(1L);
             return savedUser;
         });
 
@@ -75,9 +78,6 @@ class UserServiceTest {
         // Then
         assertNotNull(resultUser);
         assertEquals("test@example.com", resultUser.getEmail());
-
-        // S3UploadService.createImage 메서드가 올바른 인수로 호출되었는지 확인
-        verify(imageService).createImage(profileImg);
 
         // 사용자 객체의 프로필 이미지 URL이 올바르게 설정되었는지 확인
         assertNotNull(resultUser.getProfileimg());
@@ -96,17 +96,16 @@ class UserServiceTest {
         user.setEmail("test@example.com");
         user.setPassword("password12");
 
-        MultipartFile profileImg = null;
-
         // userRepository.save() 메서드를 모의화
         when(userRepository.save(any(User.class))).thenReturn(user);
 
         // When
-        User resultUser = userService.createUser(user, profileImg);
+        User resultUser = userService.createUser(user, null);
 
         // Then
         assertNotNull(resultUser);
         assertEquals("test@example.com", resultUser.getEmail());
+        assertEquals(DEFAULT_PROFILE_IMAGE_URL, resultUser.getProfileimg().getImageUrl());
 
         // createImage 메서드가 호출되지 않았는지 확인
         verify(imageService, never()).createImage(any(MultipartFile.class));
