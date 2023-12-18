@@ -28,7 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class UserService {
 
-    private static final String DEFAULT_PROFILE_IMAGE_URL = "https://fitfolio-photo.s3.ap-northeast-2.amazonaws.com/Defaultimage/defaultImage.png";
+    private static final String DEFAULT_PROFILE_IMAGE_URL = "https://fitfolio-photo.s3.ap-northeast-2.amazonaws.com/Defaultimage/defaltImage.png";
     private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm";
 
     private final UserRepository userRepository;
@@ -56,27 +56,32 @@ public class UserService {
 
         // 이미지가 없는 경우, 이미지 URL이 있는지 확인
         if (user.getProfileimg() == null || user.getProfileimg().getImageUrl() == null) {
-            Image defaultProfileImage = new Image();
-            defaultProfileImage.setImageUrl(DEFAULT_PROFILE_IMAGE_URL);
-            defaultProfileImage.setUser(user);
-            user.setProfileimg(defaultProfileImage);
+            setDefaultProfileImage(user);
         }
     }
 
     private void handleOrUpdateProfileImage(User user, MultipartFile profileimg) {
-        Image profileImage = user.getProfileimg();
-
-        if (profileImage == null) {
-            profileImage = new Image();
-        }
+        Image profileImage = Optional.ofNullable(user.getProfileimg()).orElse(new Image());
 
         if (profileimg != null && !profileimg.isEmpty()) {
-            String imageUrl = imageService.updateImage(profileImage.getImageId(), profileimg);
-            profileImage.setImageUrl(imageUrl);
+            profileImage.setImageUrl(determineImageUrl(profileImage, profileimg));
         }
 
         profileImage.setUser(user);
         user.setProfileimg(profileImage);
+    }
+
+    private String determineImageUrl(Image profileImage, MultipartFile profileimg) {
+        return Optional.ofNullable(profileImage.getImageId())
+                .map(imageId -> imageService.updateImage(imageId, profileimg))
+                .orElseGet(() -> imageService.createImage(profileimg));
+    }
+
+    private void setDefaultProfileImage(User user) {
+        Image defaultProfileImage = new Image();
+        defaultProfileImage.setImageUrl(DEFAULT_PROFILE_IMAGE_URL);
+        defaultProfileImage.setUser(user);
+        user.setProfileimg(defaultProfileImage);
     }
 
     private void validatePassword(String password) {
