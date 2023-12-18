@@ -19,6 +19,8 @@ import java.util.Optional;
 @Service
 public class ImageService {
 
+    private static final String DEFAULT_PROFILE_IMAGE_URL = "https://fitfolio-photo.s3.ap-northeast-2.amazonaws.com/Defaultimage/defaltImage.png";
+
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
@@ -50,8 +52,8 @@ public class ImageService {
 
         String oldImageUrl = updateImage.getImageUrl();
 
-        // 이전 이미지를 S3에서 삭제
-        if (oldImageUrl != null) {
+        // 이전 이미지를 S3에서 삭제 (단, 기본 이미지 URL이 아닐 경우만)
+        if (oldImageUrl != null && !oldImageUrl.equals(DEFAULT_PROFILE_IMAGE_URL)) {
             URI uri = URI.create(oldImageUrl);  // imageUrl 문자열을 URI 객체로 변환
             String key = uri.getPath().substring(1);
             amazonS3.deleteObject(new DeleteObjectRequest(bucket, key));
@@ -68,7 +70,6 @@ public class ImageService {
         return newImageUrl;
     }
 
-
     // 이미지ID로 이미지 조회
     public Image findImage(long imageId) {
 
@@ -79,7 +80,6 @@ public class ImageService {
     public void deleteImage(long imageId) {
         // 삭제할 이미지 찾기
         Image deletedImage = findImage(imageId);
-
 
         // image url 목록 가져오기
         String deleteImageUrl = deletedImage.getImageUrl();
@@ -106,8 +106,6 @@ public class ImageService {
 //
 //    }
 
-
-
     // 이미지 URL로 이미지 조회(수정)
     public Image findImageByImageUrl(String imageUrl) {
         List<Image> images = imageRepository.findDistinctByImageUrl(imageUrl);
@@ -118,10 +116,6 @@ public class ImageService {
         return null; // 이미지가 없는 경우 null 반환
     }
 
-
-
-
-
     // 프로필 이미지 URL 가져오기
     public String getProfileImageUrl(User user) {
         if (user.getProfileimg() != null) {
@@ -129,10 +123,6 @@ public class ImageService {
         }
         return null; // 프로필 이미지가 없는 경우 null 반환
     }
-
-
-
-
 }
 
 
