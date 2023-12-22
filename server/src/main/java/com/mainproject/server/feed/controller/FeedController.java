@@ -1,6 +1,6 @@
 package com.mainproject.server.feed.controller;
 
-import com.mainproject.server.auth.loginResolver.LoginUserId;
+import com.mainproject.server.auth.loginresolver.LoginUserId;
 import com.mainproject.server.feed.dto.FeedDto;
 import com.mainproject.server.feed.dto.FeedResponseDto;
 import com.mainproject.server.feed.dto.FeedRolesPageDto;

@@ -1,4 +1,4 @@
-package com.mainproject.server.auth.loginResolver;
+package com.mainproject.server.auth.loginresolver;
 
 import com.mainproject.server.auth.dto.TokenPrincipalDto;
 import org.springframework.core.MethodParameter;

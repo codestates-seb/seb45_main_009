@@ -1,6 +1,6 @@
 package com.mainproject.server.liked.controller;
 
-import com.mainproject.server.auth.loginResolver.LoginUserId;
+import com.mainproject.server.auth.loginresolver.LoginUserId;
 import com.mainproject.server.exception.BusinessLogicException;
 import com.mainproject.server.exception.ExceptionCode;
 import com.mainproject.server.liked.service.LikedService;

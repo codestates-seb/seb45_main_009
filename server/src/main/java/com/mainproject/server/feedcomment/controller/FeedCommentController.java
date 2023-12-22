@@ -1,6 +1,6 @@
 package com.mainproject.server.feedcomment.controller;
 
-import com.mainproject.server.auth.loginResolver.LoginUserId;
+import com.mainproject.server.auth.loginresolver.LoginUserId;
 import com.mainproject.server.feed.service.FeedService;
 import com.mainproject.server.feedcomment.dto.FeedCommentDto;
 import com.mainproject.server.feedcomment.dto.FeedCommentPageDto;

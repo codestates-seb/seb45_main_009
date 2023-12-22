@@ -1,7 +1,7 @@
 package com.mainproject.server.user.controller;
 
 
-import com.mainproject.server.auth.loginResolver.LoginUserId;
+import com.mainproject.server.auth.loginresolver.LoginUserId;
 import com.mainproject.server.response.DataResponseDto;
 import com.mainproject.server.response.SingleResponseDto;
 import com.mainproject.server.user.dto.AuthLoginDto;
