@@ -58,7 +58,14 @@ public class Feed {
 
     //liked와 매핑(일대다)
     @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = false)
-    private final List<Liked> likedList = new ArrayList<>();
+    private List<Liked> likedList = new ArrayList<>();
+
+    public List<Liked> getLikedList() {
+        if (likedList == null) {
+            likedList = new ArrayList<>();
+        }
+        return likedList;
+    }
 
 
 //    // 말풍선 태그와 매핑(일대다)
