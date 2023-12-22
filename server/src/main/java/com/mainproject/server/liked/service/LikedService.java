@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,29 +24,43 @@ public class LikedService {
     private final FeedRepository feedRepository;
 
     @Transactional
-    // 피드에 좋아요 추가하기
     public boolean toggleLikeFeed(Long feedId, User user) {
-        Optional<Feed> feed = feedRepository.findById(feedId);
+        Optional<Feed> feedOptional = feedRepository.findById(feedId);
 
-        if (feed.isPresent()) {
-            for (Liked liked : feed.get().getLikedList()) {
+        if (feedOptional.isPresent()) {
+            Feed feed = feedOptional.get();
+
+            // feed의 likedList가 null이면 초기화
+            if (feed.getLikedList() == null) {
+                feed.setLikedList(new ArrayList<>());
+            }
+
+            // 반복문을 통해 중복 초기화 방지
+            if (feed.getLikedList().isEmpty()) {
+                feed.getLikedList().addAll(likedRepository.findByFeed(feed));
+            }
+
+            for (Liked liked : feed.getLikedList()) {
                 if (liked.getUser().getUserId().equals(user.getUserId())) {
-                    feed.get().getLikedList().remove(liked);
+                    feed.getLikedList().remove(liked);
                     liked.disconnectFeed();
                     likedRepository.delete(liked);
                     return false; // 좋아요를 취소하고 반환
                 }
             }
+
             // 좋아요를 추가하고 반환
             likedRepository.save(Liked.builder()
                     .user(user)
-                    .feed(feed.get())
+                    .feed(feed)
                     .build());
             return true;
         } else {
             throw new BusinessLogicException(ExceptionCode.FEED_NOT_FOUND);
         }
     }
+
+
 
     // 피드에 좋아요를 누른 사용자 목록 가져오기
     public List<Long> getLikedUsers(Long feedId) {

@@ -38,7 +38,7 @@ public class Liked {
         this.user = user;
         this.feed = feed;
     }
-    public void disconnectFeed(){
+    public void disconnectFeed() {
         this.feed = null;
     }
 
