@@ -42,8 +42,10 @@ public class FeedService {
 
 
     @Autowired
-    public FeedService(FeedRepository feedRepository, ImageService imageService, UserService userService, ImageRepository imageRepository,
-                       FollowRepository followRepository, FollowService followService, NotificationService notificationService, FeedMapper feedMapper) {
+    public FeedService(FeedRepository feedRepository, ImageService imageService, UserService userService,
+                       ImageRepository imageRepository,
+                       FollowRepository followRepository, FollowService followService,
+                       NotificationService notificationService, FeedMapper feedMapper) {
         this.feedRepository = feedRepository;
         this.imageService = imageService;
         this.userService = userService;
@@ -51,7 +53,7 @@ public class FeedService {
         this.followRepository = followRepository;
         this.followService = followService;
         this.notificationService = notificationService;
-        this.feedMapper =feedMapper;
+        this.feedMapper = feedMapper;
     }
 
 
@@ -100,7 +102,8 @@ public class FeedService {
             // 팔로우 관계가 존재하면 알림을 전송
             if (followRelationship != null) {
                 String content = userService.findUser(userId).getNickname() + "님이 새로운 피드를 등록했습니다.";
-                notificationService.send(userService.findUser(follower.getUserId()), Notification.NotificationType.NEW_FEED, content, "/feed/add" + feed.getFeedId());
+                notificationService.send(userService.findUser(follower.getUserId()),
+                        Notification.NotificationType.NEW_FEED, content, "/feed/add" + feed.getFeedId());
             }
         }
 
@@ -301,7 +304,8 @@ public class FeedService {
         // 피드 객체를 피드 응답 DTO로 변환
         Page<FeedResponseDto> userFeedResponse = userFeeds.map(feed -> feedMapper.feedToFeedResponseDto(feed));
         // 페이지 정보를 생성
-        FeedPageInfo pageInfo = new FeedPageInfo(page, size, (int) userFeeds.getTotalElements(), userFeeds.getTotalPages());
+        FeedPageInfo pageInfo = new FeedPageInfo(page, size, (int) userFeeds.getTotalElements(),
+                userFeeds.getTotalPages());
 
         // 피드 응답 DTO와 페이지 정보를 포함한 결과 객체 생성
         return new FeedRolesPageDto(userFeedResponse.getContent(), pageInfo);
@@ -315,7 +319,6 @@ public class FeedService {
         PageRequest pageable = PageRequest.of(page - 1, size, sort);
         // 스토어 피드를 담을 페이지 객체
         Page<Feed> storeFeeds;
-
         // 관련 태그와 위치 정보가 없을 경우 모든 스토어 피드를 가져옴
         if ((relatedTags == null || relatedTags.isEmpty()) && (location == null || location.isEmpty())) {
             storeFeeds = feedRepository.findStoreFeeds(pageable);
@@ -328,15 +331,15 @@ public class FeedService {
                 storeFeeds = feedRepository.findByRelatedTagsInForStore(relatedTags, pageable);
             } else {
                 // 관련 태그와 위치 정보가 모두 있는 경우 해당 태그와 위치를 가지고 있는 스토어 피드를 가져옴
-                storeFeeds = feedRepository.findByRelatedTagsInAndLocationInForStore(relatedTags, Collections.singletonList(location), pageable);
+                storeFeeds = feedRepository.findByRelatedTagsInAndLocationInForStore(relatedTags,
+                        Collections.singletonList(location), pageable);
             }
         }
-
         // 피드 객체를 피드 응답 DTO로 변환
         Page<FeedResponseDto> storeFeedResponse = storeFeeds.map(feed -> feedMapper.feedToFeedResponseDto(feed));
         // 페이지 정보를 생성
-        FeedPageInfo pageInfo = new FeedPageInfo(page, size, (int) storeFeeds.getTotalElements(), storeFeeds.getTotalPages());
-
+        FeedPageInfo pageInfo = new FeedPageInfo(page, size, (int) storeFeeds.getTotalElements(),
+                storeFeeds.getTotalPages());
         // 피드 응답 DTO와 페이지 정보를 포함한 결과 객체 생성
         return new FeedRolesPageDto(storeFeedResponse.getContent(), pageInfo);
     }

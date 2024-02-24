@@ -20,8 +20,6 @@ public class SearchService {
     private final FeedRepository feedRepository;
     private final UserRepository userRepository;
 
-
-
     public SearchService(UserRepository userRepository, FeedRepository feedRepository ) {
         this.userRepository = userRepository;
         this.feedRepository = feedRepository;

@@ -114,7 +114,8 @@ class UserControllerTest {
                         .accept(MediaType.APPLICATION_JSON));
 
         // then
-        result.andExpect(status().isCreated());
+        result.andExpect(status().isCreated())
+                .andDo(print());
     }
 
     @Test
@@ -135,7 +136,8 @@ class UserControllerTest {
                         .accept(MediaType.APPLICATION_JSON));
 
         // then
-        result.andExpect(status().isCreated());
+        result.andExpect(status().isCreated())
+                .andDo(print());
     }
 
     @Test
@@ -164,14 +166,12 @@ class UserControllerTest {
 
         // when
         ResultActions result = mockMvc.perform(get("/mypage")
-                        .header("Authorization", "Bearer " + testToken)
-                        .with(csrf()))
-                .andExpect(status().isOk())
+                        .header("Authorization", "Bearer " + testToken))
                 .andExpect(jsonPath("$.data.email", Matchers.is(user.getEmail())))
                 .andDo(print());
 
         // then
-        result.andDo(print());
+        result.andExpect(status().isOk());
     }
 
     @Test
