@@ -4,7 +4,7 @@ package com.mainproject.server.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.mainproject.server.feed.enitiy.Feed;
+import com.mainproject.server.feed.entity.Feed;
 import com.mainproject.server.follow.entity.Follow;
 import com.mainproject.server.image.entity.Image;
 import com.mainproject.server.userprofile.entity.UserProfile;
@@ -112,7 +112,5 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @JoinColumn(name = "user_profile_id")
     private UserProfile userProfile;
-
-    // 마이 페이지
 
 }

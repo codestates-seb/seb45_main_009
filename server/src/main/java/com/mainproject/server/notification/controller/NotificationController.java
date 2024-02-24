@@ -1,14 +1,11 @@
 package com.mainproject.server.notification.controller;
 
-import com.mainproject.server.auth.loginResolver.LoginUserId;
+import com.mainproject.server.auth.loginresolver.LoginUserId;
 import com.mainproject.server.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * 클라이언트가 요청을 보낼 수 있는 엔드포인트를 지정.

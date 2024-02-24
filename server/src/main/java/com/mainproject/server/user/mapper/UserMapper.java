@@ -19,7 +19,6 @@ public interface UserMapper {
 
      User patchToUser(UserDto.PatchDto patchDto);
 
-
      @Mapping(source = "profileimg.imageUrl", target = "profileimg")
      UserDto.ResponseDto userToResponse(User user);
 
@@ -31,12 +30,11 @@ public interface UserMapper {
      @Named("stringToImage")
      default Image stringToImage(String profileimg) {
           if (profileimg == null || profileimg.isEmpty()) {
-               return null; // Handle null or empty string appropriately, or return a default Image if needed
+               return null;
           }
 
-          // Implement the conversion logic here, e.g., parse the string and create an Image object
           Image image = new Image();
-          image.setImageUrl(profileimg); // Assuming there's a setter for the image URL
+          image.setImageUrl(profileimg);
 
           return image;
      }

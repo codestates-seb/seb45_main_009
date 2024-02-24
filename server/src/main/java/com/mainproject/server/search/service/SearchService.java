@@ -2,15 +2,13 @@ package com.mainproject.server.search.service;
 
 import com.mainproject.server.feed.dto.FeedResponseDto;
 
-import com.mainproject.server.feed.enitiy.Feed;
+import com.mainproject.server.feed.entity.Feed;
 import com.mainproject.server.feed.repository.FeedRepository;
-import com.mainproject.server.image.entity.Image;
 import com.mainproject.server.search.dto.SearchDto;
 import com.mainproject.server.user.dto.UserDto;
 import com.mainproject.server.user.entity.User;
 import com.mainproject.server.user.repository.UserRepository;
 import com.mainproject.server.userprofile.dto.FeedInfoConverter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +19,6 @@ public class SearchService {
 
     private final FeedRepository feedRepository;
     private final UserRepository userRepository;
-
-
 
     public SearchService(UserRepository userRepository, FeedRepository feedRepository ) {
         this.userRepository = userRepository;
@@ -45,7 +41,6 @@ public class SearchService {
                 .map(this::convertToFeedInfo)
                 .collect(Collectors.toList());
         searchDto.setFeeds(feedInfos);
-
 
         return searchDto;
     }

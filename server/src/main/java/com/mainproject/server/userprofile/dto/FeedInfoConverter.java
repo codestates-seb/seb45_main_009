@@ -2,7 +2,7 @@ package com.mainproject.server.userprofile.dto;
 
 import com.mainproject.server.feed.dto.FeedResponseDto;
 
-import com.mainproject.server.feed.enitiy.Feed;
+import com.mainproject.server.feed.entity.Feed;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

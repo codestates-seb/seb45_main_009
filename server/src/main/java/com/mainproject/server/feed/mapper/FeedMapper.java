@@ -2,7 +2,7 @@ package com.mainproject.server.feed.mapper;
 
 import com.mainproject.server.feed.dto.FeedDto;
 import com.mainproject.server.feed.dto.FeedResponseDto;
-import com.mainproject.server.feed.enitiy.Feed;
+import com.mainproject.server.feed.entity.Feed;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

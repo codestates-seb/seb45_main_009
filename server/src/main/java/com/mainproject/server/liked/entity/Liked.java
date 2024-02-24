@@ -1,6 +1,6 @@
 package com.mainproject.server.liked.entity;
 
-import com.mainproject.server.feed.enitiy.Feed;
+import com.mainproject.server.feed.entity.Feed;
 import com.mainproject.server.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,7 +38,7 @@ public class Liked {
         this.user = user;
         this.feed = feed;
     }
-    public void disconnectFeed(){
+    public void disconnectFeed() {
         this.feed = null;
     }
 

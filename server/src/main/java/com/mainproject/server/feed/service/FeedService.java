@@ -5,17 +5,15 @@ import com.mainproject.server.exception.ExceptionCode;
 import com.mainproject.server.feed.dto.FeedPageInfo;
 import com.mainproject.server.feed.dto.FeedResponseDto;
 import com.mainproject.server.feed.dto.FeedRolesPageDto;
-import com.mainproject.server.feed.enitiy.Feed;
+import com.mainproject.server.feed.entity.Feed;
 import com.mainproject.server.feed.mapper.FeedMapper;
 import com.mainproject.server.feed.repository.FeedRepository;
-import com.mainproject.server.feedcomment.entity.FeedComment;
 import com.mainproject.server.follow.entity.Follow;
 import com.mainproject.server.follow.repository.FollowRepository;
 import com.mainproject.server.follow.service.FollowService;
 import com.mainproject.server.image.entity.Image;
 import com.mainproject.server.image.repository.ImageRepository;
 import com.mainproject.server.image.service.ImageService;
-import com.mainproject.server.image.service.S3UploadService;
 import com.mainproject.server.notification.entity.Notification;
 import com.mainproject.server.notification.service.NotificationService;
 import com.mainproject.server.user.dto.UserDto;
@@ -44,8 +42,10 @@ public class FeedService {
 
 
     @Autowired
-    public FeedService(FeedRepository feedRepository, ImageService imageService, UserService userService, ImageRepository imageRepository,
-                       FollowRepository followRepository, FollowService followService, NotificationService notificationService, FeedMapper feedMapper) {
+    public FeedService(FeedRepository feedRepository, ImageService imageService, UserService userService,
+                       ImageRepository imageRepository,
+                       FollowRepository followRepository, FollowService followService,
+                       NotificationService notificationService, FeedMapper feedMapper) {
         this.feedRepository = feedRepository;
         this.imageService = imageService;
         this.userService = userService;
@@ -53,7 +53,7 @@ public class FeedService {
         this.followRepository = followRepository;
         this.followService = followService;
         this.notificationService = notificationService;
-        this.feedMapper =feedMapper;
+        this.feedMapper = feedMapper;
     }
 
 
@@ -102,7 +102,8 @@ public class FeedService {
             // 팔로우 관계가 존재하면 알림을 전송
             if (followRelationship != null) {
                 String content = userService.findUser(userId).getNickname() + "님이 새로운 피드를 등록했습니다.";
-                notificationService.send(userService.findUser(follower.getUserId()), Notification.NotificationType.NEW_FEED, content, "/feed/add" + feed.getFeedId());
+                notificationService.send(userService.findUser(follower.getUserId()),
+                        Notification.NotificationType.NEW_FEED, content, "/feed/add" + feed.getFeedId());
             }
         }
 
@@ -303,7 +304,8 @@ public class FeedService {
         // 피드 객체를 피드 응답 DTO로 변환
         Page<FeedResponseDto> userFeedResponse = userFeeds.map(feed -> feedMapper.feedToFeedResponseDto(feed));
         // 페이지 정보를 생성
-        FeedPageInfo pageInfo = new FeedPageInfo(page, size, (int) userFeeds.getTotalElements(), userFeeds.getTotalPages());
+        FeedPageInfo pageInfo = new FeedPageInfo(page, size, (int) userFeeds.getTotalElements(),
+                userFeeds.getTotalPages());
 
         // 피드 응답 DTO와 페이지 정보를 포함한 결과 객체 생성
         return new FeedRolesPageDto(userFeedResponse.getContent(), pageInfo);
@@ -317,7 +319,6 @@ public class FeedService {
         PageRequest pageable = PageRequest.of(page - 1, size, sort);
         // 스토어 피드를 담을 페이지 객체
         Page<Feed> storeFeeds;
-
         // 관련 태그와 위치 정보가 없을 경우 모든 스토어 피드를 가져옴
         if ((relatedTags == null || relatedTags.isEmpty()) && (location == null || location.isEmpty())) {
             storeFeeds = feedRepository.findStoreFeeds(pageable);
@@ -330,15 +331,15 @@ public class FeedService {
                 storeFeeds = feedRepository.findByRelatedTagsInForStore(relatedTags, pageable);
             } else {
                 // 관련 태그와 위치 정보가 모두 있는 경우 해당 태그와 위치를 가지고 있는 스토어 피드를 가져옴
-                storeFeeds = feedRepository.findByRelatedTagsInAndLocationInForStore(relatedTags, Collections.singletonList(location), pageable);
+                storeFeeds = feedRepository.findByRelatedTagsInAndLocationInForStore(relatedTags,
+                        Collections.singletonList(location), pageable);
             }
         }
-
         // 피드 객체를 피드 응답 DTO로 변환
         Page<FeedResponseDto> storeFeedResponse = storeFeeds.map(feed -> feedMapper.feedToFeedResponseDto(feed));
         // 페이지 정보를 생성
-        FeedPageInfo pageInfo = new FeedPageInfo(page, size, (int) storeFeeds.getTotalElements(), storeFeeds.getTotalPages());
-
+        FeedPageInfo pageInfo = new FeedPageInfo(page, size, (int) storeFeeds.getTotalElements(),
+                storeFeeds.getTotalPages());
         // 피드 응답 DTO와 페이지 정보를 포함한 결과 객체 생성
         return new FeedRolesPageDto(storeFeedResponse.getContent(), pageInfo);
     }

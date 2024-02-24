@@ -1,6 +1,6 @@
 package com.mainproject.server.feedcomment.entity;
 
-import com.mainproject.server.feed.enitiy.Feed;
+import com.mainproject.server.feed.entity.Feed;
 import com.mainproject.server.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

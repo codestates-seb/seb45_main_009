@@ -1,7 +1,6 @@
 package com.mainproject.server.feed.repository;
 
-import com.mainproject.server.feed.dto.FeedResponseDto;
-import com.mainproject.server.feed.enitiy.Feed;
+import com.mainproject.server.feed.entity.Feed;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,9 +28,9 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
     @Query("SELECT DISTINCT f FROM Feed f JOIN f.relatedTags t WHERE t LIKE %:keyword%")
     List<Feed> findFeedsByRelatedTagsContaining(String keyword);
 
-
     // Store feeds: Filter by related tags and location
-    @Query("SELECT f FROM Feed f WHERE 'STORE' MEMBER OF f.user.roles AND f.location IN :location AND EXISTS (SELECT t FROM f.relatedTags t WHERE t IN :relatedTags)")
+    @Query("SELECT f FROM Feed f WHERE 'STORE' MEMBER OF f.user.roles AND f.location IN :location AND EXISTS "
+            + "(SELECT t FROM f.relatedTags t WHERE t IN :relatedTags)")
     Page<Feed> findByRelatedTagsInAndLocationInForStore(@Param("relatedTags") List<String> relatedTags, @Param("location") List<String> location, Pageable pageable);
 
     // Store feeds: Filter by location
@@ -39,13 +38,14 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
     Page<Feed> findByLocationInForStore(@Param("location") List<String> location, Pageable pageable);
 
     // Store feeds: Filter by related tags
-    @Query("SELECT f FROM Feed f WHERE 'STORE' MEMBER OF f.user.roles AND EXISTS (SELECT t FROM f.relatedTags t WHERE t IN :relatedTags)")
+    @Query("SELECT f FROM Feed f WHERE 'STORE' MEMBER OF f.user.roles AND EXISTS "
+            + "(SELECT t FROM f.relatedTags t WHERE t IN :relatedTags)")
     Page<Feed> findByRelatedTagsInForStore(@Param("relatedTags") List<String> relatedTags, Pageable pageable);
 
     // User feeds: Filter by related tags
-    @Query("SELECT f FROM Feed f WHERE 'USER' MEMBER OF f.user.roles AND EXISTS (SELECT t FROM f.relatedTags t WHERE t IN :relatedTags)")
+    @Query("SELECT f FROM Feed f WHERE 'USER' MEMBER OF f.user.roles AND EXISTS "
+            + "(SELECT t FROM f.relatedTags t WHERE t IN :relatedTags)")
     Page<Feed> findByRelatedTagsInForUser(@Param("relatedTags") List<String> relatedTags, Pageable pageable);
-
 
 }
 

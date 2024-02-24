@@ -1,29 +1,22 @@
 package com.mainproject.server.feed.controller;
 
-import com.mainproject.server.auth.loginResolver.LoginUserId;
+import com.mainproject.server.auth.loginresolver.LoginUserId;
 import com.mainproject.server.feed.dto.FeedDto;
 import com.mainproject.server.feed.dto.FeedResponseDto;
 import com.mainproject.server.feed.dto.FeedRolesPageDto;
 import com.mainproject.server.feed.dto.FeedPageInfo;
-import com.mainproject.server.feed.enitiy.Feed;
+import com.mainproject.server.feed.entity.Feed;
 import com.mainproject.server.feed.mapper.FeedMapper;
-import com.mainproject.server.feed.repository.FeedRepository;
 import com.mainproject.server.feed.service.FeedService;
 import com.mainproject.server.liked.service.LikedService;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/")

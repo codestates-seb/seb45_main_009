@@ -1,7 +1,7 @@
 package com.mainproject.server.report.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.mainproject.server.feed.enitiy.Feed;
+import com.mainproject.server.feed.entity.Feed;
 import com.mainproject.server.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
